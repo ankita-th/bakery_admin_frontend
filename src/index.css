@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.nav-item {
+  color: black;
+  font-size: 15px;
+  display: block;
+  border-radius: 0.25rem;
+  padding: 10px 1rem;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.outlet {
+  width: calc(100% - 240px);
+  margin-left: auto;
+}
+
+header.header {
+  width: calc(100% - 240px);
+  margin-left: auto;
+}
+.nav-item:hover {
+  color: #2563eb;
+  background-color: #eff6ff;
+}
+.login-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+.section1 {
+  width: 40%;
+  height: 100vh;
+}
+.section2 {
+  width: 60%;
+  height: 100vh;
+}
+.commonInput {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  background-color: #f7fafc;
+  width: 100%;
+  font-size: 0.875rem;
+  outline: 1px solid #333;
+  border-radius: 0.125rem;
+  transition: all 0.2s;
+}
+
+.commonInput:focus {
+  background-color: transparent; /* focus:bg-transparent */
+}
+
+.filterInput {
+  width: 216px;
+  height: 40px;
+  border: 1px solid #d3d3d3;
+  border-radius: 8px;
+  margin-right: 4px;
+}
+.search {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid #d3d3d3;
+  width: 221px;
+}
+.searchInput {
+  width: 100%;
+  height: 100%;
+}
+.searchIcon {
+  background-color: #ff6363;
+  border-radius: 10px;
+  padding: 5px 7px;
+  cursor: pointer;
+}
+
+.filtersSection {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.buttonOne {
+  background: #3e3232bf;
+  border-radius: 10px;
+  width: 125px;
+  height: 40px;
+  margin-left: 2px;
+}
+
+.buttonTwo {
+  background: #ff6d2f;
+  border-radius: 10px;
+  width: 127px;
+  height: 43px;
+  margin-left: 2px;
+}
