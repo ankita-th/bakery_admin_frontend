@@ -1,7 +1,7 @@
 // login validations
 export const LoginValidations = {
-  userName: {
-    required: "Username is required",
+  email: {
+    required: "Username or email is required",
   },
   password: {
     required: "Password is required",

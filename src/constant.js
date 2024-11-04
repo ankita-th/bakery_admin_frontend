@@ -1,4 +1,7 @@
 export const PRODUCTS_ITEMS_PER_PAGE = 10;
+export const CATEGORIES_ITEMS_PER_PAGE = 10;
+export const RAW_MATERIALS_ITEMS_PER_PAGE = 10;
+
 export const DUMMY_PRODUCT_DATA = [
   {
     id: 9,
@@ -178,3 +181,18 @@ export const DUMMY_PRODUCT_DATA = [
     ],
   },
 ];
+
+export const DEFAULT_ERROR_MESSAGE = "Something Went Wrong";
+
+export const allowedImageTypes = [
+  "image/png",
+  "image/svg+xml",
+  "image/jpeg", // Covers both .jpg and .jpeg
+  //   "image/gif",
+  //   "image/webp",
+];
+
+export const today = new Date().toISOString().split("T")[0];
+export const DEFAULT_CLASS =
+  "px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-sm transition-all";
+

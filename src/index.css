@@ -93,12 +93,76 @@ header.header {
   width: 125px;
   height: 40px;
   margin-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0px 4px;
+  color: white;
 }
 
 .buttonTwo {
   background: #ff6d2f;
   border-radius: 10px;
   width: 127px;
-  height: 43px;
+  height: 38px;
   margin-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0px 4px;
+  color: white;
+}
+
+.OTPInputContainer {
+  justify-content: center;
+  gap: 3px;
+}
+
+.otpInput {
+  padding: 10px;
+  margin: 5px 3px 20px;
+  width: 55px !important;
+  border-radius: 8px;
+  border: 1px solid var(--Is-light-gray);
+  height: 55px;
+  text-align: center;
+}
+
+.category-section {
+  width: 256px;
+  height: 1171px;
+  background-color: #f7fafc;
+  position: fixed;
+  top: 2px;
+  right: 2px;
+}
+
+.add-edit-heading {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.close-icon {
+  cursor: pointer;
+}
+
+.add-edit-input {
+  background: #f1f1f1;
+  border-radius: 12px;
+  height: 48px;
+  width: 429px;
+}
+
+.image-upload-icon {
+  cursor: pointer;
+}
+
+.button-section {
+  display: flex;
+  gap: 10px;
+}
+
+.icon {
+  cursor: pointer;
 }

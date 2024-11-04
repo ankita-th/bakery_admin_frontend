@@ -6,6 +6,8 @@ import CommonTextField from "../Form Fields/CommonTextField";
 import { ClosedEye, OpenEye } from "../assets/Icons/Svg";
 import { useNavigate } from "react-router-dom";
 import { login } from "../api/apiFunctions";
+import { successType, toastMessage } from "../utils/toastMessage";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -17,19 +19,17 @@ const Login = () => {
   };
   const onSubmit = (values) => {
     console.log(values, "inside submit");
-    // update required: add token from the API here
-    const token = Date.now();
-    localStorage.setItem("token", token);
-    navigate("/products");
-
     login(values)
       .then((res) => {
         // update the token logic with actual token
-        const token = Date.now();
-        localStorage.setItem("token", token);
+        localStorage.setItem("token", res?.data?.access);
+        toastMessage("Logged In successfully", successType);
+        localStorage.setItem("refreshToken", res?.data?.refresh);
         navigate("/dashboard");
       })
-      .catch((err) => console.log(err));
+      .catch((err) =>
+        toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE)
+      );
   };
   return (
     <>
@@ -42,11 +42,11 @@ const Login = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="login-form">
         <h2>Login!</h2>
         <CommonTextField
-          fieldName="username"
+          fieldName="email"
           formConfig={formConfig}
           type="text"
           placeholder="Enter Username"
-          rules={LoginValidations["userName"]}
+          rules={LoginValidations["email"]}
           label="Username or email address"
         />
         <CommonTextField

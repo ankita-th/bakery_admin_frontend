@@ -6,6 +6,7 @@ const DeleteConfirmationModal = ({
   description,
   onDelete,
   onCancel,
+  disabled = false,
 }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
@@ -20,10 +21,7 @@ const DeleteConfirmationModal = ({
         </h2>
         <p className="text-sm text-center text-gray-600 mt-2">{description}</p>
         <div className="flex justify-center mt-6 space-x-3">
-          <button
-            className="buttonTwo"
-            onClick={onDelete}
-          >
+          <button className="buttonTwo" onClick={onDelete} disabled={disabled}>
             Delete
           </button>
           <button

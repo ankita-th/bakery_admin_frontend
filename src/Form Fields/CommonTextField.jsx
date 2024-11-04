@@ -1,8 +1,6 @@
 import React from "react";
 import ErrorMessage from "../Components/Common/ErrorMessage";
-
-const DEFAULT_CLASS =
-  "px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-sm transition-all";
+import { DEFAULT_CLASS } from "../constant";
 
 const CommonTextField = ({
   rules,

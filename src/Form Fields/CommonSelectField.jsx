@@ -11,7 +11,7 @@ const CommonSelectField = ({
   const { register } = formConfig;
   return (
     <div>
-      <select className={className} onChange={() => handleChang()}>
+      <select className={className}>
         <option value="" selected hidden disabled>
           {defaultOption}
         </option>

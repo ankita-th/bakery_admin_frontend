@@ -35,29 +35,29 @@ const createAuthorizedInstance = (type) => {
     function (error) {
       if (error?.response?.status === 401) {
         localStorage.clear();
-        window.location.href = "/";
-        // authAxios
-        //   .post(REFRESH_TOKEN, refreshToken)
-        //   .then((res) => {
-        //     localStorage.setItem("token", res.data.data.access);
-        //     localStorage.setItem("refresh_token", res.data.data.refresh);
-        //     const { config: oldRequest } = error;
-        //     // retrigger old request
-        //     authAxios
-        //       .request({ ...oldRequest })
-        //       .then((res) => {
-        //         return res;
-        //       })
-        //       .catch((err) => {
-        //         return err;
-        //       });
-        //   })
-        //   .catch((err) => {
-        //     console.log(err);
-        //     localStorage.clear();
-        //     window.location.href = "/";
-        //   });
-        // return Promise.reject(error);
+        // window.location.href = "/";
+        authAxios
+          .post(REFRESH_TOKEN, refreshToken)
+          .then((res) => {
+            localStorage.setItem("token", res.data.data.access);
+            localStorage.setItem("refreshToken", res.data.data.refresh);
+            const { config: oldRequest } = error;
+            // retrigger old request
+            authAxios
+              .request({ ...oldRequest })
+              .then((res) => {
+                return res;
+              })
+              .catch((err) => {
+                return err;
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+            localStorage.clear();
+            window.location.href = "/";
+          });
+        return Promise.reject(error);
       }
       return Promise.reject(error);
     }

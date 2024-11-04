@@ -2,18 +2,24 @@ import { cleanFilters } from "../utils/helpers";
 import { authAxios, authorizeAxios } from "./apiConfig";
 
 export const login = (payload) => {
-  return authAxios.post("/register", payload);
+  return authAxios.post("/login/", payload);
 };
 
 //  products flow
 export const getProducts = (filters) => {
   // for removing filter keys from an object whose values are empty and further implementing encodingURIComponent
   const cleanedFilters = cleanFilters(filters);
-  return authorizeAxios.get("/product/products/", { params: cleanedFilters });
+  return authorizeAxios.get("/products/", { params: cleanedFilters });
 };
 
-export const deleteProduct = (id) => {  
-  return authorizeAxios.delete(`/product/products/${id}/`);
+export const deleteProduct = (id) => {
+  console.log("delete product id", id);
+  return authorizeAxios.delete(`/products/${id}/`);
+};
+
+export const addProduct = (payload) => {
+  console.log("add product payload", payload);
+  return authorizeAxios.post(`/products/`, payload);
 };
 
 export const METHODS = {
@@ -24,12 +30,20 @@ export const METHODS = {
   delete: "DELETE",
 };
 
+export const INSTANCE = {
+  authorized: "authoized",
+  auth: "auth",
+  formInstance: "formInstance",
+};
+
 export const makeApiRequest = async ({
   endPoint,
   method,
   params,
   payload,
-  instanceType = INSTANCE.auth,
+  instanceType = INSTANCE.authorized,
+  delete_id,
+  update_id,
 }) => {
   try {
     console.log("payload: ", payload, "endpoint: ", endPoint);
@@ -44,7 +58,9 @@ export const makeApiRequest = async ({
 
     switch (method) {
       case METHODS.get: {
-        const config = params ? { params: { ...params } } : {};
+        // for removing empty key value pairs and for encoding
+        const cleanedParams = cleanFilters(params);
+        const config = params ? { params: { ...cleanedParams } } : {};
         return await API_INSTANCE.get(endPoint, config);
       }
 
@@ -53,15 +69,15 @@ export const makeApiRequest = async ({
       }
 
       case METHODS.put: {
-        return await API_INSTANCE.put(endPoint, { ...payload });
+        return await API_INSTANCE.put(endPoint + update_id, { ...payload });
       }
 
       case METHODS.patch: {
-        return await API_INSTANCE.patch(endPoint, { ...payload });
+        return await API_INSTANCE.patch(endPoint + update_id, { ...payload });
       }
 
       case METHODS.delete: {
-        return await API_INSTANCE.delete(endPoint);
+        return await API_INSTANCE.delete(`${endPoint}${delete_id}/`);
       }
 
       default:

@@ -3,9 +3,9 @@ import { editIcon, eyeIcon, trashIcon } from "../assets/Icons/Svg";
 import { renderSerialNumber } from "../utils/helpers";
 import { PRODUCTS_ITEMS_PER_PAGE } from "../constant";
 
-const SingleProductRow = ({ data, currentPage, index,handleActions }) => {
-    // updates required: price published status in date,date are not given and also category is in number
-  const { id, category, name, sku, status, is_active } = data;
+const SingleProductRow = ({ data, currentPage, index, handleActions }) => {
+  // updates required: price published status in date,date are not given and also category is in number
+  const { id, category, name, product_detail, status, is_active } = data;
 
   return (
     <tr className="text-center">
@@ -13,7 +13,7 @@ const SingleProductRow = ({ data, currentPage, index,handleActions }) => {
         {renderSerialNumber(currentPage, PRODUCTS_ITEMS_PER_PAGE, index)}
       </td>
       <td className="py-2 px-4 border">{name}</td>
-      <td className="py-2 px-4 border">{sku}</td>
+      <td className="py-2 px-4 border">{product_detail?.inventory?.sku}</td>
       <td
         className={`py-2 px-4 border ${
           status === "available" ? "text-green-500" : "text-red-500"
@@ -21,7 +21,7 @@ const SingleProductRow = ({ data, currentPage, index,handleActions }) => {
       >
         {status}
       </td>
-      <td className="py-2 px-4 border">$Product Price</td>
+      <td className="py-2 px-4 border">{`$ ${product_detail?.inventory?.sale_price}`}</td>
       <td className="py-2 px-4 border">{category}</td>
       <td className="py-2 px-4 border">Product Date</td>
       <td

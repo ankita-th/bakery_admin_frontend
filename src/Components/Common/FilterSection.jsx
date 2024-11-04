@@ -5,7 +5,7 @@ const FilterSection = ({
   filterFields,
   handleFilterChange,
   className = "filterInput",
-  children
+  children,
 }) => {
   const [searchInput, setSearchInput] = useState("");
 

@@ -5,6 +5,8 @@ import NotFound from "../pages/NotFound";
 import Login from "../pages/Login";
 import AddEditProduct from "../pages/AddEditProduct";
 import Categories from "../pages/Categories";
+import RawMaterials from "../pages/RawMaterials";
+import Todo from "../pages/Todo";
 
 export const routes = [
   {
@@ -35,6 +37,17 @@ export const routes = [
   {
     path: "/categories",
     element: <Categories />,
+    private: true,
+  },
+  
+  {
+    path: "/raw-materials",
+    element: <RawMaterials />,
+    private: true,
+  },
+  {
+    path: "/to-do",
+    element: <Todo />,
     private: true,
   },
   {

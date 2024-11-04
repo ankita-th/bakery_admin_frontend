@@ -5,9 +5,12 @@ import FilterSection from "../Components/Common/FilterSection";
 import { deleteProduct, getProducts } from "../api/apiFunctions";
 import usePagination from "../hooks/usePagination";
 import Pagination from "../Components/Common/Pagination";
-import { DUMMY_PRODUCT_DATA, PRODUCTS_ITEMS_PER_PAGE } from "../constant";
+import {
+  DEFAULT_ERROR_MESSAGE,
+  DUMMY_PRODUCT_DATA,
+  PRODUCTS_ITEMS_PER_PAGE,
+} from "../constant";
 import CommonButton from "../Components/Common/CommonButton";
-import TableComponent from "../Components/Common/TableComponent";
 import useModalToggle from "../hooks/useModalToggle";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import { trashIcon } from "../assets/Icons/Svg";
@@ -18,6 +21,9 @@ import PageLoader from "../loaders/PageLoader";
 import SingleProductRow from "../Components/SingleproductTableRow";
 import NoDataFound from "../Components/Common/NoDataFound";
 import { useNavigate } from "react-router-dom";
+import TableWrapper from "../Wrappers/TableWrapper";
+import TableComponent from "../Components/Common/TableComponent";
+import { deleteItemBasedOnId } from "../utils/helpers";
 
 const OPTIONS = [
   { value: "Option1", label: "Option1" },
@@ -77,7 +83,7 @@ const Products = () => {
   const navigate = useNavigate();
   const { page, onPageChange } = usePagination();
   const { showModal, toggleModal } = useModalToggle();
-  const { loader, toggleLoader } = useLoader();
+  const { pageLoader, buttonLoader, toggleLoader } = useLoader();
   const [products, setProducts] = useState([]);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [totalData, setTotalData] = useState();
@@ -93,9 +99,8 @@ const Products = () => {
       ...filters,
       page: page,
     };
-    toggleLoader();
+    toggleLoader("pageLoader");
     // update required: remove this dummy data and according to the API data
-    setProducts(DUMMY_PRODUCT_DATA);
     getProducts(apiFilters)
       .then((res) => {
         console.log(res?.data, "this is response");
@@ -104,7 +109,7 @@ const Products = () => {
         setTotalData(res?.data?.count);
       })
       .catch((err) => console.log(err))
-      .finally(() => toggleLoader());
+      .finally(() => toggleLoader("pageLoader"));
   }, [filters, page]);
 
   const handleFilterChange = (filterName, value) => {
@@ -112,23 +117,31 @@ const Products = () => {
     temp[filterName] = value;
     setFilters(temp);
   };
-  const handleCategoryClick = () => {};
+  const handleCategoryClick = () => {
+    navigate("/categories");
+  };
 
   const handleAddNewProductClick = () => {};
   const handleDeleteProduct = () => {
-    // update required: comment from here and use the APi one
-    toastMessage("Product deleted successfully", successType);
-    toggleModal();
-
+    toggleLoader("buttonLoader");
+    // update required: comment from here and use the API one
     deleteProduct(itemToDelete)
       .then((res) => {
         toastMessage("Product deleted successfully", successType);
-        toggleModal();
+        setProducts(deleteItemBasedOnId(products, itemToDelete));
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+      })
+      .finally(() => {
+        toggleModal();
+        setItemToDelete(null);
+        toggleLoader("buttonLoader");
+      });
   };
   // for managing view , edit and delete buttons inside single row
   // in case of delete the id will be the deleteItemId and in case of edit the id of the item to edit
+
   const handleActions = (action, id) => {
     if (action === "view") {
     } else if (action === "edit") {
@@ -139,12 +152,11 @@ const Products = () => {
       setItemToDelete(id);
     }
   };
-  console.log(itemToDelete, "itemToDelete");
 
   return (
     <>
       {/* update required : depending on the css of the loader make sure we have to show other data or not */}
-      {loader && <PageLoader />}
+      {pageLoader && <PageLoader />}
       <div>
         <FilterSection
           filterFields={filterFields}
@@ -164,7 +176,7 @@ const Products = () => {
           />
         </FilterSection>
         {/* product listing */}
-        <TableComponent columns={PRODUCT_PAGE_COLUMNS}>
+        <TableWrapper columns={PRODUCT_PAGE_COLUMNS}>
           {products?.length ? (
             products?.map((dt, idx) => (
               <SingleProductRow
@@ -179,7 +191,7 @@ const Products = () => {
             // updates required:Create a better no data found component
             <NoDataFound />
           )}
-        </TableComponent>
+        </TableWrapper>
 
         <Pagination
           onPageChange={onPageChange}

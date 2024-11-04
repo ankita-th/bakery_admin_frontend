@@ -10,7 +10,12 @@ const CommonButton = ({
   loader = false,
 }) => {
   return (
-    <button className={className} type={type} onClick={onClick} disabled={disabled}>
+    <button
+      className={className}
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {icon}
       {text}
       {/* add loader here */}
