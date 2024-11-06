@@ -1,5 +1,5 @@
 import React from "react";
-import { imageUploadIcon } from "../assets/Icons/Svg";
+import { closeIcon, imageUploadIcon } from "../assets/Icons/Svg";
 import ErrorMessage from "../Components/Common/ErrorMessage";
 import { isValidType } from "../utils/helpers";
 
@@ -30,6 +30,7 @@ const ImageUploadSection = ({
           setImagePreview(e.target.result);
         };
         reader.readAsDataURL(file);
+        clearErrors(fieldName);
       } else {
         setError(fieldName, {
           type: "manual",
@@ -45,12 +46,12 @@ const ImageUploadSection = ({
     <div>
       {label}
       <label htmlFor={inputId} className="image-upload-icon">
-        {imageUploadIcon}
+        {!imagePreview && imageUploadIcon}
       </label>
       <input
         {...register(fieldName, {
           // may be need to remove this validation in future
-          //   required: imagePreview ? false : "Please upload image",
+          // required: imagePreview ? false : "Category Image is required",
           onChange: (e) => {
             handleImageUpload(e);
           },
@@ -60,7 +61,23 @@ const ImageUploadSection = ({
         className="hidden"
         accept="image/*"
       />
-      {imagePreview && <img className="image-preview" src={imagePreview} />}
+      {imagePreview && (
+        <div className="image-preview-section">
+          <img className="image-preview" src={imagePreview} />
+          <div
+            className="remove-image"
+            onClick={() => {
+              setImagePreview(null);
+              // setError(fieldName, {
+              //   type: "manual",
+              //   message: "Category Image us required",
+              // });
+            }}
+          >
+            {closeIcon}
+          </div>
+        </div>
+      )}
       <ErrorMessage errors={errors} fieldName={fieldName} />
     </div>
   );

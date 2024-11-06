@@ -58,7 +58,7 @@ const SIDEBAR_LINKS_TOP = [
   {
     label: "Todo",
     icon: TodoIcon,
-    href: "/todo",
+    href: "/to-do",
   },
   {
     label: "Configuration",
@@ -66,9 +66,9 @@ const SIDEBAR_LINKS_TOP = [
     href: "/configuration",
   },
   {
-    label: "Recipes",
+    label: "Recipe's",
     icon: RecipeIcon,
-    href: "/recipes",
+    href: "/recipe",
   },
   {
     label: "Payment History",

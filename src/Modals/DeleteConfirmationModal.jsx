@@ -1,7 +1,8 @@
 import React from "react";
+import { trashIcon } from "../assets/Icons/Svg";
 
 const DeleteConfirmationModal = ({
-  icon,
+  icon = trashIcon,
   title,
   description,
   onDelete,

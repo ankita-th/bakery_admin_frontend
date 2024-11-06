@@ -8,6 +8,7 @@ const CommonButton = ({
   icon,
   className = "",
   loader = false,
+  name = "",
 }) => {
   return (
     <button
@@ -15,6 +16,7 @@ const CommonButton = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
+      name={name}
     >
       {icon}
       {text}

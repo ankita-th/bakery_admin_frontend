@@ -1,3 +1,7 @@
 export const CATEGORIES_ENDPOINT = "/categories/";
 export const RAW_MATERIAL_ENDPOINT = "/product-material/";
-export const TODO_ENDPOINT = "/todo/"
+export const TODO_ENDPOINT = "/todos/tasks/";
+export const REFRESH_TOKEN = "/token/refresh";
+export const EMPLOYEE_ENDPOINT = "/todos/employee-list/";
+export const CONFIGURATION_ENDPOINT = "/zip/configuration/";
+export const RECIPE_ENDPOINT = "/recipe/";

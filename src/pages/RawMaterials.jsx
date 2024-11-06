@@ -6,18 +6,22 @@ import useLoader from "../hooks/useLoader";
 import { successType, toastMessage } from "../utils/toastMessage";
 import {
   DEFAULT_ERROR_MESSAGE,
+  OPTIONS,
   RAW_MATERIALS_ITEMS_PER_PAGE,
+  YYYY_MM_DD,
 } from "../constant";
 import TableWrapper from "../Wrappers/TableWrapper";
 import NoDataFound from "../Components/Common/NoDataFound";
 import SingleRawMaterialRow from "../Components/SingleRawMaterialRow";
 import useModalToggle from "../hooks/useModalToggle";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
-import { deleteItemBasedOnId } from "../utils/helpers";
+import { deleteItemBasedOnId, formatDate, handleEdit } from "../utils/helpers";
 import { trashIcon } from "../assets/Icons/Svg";
 import Pagination from "../Components/Common/Pagination";
 import AddEditRawMaterial from "../Components/AddEditRawMaterial";
 import { useForm } from "react-hook-form";
+import FilterSection from "../Components/Common/FilterSection";
+import CommonButton from "../Components/Common/CommonButton";
 const RAW_MATERIAL_COLUMNS = [
   "",
   "ID",
@@ -28,6 +32,25 @@ const RAW_MATERIAL_COLUMNS = [
   "Last Updated",
   "Notes",
   "Action",
+];
+const filterFields = [
+  {
+    type: "select",
+    defaultOption: "All",
+    options: OPTIONS,
+    filterName: "type",
+  },
+  {
+    type: "select",
+    defaultOption: "Select Category",
+    options: OPTIONS,
+    filterName: "category",
+  },
+  {
+    type: "search",
+    filterName: "name",
+    placeholder: "Search Category",
+  },
 ];
 
 const dummyData = [
@@ -59,6 +82,7 @@ const dummyData = [
     notes: "High quality wheat",
   },
 ];
+
 const RawMaterials = () => {
   const formConfig = useForm();
   const { reset } = formConfig;
@@ -71,8 +95,12 @@ const RawMaterials = () => {
   } = useModalToggle();
 
   const { buttonLoader, pageLoader, toggleLoader } = useLoader();
-  const { page, onPageChange } = usePagination();
-  const [filters, setFilters] = useState({});
+  const { page, onPageChange, setPage } = usePagination();
+  const [filters, setFilters] = useState({
+    type: "",
+    category: "",
+    name: "",
+  });
   const [editInfo, setEditInfo] = useState({
     isEdit: false,
     item: null,
@@ -145,19 +173,31 @@ const RawMaterials = () => {
       });
   };
 
+  const handleFilterChange = (filterName, value) => {
+    const temp = { ...filters };
+    temp[filterName] = value;
+    setFilters(temp);
+  };
+
   const handleRawMaterialCancel = () => {
     toggleRawMaterialSection();
     setEditInfo({ isEdit: false, item: null });
     reset(); // for resetting form values
   };
 
-  const handleAddEditRawMaterial = (values) => {
+  const handleAddEditRawMaterial = (values, event) => {
+    const buttonType = event.nativeEvent.submitter.name;
+
     console.log(values, "these are form values");
     toggleLoader("buttonLoader");
     const payload = {
       ...values,
       quantity: +values?.quantity, // for converting quantity type from string into number
+      reorder: +values?.reorder, // for converting quantity type from string into number
+      is_active: buttonType === "draft",
+      expiry_date: formatDate(values?.expiry_date, YYYY_MM_DD),
     };
+    console.log(payload, "this is payload");
 
     makeApiRequest({
       endPoint: RAW_MATERIAL_ENDPOINT,
@@ -166,18 +206,38 @@ const RawMaterials = () => {
       update_id: editInfo?.isEdit && editInfo?.item?.id,
     })
       .then((res) => {
-        toastMessage("Raw material added successfully", successType);
+        console.log(res,"res inside raw material")
+        toastMessage(
+          `Raw material ${editInfo?.isEdit ? "updated" : "added"} successfully`,
+          successType
+        );
+        if (editInfo?.isEdit) {
+          setRawMaterials(handleEdit(rawMaterials, editInfo?.item?.id, res?.data));
+        } else {
+           setRawMaterials((prev) => [...prev,res?.data])
+        }
       })
       .catch((err) => {
         toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
       })
       .finally(() => {
         toggleLoader("buttonLoader");
-        toggleRawMaterialSection();
+        handleRawMaterialCancel();
+        setPage(1);
       });
   };
   return (
     <>
+      <FilterSection
+        filterFields={filterFields}
+        handleFilterChange={handleFilterChange}
+      >
+        <CommonButton
+          text="Add Raw Product"
+          className="buttonTwo"
+          onClick={toggleRawMaterialSection}
+        />
+      </FilterSection>
       <TableWrapper columns={RAW_MATERIAL_COLUMNS}>
         {rawMaterials?.length ? (
           rawMaterials?.map((it, idx) => (

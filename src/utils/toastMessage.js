@@ -1,5 +1,4 @@
-
-"use client"
+"use client";
 import { toast } from "react-toastify";
 export const successType = "success";
 
@@ -9,5 +8,6 @@ export const toastMessage = (msg, type) => {
     toast.success(msg);
   } else {
     toast.dismiss();
+    toast.error(msg);
   }
 };

@@ -1,7 +1,7 @@
 import axios from "axios";
-// import { REFRESH_TOKEN } from "./APIUrls";
+import { REFRESH_TOKEN } from "./endpoints";
 export const baseURL = import.meta.env.VITE_APP_BASE_URL;
-// const refreshToken = localStorage.getItem("refresh_token");
+const refreshToken = localStorage.getItem("refreshToken");
 // export const APPLICATION_BASE_URL = process.env.VITE_APP_BASE_WEBSITE_URL;
 const MULTIPART = "multipart";
 
@@ -37,10 +37,10 @@ const createAuthorizedInstance = (type) => {
         localStorage.clear();
         // window.location.href = "/";
         authAxios
-          .post(REFRESH_TOKEN, refreshToken)
+          .post(REFRESH_TOKEN, { refresh: refreshToken })
           .then((res) => {
-            localStorage.setItem("token", res.data.data.access);
-            localStorage.setItem("refreshToken", res.data.data.refresh);
+            localStorage.setItem("token", res.data.access);
+            localStorage.setItem("refreshToken", res.data.refresh);
             const { config: oldRequest } = error;
             // retrigger old request
             authAxios

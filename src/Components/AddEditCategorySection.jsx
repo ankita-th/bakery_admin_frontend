@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import FormWrapper from "../Wrappers/FormWrapper";
-import { closeIcon } from "../assets/Icons/Svg";
+import { closeIcon, publishIcon } from "../assets/Icons/Svg";
 import AddEditSectionHeading from "./AddEditSectionHeading";
 import CommonTextField from "../Form Fields/CommonTextField";
 import { CategoryValidations } from "../Validations/validations";
@@ -10,6 +10,7 @@ import CommonSelect from "../Form Fields/CommonSelect";
 import ImageUploadSection from "../Form Fields/ImageUploadSection";
 import { allowedImageTypes } from "../constant";
 import { prefillFormValues } from "../utils/helpers";
+import CommonButton from "./Common/CommonButton";
 const PARENT_CATEGORY_OPTIONS = [
   { value: "option1", label: "Option1" },
   { value: "option2", label: "Option2" },
@@ -32,7 +33,7 @@ const AddEditCategorySection = ({
   setImagePreview,
   editCategoryInfo,
 }) => {
-  const { watch, setValue } = formConfig;
+  const { watch, setValue, handleSubmit } = formConfig;
   const { isEdit, item } = editCategoryInfo;
   console.log(watch(), "form values");
 
@@ -52,11 +53,14 @@ const AddEditCategorySection = ({
           onClose={onClose}
           text={isEdit ? "Edit Category" : "Add New Category"}
         />
-        <FormWrapper
+        {/* here custom logic is required that's why not using form wrapper */}
+
+        {/* <FormWrapper
           onSubmit={onSubmit}
           formConfig={formConfig}
           className="buttonTwo"
-        >
+        > */}
+        <form onSubmit={handleSubmit(onSubmit)}>
           {" "}
           <CommonTextField
             label="Title"
@@ -98,12 +102,19 @@ const AddEditCategorySection = ({
           <ImageUploadSection
             label="Upload/Add Image"
             formConfig={formConfig}
-            fieldName="image"
+            fieldName="category_image"
             imagePreview={imagePreview}
             setImagePreview={setImagePreview}
             allowedTypes={allowedImageTypes}
           />
-        </FormWrapper>
+          <CommonButton
+            type="submit"
+            text="Publish"
+            className="buttonTwo"
+            icon={publishIcon}
+          />
+        </form>
+        {/* </FormWrapper> */}
       </div>
     </div>
   );

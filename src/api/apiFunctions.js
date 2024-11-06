@@ -31,7 +31,7 @@ export const METHODS = {
 };
 
 export const INSTANCE = {
-  authorized: "authoized",
+  authorized: "authorized",
   auth: "auth",
   formInstance: "formInstance",
 };
@@ -58,8 +58,11 @@ export const makeApiRequest = async ({
 
     switch (method) {
       case METHODS.get: {
+        let cleanedParams;
         // for removing empty key value pairs and for encoding
-        const cleanedParams = cleanFilters(params);
+        if (params) {
+          cleanedParams = cleanFilters(params);
+        }
         const config = params ? { params: { ...cleanedParams } } : {};
         return await API_INSTANCE.get(endPoint, config);
       }
@@ -69,11 +72,11 @@ export const makeApiRequest = async ({
       }
 
       case METHODS.put: {
-        return await API_INSTANCE.put(endPoint + update_id, { ...payload });
+        return await API_INSTANCE.put(endPoint + update_id+"/", { ...payload });
       }
 
       case METHODS.patch: {
-        return await API_INSTANCE.patch(endPoint + update_id, { ...payload });
+        return await API_INSTANCE.patch(endPoint + update_id+"/", { ...payload });
       }
 
       case METHODS.delete: {

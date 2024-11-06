@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { INSTANCE, makeApiRequest, METHODS } from "../api/apiFunctions";
 import { CATEGORIES_ENDPOINT } from "../api/endpoints";
 import { successType, toastMessage } from "../utils/toastMessage";
-import { CATEGORIES_ITEMS_PER_PAGE, DEFAULT_ERROR_MESSAGE } from "../constant";
+import { CATEGORIES_ITEMS_PER_PAGE, DEFAULT_ERROR_MESSAGE, OPTIONS } from "../constant";
 import useLoader from "../hooks/useLoader";
 import usePagination from "../hooks/usePagination";
 import TableComponent from "../Components/Common/TableComponent";
@@ -34,11 +34,7 @@ const DEFAULT_CATEGORY_VALUES = {
   parent_category: "",
   image: "",
 };
-const OPTIONS = [
-  { value: "Option1", label: "Option1" },
-  { value: "Option2", label: "Option2" },
-  { value: "Option3", label: "Option3" },
-];
+
 
 const filterFields = [
   {
@@ -96,7 +92,7 @@ const Categories = () => {
     toggleLoader("pageLoader");
     const apiFilters = {
       ...filters,
-      page: page,
+      page:page,
     };
     makeApiRequest({
       endPoint: CATEGORIES_ENDPOINT,
@@ -169,16 +165,16 @@ const Categories = () => {
     toggleLoader("buttonLoader");
     const payload = {
       ...values,
+      // category_image: imagePreview,
       // need to add another details
     };
-    console.log(values, "these are values");
+    console.log(payload, "this is payload");
     makeApiRequest({
       endPoint: CATEGORIES_ENDPOINT,
       method: isEdit ? METHODS?.patch : METHODS?.post,
       payload: payload,
       update_id: item?.id,
       instanceType: INSTANCE?.authorized,
-
     })
       .then((res) => {
         toastMessage(

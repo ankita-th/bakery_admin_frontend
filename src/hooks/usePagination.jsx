@@ -8,7 +8,7 @@ const usePagination = () => {
     const page = selected + 1;
     setPage(page);
   };
-  return { page, onPageChange };
+  return { page, onPageChange ,setPage};
 };
 
 export default usePagination;
