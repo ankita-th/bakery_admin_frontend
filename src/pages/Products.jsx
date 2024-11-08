@@ -42,6 +42,7 @@ const DUMMY_COLUMNS = [
   { label: "Action", key: "projectStatus" },
 ];
 const PRODUCT_PAGE_COLUMNS = [
+  "checkbox",
   "S.no",
   "Name",
   "SKU",

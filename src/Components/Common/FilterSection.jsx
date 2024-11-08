@@ -13,44 +13,49 @@ const FilterSection = ({
     <div className="filtersSection">
       {filterFields?.map(
         ({ type, filterName, defaultOption, options, placeholder }, idx) => (
-          <Fragment key={idx}>
-            {type === "select" && (
-              <select
-                className={className}
-                onChange={(e) => handleFilterChange(filterName, e.target.value)}
-              >
-                <option value="" selected hidden disabled>
-                  {defaultOption}
-                </option>
-                {options?.map(({ value, label }, idx) => (
-                  <option key={idx} value={value}>
-                    {label}
-                  </option>
-                ))}
-              </select>
-            )}
-
-            {type === "search" && (
-              <div className="search">
-                <input
-                  type="text"
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  className="search-input"
-                  placeholder={placeholder}
-                />
-                <div
-                  className="searchIcon"
-                  onClick={() => handleFilterChange(filterName, searchInput)}
-                >
-                  {searchIcon}
-                </div>
+          <div className="selection-pre">
+            <Fragment key={idx}>
+              <div className="filters">
+                {type === "select" && (
+                  <select
+                    className={className}
+                    onChange={(e) =>
+                      handleFilterChange(filterName, e.target.value)
+                    }
+                  >
+                    <option value="" selected hidden disabled>
+                      {defaultOption}
+                    </option>
+                    {options?.map(({ value, label }, idx) => (
+                      <option key={idx} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
-            )}
-          </Fragment>
+              {type === "search" && (
+                <>
+                  <input
+                    type="text"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    className="search-input"
+                    placeholder={placeholder}
+                  />
+                  <div
+                    className="searchIcon"
+                    onClick={() => handleFilterChange(filterName, searchInput)}
+                  >
+                    {searchIcon}
+                  </div>
+                </>
+              )}
+            </Fragment>
+          </div>
         )
       )}
-      {children}
+      <div className="filter-buttons">{children}</div>
     </div>
   );
 };
