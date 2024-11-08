@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+* {font-family: "Montserrat", sans-serif;}
+
 .nav-item {
   color: black;
   font-size: 15px;
@@ -14,12 +17,13 @@
   gap: 5px;
 }
 .outlet {
-  width: calc(100% - 240px);
+  width: calc(100% - 280px);
   margin-left: auto;
+  padding: 50px 30px;
 }
 
 header.header {
-  width: calc(100% - 240px);
+  width: calc(100% - 280px);
   margin-left: auto;
 }
 .nav-item:hover {
@@ -68,7 +72,7 @@ header.header {
   align-items: center;
   gap: 5px;
   border: 1px solid #d3d3d3;
-  width: 221px;
+  /* width: 221px; */
 }
 .searchInput {
   width: 100%;
@@ -179,3 +183,23 @@ header.header {
 .status-pending {
   color: red;
 }
+
+/* Header CSS */
+
+div#dropdownMenu a {transition: 0.4s ease-in-out;color: #64748B;border-bottom: 1px solid #D9D9D9;padding: 12px 20px;}
+div#dropdownMenu a:hover {color: #000000;background: transparent;}
+div#dropdownMenu a:last-child {border: none;}
+
+/* Sidebar CSS */
+
+.custom_nagivation a.nav-item {padding: 0;width: 100%;display: inline-block;border-radius: 60px;background: transparent;}
+.custom_nagivation a.nav-item .nav-item {color: #64748B;font-size: 14px;border-radius: 60px;}
+.custom_nagivation a.nav-item.active-link {background: #FFF6EE;border-radius: 60px;}
+.custom_nagivation a.nav-item.active-link .nav-item {color: #A94301;}
+.custom_nagivation a.nav-item.active-link .nav-item .icon * {stroke: #A94301;}
+
+
+/* Dashboard Css */
+
+.dashcat_icons {position: absolute;right: 10px;bottom: 10px;}
+.image_total_revenue {position: absolute;right: 0;width: 100%;max-width: 300px;}

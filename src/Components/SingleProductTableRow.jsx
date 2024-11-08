@@ -5,10 +5,17 @@ import { PRODUCTS_ITEMS_PER_PAGE } from "../constant";
 
 const SingleProductRow = ({ data, currentPage, index, handleActions }) => {
   // updates required: price published status in date,date are not given and also category is in number
-  const { id, category, name, product_detail, status, is_active} = data;
+  const { id, category, name, product_detail, status, is_active } = data;
 
   return (
     <tr className="text-center">
+      <td>
+        <input
+          type="checkbox"
+          id="checkbox"
+          className="w-6 h-6 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+        />
+      </td>
       <td className="py-2 px-4 border">
         {renderSerialNumber(currentPage, PRODUCTS_ITEMS_PER_PAGE, index)}
       </td>
