@@ -96,6 +96,8 @@ const Recipe = () => {
     } else if (action === "edit") {
       navigate(`/add-edit-recipe/${id}`);
     } else {
+
+
       // this is for print/view
     }
   };
@@ -107,7 +109,8 @@ const Recipe = () => {
       method: METHODS?.delete,
       delete_id: itemToDelete,
     })
-      .then((res) => {
+    .then((res) => {
+        console.log(itemToDelete);
         toastMessage("Recipe deleted successfully", successType);
         setTodos(deleteItemBasedOnId(recipes, itemToDelete)); //itemTo delete contains the id
       })
