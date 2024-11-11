@@ -9,6 +9,8 @@ import Todo from "../pages/Todo";
 import ZipConfiguration from "../pages/ZipConfiguration";
 import Recipe from "../pages/Recipe";
 import RecipeAddEdit from "../pages/RecipeAddEdit";
+import InventoryManagement from "../pages/InventoryManagement";
+import EmployeeManagement from "../pages/EmployeeManagement";
 
 export const routes = [
   {
@@ -65,6 +67,21 @@ export const routes = [
   {
     path: "/add-edit-recipe",
     element: <RecipeAddEdit />,
+    private: true,
+  },
+  {
+    path: "/add-edit-recipe/:receipe_id",
+    element: <RecipeAddEdit />,
+    private: true,
+  },
+  {
+    path: "/inventory/",
+    element: <InventoryManagement />,
+    private: true,
+  },
+  {
+    path: "/employee/",
+    element: <EmployeeManagement />,
     private: true,
   },
   {

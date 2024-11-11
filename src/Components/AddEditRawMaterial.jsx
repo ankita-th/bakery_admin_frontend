@@ -67,7 +67,7 @@ const AddEditRawMaterial = ({ onClose, onSubmit, formConfig, editInfo }) => {
           />
 
           <CommonTextField
-            label="Quantity in stock *"
+            label="Quantity In Stock *"
             fieldName="quantity"
             rules={RawMaterialValidations["quantity"]}
             formConfig={formConfig}
@@ -79,7 +79,7 @@ const AddEditRawMaterial = ({ onClose, onSubmit, formConfig, editInfo }) => {
             label="Unit Of Measure *"
             selectType="normal"
             options={MEASURE_OPTIONS}
-            defaultOption="Select option"
+            defaultOption="Select Unit Of Product"
             fieldName="unit_of_measure"
             className="add-edit-input"
             rules={RawMaterialValidations["unit_of_measure"]}
@@ -87,6 +87,7 @@ const AddEditRawMaterial = ({ onClose, onSubmit, formConfig, editInfo }) => {
           <CommonTextField
             label="Reorder Level"
             fieldName="reorder"
+            placeholder="Enter Reorder Level"
             rules={RawMaterialValidations["reorder"]}
             formConfig={formConfig}
             isNumberOnly={true}
@@ -95,6 +96,7 @@ const AddEditRawMaterial = ({ onClose, onSubmit, formConfig, editInfo }) => {
           <CommonTextField
             label="Cost Per Unit (USD)*"
             fieldName="cost"
+            placeholder="Cost Per Unit"
             rules={RawMaterialValidations["cost"]}
             formConfig={formConfig}
           />

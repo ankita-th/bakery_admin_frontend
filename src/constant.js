@@ -295,3 +295,25 @@ export const STATE_OPTIONS = [
   { label: "Wisconsin", value: "WI" },
   { label: "Wyoming", value: "WY" },
 ];
+
+
+export const DUMMY_EMPLOYEE_DATA = [
+  {
+    id:1,
+    name: "Jane Smith",
+    role: "Accountant",
+    email: "jane.smith@bakers.com",
+    phone: "123-456-7890",
+    shift: "9AM-5PM",
+    status: true,
+  },
+  {
+    id: 2,
+    name: "John Doe",
+    role: "Supervisor",
+    email: "john.doe@bakers.com",
+    phone: "123-456-7890",
+    shift: "9AM-5PM",
+    status: true,
+  },
+];

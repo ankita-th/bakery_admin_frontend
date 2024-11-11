@@ -3,7 +3,11 @@ import { useForm } from "react-hook-form";
 import { INSTANCE, makeApiRequest, METHODS } from "../api/apiFunctions";
 import { CATEGORIES_ENDPOINT } from "../api/endpoints";
 import { successType, toastMessage } from "../utils/toastMessage";
-import { CATEGORIES_ITEMS_PER_PAGE, DEFAULT_ERROR_MESSAGE, OPTIONS } from "../constant";
+import {
+  CATEGORIES_ITEMS_PER_PAGE,
+  DEFAULT_ERROR_MESSAGE,
+  OPTIONS,
+} from "../constant";
 import useLoader from "../hooks/useLoader";
 import usePagination from "../hooks/usePagination";
 import TableComponent from "../Components/Common/TableComponent";
@@ -14,7 +18,7 @@ import useModalToggle from "../hooks/useModalToggle";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import { trashIcon } from "../assets/Icons/Svg";
 import Pagination from "../Components/Common/Pagination";
-import { deleteItemBasedOnId } from "../utils/helpers";
+import { deleteItemBasedOnId, handleEdit } from "../utils/helpers";
 import FilterSection from "../Components/Common/FilterSection";
 import CommonButton from "../Components/Common/CommonButton";
 import AddEditCategorySection from "../Components/AddEditCategorySection";
@@ -23,10 +27,10 @@ const CATEGORY_PAGE_COLUMNS = [
   "Name",
   "Slug",
   "Description",
-  "Product Count",
+  "Parent Category",
   "Actions",
   // this extra space is for the hamburger menu ,
-  "",
+  // "",
 ];
 const DEFAULT_CATEGORY_VALUES = {
   name: "",
@@ -35,19 +39,12 @@ const DEFAULT_CATEGORY_VALUES = {
   image: "",
 };
 
-
 const filterFields = [
   {
     type: "select",
     defaultOption: "All",
     options: OPTIONS,
     filterName: "type",
-  },
-  {
-    type: "select",
-    defaultOption: "Select Category",
-    options: OPTIONS,
-    filterName: "category",
   },
   {
     type: "select",
@@ -66,10 +63,9 @@ const Categories = () => {
   const formConfig = useForm({
     defaultValues: DEFAULT_CATEGORY_VALUES,
   });
-  const { reset } = formConfig;
+  const { reset,setValue } = formConfig;
   const [filters, setFilters] = useState({
     type: "",
-    category: "",
     action: "",
     name: "",
   });
@@ -84,7 +80,7 @@ const Categories = () => {
   const { buttonLoader, pageLoader, toggleLoader } = useLoader();
   // for delete confirmation modal
   const { showModal, toggleModal } = useModalToggle();
-  const { page, onPageChange } = usePagination();
+  const { page, onPageChange, setPage } = usePagination();
   // for add and edit category modal
   const categoryModal = useModalToggle();
 
@@ -92,7 +88,7 @@ const Categories = () => {
     toggleLoader("pageLoader");
     const apiFilters = {
       ...filters,
-      page:page,
+      page: page,
     };
     makeApiRequest({
       endPoint: CATEGORIES_ENDPOINT,
@@ -149,36 +145,62 @@ const Categories = () => {
     setFilters(temp);
   };
 
-  const handleCategoryModal = ({ action, itemToEdit }) => {
+  const handleCategoryModal = ({ action }) => {
     if (action === "open") {
-      // categoryModal?.toggleModal();
+      categoryModal?.toggleModal();
     } else if (action === "close") {
       reset();
       setEditCategoryInfo({ isEdit: false, item: null });
       setItemToDelete(null);
+      setImagePreview(null);
+      setPage(1);
+      categoryModal?.toggleModal();
+      setValue("category_image", null);
     }
-    categoryModal?.toggleModal();
   };
 
-  const handleAddEditCategory = (values) => {
+  const handleAddEditCategory = (values, event) => {
     const { isEdit, item } = editCategoryInfo;
+    const buttonType = event.nativeEvent.submitter.name;
+
     toggleLoader("buttonLoader");
     const payload = {
       ...values,
+      is_active: buttonType === "publish",
+      //update required:  comment this and fix image issue
+      category_image: null,
       // category_image: imagePreview,
-      // need to add another details
     };
-    console.log(payload, "this is payload");
+    delete payload.image;
+
+    // converting payload into form data
+    const formData = new FormData();
+
+    for (let key in payload) {
+      formData.append(key, payload[key]);
+    }
+
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value, "form values");
+    }
+    console.log(payload, " log payload");
+
     makeApiRequest({
       endPoint: CATEGORIES_ENDPOINT,
       method: isEdit ? METHODS?.patch : METHODS?.post,
-      payload: payload,
-      update_id: item?.id,
-      instanceType: INSTANCE?.authorized,
+      update_id: isEdit && item?.id,
+      payload: formData,
+      instanceType: INSTANCE.formInstance,
+      // payload: payload,
     })
       .then((res) => {
+        if (isEdit) {
+          setCategories(handleEdit(categories, item?.id, res?.data)); //array , id to update , data to update
+        } else {
+          setCategories((prev) => [...prev, res?.data]);
+        }
         toastMessage(
-          `Category ${isEdit ? "added" : "updated"} successfully`,
+          `Category ${isEdit ? "updated" : "added"} successfully`,
           successType
         );
       })
@@ -187,9 +209,9 @@ const Categories = () => {
       })
       .finally(() => {
         handleCategoryModal({ action: "close" });
+        reset();
       });
   };
-  console.log(editCategoryInfo, "editCategoryInfo");
 
   return (
     <>

@@ -27,9 +27,10 @@ const Login = () => {
         localStorage.setItem("refreshToken", res?.data?.refresh);
         navigate("/dashboard");
       })
-      .catch((err) =>
-        toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE)
-      );
+      .catch((err) => {
+        console.log(err?.response?.data?.non_field_errors[0], "error");
+        toastMessage(err?.response?.data?.non_field_errors[0] || DEFAULT_ERROR_MESSAGE);
+      });
   };
   return (
     <>

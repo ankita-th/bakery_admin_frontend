@@ -98,6 +98,7 @@ header.header {
   gap: 20px;
   padding: 0px 4px;
   color: white;
+  cursor: pointer;
 }
 
 .buttonTwo {
@@ -111,6 +112,8 @@ header.header {
   gap: 20px;
   padding: 0px 4px;
   color: white;
+  cursor: pointer;
+
 }
 
 .OTPInputContainer {
@@ -178,4 +181,22 @@ header.header {
 }
 .status-pending {
   color: red;
+}
+.recipe-input {
+  @apply bg-[#F5F5F5] w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2;
+}
+.cross-icon {
+  background: #ff6d2f;
+  border-radius: 12px;
+  height: 33px;
+  width: 32px;
+}
+.add-row-button {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: #E4E4E4;
+  border-radius: 12px;
+  padding: 5px;
+  margin-top: 5px;
 }

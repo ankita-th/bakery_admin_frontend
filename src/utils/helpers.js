@@ -8,6 +8,9 @@ const routeTitles = {
   "/raw-materials": "Raw Materials",
   "/configuration": "ZIP Code Configuration",
   "/recipe": "Recipe",
+  "/add-edit-recipe": "New Recipe",
+  "/inventory": "Inventory Management",
+  "/employee": "Employee Management",
 };
 
 export const getHeadingTitleFromRoute = (pathName) => {
@@ -115,4 +118,15 @@ export const handleEdit = (arr, id, dataToUpdate) => {
   // return arr.map((el) =>
   //   el.id === id ? { ...el, ...dataToUpdate } : el
   // );
+};
+
+export const appendStepCountInObject = (instructions) => {
+  if (instructions?.length) {
+    const result = [];
+    instructions.forEach((curElem, index) => {
+      const item = { ...curElem, step_count: index + 1 };
+      result.push(item);
+    });
+    return result;
+  }
 };

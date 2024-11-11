@@ -1,3 +1,7 @@
+// regex
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// regex
+
 // validations for category section
 
 export const CategoryValidations = {
@@ -91,8 +95,55 @@ export const ConfigurationValidations = {
   state: {
     required: "State is required",
   },
-  
+
   city: {
     required: "City is required",
+  },
+};
+
+// Recipe validations
+export const RecipeValidations = {
+  recipe_title: {
+    required: "Recipe title is required",
+  },
+  preparation_time: {
+    required: "Preparation time is required",
+  },
+  cook_time: {
+    required: "Cook time is required",
+  },
+  difficulty_level: {
+    required: "Difficulty level is required",
+  },
+  difficulty_level: {
+    required: "Difficulty level is required",
+  },
+  serving_size: {
+    required: "Serving size is required",
+  },
+  description: {
+    required: "This field is required",
+  },
+  dietary_plan: {
+    required: "This field is required",
+  },
+  allergen_informations: {
+    required: "This field is required",
+  },
+};
+
+export const EmployeeValidations = {
+  name: {
+    required: "Employee name is required",
+  },
+  email: {
+    pattern: {
+      value: EMAIL_REGEX,
+      message: "Please enter a valid email",
+    },
+  },
+
+  zip_code: {
+    required: "ZIP code  is required",
   },
 };

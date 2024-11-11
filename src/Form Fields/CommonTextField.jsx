@@ -15,6 +15,7 @@ const CommonTextField = ({
   isNumberOnly = false,
   maxlength = null,
   rows = null,
+  customError = null,
 }) => {
   const {
     register,
@@ -60,7 +61,11 @@ const CommonTextField = ({
       <div className="icon" onClick={onIconClick}>
         {icon}
       </div>
-      <ErrorMessage fieldName={fieldName} errors={errors} />
+      {customError ? (
+        <p className="text-red-600">{customError}</p> 
+      ) : (
+        <ErrorMessage fieldName={fieldName} errors={errors} />
+      )}
     </div>
   );
 };

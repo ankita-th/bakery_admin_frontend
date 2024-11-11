@@ -23,6 +23,7 @@ const CommonTextEditor = ({
   rules,
   fieldName,
   requiredMessage,
+  label,
 }) => {
   const {
     control,
@@ -30,13 +31,15 @@ const CommonTextEditor = ({
   } = formConfig;
   return (
     <div>
+      {label}
       <Controller
         control={control}
         name={fieldName}
         rules={{
           ...rules,
           validate: (value) => {
-            const isEmpty = value === "" || value === "<p><br></p>";
+            const isEmpty =
+              value === "" || value === "<p><br></p>" || value === undefined;
             return isEmpty && requiredMessage ? requiredMessage : true;
           },
         }}

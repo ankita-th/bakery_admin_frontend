@@ -1,5 +1,5 @@
 import { cleanFilters } from "../utils/helpers";
-import { authAxios, authorizeAxios } from "./apiConfig";
+import { authAxios, authorizeAxios, authorizeFileInstance } from "./apiConfig";
 
 export const login = (payload) => {
   return authAxios.post("/login/", payload);

@@ -17,7 +17,7 @@ import NoDataFound from "../Components/Common/NoDataFound";
 import useModalToggle from "../hooks/useModalToggle";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import SingleRecipeRow from "../Components/SingleRecipeRow";
-import { successType } from "../utils/toastMessage";
+import { successType, toastMessage } from "../utils/toastMessage";
 import { deleteItemBasedOnId } from "../utils/helpers";
 const filterFields = [
   {
@@ -89,10 +89,14 @@ const Recipe = () => {
     temp[filterName] = value;
     setFilters(temp);
   };
-  const handleActions = ({ action, delete_id }) => {
+  const handleActions = ({ action, id }) => {
     if (action === "delete") {
-      setItemToDelete(delete_id);
+      setItemToDelete(id);
       toggleDeleteModal();
+    } else if (action === "edit") {
+      navigate(`/add-edit-recipe/${id}`);
+    } else {
+      // this is for print/view
     }
   };
 
@@ -115,6 +119,7 @@ const Recipe = () => {
         toggleLoader("buttonLoader");
       });
   };
+  console.log(itemToDelete, "these are recipes");
   return (
     <div>
       <FilterSection
@@ -141,6 +146,7 @@ const Recipe = () => {
               index={idx}
               currentPage={page}
               handleActions={handleActions}
+              isRecipe={true}
             />
           ))
         ) : (

@@ -2,6 +2,7 @@ import React from "react";
 import { closeIcon, imageUploadIcon } from "../assets/Icons/Svg";
 import ErrorMessage from "../Components/Common/ErrorMessage";
 import { isValidType } from "../utils/helpers";
+import { Controller } from "react-hook-form";
 
 const ImageUploadSection = ({
   label,
@@ -10,20 +11,26 @@ const ImageUploadSection = ({
   imagePreview,
   setImagePreview,
   allowedTypes,
+  // rules
 }) => {
   const {
     register,
     setError,
     clearErrors,
+    watch,
+    setValue,
+    control,
     formState: { errors },
   } = formConfig;
   const inputId = `image-upload-${label}`;
+  console.log(watch("category_image"), "sdjs");
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
       if (isValidType(file, allowedTypes)) {
         // logic to convert image file into url
+        setValue(fieldName, file);
         clearErrors(fieldName);
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -50,11 +57,7 @@ const ImageUploadSection = ({
       </label>
       <input
         {...register(fieldName, {
-          // may be need to remove this validation in future
-          // required: imagePreview ? false : "Category Image is required",
-          onChange: (e) => {
-            handleImageUpload(e);
-          },
+          onChange: (e) => handleImageUpload(e),
         })}
         type="file"
         id={inputId}
@@ -68,6 +71,7 @@ const ImageUploadSection = ({
             className="remove-image"
             onClick={() => {
               setImagePreview(null);
+              setValue(fieldName,null);
               // setError(fieldName, {
               //   type: "manual",
               //   message: "Category Image us required",

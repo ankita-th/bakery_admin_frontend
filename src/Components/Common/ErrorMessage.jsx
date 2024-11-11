@@ -4,7 +4,7 @@ const ErrorMessage = ({ fieldName, errors }) => {
   return (
     <>
       {errors?.[fieldName] && (
-        <p className="text-red-600">{errors?.[fieldName]?.message}</p>
+        <p className="text-red-600">{errors?.[fieldName].message}</p>
       )}
     </>
   );

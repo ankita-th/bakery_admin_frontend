@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import FormWrapper from "../Wrappers/FormWrapper";
-import { closeIcon, publishIcon } from "../assets/Icons/Svg";
+import { closeIcon, draftIcon, publishIcon } from "../assets/Icons/Svg";
 import AddEditSectionHeading from "./AddEditSectionHeading";
 import CommonTextField from "../Form Fields/CommonTextField";
 import { CategoryValidations } from "../Validations/validations";
@@ -42,7 +42,7 @@ const AddEditCategorySection = ({
       // function for prefilling normal values
       prefillFormValues(item, keysToPrefill, setValue);
       // for handling custom prefilling logic
-      setValue("image", imagePreview);
+      // setValue("image", imagePreview);
     }
   }, []);
   return (
@@ -107,12 +107,23 @@ const AddEditCategorySection = ({
             setImagePreview={setImagePreview}
             allowedTypes={allowedImageTypes}
           />
-          <CommonButton
-            type="submit"
-            text="Publish"
-            className="buttonTwo"
-            icon={publishIcon}
-          />
+          <div className="button-section">
+            <CommonButton
+              type="submit"
+              text="Publish"
+              className="buttonTwo"
+              icon={publishIcon}
+              name="publish"
+            />
+
+            <CommonButton
+              type="submit"
+              text="Draft"
+              className="buttonTwo"
+              icon={draftIcon}
+              name="draft"
+            />
+          </div>
         </form>
         {/* </FormWrapper> */}
       </div>

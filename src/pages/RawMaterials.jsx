@@ -42,14 +42,14 @@ const filterFields = [
   },
   {
     type: "select",
-    defaultOption: "Select Category",
+    defaultOption: "Select Action",
     options: OPTIONS,
-    filterName: "category",
+    filterName: "action",
   },
   {
     type: "search",
     filterName: "name",
-    placeholder: "Search Category",
+    placeholder: "Search Materials",
   },
 ];
 

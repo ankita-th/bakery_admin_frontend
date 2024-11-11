@@ -22,7 +22,7 @@ const DeleteConfirmationModal = ({
         </h2>
         <p className="text-sm text-center text-gray-600 mt-2">{description}</p>
         <div className="flex justify-center mt-6 space-x-3">
-          <button className="buttonTwo" onClick={onDelete} disabled={disabled}>
+          <button className="buttonTwo" onClick={onDelete} >
             Delete
           </button>
           <button
