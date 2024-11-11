@@ -1,7 +1,7 @@
 import React from "react";
 import { editIcon, eyeIcon, trashIcon } from "../assets/Icons/Svg";
 import { renderSerialNumber } from "../utils/helpers";
-import { PRODUCTS_ITEMS_PER_PAGE } from "../constant";
+import { ITEMS_PER_PAGE } from "../constant";
 
 const SingleConfigurationRow = ({
   item,
@@ -23,7 +23,7 @@ const SingleConfigurationRow = ({
   return (
     <tr className="text-center">
       <td className="py-2 px-4 border">
-        {renderSerialNumber(currentPage, PRODUCTS_ITEMS_PER_PAGE, index)}
+        {renderSerialNumber(currentPage, ITEMS_PER_PAGE, index)}
       </td>
       <td className="py-2 px-4 border">{zip_code}</td>
       <td className="py-2 px-4 border">{location}</td>

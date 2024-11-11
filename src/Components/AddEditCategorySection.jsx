@@ -12,9 +12,9 @@ import { allowedImageTypes } from "../constant";
 import { prefillFormValues } from "../utils/helpers";
 import CommonButton from "./Common/CommonButton";
 const PARENT_CATEGORY_OPTIONS = [
-  { value: "option1", label: "Option1" },
-  { value: "option2", label: "Option2" },
-  { value: "option2", label: "Option2" },
+  { value: "option1", label: "Option 1" },
+  { value: "option2", label: "Option 2" },
+  { value: "option3", label: "Option 3" },
 ];
 
 const keysToPrefill = [
@@ -82,8 +82,8 @@ const AddEditCategorySection = ({
           <CommonSelect
             selectType="normal"
             options={PARENT_CATEGORY_OPTIONS}
-            rules={CategoryValidations["parent_category"]}
-            fieldName="parent_category"
+            rules={CategoryValidations["parent"]}
+            fieldName="parent"
             defaultOption="None"
             formConfig={formConfig}
             className="add-edit-input"

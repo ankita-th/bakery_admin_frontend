@@ -22,6 +22,7 @@ import AddEditRawMaterial from "../Components/AddEditRawMaterial";
 import { useForm } from "react-hook-form";
 import FilterSection from "../Components/Common/FilterSection";
 import CommonButton from "../Components/Common/CommonButton";
+import PageLoader from "../loaders/PageLoader";
 const RAW_MATERIAL_COLUMNS = [
   "",
   "ID",
@@ -94,7 +95,7 @@ const RawMaterials = () => {
     toggleModal: toggleRawMaterialSection,
   } = useModalToggle();
 
-  const { buttonLoader, pageLoader, toggleLoader } = useLoader();
+  const { pageLoader, toggleLoader } = useLoader();
   const { page, onPageChange, setPage } = usePagination();
   const [filters, setFilters] = useState({
     type: "",
@@ -108,6 +109,11 @@ const RawMaterials = () => {
   const [rawMaterials, setRawMaterials] = useState([]);
   const [totalData, setTotalData] = useState(null);
   const [itemToDelete, setItemToDelete] = useState();
+  const [deleteLoader, setDeleteLoader] = useState(false);
+  const [btnLoaders, setbtnLoaders] = useState({
+    publish: false,
+    draft: false,
+  });
 
   useEffect(() => {
     toggleLoader("pageLoader");
@@ -129,7 +135,7 @@ const RawMaterials = () => {
         setRawMaterials(response?.results);
       })
       .catch((err) => {
-        toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+        console.log(err);
       })
       .finally(() => {
         toggleLoader("pageLoader");
@@ -152,8 +158,7 @@ const RawMaterials = () => {
   };
 
   const deleteRawMaterial = () => {
-    toggleLoader("buttonLoader");
-
+    setDeleteLoader((prev) => true);
     makeApiRequest({
       endPoint: RAW_MATERIAL_ENDPOINT,
       method: METHODS?.delete,
@@ -169,7 +174,7 @@ const RawMaterials = () => {
       })
       .finally((res) => {
         toggleDeleteModal();
-        toggleLoader("buttonLoader");
+        setDeleteLoader((prev) => false);
       });
   };
 
@@ -186,18 +191,15 @@ const RawMaterials = () => {
   };
 
   const handleAddEditRawMaterial = (values, event) => {
-    const buttonType = event.nativeEvent.submitter.name;
-
-    console.log(values, "these are form values");
-    toggleLoader("buttonLoader");
+    const buttonType = event.nativeEvent.submitter.name; //contains publish and draft
+    handleButtonLoaders(buttonType);
     const payload = {
       ...values,
       quantity: +values?.quantity, // for converting quantity type from string into number
       reorder: +values?.reorder, // for converting quantity type from string into number
-      is_active: buttonType === "draft",
+      is_active: buttonType === "publish",
       expiry_date: formatDate(values?.expiry_date, YYYY_MM_DD),
     };
-    console.log(payload, "this is payload");
 
     makeApiRequest({
       endPoint: RAW_MATERIAL_ENDPOINT,
@@ -206,80 +208,94 @@ const RawMaterials = () => {
       update_id: editInfo?.isEdit && editInfo?.item?.id,
     })
       .then((res) => {
-        console.log(res,"res inside raw material")
         toastMessage(
           `Raw material ${editInfo?.isEdit ? "updated" : "added"} successfully`,
           successType
         );
         if (editInfo?.isEdit) {
-          setRawMaterials(handleEdit(rawMaterials, editInfo?.item?.id, res?.data));
+          setRawMaterials(
+            handleEdit(rawMaterials, editInfo?.item?.id, res?.data)
+          );
         } else {
-           setRawMaterials((prev) => [...prev,res?.data])
+          setRawMaterials((prev) => [...prev, res?.data]);
         }
       })
       .catch((err) => {
-        toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+        console.log(err.response?.data, "raw material error");
+        toastMessage(err?.response?.data?.name[0] || DEFAULT_ERROR_MESSAGE);
       })
       .finally(() => {
-        toggleLoader("buttonLoader");
+        setbtnLoaders({ publish: false, draft: false });
         handleRawMaterialCancel();
         setPage(1);
       });
   };
+  // for managing loaders for  publish and draft buttons
+  const handleButtonLoaders = (type) => {
+    setbtnLoaders({ ...btnLoaders, [type]: !btnLoaders[type] });
+  };
+  console.log(btnLoaders, "this is button loader");
   return (
     <>
-      <FilterSection
-        filterFields={filterFields}
-        handleFilterChange={handleFilterChange}
-      >
-        <CommonButton
-          text="Add Raw Product"
-          className="buttonTwo"
-          onClick={toggleRawMaterialSection}
-        />
-      </FilterSection>
-      <TableWrapper columns={RAW_MATERIAL_COLUMNS}>
-        {rawMaterials?.length ? (
-          rawMaterials?.map((it, idx) => (
-            <SingleRawMaterialRow
-              key={idx}
-              item={it}
-              index={idx}
-              currentPage={page}
-              handleActions={handleActions}
+      {pageLoader ? (
+        <PageLoader />
+      ) : (
+        <>
+          <FilterSection
+            filterFields={filterFields}
+            handleFilterChange={handleFilterChange}
+          >
+            <CommonButton
+              text="Add Raw Product"
+              className="buttonTwo"
+              onClick={toggleRawMaterialSection}
             />
-          ))
-        ) : (
-          <NoDataFound />
-        )}
-      </TableWrapper>
+          </FilterSection>
+          <TableWrapper columns={RAW_MATERIAL_COLUMNS}>
+            {rawMaterials?.length ? (
+              rawMaterials?.map((it, idx) => (
+                <SingleRawMaterialRow
+                  key={idx}
+                  item={it}
+                  index={idx}
+                  currentPage={page}
+                  handleActions={handleActions}
+                />
+              ))
+            ) : (
+              <NoDataFound />
+            )}
+          </TableWrapper>
 
-      <Pagination
-        onPageChange={onPageChange}
-        itemsPerPage={RAW_MATERIALS_ITEMS_PER_PAGE}
-        totalData={totalData}
-      />
+          <Pagination
+            onPageChange={onPageChange}
+            itemsPerPage={RAW_MATERIALS_ITEMS_PER_PAGE}
+            totalData={totalData}
+          />
 
-      {showDeleteModal && (
-        <DeleteConfirmationModal
-          icon={trashIcon}
-          title="Are you sure you want to delete this raw material?"
-          description="This action cannot be redo. Deleting this product will permanently remove it from your inventory"
-          onCancel={() => {
-            setItemToDelete(null);
-            toggleDeleteModal();
-          }}
-          onDelete={deleteRawMaterial}
-        />
-      )}
+          {showDeleteModal && (
+            <DeleteConfirmationModal
+              title="Are you sure you want to delete this raw material?"
+              description="This action cannot be redo. Deleting this product will permanently remove it from your inventory"
+              onCancel={() => {
+                setItemToDelete(null);
+                toggleDeleteModal();
+              }}
+              loader={deleteLoader}
+              onDelete={deleteRawMaterial}
+            />
+          )}
 
-      {showRawMaterialSection && (
-        <AddEditRawMaterial
-          formConfig={formConfig}
-          onClose={handleRawMaterialCancel}
-          onSubmit={handleAddEditRawMaterial}
-          editInfo={editInfo}
-        />
+          {showRawMaterialSection && (
+            <AddEditRawMaterial
+              formConfig={formConfig}
+              onClose={handleRawMaterialCancel}
+              onSubmit={handleAddEditRawMaterial}
+              editInfo={editInfo}
+              btnLoaders={btnLoaders}
+            />
+          )}
+        </>
       )}
     </>
   );

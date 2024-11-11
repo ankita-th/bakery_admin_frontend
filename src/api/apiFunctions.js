@@ -68,15 +68,15 @@ export const makeApiRequest = async ({
       }
 
       case METHODS.post: {
-        return await API_INSTANCE.post(endPoint, { ...payload });
+        return await API_INSTANCE.post(endPoint, payload);
       }
 
       case METHODS.put: {
-        return await API_INSTANCE.put(endPoint + update_id+"/", { ...payload });
+        return await API_INSTANCE.put(endPoint + update_id + "/", payload);
       }
 
       case METHODS.patch: {
-        return await API_INSTANCE.patch(endPoint + update_id+"/", { ...payload });
+        return await API_INSTANCE.patch(endPoint + update_id + "/", payload);
       }
 
       case METHODS.delete: {

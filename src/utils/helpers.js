@@ -11,6 +11,7 @@ const routeTitles = {
   "/add-edit-recipe": "New Recipe",
   "/inventory": "Inventory Management",
   "/employee": "Employee Management",
+  "/payment-history": "Payment History",
 };
 
 export const getHeadingTitleFromRoute = (pathName) => {

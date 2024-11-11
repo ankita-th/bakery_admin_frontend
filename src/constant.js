@@ -1,9 +1,7 @@
-export const PRODUCTS_ITEMS_PER_PAGE = 10;
-export const CATEGORIES_ITEMS_PER_PAGE = 10;
 export const RAW_MATERIALS_ITEMS_PER_PAGE = 10;
 export const TODO_ITEMS_PER_PAGE = 10;
 export const CONFIGURATION_ITEMS_PER_PAGE = 10;
-export const RECIPE_ITEMS_PER_PAGE = 10;
+export const ITEMS_PER_PAGE = 10;
 
 export const DUMMY_PRODUCT_DATA = [
   {
@@ -296,10 +294,9 @@ export const STATE_OPTIONS = [
   { label: "Wyoming", value: "WY" },
 ];
 
-
 export const DUMMY_EMPLOYEE_DATA = [
   {
-    id:1,
+    id: 1,
     name: "Jane Smith",
     role: "Accountant",
     email: "jane.smith@bakers.com",

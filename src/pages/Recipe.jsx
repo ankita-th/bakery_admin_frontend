@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import FilterSection from "../Components/Common/FilterSection";
 import {
   DEFAULT_ERROR_MESSAGE,
+  ITEMS_PER_PAGE,
   OPTIONS,
-  RECIPE_ITEMS_PER_PAGE,
 } from "../constant";
 import CommonButton from "../Components/Common/CommonButton";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +19,7 @@ import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import SingleRecipeRow from "../Components/SingleRecipeRow";
 import { successType, toastMessage } from "../utils/toastMessage";
 import { deleteItemBasedOnId } from "../utils/helpers";
+import PageLoader from "../loaders/PageLoader";
 const filterFields = [
   {
     type: "select",
@@ -64,6 +65,7 @@ const Recipe = () => {
   const [recipes, setRecipes] = useState([]);
   const [totalData, setTotalData] = useState(null);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const [deleteLoader, setDeleteLoader] = useState(false);
 
   useEffect(() => {
     toggleLoader("pageLoader");
@@ -89,6 +91,7 @@ const Recipe = () => {
     temp[filterName] = value;
     setFilters(temp);
   };
+
   const handleActions = ({ action, id }) => {
     if (action === "delete") {
       setItemToDelete(id);
@@ -96,20 +99,18 @@ const Recipe = () => {
     } else if (action === "edit") {
       navigate(`/add-edit-recipe/${id}`);
     } else {
-
-
       // this is for print/view
     }
   };
 
   const deleteRecipe = () => {
-    toggleLoader("buttonLoader");
+    setDeleteLoader((prev) => true);
     makeApiRequest({
       endPoint: RECIPE_ENDPOINT,
       method: METHODS?.delete,
       delete_id: itemToDelete,
     })
-    .then((res) => {
+      .then((res) => {
         console.log(itemToDelete);
         toastMessage("Recipe deleted successfully", successType);
         setTodos(deleteItemBasedOnId(recipes, itemToDelete)); //itemTo delete contains the id
@@ -120,57 +121,64 @@ const Recipe = () => {
       .finally((res) => {
         toggleDeleteModal();
         toggleLoader("buttonLoader");
+        setDeleteLoader((prev) => false);
       });
   };
-  console.log(itemToDelete, "these are recipes");
   return (
     <div>
-      <FilterSection
-        filterFields={filterFields}
-        handleFilterChange={handleFilterChange}
-      >
-        <CommonButton
-          text="Categories"
-          className="buttonOne"
-          onClick={() => navigate("/categories")}
-        />
-        <CommonButton
-          text="Add New Recipe"
-          className="buttonTwo"
-          onClick={() => navigate("/add-edit-recipe")}
-        />
-      </FilterSection>
-      <TableWrapper columns={RECIPE_COLUMNS}>
-        {recipes?.length ? (
-          recipes?.map((it, idx) => (
-            <SingleRecipeRow
-              key={idx}
-              item={it}
-              index={idx}
-              currentPage={page}
-              handleActions={handleActions}
-              isRecipe={true}
+      {pageLoader ? (
+        <PageLoader />
+      ) : (
+        <>
+          <FilterSection
+            filterFields={filterFields}
+            handleFilterChange={handleFilterChange}
+          >
+            <CommonButton
+              text="Categories"
+              className="buttonOne"
+              onClick={() => navigate("/categories")}
             />
-          ))
-        ) : (
-          <NoDataFound />
-        )}
-      </TableWrapper>
-      <Pagination
-        onPageChange={onPageChange}
-        itemsPerPage={RECIPE_ITEMS_PER_PAGE}
-        totalData={totalData}
-      />
-      {showDeleteModal && (
-        <DeleteConfirmationModal
-          title="Are you sure you want to delete this recipe?"
-          description="This action cannot be redo. Deleting this recipe will permanently remove it from your inventory"
-          onCancel={() => {
-            setItemToDelete(null);
-            toggleDeleteModal();
-          }}
-          onDelete={deleteRecipe}
-        />
+            <CommonButton
+              text="Add New Recipe"
+              className="buttonTwo"
+              onClick={() => navigate("/add-edit-recipe")}
+            />
+          </FilterSection>
+          <TableWrapper columns={RECIPE_COLUMNS}>
+            {recipes?.length ? (
+              recipes?.map((it, idx) => (
+                <SingleRecipeRow
+                  key={idx}
+                  item={it}
+                  index={idx}
+                  currentPage={page}
+                  handleActions={handleActions}
+                  isRecipe={true}
+                />
+              ))
+            ) : (
+              <NoDataFound />
+            )}
+          </TableWrapper>
+          <Pagination
+            onPageChange={onPageChange}
+            itemsPerPage={ITEMS_PER_PAGE}
+            totalData={totalData}
+          />
+          {showDeleteModal && (
+            <DeleteConfirmationModal
+              title="Are you sure you want to delete this recipe?"
+              description="This action cannot be redo. Deleting this recipe will permanently remove it from your inventory"
+              onCancel={() => {
+                setItemToDelete(null);
+                toggleDeleteModal();
+              }}
+              onDelete={deleteRecipe}
+              loader={deleteLoader}
+            />
+          )}
+        </>
       )}
     </div>
   );

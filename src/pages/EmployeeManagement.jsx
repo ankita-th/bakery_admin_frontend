@@ -66,6 +66,7 @@ const EmployeeManagement = () => {
     sort_by: "",
     name: "",
   });
+  const [deleteLoader, setDeleteLoader] = useState(false);
 
   useEffect(() => {
     toggleLoader("pageLoader");
@@ -121,6 +122,7 @@ const EmployeeManagement = () => {
   };
   const deleteEmployee = () => {
     // manage delete modal loader here
+    setDeleteLoader((prev) => true);
     makeApiRequest({
       endPoint: EMPLOYEE_ENDPOINT,
       method: METHODS.delete,
@@ -135,6 +137,7 @@ const EmployeeManagement = () => {
         toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
       })
       .finally(() => {
+        setDeleteLoader((prev) => false);
         toggleDeleteModal();
         setItemToDelete(null);
       });
@@ -184,6 +187,7 @@ const EmployeeManagement = () => {
             toggleDeleteModal();
           }}
           onDelete={deleteEmployee}
+          loader={deleteLoader}
         />
       )}
       {showEmployeeSection && (

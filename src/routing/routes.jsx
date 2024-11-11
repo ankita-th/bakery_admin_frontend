@@ -11,6 +11,7 @@ import Recipe from "../pages/Recipe";
 import RecipeAddEdit from "../pages/RecipeAddEdit";
 import InventoryManagement from "../pages/InventoryManagement";
 import EmployeeManagement from "../pages/EmployeeManagement";
+import PaymentHistory from "../pages/PaymentHistory";
 
 export const routes = [
   {
@@ -82,6 +83,11 @@ export const routes = [
   {
     path: "/employee/",
     element: <EmployeeManagement />,
+    private: true,
+  },
+  {
+    path: "/payment-history/",
+    element: <PaymentHistory />,
     private: true,
   },
   {

@@ -21,7 +21,7 @@ const CommonButton = ({
       {icon}
       {text}
       {/* add loader here */}
-      {loader && "...loading"}
+      {loader ? "...loading":""}
     </button>
   );
 };

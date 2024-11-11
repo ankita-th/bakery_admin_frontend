@@ -3,11 +3,7 @@ import { useForm } from "react-hook-form";
 import { INSTANCE, makeApiRequest, METHODS } from "../api/apiFunctions";
 import { CATEGORIES_ENDPOINT } from "../api/endpoints";
 import { successType, toastMessage } from "../utils/toastMessage";
-import {
-  CATEGORIES_ITEMS_PER_PAGE,
-  DEFAULT_ERROR_MESSAGE,
-  OPTIONS,
-} from "../constant";
+import { DEFAULT_ERROR_MESSAGE, ITEMS_PER_PAGE, OPTIONS } from "../constant";
 import useLoader from "../hooks/useLoader";
 import usePagination from "../hooks/usePagination";
 import TableComponent from "../Components/Common/TableComponent";
@@ -22,12 +18,14 @@ import { deleteItemBasedOnId, handleEdit } from "../utils/helpers";
 import FilterSection from "../Components/Common/FilterSection";
 import CommonButton from "../Components/Common/CommonButton";
 import AddEditCategorySection from "../Components/AddEditCategorySection";
+import PageLoader from "../loaders/PageLoader";
 const CATEGORY_PAGE_COLUMNS = [
   "", // for image section
   "Name",
   "Slug",
   "Description",
-  "Parent Category",
+  // "Parent Category",
+  "Product Count",
   "Actions",
   // this extra space is for the hamburger menu ,
   // "",
@@ -55,7 +53,7 @@ const filterFields = [
   {
     type: "search",
     filterName: "name",
-    placeholder: "Search Category",
+    placeholder: "Search Categories",
   },
 ];
 
@@ -63,7 +61,7 @@ const Categories = () => {
   const formConfig = useForm({
     defaultValues: DEFAULT_CATEGORY_VALUES,
   });
-  const { reset,setValue } = formConfig;
+  const { reset, setValue } = formConfig;
   const [filters, setFilters] = useState({
     type: "",
     action: "",
@@ -77,6 +75,7 @@ const Categories = () => {
     isEdit: false,
     editItem: null,
   });
+  const [deleteLoader, setDeleteLoader] = useState(false);
   const { buttonLoader, pageLoader, toggleLoader } = useLoader();
   // for delete confirmation modal
   const { showModal, toggleModal } = useModalToggle();
@@ -101,7 +100,7 @@ const Categories = () => {
         setCategories(res?.data?.results);
       })
       .catch((err) => {
-        toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+        console.log(err);
       })
       .finally(() => toggleLoader("pageLoader"));
   }, [filters, page]);
@@ -118,6 +117,7 @@ const Categories = () => {
   };
 
   const handleDeleteCategory = () => {
+    setDeleteLoader((prev) => true);
     makeApiRequest({
       endPoint: CATEGORIES_ENDPOINT,
       method: METHODS.delete,
@@ -133,7 +133,7 @@ const Categories = () => {
         toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
       })
       .finally(() => {
-        toggleLoader("buttonLoader");
+        setDeleteLoader((prev) => false);
         toggleModal();
         setItemToDelete(null);
       });
@@ -164,15 +164,18 @@ const Categories = () => {
     const buttonType = event.nativeEvent.submitter.name;
 
     toggleLoader("buttonLoader");
+    // const payload = {
+    //   ...values,
+    //   is_active: buttonType === "publish",
+    // };
     const payload = {
-      ...values,
-      is_active: buttonType === "publish",
-      //update required:  comment this and fix image issue
-      category_image: null,
-      // category_image: imagePreview,
+      name: values.name,
+      slug: values.slug,
+      category_image: values.category_image,
     };
     delete payload.image;
 
+    delete payload.is_active;
     // converting payload into form data
     const formData = new FormData();
 
@@ -180,11 +183,7 @@ const Categories = () => {
       formData.append(key, payload[key]);
     }
 
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value, "form values");
-    }
-    console.log(payload, " log payload");
-
+    const data = Object.fromEntries(formData.entries()); // Convert to object
     makeApiRequest({
       endPoint: CATEGORIES_ENDPOINT,
       method: isEdit ? METHODS?.patch : METHODS?.post,
@@ -203,9 +202,9 @@ const Categories = () => {
           `Category ${isEdit ? "updated" : "added"} successfully`,
           successType
         );
-      })
+      })  
       .catch((err) => {
-        toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+        toastMessage(err?.response?.data?.name?.[0] || err?.response?.data?.slug?.[0] || DEFAULT_ERROR_MESSAGE);
       })
       .finally(() => {
         handleCategoryModal({ action: "close" });
@@ -215,65 +214,70 @@ const Categories = () => {
 
   return (
     <>
-      <FilterSection
-        filterFields={filterFields}
-        handleFilterChange={handleFilterChange}
-      >
-        <CommonButton
-          text="Add Category"
-          // may be need to change this action from here to somewhere else
-          onClick={() => {
-            handleCategoryModal({ action: "open" });
-          }}
-          type="button"
-          className="buttonTwo"
-        />
-      </FilterSection>
-      <TableWrapper columns={CATEGORY_PAGE_COLUMNS}>
-        {categories?.length ? (
-          categories?.map((it, idx) => (
-            <SingleCategoryRow
-              key={idx}
-              item={it}
-              currentPage={page}
-              index={idx}
-              handleActions={handleActions}
+      {pageLoader ? (
+        <PageLoader />
+      ) : (
+        <>
+          <FilterSection
+            filterFields={filterFields}
+            handleFilterChange={handleFilterChange}
+          >
+            <CommonButton
+              text="Add Category"
+              // may be need to change this action from here to somewhere else
+              onClick={() => {
+                handleCategoryModal({ action: "open" });
+              }}
+              type="button"
+              className="buttonTwo"
             />
-          ))
-        ) : (
-          // updates required:Create a better no data found component
-          <NoDataFound />
-        )}
-      </TableWrapper>
+          </FilterSection>
+          <TableWrapper columns={CATEGORY_PAGE_COLUMNS}>
+            {categories?.length ? (
+              categories?.map((it, idx) => (
+                <SingleCategoryRow
+                  key={idx}
+                  item={it}
+                  currentPage={page}
+                  index={idx}
+                  handleActions={handleActions}
+                />
+              ))
+            ) : (
+              // updates required:Create a better no data found component
+              <NoDataFound />
+            )}
+          </TableWrapper>
 
-      <Pagination
-        onPageChange={onPageChange}
-        itemsPerPage={CATEGORIES_ITEMS_PER_PAGE}
-        totalData={totalData}
-      />
-      {showModal && (
-        <DeleteConfirmationModal
-          icon={trashIcon}
-          title="Are you sure you want to delete this category?"
-          description="This action cannot be redo. Deleting this category will permanently remove it from your inventory"
-          onCancel={() => {
-            setItemToDelete(null);
-            toggleModal();
-          }}
-          onDelete={handleDeleteCategory}
-          disabled={buttonLoader}
-        />
-      )}
+          <Pagination
+            onPageChange={onPageChange}
+            itemsPerPage={ITEMS_PER_PAGE}
+            totalData={totalData}
+          />
+          {showModal && (
+            <DeleteConfirmationModal
+              title="Are you sure you want to delete this category?"
+              description="This action cannot be redo. Deleting this category will permanently remove it from your inventory"
+              onCancel={() => {
+                setItemToDelete(null);
+                toggleModal();
+              }}
+              onDelete={handleDeleteCategory}
+              loader={deleteLoader}
+            />
+          )}
 
-      {categoryModal?.showModal && (
-        <AddEditCategorySection
-          onClose={() => handleCategoryModal({ action: "close" })}
-          onSubmit={handleAddEditCategory}
-          formConfig={formConfig}
-          imagePreview={imagePreview}
-          setImagePreview={setImagePreview}
-          editCategoryInfo={editCategoryInfo}
-        />
+          {categoryModal?.showModal && (
+            <AddEditCategorySection
+              onClose={() => handleCategoryModal({ action: "close" })}
+              onSubmit={handleAddEditCategory}
+              formConfig={formConfig}
+              imagePreview={imagePreview}
+              setImagePreview={setImagePreview}
+              editCategoryInfo={editCategoryInfo}
+            />
+          )}
+        </>
       )}
     </>
   );

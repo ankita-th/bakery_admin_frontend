@@ -20,8 +20,13 @@ import useModalToggle from "../hooks/useModalToggle";
 import Pagination from "../Components/Common/Pagination";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import { successType, toastMessage } from "../utils/toastMessage";
-import { deleteItemBasedOnId, employeeListIntoOptions, handleEdit } from "../utils/helpers";
+import {
+  deleteItemBasedOnId,
+  employeeListIntoOptions,
+  handleEdit,
+} from "../utils/helpers";
 import AddEditTodo from "../Components/AddEditTodo";
+import PageLoader from "../loaders/PageLoader";
 const filterFields = [
   {
     type: "select",
@@ -47,8 +52,8 @@ export const TODO_COLUMNS = [
   "", // for edit and delete actions
 ];
 const Todo = () => {
-  const { page, onPageChange,setPage } = usePagination();
-  const { buttonLoader, pageloader, toggleLoader } = useLoader();
+  const { page, onPageChange, setPage } = usePagination();
+  const { buttonLoader, pageLoader, toggleLoader } = useLoader();
   // for add and edit todo section
   const todoSection = useModalToggle();
   const deleteModal = useModalToggle();
@@ -66,6 +71,11 @@ const Todo = () => {
     editItem: null,
   });
   const [employeeList, setEmployeeList] = useState([]);
+  const [deleteLoader, setDeleteLoader] = useState(false);
+  const [btnLoaders, setBtnLoaders] = useState({
+    unassigned: false,
+    assigned: false,
+  });
 
   useEffect(() => {
     toggleLoader("pageLoader");
@@ -94,7 +104,6 @@ const Todo = () => {
 
   // for setting employee list
   useEffect(() => {
-    console.log("inside");
     makeApiRequest({
       endPoint: EMPLOYEE_ENDPOINT,
       method: METHODS.get,
@@ -132,7 +141,6 @@ const Todo = () => {
       })
       .catch((err) => console.log(err));
   }, []);
-  console.log(employeeList, "employee list inside parent");
 
   const handleFilterChange = (filterName, value) => {
     const temp = { ...filters };
@@ -151,7 +159,7 @@ const Todo = () => {
   };
 
   const deleteTask = () => {
-    toggleLoader("buttonLoader");
+    setDeleteLoader((prev) => true);
     makeApiRequest({
       endPoint: TODO_ENDPOINT,
       method: METHODS?.delete,
@@ -166,7 +174,7 @@ const Todo = () => {
       })
       .finally((res) => {
         deleteModal?.toggleModal();
-        toggleLoader("buttonLoader");
+        setDeleteLoader((prev) => false);
       });
   };
 
@@ -193,17 +201,14 @@ const Todo = () => {
 
   const onSubmit = (data, event) => {
     const { isEdit, editItem } = editInfo;
-    console.log(event, "submitter");
     const buttonType = event.nativeEvent.submitter.name;
-    console.log(buttonType, "buttonType");
     const payload = {
       ...data,
       priority: data?.priority?.value,
-      status: buttonType === "assign-later" ? "unassigned" : "assigned",
+      status: buttonType,
       assigned_to: data?.assigned_to?.value,
     };
-    toggleLoader("buttonLoader");
-
+    setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
     makeApiRequest({
       endPoint: TODO_ENDPOINT,
       method: isEdit ? METHODS.patch : METHODS.post,
@@ -211,7 +216,7 @@ const Todo = () => {
       update_id: isEdit ? editItem?.id : null,
     })
       .then((res) => {
-        console.log(res,"this is response")
+        console.log(res, "this is response");
         // need updated data inside response
         if (isEdit) {
           setTodos(handleEdit(todos, editItem?.id, res?.data)); //array , id to update , data to update
@@ -229,68 +234,78 @@ const Todo = () => {
       })
       .finally(() => {
         handleTodoSection({ action: "close" });
-        toggleLoader("buttonLoader");
+        setBtnLoaders({ unassigned: false, assigned: false });
         setPage(1);
       });
   };
+
   return (
     <div>
-      <FilterSection
-        filterFields={filterFields}
-        handleFilterChange={handleFilterChange}
-      >
-        <CommonButton
-          text="Add Todo List"
-          className="buttonTwo"
-          onClick={() => {
-            // for opening add edit todo section
-            handleTodoSection({ action: "open" });
-          }}
-        />
-      </FilterSection>
-
-      <TableWrapper columns={TODO_COLUMNS}>
-        {todos?.length ? (
-          todos?.map((it, idx) => (
-            <SingleTodoRow
-              key={idx}
-              item={it}
-              handleActions={handleActions}
-              employeeList={employeeList}
+      {pageLoader ? (
+        <PageLoader />
+      ) : (
+        <>
+          <FilterSection
+            filterFields={filterFields}
+            handleFilterChange={handleFilterChange}
+          >
+            <CommonButton
+              text="Add Todo List"
+              className="buttonTwo"
+              onClick={() => {
+                // for opening add edit todo section
+                handleTodoSection({ action: "open" });
+              }}
             />
-          ))
-        ) : (
-          <NoDataFound />
-        )}
-      </TableWrapper>
-      <Pagination
-        onPageChange={onPageChange}
-        itemsPerPage={TODO_ITEMS_PER_PAGE}
-        totalData={totalData}
-      />
+          </FilterSection>
 
-      {/* delete confirmation modal */}
-      {deleteModal?.showModal && (
-        <DeleteConfirmationModal
-          title="Are you sure you want to delete this task?"
-          description="This action cannot be redo.The task will permanently be deleted"
-          onCancel={() => {
-            setItemToDelete(null);
-            deleteModal.toggleModal();
-          }}
-          onDelete={deleteTask}
-        />
-      )}
+          <TableWrapper columns={TODO_COLUMNS}>
+            {todos?.length ? (
+              todos?.map((it, idx) => (
+                <SingleTodoRow
+                  key={idx}
+                  item={it}
+                  handleActions={handleActions}
+                  employeeList={employeeList}
+                />
+              ))
+            ) : (
+              <NoDataFound />
+            )}
+          </TableWrapper>
+          <Pagination
+            onPageChange={onPageChange}
+            itemsPerPage={TODO_ITEMS_PER_PAGE}
+            totalData={totalData}
+          />
 
-      {/* add/edit todo section */}
-      {todoSection?.showModal && (
-        <AddEditTodo
-          onClose={() => handleTodoSection({ action: "close" })}
-          editInfo={editInfo}
-          onSubmit={onSubmit}
-          formConfig={formConfig}
-          employeeList={employeeList}
-        />
+          {/* delete confirmation modal */}
+          {deleteModal?.showModal && (
+            <DeleteConfirmationModal
+              title="Are you sure you want to delete this task?"
+              description="This action cannot be redo.The task will permanently be deleted"
+              onCancel={() => {
+                setItemToDelete(null);
+                deleteModal.toggleModal();
+              }}
+              onDelete={deleteTask}
+              loader={deleteLoader}
+            />
+          )}
+
+          {/* add/edit todo section */}
+          {todoSection?.showModal && (
+            <AddEditTodo
+              onClose={() => handleTodoSection({ action: "close" })}
+              editInfo={editInfo}
+              onSubmit={onSubmit}
+              formConfig={formConfig}
+              employeeList={employeeList}
+              btnLoaders={btnLoaders}
+              handleTodoSection={handleTodoSection}
+            />
+          )}
+        </>
       )}
     </div>
   );

@@ -24,6 +24,7 @@ import NoDataFound from "../Components/Common/NoDataFound";
 import SingleConfigurationRow from "../Components/SingleConfigurationRow";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import { trashIcon } from "../assets/Icons/Svg";
+import PageLoader from "../loaders/PageLoader";
 const filterFields = [
   {
     type: "search",
@@ -45,7 +46,7 @@ const ZipConfiguration = () => {
   const formConfig = useForm();
   const { reset } = formConfig;
   const { page, onPageChange, setPage } = usePagination();
-  const { btnLoader, pageLoader, toggleLoader } = useLoader();
+  const { pageLoader, toggleLoader } = useLoader();
   const {
     toggleModal: toggleConfiguration,
     showModal: showConfigurationSection,
@@ -61,6 +62,11 @@ const ZipConfiguration = () => {
   const [editInfo, setEditInfo] = useState({
     isEdit: false,
     editItem: null,
+  });
+  const [deleteLoader, setDeleteLoader] = useState(false);
+  const [btnLoaders, setBtnLoaders] = useState({
+    publish: false,
+    draft: false,
   });
   useEffect(() => {
     toggleLoader("pageLoader");
@@ -105,6 +111,8 @@ const ZipConfiguration = () => {
 
   const onSubmit = (data, event) => {
     toggleLoader("buttonLoader");
+    const buttonType = event.nativeEvent.submitter.name;
+    setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
     const { isEdit, editItem } = editInfo;
     // for extracting state , city and country from address
     // const { state, city, country } = returnAddressInfo(
@@ -147,7 +155,7 @@ const ZipConfiguration = () => {
       })
       .finally(() => {
         handleConfigurationSection({ action: "close" });
-        toggleLoader("buttonLoader");
+        setBtnLoaders({ publish: false, draft: false });
         setPage(1);
       });
   };
@@ -163,7 +171,7 @@ const ZipConfiguration = () => {
   };
 
   const deleteConfiguration = () => {
-    toggleLoader("buttonLoader");
+    setDeleteLoader((prev) => true);
     makeApiRequest({
       endPoint: "/zip/configurations/",
       method: METHODS.delete,
@@ -177,66 +185,74 @@ const ZipConfiguration = () => {
         toastMessage(DEFAULT_ERROR_MESSAGE);
       })
       .finally(() => {
-        toggleLoader("buttonLoader");
         toggleDeleteModal();
         setItemToDelete(null);
+        setDeleteLoader((prev) => false);
       });
   };
   console.log(configurations, "configurations");
   return (
     <div>
-      <FilterSection
-        filterFields={filterFields}
-        handleFilterChange={handleFilterChange}
-      >
-        <CommonButton
-          text="Add Configuration"
-          className="buttonTwo"
-          onClick={() => {
-            handleConfigurationSection({ action: "open" });
-          }}
-        />
-      </FilterSection>{" "}
-      <TableWrapper columns={CONFIGURATION_COLUMNS}>
-        {configurations?.length ? (
-          configurations?.map((it, idx) => (
-            <SingleConfigurationRow
-              key={idx}
-              item={it}
-              index={idx}
-              currentPage={page}
-              handleActions={handleActions}
+      {pageLoader ? (
+        <PageLoader />
+      ) : (
+        <>
+          <FilterSection
+            filterFields={filterFields}
+            handleFilterChange={handleFilterChange}
+          >
+            <CommonButton
+              text="Add Configuration"
+              className="buttonTwo"
+              onClick={() => {
+                handleConfigurationSection({ action: "open" });
+              }}
             />
-          ))
-        ) : (
-          <NoDataFound />
-        )}
-      </TableWrapper>
-      <Pagination
-        onPageChange={onPageChange}
-        itemsPerPage={CONFIGURATION_ITEMS_PER_PAGE}
-        totalData={totalData}
-      />
-      {showConfigurationSection && (
-        <AddEditConfiguration
-          formConfig={formConfig}
-          onSubmit={onSubmit}
-          editInfo={editInfo}
-          onClose={() => {
-            handleConfigurationSection({ action: "close" });
-          }}
-        />
-      )}
-      {showDeleteModal && (
-        <DeleteConfirmationModal
-          title="Are you sure you want to delete this ZIP configuration?"
-          description="This action cannot be redo. Deleting this ZIP configuration will permanently remove it from your inventory"
-          onCancel={() => {
-            setItemToDelete(null);
-            toggleDeleteModal();
-          }}
-          onDelete={deleteConfiguration}
-        />
+          </FilterSection>{" "}
+          <TableWrapper columns={CONFIGURATION_COLUMNS}>
+            {configurations?.length ? (
+              configurations?.map((it, idx) => (
+                <SingleConfigurationRow
+                  key={idx}
+                  item={it}
+                  index={idx}
+                  currentPage={page}
+                  handleActions={handleActions}
+                />
+              ))
+            ) : (
+              <NoDataFound />
+            )}
+          </TableWrapper>
+          <Pagination
+            onPageChange={onPageChange}
+            itemsPerPage={CONFIGURATION_ITEMS_PER_PAGE}
+            totalData={totalData}
+          />
+          {showConfigurationSection && (
+            <AddEditConfiguration
+              formConfig={formConfig}
+              onSubmit={onSubmit}
+              editInfo={editInfo}
+              onClose={() => {
+                handleConfigurationSection({ action: "close" });
+              }}
+              btnLoaders={btnLoaders}
+            />
+          )}
+          {showDeleteModal && (
+            <DeleteConfirmationModal
+              title="Are you sure you want to delete this ZIP configuration?"
+              description="This action cannot be redo. Deleting this ZIP configuration will permanently remove it from your inventory"
+              onCancel={() => {
+                setItemToDelete(null);
+                toggleDeleteModal();
+              }}
+              onDelete={deleteConfiguration}
+              loader={deleteLoader}
+            />
+          )}
+        </>
       )}
     </div>
   );
