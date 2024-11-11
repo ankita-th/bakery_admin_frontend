@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BellIcon } from "../assets/Icons/Svg";
 import userImage from "../assets/images/Avatar.png";
 import { useLocation } from "react-router-dom";
@@ -8,19 +8,27 @@ const Header = () => {
   const userName = localStorage.getItem("userName");
   const { pathname } = useLocation();
   const title = getHeadingTitleFromRoute(pathname);
+    // State to track dropdown visibility
+    const [isOpen, setIsOpen] = useState(false);
+  
+    // Toggle dropdown visibility
+    const toggleDropdown = () => {
+      setIsOpen((prev) => !prev);
+    };
   return (
     <>
-      <header className="header flex shadow-md py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
+      <header className="header flex shadow-md py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide relative z-50 sticky top-0">
         <div className="flex flex-wrap items-center justify-between gap-5 w-full">
-          <h5>
+          <div class="main_head_title">
             {pathname === "/dashboard" || pathname === "/" ? (
-              <h5>
-                Good Morning <span className="user-name">John Doe!</span>
+              <h5 class="text-lg font-normal">
+                Good Morning{" "}
+                <span class="text-[#EC7F1A] font-bold text-xl">John Doe!</span>
               </h5>
             ) : (
-              <h5>{title}</h5>
+              <h5 class="text-lg font-normal">{title}</h5>
             )}
-          </h5>
+          </div>
           {/* <div
             id="collapseMenu"
             className="max-lg:hidden lg:!block max-lg:before:fixed max-lg:before:bg-black max-lg:before:opacity-50 max-lg:before:inset-0 max-lg:before:z-50"
@@ -107,14 +115,49 @@ const Header = () => {
           </div> */}
 
           <div className="flex max-lg:ml-auto space-x-3">
-            <button className="px-4 py-2 text-sm rounded-full font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent ">
+
+            <button class="relative p-2 rounded-full rounded-full">
               {BellIcon}
             </button>
-            <div className="profile flex space-x-2 items-center">
-              <div className="userIcon w-20">
-                <img src={userImage} />
-              </div>
-              <div className="name">userName</div>
+            <div className="relative inline-block text-left">
+              {/* Profile Button with Image and Name */}
+              <button
+                className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                onClick={toggleDropdown}
+              >
+                <div className="flex items-center space-x-2">
+                  <div className="w-10 h-10 rounded-full overflow-hidden">
+                    <img src={userImage} />
+                  </div>
+                  <span className="font-semibold text-gray-700">John Doe</span>
+                </div>
+              </button>
+
+              {isOpen && (
+                <div
+                  id="dropdownMenu"
+                  className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5"
+                >
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      My Profile
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Settings
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Logout
+                    </a>
+                </div>
+              )}
             </div>
 
             <button id="toggleOpen" className="lg:hidden">
