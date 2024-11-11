@@ -1,5 +1,5 @@
 import React from "react";
-import { CATEGORIES_ITEMS_PER_PAGE } from "../../constant";
+import { ITEMS_PER_PAGE } from "../../constant";
 import { editIcon, trashIcon } from "../../assets/Icons/Svg";
 import { renderSerialNumber } from "../../utils/helpers";
 
@@ -10,7 +10,7 @@ const SingleCategoryRow = ({ item, currentPage, index, handleActions }) => {
   return (
     <tr className="text-center">
       <td className="py-2 px-4 border">
-        {renderSerialNumber(currentPage, CATEGORIES_ITEMS_PER_PAGE, index)}
+        {renderSerialNumber(currentPage, ITEMS_PER_PAGE, index)}
       </td>
       <td className="py-2 px-4 border">{name}</td>
       <td className="py-2 px-4 border">{slug}</td>

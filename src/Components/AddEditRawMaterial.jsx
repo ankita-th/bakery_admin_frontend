@@ -14,9 +14,15 @@ const MEASURE_OPTIONS = [
   { label: "Gram", value: "g" },
   { label: "Litre", value: "kg" },
 ];
-const AddEditRawMaterial = ({ onClose, onSubmit, formConfig, editInfo }) => {
+const AddEditRawMaterial = ({
+  onClose,
+  onSubmit,
+  formConfig,
+  editInfo,
+  btnLoaders,
+}) => {
   const { isEdit, item } = editInfo;
-  const { setValue, watch} = formConfig;
+  const { setValue, watch } = formConfig;
   console.log(editInfo, "editInfo inside comp");
   useEffect(() => {
     const prefillKeys = [
@@ -26,13 +32,13 @@ const AddEditRawMaterial = ({ onClose, onSubmit, formConfig, editInfo }) => {
       "reorder",
       "quantity",
       "expiry_date",
-      "cost"
+      "cost",
     ];
     if (isEdit) {
       // for filling normal keys
       prefillFormValues(item, prefillKeys, setValue);
       // for prefilling values with custom logic
-      setValue("expiry_date",formatDate(item?.expiry_date,YYYY_MM_DD));
+      setValue("expiry_date", formatDate(item?.expiry_date, YYYY_MM_DD));
     }
   }, []);
 
@@ -44,7 +50,7 @@ const AddEditRawMaterial = ({ onClose, onSubmit, formConfig, editInfo }) => {
     setValue("notes", "High-quality wheat");
     setValue("cost", "150");
   };
-  console.log(watch("expiry_date"),"expiry date");
+  console.log(watch("expiry_date"), "expiry date");
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="category-section">
@@ -64,6 +70,7 @@ const AddEditRawMaterial = ({ onClose, onSubmit, formConfig, editInfo }) => {
             fieldName="name"
             rules={RawMaterialValidations["name"]}
             formConfig={formConfig}
+            placeholder="Enter Material Name"
           />
 
           <CommonTextField
@@ -72,6 +79,7 @@ const AddEditRawMaterial = ({ onClose, onSubmit, formConfig, editInfo }) => {
             rules={RawMaterialValidations["quantity"]}
             formConfig={formConfig}
             isNumberOnly={true}
+            placeholder="Enter Quantity Of Stock"
           />
 
           <CommonSelect
@@ -133,6 +141,8 @@ const AddEditRawMaterial = ({ onClose, onSubmit, formConfig, editInfo }) => {
               icon={publishIcon}
               className="buttonTwo"
               name="publish"
+              loader={btnLoaders?.publish}
+              disabled={btnLoaders?.publish || btnLoaders?.draft}
             />
             {/* need to confirm functionality for this */}
             <CommonButton
@@ -141,6 +151,8 @@ const AddEditRawMaterial = ({ onClose, onSubmit, formConfig, editInfo }) => {
               icon={draftIcon}
               className="buttonTwo"
               name="draft"
+              loader={btnLoaders?.draft}
+              disabled={btnLoaders?.publish || btnLoaders?.draft}
             />
           </div>
         </FormWrapper>

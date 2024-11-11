@@ -25,17 +25,20 @@ const SingleTodoRow = ({
     status,
     notes,
   } = item;
-  console.log(item, "listed item");
   return (
     <tr className="text-center">
       <td className="py-2 px-4 border">{task_id}</td>
       <td className="py-2 px-4 border">{title}</td>
       <td className="py-2 px-4 border">{description}</td>
       <td className="py-2 px-4 border">
-        {assigned_to ? (
+        {status === "assigned" ? (
           extractOption(employeeList, assigned_to, "value")?.label
         ) : (
-          <CommonButton text="Assign Task" className="buttonTwo" />
+          <CommonButton
+            text="Assign Task"
+            className="buttonTwo"
+            onClick={() => handleActions({ action: "edit", editItem: item })}
+          />
         )}
       </td>
       <td className="py-2 px-4 border">{priority}</td>

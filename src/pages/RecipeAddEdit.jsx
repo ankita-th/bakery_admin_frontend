@@ -24,6 +24,8 @@ import { makeApiRequest, METHODS } from "../api/apiFunctions";
 import { RECIPE_ENDPOINT } from "../api/endpoints";
 import { successType, toastMessage } from "../utils/toastMessage";
 import { useNavigate, useParams } from "react-router-dom";
+import useLoader from "../hooks/useLoader";
+import PageLoader from "../loaders/PageLoader";
 const ALLERGEN_OPTIONS = [{ value: "CN", label: "Contain Nuts" }];
 const DIETRY_OPTIONS = [{ value: "GF", label: "Gluten-free" }];
 const DIFFICULTY_OPTIONS = [
@@ -78,6 +80,7 @@ const INSTRUCTION_ITEMS = [
 
 const RecipeAddEdit = () => {
   const navigate = useNavigate();
+  const { pageLoader, toggleLoader } = useLoader();
   const params = useParams();
   const formConfig = useForm({
     defaultValues: {
@@ -96,58 +99,70 @@ const RecipeAddEdit = () => {
   });
   const { watch } = formConfig;
 
+  const [btnLoaders, setBtnLoaders] = useState({
+    publish: false,
+    draft: false,
+  });
+
   useEffect(() => {
-    makeApiRequest({
-      endPoint: `${RECIPE_ENDPOINT}${1}/`,
-      method: METHODS.get,
-      // params: { id: params?.receipe_id },
-    })
-      .then((res) => {
-        const response = res?.data;
-        const prefillKeys = [
-          "recipe_title",
-          "recipe_title",
-          "preparation_time",
-          "notes",
-          "cook_time",
-          "serving_size",
-          "ingredients",
-          "description",
-          "instructions",
-        ];
-        //  for prefilling normal values
-        prefillFormValues(response, prefillKeys, setValue);
-        const difficultyOption = extractOption(
-          DIFFICULTY_OPTIONS,
-          response?.difficulty_level,
-          "value"
-        );
-        const allergenOption = extractOption(
-          ALLERGEN_OPTIONS,
-          response?.allergen_information,
-          "value"
-        );
-        const dietryOption = extractOption(
-          DIETRY_OPTIONS,
-          response?.dietary_plan,
-          "value"
-        );
-        console.log(allergenOption, "allergenOption");
-
-        setValue("difficulty_level", difficultyOption);
-        setValue("allergen_information", allergenOption);
-        setValue("dietary_plan", dietryOption);
-
-        // for prefilling values that requires custom logic
+    if (params?.receipe_id) {
+      toggleLoader("pageLoader");
+      makeApiRequest({
+        endPoint: `${RECIPE_ENDPOINT}${params?.receipe_id}/`,
+        method: METHODS.get,
+        // params: { id: params?.receipe_id },
       })
-      .catch((err) => {
-        console.log(err); // update required: Check in which field error message
-      });
+        .then((res) => {
+          const response = res?.data;
+          const prefillKeys = [
+            "recipe_title",
+            "recipe_title",
+            "preparation_time",
+            "notes",
+            "cook_time",
+            "serving_size",
+            "ingredients",
+            "description",
+            "instructions",
+          ];
+          //  for prefilling normal values
+          prefillFormValues(response, prefillKeys, setValue);
+          const difficultyOption = extractOption(
+            DIFFICULTY_OPTIONS,
+            response?.difficulty_level,
+            "value"
+          );
+          const allergenOption = extractOption(
+            ALLERGEN_OPTIONS,
+            response?.allergen_information,
+            "value"
+          );
+          const dietryOption = extractOption(
+            DIETRY_OPTIONS,
+            response?.dietary_plan,
+            "value"
+          );
+          console.log(allergenOption, "allergenOption");
+
+          setValue("difficulty_level", difficultyOption);
+          setValue("allergen_information", allergenOption);
+          setValue("dietary_plan", dietryOption);
+
+          // for prefilling values that requires custom logic
+        })
+        .catch((err) => {
+          console.log(err); // update required: Check in which field error message
+        })
+        .finally(() => {
+          toggleLoader("pageLoader");
+        });
+    }
   }, []);
 
   const onSubmit = (values, event) => {
     console.log(values, "these are values");
     const buttonType = event.nativeEvent.submitter.name;
+    setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
 
     const payload = {
       ...values,
@@ -158,7 +173,7 @@ const RecipeAddEdit = () => {
       difficulty_level: values?.difficulty_level?.value,
       dietary_plan: values?.dietary_plan?.value,
       allergen_information: values?.allergen_information?.value,
-      status: buttonType === "draft",
+      status: buttonType === "publish",
       // update required: Make this category_image and category  dynamic
       category: +5,
       category_images: [{ image: "" }],
@@ -179,158 +194,169 @@ const RecipeAddEdit = () => {
       })
       .catch((err) => {
         toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+      })
+      .finally(() => {
+        setBtnLoaders({ publish: false, draft: false });
       });
     // update required:Need to add loaders
   };
 
   return (
     <div>
-      <div className="bg-[#FFFFFF]-100 p-6 rounded-lg shadow-md max-w-100">
-        <div className="grid grid-cols-1 gap-4">
-          <div>
-            <FormWrapper
-              formConfig={formConfig}
-              onSubmit={onSubmit}
-              isCustomButtons={true}
-            >
-              {/* update required: need to confirm about category field */}
-              <CommonTextField
+      {pageLoader ? (
+        <PageLoader />
+      ) : (
+        <div className="bg-[#FFFFFF]-100 p-6 rounded-lg shadow-md max-w-100">
+          <div className="grid grid-cols-1 gap-4">
+            <div>
+              <FormWrapper
                 formConfig={formConfig}
-                label="Recipe Title"
-                fieldName="recipe_title"
-                placeholder="Enter Recipe Title"
-                className="recipe-input"
-                rules={RecipeValidations["recipe_title"]}
-              />
-              <div className="description mt-2">
-                <CommonTextEditor
-                  label="Description"
-                  fieldName="description"
+                onSubmit={onSubmit}
+                isCustomButtons={true}
+              >
+                {/* update required: need to confirm about category field */}
+                <CommonTextField
                   formConfig={formConfig}
-                  placeholder="Type..."
-                  requiredMessage="This field is required" //validations works a bit different in text editor that's why
+                  label="Recipe Title"
+                  fieldName="recipe_title"
+                  placeholder="Enter Recipe Title"
+                  className="recipe-input"
+                  rules={RecipeValidations["recipe_title"]}
                 />
-              </div>
-
-              <div className="recipe-section-two">
-                <div className="sec-1">
-                  <CommonTextField
+                <div className="description mt-2">
+                  <CommonTextEditor
+                    label="Description"
+                    fieldName="description"
                     formConfig={formConfig}
-                    label="Preparation Time"
-                    fieldName="preparation_time"
-                    placeholder="Enter the prep time in minutes or hours"
-                    className="recipe-input"
-                    rules={RecipeValidations["preparation_time"]}
-                    isNumberOnly={true}
-                  />
-
-                  <CommonTextField
-                    formConfig={formConfig}
-                    label="Cook Time"
-                    fieldName="cook_time"
-                    placeholder="Enter the cook time"
-                    className="recipe-input"
-                    rules={RecipeValidations["cook_time"]}
-                    isNumberOnly={true}
+                    placeholder="Type..."
+                    requiredMessage="This field is required" //validations works a bit different in text editor that's why
                   />
                 </div>
 
-                <div className="sec-2">
-                  <CommonTextField
-                    formConfig={formConfig}
-                    label="Serving Size"
-                    fieldName="serving_size"
-                    placeholder="Number of servings the recipe make."
-                    className="recipe-input"
-                    rules={RecipeValidations["serving_size"]}
-                    isNumberOnly={true}
-                  />
-                  <CommonSelect
-                    formConfig={formConfig}
-                    label="Difficulty Level"
-                    fieldName="difficulty_level"
-                    placeholder="Select difficulty level"
-                    className="recipe-input"
-                    selectType="react-select"
-                    options={DIFFICULTY_OPTIONS}
-                    rules={RecipeValidations["difficulty_level"]}
-                  />
-                </div>
+                <div className="recipe-section-two">
+                  <div className="sec-1">
+                    <CommonTextField
+                      formConfig={formConfig}
+                      label="Preparation Time"
+                      fieldName="preparation_time"
+                      placeholder="Enter the prep time in minutes or hours"
+                      className="recipe-input"
+                      rules={RecipeValidations["preparation_time"]}
+                      isNumberOnly={true}
+                    />
 
-                <div className="ingredients-section">
-                  <CommonFieldArray
-                    heading="Ingredients"
-                    fieldArrayName="ingredients"
-                    formConfig={formConfig}
-                    itemToAppend={INGREDIENT_TO_APPEND}
-                    items={INGREDIENTS_ITEMS}
-                  />
-                </div>
-                <div className="instructions-section">
-                  <CommonFieldArray
-                    heading="Instructions/Steps"
-                    fieldArrayName="instructions"
-                    formConfig={formConfig}
-                    itemToAppend={INSTRUCTION_TO_APPEND}
-                    items={INSTRUCTION_ITEMS}
-                  />
-                </div>
+                    <CommonTextField
+                      formConfig={formConfig}
+                      label="Cook Time"
+                      fieldName="cook_time"
+                      placeholder="Enter the cook time"
+                      className="recipe-input"
+                      rules={RecipeValidations["cook_time"]}
+                      isNumberOnly={true}
+                    />
+                  </div>
 
-                <div className="dietry-section flex items-center space-x-4">
-                  {/* may be need to update this field into text field further */}
-                  <CommonSelect
-                    label="Dietary Information"
-                    selectType="react-select"
-                    options={DIETRY_OPTIONS}
-                    fieldName="dietary_plan"
-                    formConfig={formConfig}
-                    placeholder="Select"
-                    rules={RecipeValidations["dietary_plan"]}
-                  />
+                  <div className="sec-2">
+                    <CommonTextField
+                      formConfig={formConfig}
+                      label="Serving Size"
+                      fieldName="serving_size"
+                      placeholder="Number of servings the recipe make."
+                      className="recipe-input"
+                      rules={RecipeValidations["serving_size"]}
+                      isNumberOnly={true}
+                    />
+                    <CommonSelect
+                      formConfig={formConfig}
+                      label="Difficulty Level"
+                      fieldName="difficulty_level"
+                      placeholder="Select difficulty level"
+                      className="recipe-input"
+                      selectType="react-select"
+                      options={DIFFICULTY_OPTIONS}
+                      rules={RecipeValidations["difficulty_level"]}
+                    />
+                  </div>
 
-                  <CommonSelect
-                    label="Allergen Informations"
-                    selectType="react-select"
-                    options={ALLERGEN_OPTIONS}
-                    fieldName="allergen_information"
-                    formConfig={formConfig}
-                    placeholder="Select"
-                    rules={RecipeValidations["allergen_informations"]}
+                  <div className="ingredients-section">
+                    <CommonFieldArray
+                      heading="Ingredients"
+                      fieldArrayName="ingredients"
+                      formConfig={formConfig}
+                      itemToAppend={INGREDIENT_TO_APPEND}
+                      items={INGREDIENTS_ITEMS}
+                    />
+                  </div>
+                  <div className="instructions-section">
+                    <CommonFieldArray
+                      heading="Instructions/Steps"
+                      fieldArrayName="instructions"
+                      formConfig={formConfig}
+                      itemToAppend={INSTRUCTION_TO_APPEND}
+                      items={INSTRUCTION_ITEMS}
+                    />
+                  </div>
+
+                  <div className="dietry-section flex items-center space-x-4">
+                    {/* may be need to update this field into text field further */}
+                    <CommonSelect
+                      label="Dietary Information"
+                      selectType="react-select"
+                      options={DIETRY_OPTIONS}
+                      fieldName="dietary_plan"
+                      formConfig={formConfig}
+                      placeholder="Select"
+                      rules={RecipeValidations["dietary_plan"]}
+                    />
+
+                    <CommonSelect
+                      label="Allergen Informations"
+                      selectType="react-select"
+                      options={ALLERGEN_OPTIONS}
+                      fieldName="allergen_information"
+                      formConfig={formConfig}
+                      placeholder="Select"
+                      rules={RecipeValidations["allergen_informations"]}
+                    />
+                  </div>
+                  <div className="notes">
+                    <CommonTextField
+                      formConfig={formConfig}
+                      label="Notes/Additional Information"
+                      fieldName="notes"
+                      placeholder="Any additional notes or tips"
+                      className="recipe-input"
+                      rules={RecipeValidations["notes"]}
+                      type="textarea"
+                      rows={4}
+                    />
+                  </div>
+                </div>
+                <div className="button-section">
+                  <CommonButton
+                    type="submit"
+                    text="Publish"
+                    icon={publishIcon}
+                    className="buttonTwo"
+                    name="publish"
+                    loader={btnLoaders?.publish}
+                    disabled={btnLoaders?.publish || btnLoaders?.draft}
+                  />
+                  <CommonButton
+                    type="submit"
+                    text="Draft"
+                    icon={draftIcon}
+                    className="buttonTwo"
+                    name="draft"
+                    loader={btnLoaders?.draft}
+                    disabled={btnLoaders?.publish || btnLoaders?.draft}
                   />
                 </div>
-                <div className="notes">
-                  <CommonTextField
-                    formConfig={formConfig}
-                    label="Notes/Additional Information"
-                    fieldName="notes"
-                    placeholder="Any additional notes or tips"
-                    className="recipe-input"
-                    rules={RecipeValidations["notes"]}
-                    type="textarea"
-                    rows={4}
-                  />
-                </div>
-              </div>
-              <div className="button-section">
-                <CommonButton
-                  type="submit"
-                  text="Publish"
-                  icon={publishIcon}
-                  className="buttonTwo"
-                  name="publish"
-                />
-                <CommonButton
-                  type="submit"
-                  text="Draft"
-                  icon={draftIcon}
-                  className="buttonTwo"
-                  name="draft"
-                />
-              </div>
-            </FormWrapper>
+              </FormWrapper>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

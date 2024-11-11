@@ -8,7 +8,7 @@ import Pagination from "../Components/Common/Pagination";
 import {
   DEFAULT_ERROR_MESSAGE,
   DUMMY_PRODUCT_DATA,
-  PRODUCTS_ITEMS_PER_PAGE,
+  ITEMS_PER_PAGE,
 } from "../constant";
 import CommonButton from "../Components/Common/CommonButton";
 import useModalToggle from "../hooks/useModalToggle";
@@ -88,6 +88,7 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [totalData, setTotalData] = useState();
+  const [deleteLoader, setDeleteLoader] = useState(false);
   const [filters, setFilters] = useState({
     type: "",
     category: "",
@@ -122,10 +123,8 @@ const Products = () => {
     navigate("/categories");
   };
 
-  const handleAddNewProductClick = () => {};
   const handleDeleteProduct = () => {
-    toggleLoader("buttonLoader");
-    // update required: comment from here and use the API one
+    setDeleteLoader((prev) => true);
     deleteProduct(itemToDelete)
       .then((res) => {
         toastMessage("Product deleted successfully", successType);
@@ -137,7 +136,7 @@ const Products = () => {
       .finally(() => {
         toggleModal();
         setItemToDelete(null);
-        toggleLoader("buttonLoader");
+        setDeleteLoader((prev) => false);
       });
   };
   // for managing view , edit and delete buttons inside single row
@@ -196,7 +195,7 @@ const Products = () => {
 
         <Pagination
           onPageChange={onPageChange}
-          itemsPerPage={PRODUCTS_ITEMS_PER_PAGE}
+          itemsPerPage={ITEMS_PER_PAGE}
           totalData={totalData}
         />
       </div>
@@ -210,6 +209,7 @@ const Products = () => {
             toggleModal();
           }}
           onDelete={handleDeleteProduct}
+          deleteLoader={deleteLoader}
         />
       )}
     </>

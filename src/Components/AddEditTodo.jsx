@@ -25,6 +25,7 @@ const AddEditTodo = ({
   formConfig,
   editInfo,
   employeeList,
+  btnLoaders,
 }) => {
   const { isEdit, editItem } = editInfo;
   const { setValue, watch } = formConfig;
@@ -116,7 +117,7 @@ const AddEditTodo = ({
           {/* currently this is not required */}
 
           <CommonSelect
-            label="Assign To"
+            label="Assign To  *"
             fieldName="assigned_to"
             rules={TodoValidations["assigned_to"]}
             formConfig={formConfig}
@@ -177,14 +178,18 @@ const AddEditTodo = ({
               type="submit"
               text="Assign Task"
               className="buttonTwo"
-              name="assign-task"
+              name="assigned"
+              loader={btnLoaders?.assigned}
+              disabled={btnLoaders?.assigned || btnLoaders?.unassigned}
             />
             {/* need to confirm functionality for this */}
             <CommonButton
               type="submit"
               text="Assign Later"
               className="buttonTwo"
-              name="assign-later"
+              name="unassigned"
+              loader={btnLoaders?.unassigned}
+              disabled={btnLoaders?.assigned || btnLoaders?.unassigned}
             />
           </div>
         </FormWrapper>

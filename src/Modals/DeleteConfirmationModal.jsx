@@ -1,5 +1,6 @@
 import React from "react";
 import { trashIcon } from "../assets/Icons/Svg";
+import CommonButton from "../Components/Common/CommonButton";
 
 const DeleteConfirmationModal = ({
   icon = trashIcon,
@@ -7,7 +8,7 @@ const DeleteConfirmationModal = ({
   description,
   onDelete,
   onCancel,
-  disabled = false,
+  loader,
 }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
@@ -22,16 +23,23 @@ const DeleteConfirmationModal = ({
         </h2>
         <p className="text-sm text-center text-gray-600 mt-2">{description}</p>
         <div className="flex justify-center mt-6 space-x-3">
-          <button className="buttonTwo" onClick={onDelete} >
+          <CommonButton
+            text="Delete"
+            onClick={onDelete}
+            type="button"
+            className="buttonTwo"
+            disabled={loader}
+            loader={loader}
+          />
+          {/* <button className="buttonTwo" onClick={onDelete}>
             Delete
-          </button>
-          <button
-            // className="bg-gray-200 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
-            className="buttonOne"
+          </button> */}
+          <CommonButton
+            text="Cancel"
             onClick={onCancel}
-          >
-            Cancel
-          </button>
+            type="button"
+            className="buttonOne"
+          />
         </div>
       </div>
     </div>

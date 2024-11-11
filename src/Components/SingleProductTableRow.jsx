@@ -1,7 +1,7 @@
 import React from "react";
 import { editIcon, eyeIcon, trashIcon } from "../assets/Icons/Svg";
 import { renderSerialNumber } from "../utils/helpers";
-import { PRODUCTS_ITEMS_PER_PAGE } from "../constant";
+import { ITEMS_PER_PAGE } from "../constant";
 
 const SingleProductRow = ({ data, currentPage, index, handleActions }) => {
   // updates required: price published status in date,date are not given and also category is in number
@@ -17,7 +17,7 @@ const SingleProductRow = ({ data, currentPage, index, handleActions }) => {
         />
       </td>
       <td className="py-2 px-4 border">
-        {renderSerialNumber(currentPage, PRODUCTS_ITEMS_PER_PAGE, index)}
+        {renderSerialNumber(currentPage, ITEMS_PER_PAGE, index)}
       </td>
       <td className="py-2 px-4 border">{name}</td>
       <td className="py-2 px-4 border">{product_detail?.inventory?.sku}</td>

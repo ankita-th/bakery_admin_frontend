@@ -22,7 +22,13 @@ const AVAILABILITY_OPTIONS = [
   { label: "Available", value: "available" },
   { label: "Not Available", value: "unavailable" },
 ];
-const AddEditConfiguration = ({ onClose, onSubmit, formConfig, editInfo }) => {
+const AddEditConfiguration = ({
+  onClose,
+  onSubmit,
+  formConfig,
+  editInfo,
+  btnLoaders,
+}) => {
   const { isEdit, editItem } = editInfo;
   const { setValue, watch } = formConfig;
   console.log(editItem, "editItem");
@@ -33,7 +39,7 @@ const AddEditConfiguration = ({ onClose, onSubmit, formConfig, editInfo }) => {
       "delivery_threshold",
       "notes",
       "address",
-      "city"
+      "city",
     ];
     // basic fields prefilling
     prefillFormValues(editItem, prefillKeys, setValue);
@@ -148,7 +154,9 @@ const AddEditConfiguration = ({ onClose, onSubmit, formConfig, editInfo }) => {
               type="submit"
               text={`${isEdit ? "Update" : "Add"} Configuration`}
               className="buttonTwo"
-              name="add-configuration"
+              name="publish"
+              loader={btnLoaders?.publish}
+              disabled={btnLoaders?.publish || btnLoaders?.draft}
             />
             {/* need to confirm functionality for this */}
             <CommonButton
@@ -156,6 +164,8 @@ const AddEditConfiguration = ({ onClose, onSubmit, formConfig, editInfo }) => {
               text="Draft"
               className="buttonTwo"
               name="draft"
+              loader={btnLoaders?.draft}
+              disabled={btnLoaders?.publish || btnLoaders?.draft}
             />
           </div>
         </FormWrapper>
