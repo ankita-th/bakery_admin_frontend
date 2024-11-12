@@ -16,6 +16,7 @@ const CommonTextField = ({
   maxlength = null,
   rows = null,
   customError = null,
+  labelClassName = "",
 }) => {
   const {
     register,
@@ -24,45 +25,48 @@ const CommonTextField = ({
   } = formConfig;
   return (
     <div>
-      <div className="label">{label}</div>
-      {isNumberOnly ? (
-        <input
-          {...register(fieldName, {
-            ...rules,
-            onChange: (e) => {
-              const numbersOnly = e.target.value.replace(/[^0-9]/g, "");
-              setValue(fieldName, numbersOnly);
-            },
-          })}
-          type={type}
-          placeholder={placeholder}
-          className={className}
-          maxlength={maxlength}
-        />
-      ) : type === "textarea" ? (
-        <textarea
-          {...register(fieldName, rules)}
-          type={type}
-          placeholder={placeholder}
-          className={className}
-          maxlength={maxlength}
-          rows={rows}
-        />
-      ) : (
-        <input
-          {...register(fieldName, rules)}
-          type={type}
-          placeholder={placeholder}
-          className={className}
-          maxlength={maxlength}
-        />
-      )}
+      <label className={labelClassName}>{label}</label>
+      <div className="common-field relative">
+        {isNumberOnly ? (
+          <input
+            {...register(fieldName, {
+              ...rules,
+              onChange: (e) => {
+                const numbersOnly = e.target.value.replace(/[^0-9]/g, "");
+                setValue(fieldName, numbersOnly);
+              },
+            })}
+            type={type}
+            placeholder={placeholder}
+            className={className}
+            maxlength={maxlength}
+          />
+        ) : type === "textarea" ? (
+          <textarea
+            {...register(fieldName, rules)}
+            type={type}
+            placeholder={placeholder}
+            className={className}
+            maxlength={maxlength}
+            rows={rows}
+          />
+        ) : (
+          <input
+            {...register(fieldName, rules)}
+            type={type}
+            placeholder={placeholder}
+            className={className}
+            maxlength={maxlength}
+          />
+        )}
 
-      <div className="icon" onClick={onIconClick}>
-        {icon}
+        <div className="icon absolute right-5 top-[17px]" onClick={onIconClick}>
+          {icon}
+        </div>
       </div>
+
       {customError ? (
-        <p className="text-red-600">{customError}</p> 
+        <p className="text-red-600">{customError}</p>
       ) : (
         <ErrorMessage fieldName={fieldName} errors={errors} />
       )}

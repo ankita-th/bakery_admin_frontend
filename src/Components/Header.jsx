@@ -17,7 +17,7 @@ const Header = () => {
     };
   return (
     <>
-      <header className="header flex shadow-md py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide relative z-50 sticky top-0">
+      <header className="header flex py-4 px-4 sm:px-10 font-[sans-serif] min-h-[70px] tracking-wide relative z-50 sticky top-0">
         <div className="flex flex-wrap items-center justify-between gap-5 w-full">
           <div class="main_head_title">
             {pathname === "/dashboard" || pathname === "/" ? (

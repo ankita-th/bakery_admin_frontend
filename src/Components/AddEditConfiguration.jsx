@@ -66,7 +66,7 @@ const AddEditConfiguration = ({
         <FormWrapper
           onSubmit={onSubmit}
           formConfig={formConfig}
-          className="buttonTwo"
+          className="orange_btn"
           isCustomButtons={true}
         >
           <CommonTextField
@@ -153,7 +153,7 @@ const AddEditConfiguration = ({
             <CommonButton
               type="submit"
               text={`${isEdit ? "Update" : "Add"} Configuration`}
-              className="buttonTwo"
+              className="orange_btn"
               name="publish"
               loader={btnLoaders?.publish}
               disabled={btnLoaders?.publish || btnLoaders?.draft}
@@ -162,7 +162,7 @@ const AddEditConfiguration = ({
             <CommonButton
               type="submit"
               text="Draft"
-              className="buttonTwo"
+              className="orange_btn"
               name="draft"
               loader={btnLoaders?.draft}
               disabled={btnLoaders?.publish || btnLoaders?.draft}

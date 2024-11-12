@@ -35,7 +35,7 @@ const FilterSection = ({
                 )}
               </div>
               {type === "search" && (
-                <>
+                <div className="flex searchbox ms-auto">
                   <input
                     type="text"
                     value={searchInput}
@@ -44,18 +44,18 @@ const FilterSection = ({
                     placeholder={placeholder}
                   />
                   <div
-                    className="searchIcon"
+                    className="searchIcon bg-red-400 rounded-lg py-1 px-2 cursor-pointer"
                     onClick={() => handleFilterChange(filterName, searchInput)}
                   >
                     {searchIcon}
                   </div>
-                </>
+                </div>
               )}
             </Fragment>
           </div>
         )
       )}
-      <div className="filter-buttons">{children}</div>
+      <div className="filter-buttons flex ms-auto">{children}</div>
     </div>
   );
 };

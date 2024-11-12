@@ -4,7 +4,7 @@ import ListHeadings from "./ListHeadings";
 
 const TableComponent = ({ columns, children }) => {
   return (
-    <div className="container mx-auto mt-5">
+    <div className="mt-5">
       <table className="min-w-full bg-white border border-gray-200">
         <ListHeadings columns={columns} />
         <tbody>{children}</tbody>

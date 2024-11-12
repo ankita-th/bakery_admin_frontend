@@ -3,7 +3,7 @@ import React, { Fragment } from "react";
 const ListHeadings = ({
   columns,
   rowClassName = "bg-orange-50",
-  columnClassName = "py-2 px-4",
+  columnClassName = "py-2 px-4 bg-[#FFEFE7]",
 }) => {
   return (
     <thead>

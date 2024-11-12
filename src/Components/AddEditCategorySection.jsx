@@ -58,7 +58,7 @@ const AddEditCategorySection = ({
         {/* <FormWrapper
           onSubmit={onSubmit}
           formConfig={formConfig}
-          className="buttonTwo"
+          className="orange_btn"
         > */}
         <form onSubmit={handleSubmit(onSubmit)}>
           {" "}
@@ -111,7 +111,7 @@ const AddEditCategorySection = ({
             <CommonButton
               type="submit"
               text="Publish"
-              className="buttonTwo"
+              className="orange_btn"
               icon={publishIcon}
               name="publish"
             />
@@ -119,7 +119,7 @@ const AddEditCategorySection = ({
             <CommonButton
               type="submit"
               text="Draft"
-              className="buttonTwo"
+              className="orange_btn"
               icon={draftIcon}
               name="draft"
             />

@@ -203,7 +203,7 @@ const ZipConfiguration = () => {
           >
             <CommonButton
               text="Add Configuration"
-              className="buttonTwo"
+              className="orange_btn"
               onClick={() => {
                 handleConfigurationSection({ action: "open" });
               }}
