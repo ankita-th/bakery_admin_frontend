@@ -4,8 +4,8 @@ const useLoader = () => {
   const [pageLoader, setPageLoader] = useState(false);
   // for sections containing pair of button loaders like for publish-draft
   const [buttonLoader, setButtonLoader] = useState({
-    buttonOne: false,
-    buttonTwo: false,
+    grey_btn: false,
+    orange_btn: false,
   });
   const [deleteLoader, setDeleteLoader] = useState(false);
   const toggleLoader = (type, smallLoaderType = null) => {

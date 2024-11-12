@@ -83,13 +83,13 @@ const AddEditTodo = ({
         <FormWrapper
           onSubmit={onSubmit}
           formConfig={formConfig}
-          className="buttonTwo"
+          className="orange_btn"
           isCustomButtons={true}
         >
           <CommonButton
             type="button"
             text="Fill Form"
-            className="buttonTwo"
+            className="orange_btn"
             onClick={fillForm}
           />
           <CommonTextField
@@ -177,7 +177,7 @@ const AddEditTodo = ({
             <CommonButton
               type="submit"
               text="Assign Task"
-              className="buttonTwo"
+              className="orange_btn"
               name="assigned"
               loader={btnLoaders?.assigned}
               disabled={btnLoaders?.assigned || btnLoaders?.unassigned}
@@ -186,7 +186,7 @@ const AddEditTodo = ({
             <CommonButton
               type="submit"
               text="Assign Later"
-              className="buttonTwo"
+              className="orange_btn"
               name="unassigned"
               loader={btnLoaders?.unassigned}
               disabled={btnLoaders?.assigned || btnLoaders?.unassigned}

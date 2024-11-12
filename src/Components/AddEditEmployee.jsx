@@ -59,7 +59,7 @@ const AddEditEmployee = ({ onClose, onSubmit, formConfig, editInfo }) => {
         <FormWrapper
           onSubmit={onSubmit}
           formConfig={formConfig}
-          className="buttonTwo"
+          className="orange_btn"
           isCustomButtons={true}
         >
           {/* update required:need to update field name and after that name inside validations as well */}
@@ -92,10 +92,10 @@ const AddEditEmployee = ({ onClose, onSubmit, formConfig, editInfo }) => {
             <CommonButton
               type="submit"
               text={`${isEdit ? "Update" : "Add"} Employee`}
-              className="buttonTwo"
+              className="orange_btn"
             />
             {/* need to confirm functionality for this */}
-            <CommonButton type="button" text="Cancel" className="buttonTwo" onClick={onClose} />
+            <CommonButton type="button" text="Cancel" className="orange_btn" onClick={onClose} />
           </div>
         </FormWrapper>
       </div>

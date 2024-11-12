@@ -247,7 +247,7 @@ const RawMaterials = () => {
           >
             <CommonButton
               text="Add Raw Product"
-              className="buttonTwo"
+              className="orange_btn"
               onClick={toggleRawMaterialSection}
             />
           </FilterSection>
