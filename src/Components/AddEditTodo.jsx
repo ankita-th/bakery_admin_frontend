@@ -14,11 +14,6 @@ import {
 } from "../utils/helpers";
 import { makeApiRequest, METHODS } from "../api/apiFunctions";
 import { EMPLOYEE_ENDPOINT, TODO_ENDPOINT } from "../api/endpoints";
-const MEASURE_OPTIONS = [
-  { label: "Option 1", value: "option1" },
-  { label: "Option 2", value: "option2" },
-  { label: "Option 3", value: "option3" },
-];
 const AddEditTodo = ({
   onClose,
   onSubmit,

@@ -18,12 +18,10 @@ const CommonFieldArray = ({
     watch,
     formState: { errors },
   } = formConfig;
-  console.log(fieldArrayName, "fieldArrayName");
   const { fields, append, remove } = useFieldArray({
     control,
     name: fieldArrayName,
   });
-  console.log(watch("instructions"), "instructions");
 
   return (
     <div>
@@ -32,7 +30,14 @@ const CommonFieldArray = ({
         <div key={field.id} className="flex space-x-4 items-center">
           {items?.map(
             (
-              { label, fieldName, placeholder, isRequired, field_type },
+              {
+                label,
+                fieldName,
+                placeholder,
+                isRequired,
+                field_type,
+                isNumberOnly = false,
+              },
               itemIndex
             ) => (
               <>
@@ -59,6 +64,7 @@ const CommonFieldArray = ({
                     formConfig={formConfig}
                     label={label}
                     placeholder={placeholder}
+                    isNumberOnly={isNumberOnly}
                     rules={{
                       required: isRequired ? "This field is required" : false,
                     }}

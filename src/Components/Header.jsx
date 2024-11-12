@@ -1,20 +1,32 @@
 import React, { useState } from "react";
 import { BellIcon } from "../assets/Icons/Svg";
 import userImage from "../assets/images/Avatar.png";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getHeadingTitleFromRoute } from "../utils/helpers";
+import { makeApiRequest } from "../api/apiFunctions";
+import { successType, toastMessage } from "../utils/toastMessage";
 
 const Header = () => {
+  const navigate = useNavigate();
   const userName = localStorage.getItem("userName");
   const { pathname } = useLocation();
   const title = getHeadingTitleFromRoute(pathname);
-    // State to track dropdown visibility
-    const [isOpen, setIsOpen] = useState(false);
-  
-    // Toggle dropdown visibility
-    const toggleDropdown = () => {
-      setIsOpen((prev) => !prev);
-    };
+  // State to track dropdown visibility
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Toggle dropdown visibility
+  const toggleDropdown = () => {
+    setIsOpen((prev) => !prev);
+  };
+  const handleLogout = () => {
+    // make api call here
+    // makeApiRequest({
+    //   endPoint:LOGOUT_ENDPOINT
+    // })
+    toastMessage("Logged out successfully", successType);
+    localStorage.clear();
+    navigate("/login");
+  };
   return (
     <>
       <header className="header flex py-4 px-4 sm:px-10 font-[sans-serif] min-h-[70px] tracking-wide relative z-50 sticky top-0">
@@ -115,7 +127,6 @@ const Header = () => {
           </div> */}
 
           <div className="flex max-lg:ml-auto space-x-3">
-
             <button class="relative p-2 rounded-full rounded-full">
               {BellIcon}
             </button>
@@ -138,24 +149,24 @@ const Header = () => {
                   id="dropdownMenu"
                   className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5"
                 >
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      My Profile
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      Settings
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      Logout
-                    </a>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    My Profile
+                  </a>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Settings
+                  </a>
+                  <button
+                    onClick={handleLogout}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
                 </div>
               )}
             </div>

@@ -131,3 +131,54 @@ export const appendStepCountInObject = (instructions) => {
     return result;
   }
 };
+
+export const createRequiredValidation = (fieldName) => {
+  const field = fieldName || "This field";
+  return { required: `${field} is required` };
+};
+
+export const createProductSeo = (values) => {
+  const { focused_keyword, seo_title, slug, preview_as, meta_description } =
+    values;
+  const result = {
+    seo_title: seo_title,
+    slug: slug,
+    meta_description: meta_description,
+    focused_keyword: extractSelectOptions(focused_keyword, "value"),
+    preview_as: preview_as,
+  };
+  return result;
+};
+
+export const createInventoryPayload = (values) => {
+  const { sku, regular_price, sale_price, weight, unit, bulking_price_rules } =
+    values;
+  const result = {
+    sku: sku,
+    regular_price: regular_price,
+    sale_price: sale_price,
+    weight: weight,
+    unit: unit?.value,
+    bulking_price_rules: bulking_price_rules,
+  };
+  return result;
+};
+
+export const extractSelectOptions = (options, valueToExtract) => {
+  if (options.length) {
+    const result = [];
+    options.forEach((curElem) => {
+      if (curElem?.[valueToExtract]) {
+        result.push(curElem[valueToExtract]);
+      }
+    });
+    return result;
+  }
+};
+
+export const createAdvancedPayload = (values) => {
+  return {
+    minimum_order_quantity: values?.minimum_order_quantity,
+    purchase_note: values?.purchase_note,
+  };
+};

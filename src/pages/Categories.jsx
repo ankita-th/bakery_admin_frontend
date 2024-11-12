@@ -199,7 +199,7 @@ const Categories = () => {
           setCategories((prev) => [...prev, res?.data]);
         }
         toastMessage(
-          `Category ${isEdit ? "updated" : "added"} successfully`,
+          `Category ${isEdit ? "updated" : "added"} sucessfully`,
           successType
         );
       })  

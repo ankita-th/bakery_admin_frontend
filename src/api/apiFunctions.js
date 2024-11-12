@@ -46,7 +46,6 @@ export const makeApiRequest = async ({
   update_id,
 }) => {
   try {
-    console.log("payload: ", payload, "endpoint: ", endPoint);
     let API_INSTANCE = null;
     if (instanceType === INSTANCE.auth) {
       API_INSTANCE = authAxios;
