@@ -10,6 +10,7 @@ const CommonDateField = ({
   maxDate = null,
   className = DEFAULT_CLASS,
   label,
+  icon = null,
 }) => {
   const {
     register,
@@ -18,14 +19,17 @@ const CommonDateField = ({
 
   return (
     <div>
-      <div className="label">{label}</div>
-      <input
-        type="date"
-        {...register(fieldName, rules)}
-        min={minDate}
-        max={maxDate}
-        className={className}
-      />
+      <div className="date-input">
+        <div className="label">{label}</div>
+        <input
+          type="date"
+          {...register(fieldName, rules)}
+          min={minDate}
+          max={maxDate}
+          className={className}
+        />
+        {icon}
+      </div>
       <ErrorMessage fieldName={fieldName} errors={errors} />
     </div>
   );

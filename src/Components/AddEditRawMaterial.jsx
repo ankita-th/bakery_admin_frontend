@@ -7,13 +7,8 @@ import CommonSelect from "../Form Fields/CommonSelect";
 import CommonButton from "./Common/CommonButton";
 import { draftIcon, publishIcon } from "../assets/Icons/Svg";
 import CommonDateField from "../Form Fields/CommonDateField";
-import { today, YYYY_MM_DD } from "../constant";
+import { MEASURE_OPTIONS, today, YYYY_MM_DD } from "../constant";
 import { formatDate, prefillFormValues } from "../utils/helpers";
-const MEASURE_OPTIONS = [
-  { label: "Kilogram", value: "kg" },
-  { label: "Gram", value: "g" },
-  { label: "Litre", value: "kg" },
-];
 const AddEditRawMaterial = ({
   onClose,
   onSubmit,
