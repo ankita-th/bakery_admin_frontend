@@ -251,7 +251,7 @@ const Todo = () => {
           >
             <CommonButton
               text="Add Todo List"
-              className="buttonTwo"
+              className="orange_btn"
               onClick={() => {
                 // for opening add edit todo section
                 handleTodoSection({ action: "open" });

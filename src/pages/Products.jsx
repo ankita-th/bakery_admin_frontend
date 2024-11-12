@@ -103,6 +103,7 @@ const Products = () => {
     };
     toggleLoader("pageLoader");
     // update required: remove this dummy data and according to the API data
+    setProducts(DUMMY_PRODUCT_DATA)
     getProducts(apiFilters)
       .then((res) => {
         console.log(res?.data, "this is response");
@@ -166,13 +167,13 @@ const Products = () => {
             text="Categories"
             onClick={() => navigate("/categories")}
             type="button"
-            className="buttonOne"
+            className="grey_btn"
           />
           <CommonButton
             text="Add New Product"
             onClick={() => navigate("/add-edit-product")}
             type="button"
-            className="buttonTwo"
+            className="orange_btn"
           />
         </FilterSection>
         {/* product listing */}

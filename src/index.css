@@ -20,9 +20,11 @@
   width: calc(100% - 280px);
   margin-left: auto;
   padding: 50px 30px;
+  background: #F8F8F8;
 }
 
 header.header {
+  background: #F8F8F8;
   width: calc(100% - 280px);
   margin-left: auto;
 }
@@ -36,11 +38,11 @@ header.header {
   align-items: center;
 }
 .section1 {
-  width: 40%;
+  /* width: 40%; */
   height: 100vh;
 }
 .section2 {
-  width: 60%;
+  /* width: 60%; */
   height: 100vh;
 }
 .commonInput {
@@ -91,33 +93,28 @@ header.header {
   gap: 5px;
 }
 
-.buttonOne {
+.grey_btn {
   background: #3e3232bf;
   border-radius: 10px;
-  width: 125px;
-  height: 40px;
   margin-left: 2px;
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 0px 4px;
+  padding: 10px 20px;
   color: white;
   cursor: pointer;
 }
 
-.buttonTwo {
+.orange_btn {
   background: #ff6d2f;
   border-radius: 10px;
-  width: 127px;
-  height: 38px;
   margin-left: 2px;
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 0px 4px;
+  padding: 10px 20px;
   color: white;
   cursor: pointer;
-
 }
 
 .OTPInputContainer {

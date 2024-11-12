@@ -57,7 +57,7 @@ const AddEditRawMaterial = ({
         <FormWrapper
           onSubmit={onSubmit}
           formConfig={formConfig}
-          className="buttonTwo"
+          className="orange_btn"
           isCustomButtons={true}
         >
           <CommonTextField
@@ -134,7 +134,7 @@ const AddEditRawMaterial = ({
               type="submit"
               text="Publish"
               icon={publishIcon}
-              className="buttonTwo"
+              className="orange_btn"
               name="publish"
               loader={btnLoaders?.publish}
               disabled={btnLoaders?.publish || btnLoaders?.draft}
@@ -144,7 +144,7 @@ const AddEditRawMaterial = ({
               type="submit"
               text="Draft"
               icon={draftIcon}
-              className="buttonTwo"
+              className="orange_btn"
               name="draft"
               loader={btnLoaders?.draft}
               disabled={btnLoaders?.publish || btnLoaders?.draft}

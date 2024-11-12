@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { login } from "../api/apiFunctions";
 import { successType, toastMessage } from "../utils/toastMessage";
 import { toast } from "react-toastify";
+import googleIcon from "../assets/images/google_logo.svg";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -29,7 +30,9 @@ const Login = () => {
       })
       .catch((err) => {
         console.log(err?.response?.data?.non_field_errors[0], "error");
-        toastMessage(err?.response?.data?.non_field_errors[0] || DEFAULT_ERROR_MESSAGE);
+        toastMessage(
+          err?.response?.data?.non_field_errors[0] || DEFAULT_ERROR_MESSAGE
+        );
       });
   };
   return (
@@ -40,8 +43,12 @@ const Login = () => {
         linkUrl="/sign-up"
         className="right-align"
       /> */}
-      <form onSubmit={handleSubmit(onSubmit)} className="login-form">
-        <h2>Login!</h2>
+
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="login-form w-full max-w-[450px]"
+      >
+        <h2 className="text-3xl font-bold mb-4">Login!</h2>
         <CommonTextField
           fieldName="email"
           formConfig={formConfig}
@@ -49,6 +56,8 @@ const Login = () => {
           placeholder="Enter Username"
           rules={LoginValidations["email"]}
           label="Username or email address"
+          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:border-black"
+          labelClassName="block text-sm font-medium mb-2"
         />
         <CommonTextField
           fieldName="password"
@@ -56,6 +65,8 @@ const Login = () => {
           placeholder="Enter Password"
           rules={LoginValidations["password"]}
           label="Your password"
+          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:border-black"
+          labelClassName="block text-sm font-medium mb-2"
           type={showPassword ? "text" : "password"}
           //   for adding icons
           onIconClick={toggleShowPassword}
@@ -65,9 +76,12 @@ const Login = () => {
           text=""
           linkText="Forgot your password"
           linkUrl="/forgot-password"
-          className="text-right"
+          className="text-left text-gray-500 hover:text-black mt-2"
         />
-        <button type="submit" className="sign-in-button">
+        <button
+          type="submit"
+          className="sign-in-button w-full py-3 mt-4 bg-gray-300 text-gray-600 font-semibold rounded-md hover:bg-[#5F6F52] hover:text-white rounded-[50px] cursor-pointer transition-all duration-400 ease-in-out"
+        >
           Sign in
         </button>
         {/* <AuthRedirectSection
@@ -75,6 +89,27 @@ const Login = () => {
           linkText="Sign up"
           linkUrl="/sign-up"
         /> */}
+
+        <p className="text-center text-sm mt-4">
+          Don’t have an account?{" "}
+          <a
+            href="#"
+            className="text-grey-500 underline hover:text-blue-500 transition-all duration-400 ease-in-out"
+          >
+            Sign up
+          </a>
+        </p>
+
+        <div className="flex items-center my-4">
+          <div className="flex-grow border-t border-gray-300"></div>
+          <span className="mx-4 text-gray-500">OR</span>
+          <div className="flex-grow border-t border-gray-300"></div>
+        </div>
+
+        <button className="w-full py-3 flex items-center justify-center border border-gray-300 hover:bg-gray-100 rounded-[50px]">
+          <img src={googleIcon} alt="Google" className="w-5 h-5 mr-2" />
+          Continue with Google
+        </button>
       </form>
     </>
   );

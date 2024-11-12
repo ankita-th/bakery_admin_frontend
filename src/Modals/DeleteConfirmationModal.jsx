@@ -27,18 +27,18 @@ const DeleteConfirmationModal = ({
             text="Delete"
             onClick={onDelete}
             type="button"
-            className="buttonTwo"
+            className="orange_btn"
             disabled={loader}
             loader={loader}
           />
-          {/* <button className="buttonTwo" onClick={onDelete}>
+          {/* <button className="orange_btn" onClick={onDelete}>
             Delete
           </button> */}
           <CommonButton
             text="Cancel"
             onClick={onCancel}
             type="button"
-            className="buttonOne"
+            className="grey_btn"
           />
         </div>
       </div>

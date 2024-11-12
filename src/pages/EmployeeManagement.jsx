@@ -156,7 +156,7 @@ const EmployeeManagement = () => {
       >
         <CommonButton
           text="Add New Employee"
-          className="buttonTwo"
+          className="orange_btn"
           type="button"
           onClick={() => {
             handleEmployeeSection({ action: "open" });

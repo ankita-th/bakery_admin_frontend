@@ -136,12 +136,12 @@ const Recipe = () => {
           >
             <CommonButton
               text="Categories"
-              className="buttonOne"
+              className="grey_btn"
               onClick={() => navigate("/categories")}
             />
             <CommonButton
               text="Add New Recipe"
-              className="buttonTwo"
+              className="orange_btn"
               onClick={() => navigate("/add-edit-recipe")}
             />
           </FilterSection>

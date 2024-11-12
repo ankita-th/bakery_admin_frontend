@@ -36,7 +36,7 @@ const SingleTodoRow = ({
         ) : (
           <CommonButton
             text="Assign Task"
-            className="buttonTwo"
+            className="orange_btn"
             onClick={() => handleActions({ action: "edit", editItem: item })}
           />
         )}

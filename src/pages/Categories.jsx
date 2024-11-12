@@ -229,7 +229,7 @@ const Categories = () => {
                 handleCategoryModal({ action: "open" });
               }}
               type="button"
-              className="buttonTwo"
+              className="orange_btn"
             />
           </FilterSection>
           <TableWrapper columns={CATEGORY_PAGE_COLUMNS}>
