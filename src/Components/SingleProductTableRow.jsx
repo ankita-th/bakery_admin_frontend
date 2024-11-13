@@ -28,9 +28,9 @@ const SingleProductRow = ({ data, currentPage, index, handleActions }) => {
       >
         {status}
       </td>
-      <td className="py-2 px-4 border-0 bg-white ">{`$ ${product_detail?.inventory?.sale_price}`}</td>
-      <td className="py-2 px-4 border-0 bg-white ">{category}</td>
-      <td className="py-2 px-4 border-0 bg-white ">Product Date</td>
+      <td className="py-2 px-4 border-0 bg-white">{`$ ${product_detail?.inventory?.sale_price}`}</td>
+      <td className="py-2 px-4 border-0 bg-white">{category}</td>
+      <td className="py-2 px-4 border-0 bg-white">Product Date</td>
       <td
         className={`py-2 px-4 border-0 bg-white  ${
           true === "Published" ? "text-green-500" : "text-gray-500"

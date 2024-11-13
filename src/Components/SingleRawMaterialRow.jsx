@@ -16,18 +16,18 @@ const SingleRawMaterialRow = ({ item, currentPage, index, handleActions }) => {
     updated_at,
   } = item;
   return (
-    <tr className="text-center">
-      <td className="py-2 px-4 border"></td>
+    <tr className=" border border-gray-400 ">
+      <td className="py-2 px-4"></td>
 
-      {/* <td className="py-2 px-4 border">
+      {/* <td className="py-2 px-4">
         {renderSerialNumber(currentPage, RAW_MATERIALS_ITEMS_PER_PAGE, index)}
       </td> */}
-      <td className="py-2 px-4 border">{id}</td>
+      <td className="py-2 px-4">{id}</td>
 
-      <td className="py-2 px-4 border">{name}</td>
-      <td className="py-2 px-4 border">{`${quantity} ${unit_of_measure}`}</td>
+      <td className="py-2 px-4">{name}</td>
+      <td className="py-2 px-4">{`${quantity} ${unit_of_measure}`}</td>
       <td
-        className={`py-2 px-4 border ${
+        className={`py-2 px-4 ${
           // update required: Update this logic
           // reorder >= 50 && "text-green-500"
           "text-green-500"
@@ -35,13 +35,13 @@ const SingleRawMaterialRow = ({ item, currentPage, index, handleActions }) => {
       >
         {reorder}
       </td>
-      <td className="py-2 px-4 border">
+      <td className="py-2 px-4">
         {formatDate(expiry_date, YYYY_MM_DD)}
       </td>
-      <td className="py-2 px-4 border">{formatDate(updated_at, YYYY_MM_DD)}</td>
-      <td className="py-2 px-4 border">{description}</td>
+      <td className="py-2 px-4">{formatDate(updated_at, YYYY_MM_DD)}</td>
+      <td className="py-2 px-4">{description}</td>
 
-      <td className="py-2 px-4 border space-x-2">
+      <td className="py-2 px-4 space-x-2">
         <button
           className="text-blue-500 hover:text-blue-700"
           onClick={() => handleActions({ action: "view" })}

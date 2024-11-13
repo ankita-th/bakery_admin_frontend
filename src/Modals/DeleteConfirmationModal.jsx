@@ -1,5 +1,5 @@
 import React from "react";
-import { trashIcon } from "../assets/Icons/Svg";
+import { deleteIcon, trashIcon } from "../assets/Icons/Svg";
 import CommonButton from "../Components/Common/CommonButton";
 
 const DeleteConfirmationModal = ({
@@ -12,9 +12,9 @@ const DeleteConfirmationModal = ({
 }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg p-6 max-w-sm w-full shadow-lg">
+      <div className="bg-white rounded-lg p-10 w-full shadow-lg w-full max-w-[800px] delete_modal">
         <div className="flex justify-center">
-          <div className="bg-red-100 rounded-full w-12 h-12 flex items-center justify-center">
+          <div className="bg-red-100 rounded-full w-20 h-20 flex items-center justify-center">
             {icon}
           </div>
         </div>
@@ -30,6 +30,7 @@ const DeleteConfirmationModal = ({
             className="orange_btn"
             disabled={loader}
             loader={loader}
+            icon={deleteIcon}
           />
           {/* <button className="orange_btn" onClick={onDelete}>
             Delete
