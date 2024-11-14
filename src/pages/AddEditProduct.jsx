@@ -58,7 +58,6 @@ const AddEditProduct = () => {
         advanced: createAdvancedPayload(values),
       },
     };
-    console.log(payload, "this is payload");
   };
   const handleActiveTab = (tabName) => {
     setActiveTab(tabName);

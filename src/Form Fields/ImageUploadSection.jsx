@@ -2,48 +2,33 @@ import React from "react";
 import { closeIcon, imageUploadIcon } from "../assets/Icons/Svg";
 import ErrorMessage from "../Components/Common/ErrorMessage";
 import { isValidType } from "../utils/helpers";
-import { Controller } from "react-hook-form";
 
 const ImageUploadSection = ({
   label,
-  fieldName,
-  formConfig,
-  imagePreview,
-  setImagePreview,
+  setFile,
+  file,
   allowedTypes,
+  accept = "image/*",
   // rules
 }) => {
-  const {
-    register,
-    setError,
-    clearErrors,
-    watch,
-    setValue,
-    control,
-    formState: { errors },
-  } = formConfig;
   const inputId = `image-upload-${label}`;
-  console.log(watch("category_image"), "sdjs");
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
       if (isValidType(file, allowedTypes)) {
-        // logic to convert image file into url
-        setValue(fieldName, file);
-        clearErrors(fieldName);
         const reader = new FileReader();
         reader.onload = (e) => {
-          setImagePreview(e.target.result);
+          setFile({ ...file, file: file, preview: e.target.result, error: "" });
         };
         reader.readAsDataURL(file);
-        clearErrors(fieldName);
       } else {
-        setError(fieldName, {
-          type: "manual",
-          message: "Please upload a valid image file",
+        setFile({
+          ...file,
+          preview: null,
+          error: "Please upload a valid image", //update required:Need to update the error message
+          file: null,
         });
-        setImagePreview(null);
       }
     }
     e.target.value = "";
@@ -53,36 +38,32 @@ const ImageUploadSection = ({
     <div>
       {label}
       <label htmlFor={inputId} className="image-upload-icon">
-        {!imagePreview && imageUploadIcon}
+        {!file.preview && imageUploadIcon}
       </label>
       <input
-        {...register(fieldName, {
-          onChange: (e) => handleImageUpload(e),
-        })}
+        onChange={(e) => {
+          handleImageUpload(e);
+        }}
         type="file"
         id={inputId}
         className="hidden"
-        accept="image/*"
+        accept={accept}
       />
-      {imagePreview && (
+
+      {file?.preview && (
         <div className="image-preview-section">
-          <img className="image-preview" src={imagePreview} />
+          <img className="image-preview" src={file.preview} />
           <div
             className="remove-image"
             onClick={() => {
-              setImagePreview(null);
-              setValue(fieldName,null);
-              // setError(fieldName, {
-              //   type: "manual",
-              //   message: "Category Image us required",
-              // });
+              setFile({ preview: null, error: "", file: null });
             }}
           >
             {closeIcon}
           </div>
         </div>
       )}
-      <ErrorMessage errors={errors} fieldName={fieldName} />
+      <ErrorMessage customError={file.error} />
     </div>
   );
 };

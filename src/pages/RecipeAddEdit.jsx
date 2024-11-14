@@ -13,19 +13,23 @@ import CommonButton from "../Components/Common/CommonButton";
 import CommonSelect from "../Form Fields/CommonSelect";
 import CommonFieldArray from "../Components/Common/CommonFieldArray";
 import CommonSelectField from "../Form Fields/CommonSelectField";
-import { DEFAULT_ERROR_MESSAGE, OPTIONS } from "../constant";
+import { allowedImageTypes, DEFAULT_ERROR_MESSAGE, OPTIONS } from "../constant";
 import CommonTextEditor from "../Form Fields/CommonTextEditor";
 import {
   appendStepCountInObject,
+  createFilesObject,
   extractOption,
+  isFilesNotEmpty,
   prefillFormValues,
 } from "../utils/helpers";
-import { makeApiRequest, METHODS } from "../api/apiFunctions";
+import { INSTANCE, makeApiRequest, METHODS } from "../api/apiFunctions";
 import { RECIPE_ENDPOINT } from "../api/endpoints";
 import { successType, toastMessage } from "../utils/toastMessage";
 import { useNavigate, useParams } from "react-router-dom";
 import useLoader from "../hooks/useLoader";
 import PageLoader from "../loaders/PageLoader";
+import MultipleImageUploadField from "../Form Fields/MultipleImageUploadField";
+import ImageUploadSection from "../Form Fields/ImageUploadSection";
 const ALLERGEN_OPTIONS = [{ value: "CN", label: "Contain Nuts" }];
 const DIETRY_OPTIONS = [{ value: "GF", label: "Gluten-free" }];
 const DIFFICULTY_OPTIONS = [
@@ -47,6 +51,7 @@ const INGREDIENTS_ITEMS = [
     placeholder: "Enter Quantity",
     label: "Ingredient Quantity",
     isRequired: true,
+    isNumberOnly: true,
   },
   {
     fieldName: "unit_of_measure",
@@ -97,12 +102,13 @@ const RecipeAddEdit = () => {
     control,
     name: "ingredients",
   });
-  const { watch } = formConfig;
 
   const [btnLoaders, setBtnLoaders] = useState({
     publish: false,
     draft: false,
   });
+  const [files, setFiles] = useState([]);
+  const [imageError, setImageError] = useState("");
 
   useEffect(() => {
     if (params?.receipe_id) {
@@ -160,10 +166,16 @@ const RecipeAddEdit = () => {
   }, []);
 
   const onSubmit = (values, event) => {
-    console.log(values, "these are values");
+    // in case required validation is required uncomment this code
+    if (isFilesNotEmpty(files)) {
+      setImageError("Category image is required");
+      return;
+    }
+    // in case required validation is required uncomment this code
+
     const buttonType = event.nativeEvent.submitter.name;
     setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
-
+    // creating payload
     const payload = {
       ...values,
       preparation_time: +values?.preparation_time,
@@ -173,17 +185,44 @@ const RecipeAddEdit = () => {
       difficulty_level: values?.difficulty_level?.value,
       dietary_plan: values?.dietary_plan?.value,
       allergen_information: values?.allergen_information?.value,
-      status: buttonType === "publish",
-      // update required: Make this category_image and category  dynamic
-      category: +5,
-      category_images: [{ image: "" }],
+      status: buttonType === "publish" ? "True" : "False",
+      // update required make this category key dynamic
+      category: +10,
     };
+
+    // converting payload into formdata
+    const formData = new FormData();
+    for (let key in payload) {
+      if (key === "ingredients" || key === "instructions") {
+        // because these are array of objects and to pass these in form data we need to pass it as stringified
+        const striginfiedResult = JSON.stringify(payload[key]);
+        formData.append(key, striginfiedResult);
+      } else {
+        formData.append(key, payload[key]);
+      }
+    }
+
+    // Appending files here
+    files.forEach(({ file }) => {
+      if (file) {
+        formData.append("category_images", file);
+      }
+    });
+
+    // Appending files here
+
+    const data = Object.fromEntries(formData.entries()); // Convert to object
+    console.log(data, "formData payload");
+    console.log(payload, "recipe payload");
+    console.log(files, "files payload");
+
     // if receipe id is there in the params means it is a edit scenario
     makeApiRequest({
       endPoint: RECIPE_ENDPOINT,
-      payload: payload,
+      payload: formData,
       method: params?.receipe_id ? METHODS?.patch : METHODS?.post,
       update_id: params?.receipe_id && params?.receipe_id,
+      instanceType: INSTANCE.formInstance,
     })
       .then(() => {
         toastMessage(
@@ -198,9 +237,19 @@ const RecipeAddEdit = () => {
       .finally(() => {
         setBtnLoaders({ publish: false, draft: false });
       });
-    // update required:Need to add loaders
   };
 
+  const fillForm = () => {
+    setValue("recipe_title", "Cookie2");
+    setValue("cook_time", 34);
+    setValue("preparation_time", 214);
+    setValue("serving_size", 21);
+    setValue("difficulty_level", { label: "Easy", value: "E" });
+    setValue("allergen_information", { value: "CN", label: "Contain Nuts" });
+    setValue("notes", "String");
+  };
+
+  console.log(imageError, "recipe image");
   return (
     <div>
       {pageLoader ? (
@@ -209,6 +258,11 @@ const RecipeAddEdit = () => {
         <div className="bg-[#FFFFFF]-100 p-6 rounded-lg shadow-md max-w-100">
           <div className="grid grid-cols-1 gap-4">
             <div>
+              <CommonButton
+                text="Fill form with dummy values"
+                onClick={fillForm}
+                className="orange_btn"
+              />
               <FormWrapper
                 formConfig={formConfig}
                 onSubmit={onSubmit}
@@ -329,6 +383,17 @@ const RecipeAddEdit = () => {
                       rules={RecipeValidations["notes"]}
                       type="textarea"
                       rows={4}
+                    />
+                  </div>
+
+                  <div className="recipe-image-upload">
+                    <MultipleImageUploadField
+                      fieldName="category-image"
+                      files={files}
+                      setFiles={setFiles}
+                      allowedTypes={allowedImageTypes}
+                      imageError={imageError}
+                      setImageError={setImageError}
                     />
                   </div>
                 </div>

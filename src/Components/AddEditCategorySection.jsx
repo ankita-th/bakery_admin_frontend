@@ -29,13 +29,12 @@ const AddEditCategorySection = ({
   onClose,
   formConfig,
   onSubmit,
-  imagePreview,
-  setImagePreview,
   editCategoryInfo,
+  file,
+  setFile
 }) => {
   const { watch, setValue, handleSubmit } = formConfig;
   const { isEdit, item } = editCategoryInfo;
-  console.log(watch(), "form values");
 
   useEffect(() => {
     if (isEdit) {
@@ -103,8 +102,8 @@ const AddEditCategorySection = ({
             label="Upload/Add Image"
             formConfig={formConfig}
             fieldName="category_image"
-            imagePreview={imagePreview}
-            setImagePreview={setImagePreview}
+            file={file}
+            setFile={setFile}
             allowedTypes={allowedImageTypes}
           />
           <div className="button-section">

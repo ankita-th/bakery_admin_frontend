@@ -3,7 +3,6 @@ import { Controller, useFieldArray } from "react-hook-form";
 import CommonButton from "./CommonButton";
 import { crossIcon, plusIcon } from "../../assets/Icons/Svg";
 import CommonTextField from "../../Form Fields/CommonTextField";
-import { DEFAULT_CLASS } from "../../constant";
 
 const CommonFieldArray = ({
   heading,

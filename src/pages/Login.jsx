@@ -9,22 +9,24 @@ import { login } from "../api/apiFunctions";
 import { successType, toastMessage } from "../utils/toastMessage";
 import { toast } from "react-toastify";
 import googleIcon from "../assets/images/google_logo.svg";
+import CommonButton from "../Components/Common/CommonButton";
 
 const Login = () => {
   const navigate = useNavigate();
   const formConfig = useForm();
   const { handleSubmit } = formConfig;
   const [showPassword, setShowPassword] = useState(false);
+  const [btnLoader, setBtnLoader] = useState(false);
   const toggleShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
   const onSubmit = (values) => {
-    console.log(values, "inside submit");
+    setBtnLoader((prev) => true);
     login(values)
       .then((res) => {
         // update the token logic with actual token
         localStorage.setItem("token", res?.data?.access);
-        toastMessage("Logged In successfully", successType);
+        toastMessage("Logged In Successfully", successType);
         localStorage.setItem("refreshToken", res?.data?.refresh);
         navigate("/dashboard");
       })
@@ -33,7 +35,8 @@ const Login = () => {
         toastMessage(
           err?.response?.data?.non_field_errors[0] || DEFAULT_ERROR_MESSAGE
         );
-      });
+      })
+      .finally(() => setBtnLoader((prev) => false));
   };
   return (
     <>
@@ -78,12 +81,12 @@ const Login = () => {
           linkUrl="/forgot-password"
           className="text-left text-gray-500 hover:text-black mt-2"
         />
-        <button
+        <CommonButton
+          text="Sign in"
           type="submit"
+          loader={btnLoader}
           className="sign-in-button w-full py-3 mt-4 bg-gray-300 text-gray-600 font-semibold rounded-md hover:bg-[#5F6F52] hover:text-white rounded-[50px] cursor-pointer transition-all duration-400 ease-in-out"
-        >
-          Sign in
-        </button>
+        />
         {/* <AuthRedirectSection
           text="Don't have an acount? "
           linkText="Sign up"
@@ -100,16 +103,16 @@ const Login = () => {
           </a>
         </p>
 
-        <div className="flex items-center my-4">
+        {/* <div className="flex items-center my-4">
           <div className="flex-grow border-t border-gray-300"></div>
           <span className="mx-4 text-gray-500">OR</span>
           <div className="flex-grow border-t border-gray-300"></div>
-        </div>
-
+        </div> */}
+        {/* 
         <button className="w-full py-3 flex items-center justify-center border border-gray-300 hover:bg-gray-100 rounded-[50px]">
           <img src={googleIcon} alt="Google" className="w-5 h-5 mr-2" />
           Continue with Google
-        </button>
+        </button> */}
       </form>
     </>
   );

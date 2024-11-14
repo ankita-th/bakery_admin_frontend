@@ -67,7 +67,11 @@ const Categories = () => {
     action: "",
     name: "",
   });
-  const [imagePreview, setImagePreview] = useState(null);
+  const [file, setFile] = useState({
+    file: null,
+    preview: "",
+    error: "",
+  });
   const [categories, setCategories] = useState([]);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [totalData, setTotalData] = useState();
@@ -152,7 +156,7 @@ const Categories = () => {
       reset();
       setEditCategoryInfo({ isEdit: false, item: null });
       setItemToDelete(null);
-      setImagePreview(null);
+      setFile({ preview: "", file: null, error: "" });
       setPage(1);
       categoryModal?.toggleModal();
       setValue("category_image", null);
@@ -171,11 +175,11 @@ const Categories = () => {
     const payload = {
       name: values.name,
       slug: values.slug,
-      category_image: values.category_image,
+      category_image: file.file,
+      description: values.description,
+      is_active: buttonType === "publish",
     };
     delete payload.image;
-
-    delete payload.is_active;
     // converting payload into form data
     const formData = new FormData();
 
@@ -202,9 +206,13 @@ const Categories = () => {
           `Category ${isEdit ? "updated" : "added"} sucessfully`,
           successType
         );
-      })  
+      })
       .catch((err) => {
-        toastMessage(err?.response?.data?.name?.[0] || err?.response?.data?.slug?.[0] || DEFAULT_ERROR_MESSAGE);
+        toastMessage(
+          err?.response?.data?.name?.[0] ||
+            err?.response?.data?.slug?.[0] ||
+            DEFAULT_ERROR_MESSAGE
+        );
       })
       .finally(() => {
         handleCategoryModal({ action: "close" });
@@ -272,8 +280,8 @@ const Categories = () => {
               onClose={() => handleCategoryModal({ action: "close" })}
               onSubmit={handleAddEditCategory}
               formConfig={formConfig}
-              imagePreview={imagePreview}
-              setImagePreview={setImagePreview}
+              file={file}
+              setFile={setFile}
               editCategoryInfo={editCategoryInfo}
             />
           )}
