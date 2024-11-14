@@ -53,7 +53,7 @@ const AddEditRawMaterial = ({
           onClose={onClose}
           text={isEdit ? "Edit Raw material" : "Add Raw material"}
         />
-        <CommonButton text="fill form" type="button" onClick={fillForm} />
+        {/* <CommonButton text="fill form" type="button" onClick={fillForm} /> */}
         <FormWrapper
           onSubmit={onSubmit}
           formConfig={formConfig}
@@ -144,7 +144,7 @@ const AddEditRawMaterial = ({
               type="submit"
               text="Draft"
               icon={draftIcon}
-              className="orange_btn"
+              className="grey_btn"
               name="draft"
               loader={btnLoaders?.draft}
               disabled={btnLoaders?.publish || btnLoaders?.draft}
