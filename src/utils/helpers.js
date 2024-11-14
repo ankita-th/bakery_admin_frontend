@@ -182,3 +182,16 @@ export const createAdvancedPayload = (values) => {
     purchase_note: values?.purchase_note,
   };
 };
+
+export const createFilesObject = (files) => {
+  const result = {};
+  files.forEach(({ file }) => {
+    if (file) {
+      result["category_images"] = file;
+    }
+  });
+};
+
+export const isFilesNotEmpty = (files) => {
+  return files.some(({ file }) => file);
+};

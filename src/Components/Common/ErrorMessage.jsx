@@ -1,10 +1,14 @@
 import React from "react";
 
-const ErrorMessage = ({ fieldName, errors }) => {
+const ErrorMessage = ({ fieldName, errors, customError = "" }) => {
   return (
     <>
-      {errors?.[fieldName] && (
-        <p className="text-red-600">{errors?.[fieldName].message}</p>
+      {customError ? (
+        <p className="text-red-600">{customError}</p>
+      ) : (
+        errors?.[fieldName] && (
+          <p className="text-red-600">{errors?.[fieldName].message}</p>
+        )
       )}
     </>
   );
