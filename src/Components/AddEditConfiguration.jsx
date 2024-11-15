@@ -31,7 +31,6 @@ const AddEditConfiguration = ({
 }) => {
   const { isEdit, editItem } = editInfo;
   const { setValue, watch } = formConfig;
-  console.log(editItem, "editItem");
   useEffect(() => {
     const prefillKeys = [
       "zip_code",

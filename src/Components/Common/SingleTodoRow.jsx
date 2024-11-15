@@ -4,6 +4,7 @@ import CommonButton from "./CommonButton";
 import { extractOption } from "../../utils/helpers";
 const STATUS_TO_CLASS = {
   "Not Started": "status-pending",
+  unassigned: "text-red-500",
   //  further add accordingly
 };
 const SingleTodoRow = ({
@@ -45,7 +46,7 @@ const SingleTodoRow = ({
           />
         )}
       </td>
-      <td className="py-2 px-4 border">{priority}</td>
+      <td className="py-2 px-4 border capitalize">{priority}</td>
       <td className="py-2 px-4 border">{end_date}</td>
       <td className={`py-2 px-4 border ${STATUS_TO_CLASS[status]}`}>
         {status}

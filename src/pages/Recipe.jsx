@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import FilterSection from "../Components/Common/FilterSection";
-import {
-  DEFAULT_ERROR_MESSAGE,
-  ITEMS_PER_PAGE,
-  OPTIONS,
-} from "../constant";
+import { DEFAULT_ERROR_MESSAGE, ITEMS_PER_PAGE, OPTIONS } from "../constant";
 import CommonButton from "../Components/Common/CommonButton";
 import { useNavigate } from "react-router-dom";
 import usePagination from "../hooks/usePagination";

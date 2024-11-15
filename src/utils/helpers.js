@@ -1,5 +1,5 @@
 import moment from "moment";
-
+const base_url = "http://192.168.1.86:8000";
 const routeTitles = {
   "/dashboard": "Welcome John Doe",
   "/products": "Products",
@@ -13,6 +13,7 @@ const routeTitles = {
   "/employee": "Employee Management",
   "/payment-history": "Payment History",
   "/to-do": "To-Do List",
+  "/add-edit-product": "New Product",
 };
 
 export const getHeadingTitleFromRoute = (pathName) => {
@@ -68,7 +69,6 @@ export const employeeListIntoOptions = (employeeList) => {
 export const extractOption = (options, valueToExtract, key) => {
   if (options?.length && valueToExtract) {
     const elem = options?.find((curElem) => curElem?.[key] == valueToExtract);
-    console.log(elem, "log element inside extract option");
     return elem;
   }
 };
@@ -80,7 +80,6 @@ export const formatDate = (date, format) => {
 };
 export const returnAddressInfo = (addressComponents) => {
   if (addressComponents) {
-    console.log(addressComponents, "addressComponents");
     const countryObj = addressComponents?.find((component) =>
       component.types.includes("country")
     );
@@ -205,4 +204,20 @@ export const handleRawMaterialErrorToast = (err) => {
   } else {
     return DEFAULT_ERROR_MESSAGE;
   }
+};
+
+export const convertIntoSelectOptions = (options, labelKey, valueKey) => {
+  const result = [];
+  options.forEach((curElem) => {
+    const option = {
+      label: curElem?.[labelKey],
+      value: curElem?.[valueKey],
+    };
+    result.push(option);
+  });
+  return result;
+};
+
+export const createPreview = (imagePreview) => {
+  return `${base_url}${imagePreview}`;
 };

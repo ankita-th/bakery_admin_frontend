@@ -80,7 +80,6 @@ const filterFields = [
   },
 ];
 const Products = () => {
-  // only one of the below will be used depending on the API response
   const navigate = useNavigate();
   const { page, onPageChange } = usePagination();
   const { showModal, toggleModal } = useModalToggle();
@@ -102,12 +101,8 @@ const Products = () => {
       page: page,
     };
     toggleLoader("pageLoader");
-    // update required: remove this dummy data and according to the API data
-    setProducts(DUMMY_PRODUCT_DATA)
     getProducts(apiFilters)
       .then((res) => {
-        console.log(res?.data, "this is response");
-        // update res?.data accordingly and totalPages and totalData logic
         setProducts(res?.data?.results);
         setTotalData(res?.data?.count);
       })
@@ -140,8 +135,6 @@ const Products = () => {
         setDeleteLoader((prev) => false);
       });
   };
-  // for managing view , edit and delete buttons inside single row
-  // in case of delete the id will be the deleteItemId and in case of edit the id of the item to edit
 
   const handleActions = (action, id) => {
     if (action === "view") {

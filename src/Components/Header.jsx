@@ -34,8 +34,8 @@ const Header = () => {
           <div class="main_head_title">
             {pathname === "/dashboard" || pathname === "/" ? (
               <h5 class="text-lg font-normal">
-                Good Morning{" "}
-                <span class="text-[#EC7F1A] font-bold text-xl">John Doe!</span>
+                {/* Good Morning{" "} */}
+                <span class="text-[#EC7F1A] font-bold text-xl">{userName}</span>
               </h5>
             ) : (
               <h5 class="text-lg font-normal">{title}</h5>
@@ -140,7 +140,9 @@ const Header = () => {
                   <div className="w-10 h-10 rounded-full overflow-hidden">
                     <img src={userImage} />
                   </div>
-                  <span className="font-semibold text-gray-700">John Doe</span>
+                  <span className="font-semibold text-gray-700">
+                    {userName}
+                  </span>
                 </div>
               </button>
 

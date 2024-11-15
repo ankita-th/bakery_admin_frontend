@@ -18,7 +18,6 @@ const AddEditRawMaterial = ({
 }) => {
   const { isEdit, item } = editInfo;
   const { setValue, watch } = formConfig;
-  console.log(editInfo, "editInfo inside comp");
   useEffect(() => {
     const prefillKeys = [
       "description",
@@ -51,7 +50,7 @@ const AddEditRawMaterial = ({
       <div className="category-section">
         <AddEditSectionHeading
           onClose={onClose}
-          text={isEdit ? "Edit Raw material" : "Add Raw material"}
+          text={isEdit ? "Edit Raw Material" : "Add Raw Material"}
         />
         {/* <CommonButton text="fill form" type="button" onClick={fillForm} /> */}
         <FormWrapper

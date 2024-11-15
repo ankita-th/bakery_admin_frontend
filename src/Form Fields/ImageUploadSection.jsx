@@ -2,26 +2,36 @@ import React from "react";
 import { closeIcon, imageUploadIcon } from "../assets/Icons/Svg";
 import ErrorMessage from "../Components/Common/ErrorMessage";
 import { isValidType } from "../utils/helpers";
+import { allowedImageTypes } from "../constant";
 
 const ImageUploadSection = ({
   label,
   setFile,
   file,
-  allowedTypes,
+  allowedTypes = allowedImageTypes,
   accept = "image/*",
+  uniqueId,
+  uploadInfo = { isOnUploadRequired: false }, // {isOnUploadRequired:true/false , onUpload:() => {}}
   // rules
 }) => {
-  const inputId = `image-upload-${label}`;
-
+  const inputId = `image-upload-${uniqueId}`;
   const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (isValidType(file, allowedTypes)) {
+    const uploadedFile = e.target.files[0];
+    if (uploadedFile) {
+      if (isValidType(uploadedFile, allowedTypes)) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          setFile({ ...file, file: file, preview: e.target.result, error: "" });
+          setFile({
+            ...file,
+            file: uploadedFile,
+            preview: e.target.result,
+            error: "",
+          });
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(uploadedFile);
+        if (uploadInfo?.isOnUploadRequired) {
+          onUpload(file);
+        }
       } else {
         setFile({
           ...file,

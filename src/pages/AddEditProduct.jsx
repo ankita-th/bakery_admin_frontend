@@ -4,7 +4,6 @@ import FormWrapper from "../Wrappers/FormWrapper";
 import CommonTextEditor from "../Form Fields/CommonTextEditor";
 import RadioGroup from "../Form Fields/RadioGroup";
 import CommonSelect from "../Form Fields/CommonSelect";
-import ImageUploadSection from "../Form Fields/ImageUploadSection";
 import CommonTextField from "../Form Fields/CommonTextField";
 import {
   createAdvancedPayload,

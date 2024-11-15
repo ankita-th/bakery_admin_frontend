@@ -18,7 +18,6 @@ const SingleRecipeRow = ({
   isRecipe = false,
 }) => {
   // values in the figma name, id, quantity, reorder level, expiration date, last updated, notes:
-  console.log(item, "this is item");
   const {
     id,
     recipe_title,
