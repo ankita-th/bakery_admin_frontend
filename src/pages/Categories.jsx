@@ -6,13 +6,11 @@ import { successType, toastMessage } from "../utils/toastMessage";
 import { DEFAULT_ERROR_MESSAGE, ITEMS_PER_PAGE, OPTIONS } from "../constant";
 import useLoader from "../hooks/useLoader";
 import usePagination from "../hooks/usePagination";
-import TableComponent from "../Components/Common/TableComponent";
 import TableWrapper from "../Wrappers/TableWrapper";
 import NoDataFound from "../Components/Common/NoDataFound";
 import SingleCategoryRow from "../Components/Common/SingleCategoryRow";
 import useModalToggle from "../hooks/useModalToggle";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
-import { trashIcon } from "../assets/Icons/Svg";
 import Pagination from "../Components/Common/Pagination";
 import { deleteItemBasedOnId, handleEdit } from "../utils/helpers";
 import FilterSection from "../Components/Common/FilterSection";
@@ -194,6 +192,9 @@ const Categories = () => {
     if (file?.file) {
       formData.append("category_image", file.file);
     }
+    if (values?.parent) {
+      formData.append("parent", values.parent);
+    }
 
     const data = Object.fromEntries(formData.entries()); // Convert to object
     makeApiRequest({
@@ -268,6 +269,9 @@ const Categories = () => {
                   currentPage={page}
                   index={idx}
                   handleActions={handleActions}
+                  // for image upload
+                  // setFile={setFile}
+                  // file={file}
                 />
               ))
             ) : (
@@ -303,6 +307,7 @@ const Categories = () => {
               setFile={setFile}
               editCategoryInfo={editCategoryInfo}
               btnLoaders={btnLoaders}
+              categories={categories}
             />
           )}
         </>

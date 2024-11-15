@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { makeApiRequest, METHODS } from "../api/apiFunctions";
+import { INSTANCE, makeApiRequest, METHODS } from "../api/apiFunctions";
 import { CATEGORIES_ENDPOINT } from "../api/endpoints";
 import AddEditCategorySection from "./AddEditCategorySection";
 import { useForm } from "react-hook-form";
 import { editIcon } from "../assets/Icons/Svg";
+import ErrorMessage from "./Common/ErrorMessage";
+import { successType, toastMessage } from "../utils/toastMessage";
+import { DEFAULT_ERROR_MESSAGE } from "../constant";
 
 const CategorySection = ({ formConfig, fieldName, rules }) => {
   const [file, setFile] = useState();
-  const { register, watch } = formConfig;
+  const {
+    register,
+    watch,
+    formState: { errors },
+  } = formConfig;
   const categoryFormConfig = useForm();
   const { reset } = categoryFormConfig;
   const [categories, setCategories] = useState([]);
@@ -27,7 +34,6 @@ const CategorySection = ({ formConfig, fieldName, rules }) => {
       });
   }, []);
 
-  console.log(watch(fieldName), "these ar categories");
   const handleButtonLoaders = (type) => {
     setBtnLoaders({ ...btnLoaders, [type]: !btnLoaders[type] });
   };
@@ -63,27 +69,20 @@ const CategorySection = ({ formConfig, fieldName, rules }) => {
     console.log(data, "recipe payload");
     makeApiRequest({
       endPoint: CATEGORIES_ENDPOINT,
-      method: isEdit ? METHODS?.patch : METHODS?.post,
-      update_id: isEdit && item?.id,
+      method: METHODS?.post,
       payload: formData,
       instanceType: INSTANCE.formInstance,
       // payload: payload,
     })
       .then((res) => {
-        if (isEdit) {
-          setCategories(handleEdit(categories, item?.id, res?.data)); //array , id to update , data to update
-        } else {
-          setCategories((prev) => [...prev, res?.data]);
-        }
-        toastMessage(
-          `Category ${isEdit ? "updated" : "added"} sucessfully`,
-          successType
-        );
+        setCategories((prev) => [...prev, res?.data]);
+        toastMessage(`Category added sucessfully`, successType);
       })
       .catch((err) => {
         toastMessage(handleCategoryErrorToast(err));
       })
       .finally(() => {
+        setShowCateoryAddSection(false);
         handleReset();
       });
   };
@@ -91,6 +90,15 @@ const CategorySection = ({ formConfig, fieldName, rules }) => {
     reset();
     setFile(null);
     setBtnLoaders({ publish: false });
+  };
+  const handleCategoryErrorToast = (err) => {
+    if (err?.response?.data?.name?.[0]) {
+      return err?.response?.data?.name?.[0];
+    } else if (err?.response?.data?.slug?.[0]) {
+      return err?.response?.data?.slug?.[0];
+    } else {
+      return DEFAULT_ERROR_MESSAGE;
+    }
   };
   return (
     <div>
@@ -124,6 +132,7 @@ const CategorySection = ({ formConfig, fieldName, rules }) => {
           )}
         </div>
       </div>
+      <ErrorMessage customError={errors?.[fieldName]?.message} />
 
       {showCategoryAddSection && (
         <AddEditCategorySection

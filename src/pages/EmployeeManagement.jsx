@@ -146,7 +146,6 @@ const EmployeeManagement = () => {
   const onSubmit = (values) => {
     console.log(values, "these are values");
   };
-  console.log(showEmployeeSection, "showEmployeeSection");
   return (
     <div>
       {" "}

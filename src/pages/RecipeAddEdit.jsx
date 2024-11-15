@@ -11,9 +11,9 @@ import { allowedImageTypes, DEFAULT_ERROR_MESSAGE } from "../constant";
 import CommonTextEditor from "../Form Fields/CommonTextEditor";
 import {
   appendStepCountInObject,
+  createPreview,
   createRequiredValidation,
   extractOption,
-  isFilesNotEmpty,
   prefillFormValues,
 } from "../utils/helpers";
 import { INSTANCE, makeApiRequest, METHODS } from "../api/apiFunctions";
@@ -24,6 +24,7 @@ import useLoader from "../hooks/useLoader";
 import PageLoader from "../loaders/PageLoader";
 import MultipleImageUploadField from "../Form Fields/MultipleImageUploadField";
 import CategorySection from "../Components/CategorySection";
+import ImageUploadSection from "../Form Fields/ImageUploadSection";
 const ALLERGEN_OPTIONS = [{ value: "CN", label: "Contain Nuts" }];
 const DIETRY_OPTIONS = [{ value: "GF", label: "Gluten-free" }];
 const DIFFICULTY_OPTIONS = [
@@ -76,6 +77,8 @@ const INSTRUCTION_ITEMS = [
     isRequired: false,
   },
 ];
+const DEFAULT_INSTRUCTION = [{ step_count: "", instructions: "", notes: "" }];
+const DEFAULT_INGREDIENT = [{ name: "", quantity: "", unit_of_measure: "" }];
 
 const RecipeAddEdit = () => {
   const navigate = useNavigate();
@@ -89,6 +92,7 @@ const RecipeAddEdit = () => {
   });
   const {
     control,
+    watch,
     handleSubmit,
     setValue,
     trigger,
@@ -103,8 +107,7 @@ const RecipeAddEdit = () => {
     publish: false,
     draft: false,
   });
-  const [files, setFiles] = useState([]);
-  const [imageError, setImageError] = useState("");
+  const [file, setFile] = useState();
 
   useEffect(() => {
     if (params?.receipe_id) {
@@ -123,9 +126,9 @@ const RecipeAddEdit = () => {
             "notes",
             "cook_time",
             "serving_size",
-            "ingredients",
             "description",
-            "instructions",
+            // "ingredients",
+            // "instructions",
           ];
           //  for prefilling normal values
           prefillFormValues(response, prefillKeys, setValue);
@@ -144,16 +147,35 @@ const RecipeAddEdit = () => {
             response?.dietary_plan,
             "value"
           );
-          console.log(allergenOption, "allergenOption");
 
           setValue("difficulty_level", difficultyOption);
           setValue("allergen_information", allergenOption);
           setValue("dietary_plan", dietryOption);
-
+          if (response?.instructions?.length) {
+            setValue("instructions", response?.instructions);
+          } else {
+            setValue("instructions", DEFAULT_INSTRUCTION);
+          }
+          if (response?.ingredients?.length) {
+            setValue("ingredients", response?.ingredients);
+          } else {
+            setValue("ingredients", DEFAULT_INGREDIENT);
+          }
+          // updateRequired: add according to the new key and type
+          setValue("category", ["17", "24"]);
+          // update required:May be need to update key name here
+          if (response?.category_images) {
+            setFile({
+              file: null,
+              preview: createPreview(response?.category_images),
+            });
+          }
           // for prefilling values that requires custom logic
         })
         .catch((err) => {
-          console.log(err); // update required: Check in which field error message
+          console.log(err); // update required: Check in which field error message`
+          toastMessage("Recipe not found");
+          navigate("/recipe");
         })
         .finally(() => {
           toggleLoader("pageLoader");
@@ -180,7 +202,8 @@ const RecipeAddEdit = () => {
       allergen_information: values?.allergen_information?.value,
       status: buttonType === "publish" ? "True" : "False",
       // update required make this category key dynamic
-      category: +16,
+      category: +6,
+      // category:values?.category
     };
 
     // converting payload into formdata
@@ -196,18 +219,21 @@ const RecipeAddEdit = () => {
     }
 
     // Appending files here
-    files.forEach(({ file }) => {
-      if (file) {
-        formData.append("category_images", file);
-      }
-    });
+    // files.forEach(({ file }) => {
+    //   if (file) {
+    //     formData.append("category_images", file);
+    //   }
+    // });
+    if (file?.file) {
+      formData.append("category_images", file?.file);
+    }
 
     // Appending files here
 
     const data = Object.fromEntries(formData.entries()); // Convert to object
     console.log(data, "formData payload");
     console.log(payload, "recipe payload");
-    console.log(files, "files payload");
+    console.log(watch("categories"), "categories");
 
     // if receipe id is there in the params means it is a edit scenario
     makeApiRequest({
@@ -242,7 +268,6 @@ const RecipeAddEdit = () => {
     setValue("notes", "String");
   };
 
-  console.log(imageError, "recipe image");
   return (
     <div>
       {pageLoader ? (
@@ -381,7 +406,12 @@ const RecipeAddEdit = () => {
                   </div>
 
                   <div className="recipe-image-upload">
-                    <MultipleImageUploadField
+                    <ImageUploadSection
+                      file={file}
+                      setFile={setFile}
+                      label="Recipe Image"
+                    />
+                    {/* <MultipleImageUploadField
                       fieldName="category-image"
                       files={files}
                       setFiles={setFiles}
@@ -393,7 +423,7 @@ const RecipeAddEdit = () => {
                         text: "Upload Recipe images",
                         class: "cursor-pointer",
                       }}
-                    />
+                    /> */}
                   </div>
                 </div>
                 <div className="button-section">

@@ -28,6 +28,8 @@ const Login = () => {
         localStorage.setItem("token", res?.data?.access);
         toastMessage("Logged In Successfully", successType);
         localStorage.setItem("refreshToken", res?.data?.refresh);
+        const userName = `${res?.data?.first_name} ${res?.data?.last_name}`;
+        localStorage.setItem("userName", userName);
         navigate("/dashboard");
       })
       .catch((err) => {

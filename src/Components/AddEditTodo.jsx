@@ -25,7 +25,6 @@ const AddEditTodo = ({
 }) => {
   const { isEdit, editItem } = editInfo;
   const { setValue, watch } = formConfig;
-  console.log(editInfo, "editInfo inside comp");
   useEffect(() => {
     const prefillKeys = [
       "task_id",
@@ -52,10 +51,8 @@ const AddEditTodo = ({
         "value"
       );
       setValue("assigned_to", employeeOption);
-      console.log(employeeOption, "log employeeOption");
     }
   }, [employeeList]);
-  console.log(employeeList, "employeeList");
 
   const fillForm = () => {
     setValue("task_id", 125);

@@ -9,7 +9,7 @@ import { MEASURE_OPTIONS, today, YYYY_MM_DD } from "../constant";
 import { formatDate, prefillFormValues } from "../utils/helpers";
 
 const ViewRawMaterials = ({ item, onClose, formConfig }) => {
-    const {setValue,} = formConfig;
+  const { setValue } = formConfig;
   useEffect(() => {
     const prefillKeys = [
       "description",
@@ -34,7 +34,7 @@ const ViewRawMaterials = ({ item, onClose, formConfig }) => {
           {/* <CommonButton text="fill form" type="button" onClick={fillForm} /> */}
 
           <CommonTextField
-            label="Material Name *"
+            label="Material Name"
             fieldName="name"
             rules={RawMaterialValidations["name"]}
             formConfig={formConfig}
@@ -43,7 +43,7 @@ const ViewRawMaterials = ({ item, onClose, formConfig }) => {
           />
 
           <CommonTextField
-            label="Quantity In Stock *"
+            label="Quantity In Stock"
             fieldName="quantity"
             rules={RawMaterialValidations["quantity"]}
             formConfig={formConfig}
@@ -54,7 +54,7 @@ const ViewRawMaterials = ({ item, onClose, formConfig }) => {
 
           <CommonSelect
             formConfig={formConfig}
-            label="Unit Of Measure *"
+            label="Unit Of Measure"
             selectType="normal"
             options={MEASURE_OPTIONS}
             defaultOption="Select Unit Of Product"
@@ -74,7 +74,7 @@ const ViewRawMaterials = ({ item, onClose, formConfig }) => {
           />
 
           <CommonTextField
-            label="Cost Per Unit ($)*"
+            label="Cost Per Unit ($)"
             fieldName="cost"
             placeholder="Cost Per Unit"
             rules={RawMaterialValidations["cost"]}
@@ -98,7 +98,7 @@ const ViewRawMaterials = ({ item, onClose, formConfig }) => {
             fieldName="expiry_date"
             minDate={today}
             rules={RawMaterialValidations["expiry_date"]}
-            label="Expiry Date *"
+            label="Expiry Date"
             disabled={true}
           />
           {/* commented for future use */}
