@@ -46,7 +46,7 @@ const RECIPE_COLUMNS = [
   "Prep Time",
   "Cook Time",
   "Serving Size",
-  "Serving Size",
+  "Status",
   "Actions",
 ];
 

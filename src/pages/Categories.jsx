@@ -79,8 +79,12 @@ const Categories = () => {
     isEdit: false,
     editItem: null,
   });
+  const [btnLoaders, setBtnLoaders] = useState({
+    publish: false,
+    draft: false,
+  });
   const [deleteLoader, setDeleteLoader] = useState(false);
-  const { buttonLoader, pageLoader, toggleLoader } = useLoader();
+  const { pageLoader, toggleLoader } = useLoader();
   // for delete confirmation modal
   const { showModal, toggleModal } = useModalToggle();
   const { page, onPageChange, setPage } = usePagination();
@@ -167,7 +171,7 @@ const Categories = () => {
     const { isEdit, item } = editCategoryInfo;
     const buttonType = event.nativeEvent.submitter.name;
 
-    toggleLoader("buttonLoader");
+    handleButtonLoaders(buttonType);
     // const payload = {
     //   ...values,
     //   is_active: buttonType === "publish",
@@ -175,7 +179,7 @@ const Categories = () => {
     const payload = {
       name: values.name,
       slug: values.slug,
-      category_image: file.file,
+      // category_image: file.file,
       description: values.description,
       is_active: buttonType === "publish",
     };
@@ -185,6 +189,10 @@ const Categories = () => {
 
     for (let key in payload) {
       formData.append(key, payload[key]);
+    }
+    // appending file
+    if (file?.file) {
+      formData.append("category_image", file.file);
     }
 
     const data = Object.fromEntries(formData.entries()); // Convert to object
@@ -208,16 +216,27 @@ const Categories = () => {
         );
       })
       .catch((err) => {
-        toastMessage(
-          err?.response?.data?.name?.[0] ||
-            err?.response?.data?.slug?.[0] ||
-            DEFAULT_ERROR_MESSAGE
-        );
+        toastMessage(handleCategoryErrorToast(err));
       })
       .finally(() => {
+        setBtnLoaders({ publish: false, draft: false });
         handleCategoryModal({ action: "close" });
         reset();
+        setFile(null);
       });
+  };
+
+  const handleCategoryErrorToast = (err) => {
+    if (err?.response?.data?.name?.[0]) {
+      return err?.response?.data?.name?.[0];
+    } else if (err?.response?.data?.slug?.[0]) {
+      return err?.response?.data?.slug?.[0];
+    } else {
+      return DEFAULT_ERROR_MESSAGE;
+    }
+  };
+  const handleButtonLoaders = (type) => {
+    setBtnLoaders({ ...btnLoaders, [type]: !btnLoaders[type] });
   };
 
   return (
@@ -283,6 +302,7 @@ const Categories = () => {
               file={file}
               setFile={setFile}
               editCategoryInfo={editCategoryInfo}
+              btnLoaders={btnLoaders}
             />
           )}
         </>

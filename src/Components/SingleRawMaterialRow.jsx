@@ -14,6 +14,7 @@ const SingleRawMaterialRow = ({ item, currentPage, index, handleActions }) => {
     expiry_date,
     unit_of_measure,
     updated_at,
+    product_count,
   } = item;
   return (
     <tr className=" border border-gray-400 ">
@@ -35,16 +36,13 @@ const SingleRawMaterialRow = ({ item, currentPage, index, handleActions }) => {
       >
         {reorder}
       </td>
-      <td className="py-2 px-4">
-        {formatDate(expiry_date, YYYY_MM_DD)}
-      </td>
+      <td className="py-2 px-4">{formatDate(expiry_date, YYYY_MM_DD)}</td>
       <td className="py-2 px-4">{formatDate(updated_at, YYYY_MM_DD)}</td>
       <td className="py-2 px-4">{description}</td>
-
       <td className="py-2 px-4 space-x-2">
         <button
           className="text-blue-500 hover:text-blue-700"
-          onClick={() => handleActions({ action: "view" })}
+          onClick={() => handleActions({ action: "view", viewItem: item })}
         >
           {eyeIcon}
         </button>

@@ -12,6 +12,8 @@ const SingleTodoRow = ({
   index = null,
   handleActions,
   employeeList,
+  handleAssignTask,
+  assignLoader,
 }) => {
   const {
     id,
@@ -28,7 +30,7 @@ const SingleTodoRow = ({
   return (
     <tr className="text-center">
       <td className="py-2 px-4 border">{task_id}</td>
-      <td className="py-2 px-4 border">{title}</td>
+      <td className="py-2 px-4 border font-bold">{title}</td>
       <td className="py-2 px-4 border">{description}</td>
       <td className="py-2 px-4 border">
         {status === "assigned" ? (
@@ -37,7 +39,9 @@ const SingleTodoRow = ({
           <CommonButton
             text="Assign Task"
             className="orange_btn"
-            onClick={() => handleActions({ action: "edit", editItem: item })}
+            onClick={() => handleAssignTask(item)}
+            loader={assignLoader}
+            disabled={assignLoader}
           />
         )}
       </td>

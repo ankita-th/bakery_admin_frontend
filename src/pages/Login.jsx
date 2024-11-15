@@ -75,12 +75,12 @@ const Login = () => {
           onIconClick={toggleShowPassword}
           icon={showPassword ? ClosedEye : OpenEye}
         />
-        <AuthRedirectSection
+        {/* <AuthRedirectSection
           text=""
           linkText="Forgot your password"
           linkUrl="/forgot-password"
           className="text-left text-gray-500 hover:text-black mt-2"
-        />
+        /> */}
         <CommonButton
           text="Sign in"
           type="submit"
@@ -93,7 +93,7 @@ const Login = () => {
           linkUrl="/sign-up"
         /> */}
 
-        <p className="text-center text-sm mt-4">
+        {/* <p className="text-center text-sm mt-4">
           Don’t have an account?{" "}
           <a
             href="#"
@@ -101,7 +101,7 @@ const Login = () => {
           >
             Sign up
           </a>
-        </p>
+        </p> */}
 
         {/* <div className="flex items-center my-4">
           <div className="flex-grow border-t border-gray-300"></div>

@@ -23,6 +23,7 @@ import { useForm } from "react-hook-form";
 import FilterSection from "../Components/Common/FilterSection";
 import CommonButton from "../Components/Common/CommonButton";
 import PageLoader from "../loaders/PageLoader";
+import ViewRawMaterials from "../Components/ViewRawMaterials";
 const RAW_MATERIAL_COLUMNS = [
   "",
   "ID",
@@ -51,36 +52,6 @@ const filterFields = [
     type: "search",
     filterName: "name",
     placeholder: "Search Materials",
-  },
-];
-
-const dummyData = [
-  {
-    name: "Flour",
-    id: 1,
-    quantity: "150Kg",
-    reorder: 50,
-    expiration_date: "2024-12-01",
-    last_updated: "2024-12-01",
-    notes: "High quality wheat",
-  },
-  {
-    id: 2,
-    name: "Sugar",
-    quantity: "150Kg",
-    reorder: 50,
-    expiration_date: "2024-12-01",
-    last_updated: "2024-12-01",
-    notes: "High quality wheat",
-  },
-  {
-    id: 3,
-    name: "Yeast",
-    quantity: "150Kg",
-    reorder: 50,
-    expiration_date: "2024-12-01",
-    last_updated: "2024-12-01",
-    notes: "High quality wheat",
   },
 ];
 
@@ -114,6 +85,7 @@ const RawMaterials = () => {
     publish: false,
     draft: false,
   });
+  const [viewInfo, setViewInfo] = useState({ show: false, item: null });
 
   useEffect(() => {
     toggleLoader("pageLoader");
@@ -121,7 +93,6 @@ const RawMaterials = () => {
       ...filters,
       page: page,
     };
-    // setRawMaterials(dummyData);
 
     makeApiRequest({
       endPoint: RAW_MATERIAL_ENDPOINT,
@@ -142,8 +113,24 @@ const RawMaterials = () => {
       });
   }, [filters, page]);
 
-  const handleActions = ({ action, deleteId, editItem }) => {
+  const dummyRawData = [
+    {
+      cost: 123,
+      reorder: 123,
+      quantity: 12,
+      unit_of_measure: "kg",
+      product_count: 12,
+      expiry_date: "11-15-2024",
+      description: "random product",
+      name: "Wheat",
+      updated_at: "11-15-2024",
+      id: 3,
+    },
+  ];
+
+  const handleActions = ({ action, deleteId, editItem, viewItem }) => {
     if (action === "view") {
+      setViewInfo({ show: true, item: viewItem });
     } else if (action === "edit") {
       setEditInfo({
         isEdit: true,
@@ -221,8 +208,7 @@ const RawMaterials = () => {
         }
       })
       .catch((err) => {
-        console.log(err.response?.data, "raw material error");
-        toastMessage(err?.response?.data?.name[0] || DEFAULT_ERROR_MESSAGE);
+        toastMessage(err?.response?.data?.name?.[0] || DEFAULT_ERROR_MESSAGE);
       })
       .finally(() => {
         setbtnLoaders({ publish: false, draft: false });
@@ -234,7 +220,6 @@ const RawMaterials = () => {
   const handleButtonLoaders = (type) => {
     setbtnLoaders({ ...btnLoaders, [type]: !btnLoaders[type] });
   };
-  console.log(btnLoaders, "this is button loader");
   return (
     <>
       {pageLoader ? (
@@ -276,7 +261,7 @@ const RawMaterials = () => {
           {showDeleteModal && (
             <DeleteConfirmationModal
               title="Are you sure you want to delete this raw material?"
-              description="This action cannot be redo. Deleting this product will permanently remove it from your inventory"
+              description="This action cannot be redo. Deleting this raw material will permanently remove it from your inventory"
               onCancel={() => {
                 setItemToDelete(null);
                 toggleDeleteModal();
@@ -293,6 +278,15 @@ const RawMaterials = () => {
               onSubmit={handleAddEditRawMaterial}
               editInfo={editInfo}
               btnLoaders={btnLoaders}
+            />
+          )}
+          {viewInfo?.show && (
+            <ViewRawMaterials
+              item={viewInfo?.item}
+              onClose={() => {
+                setViewInfo({ show: false, item: null });
+              }}
+              formConfig={formConfig}
             />
           )}
         </>

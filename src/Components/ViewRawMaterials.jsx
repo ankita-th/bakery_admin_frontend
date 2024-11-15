@@ -1,24 +1,15 @@
 import React, { useEffect } from "react";
-import FormWrapper from "../Wrappers/FormWrapper";
 import AddEditSectionHeading from "./AddEditSectionHeading";
+import FormWrapper from "../Wrappers/FormWrapper";
 import CommonTextField from "../Form Fields/CommonTextField";
-import { RawMaterialValidations } from "../Validations/validations";
 import CommonSelect from "../Form Fields/CommonSelect";
-import CommonButton from "./Common/CommonButton";
-import { draftIcon, publishIcon } from "../assets/Icons/Svg";
 import CommonDateField from "../Form Fields/CommonDateField";
+import { RawMaterialValidations } from "../Validations/validations";
 import { MEASURE_OPTIONS, today, YYYY_MM_DD } from "../constant";
 import { formatDate, prefillFormValues } from "../utils/helpers";
-const AddEditRawMaterial = ({
-  onClose,
-  onSubmit,
-  formConfig,
-  editInfo,
-  btnLoaders,
-}) => {
-  const { isEdit, item } = editInfo;
-  const { setValue, watch } = formConfig;
-  console.log(editInfo, "editInfo inside comp");
+
+const ViewRawMaterials = ({ item, onClose, formConfig }) => {
+    const {setValue,} = formConfig;
   useEffect(() => {
     const prefillKeys = [
       "description",
@@ -29,43 +20,26 @@ const AddEditRawMaterial = ({
       "expiry_date",
       "cost",
     ];
-    if (isEdit) {
-      // for filling normal keys
-      prefillFormValues(item, prefillKeys, setValue);
-      // for prefilling values with custom logic
-      setValue("expiry_date", formatDate(item?.expiry_date, YYYY_MM_DD));
-    }
+    // for filling normal keys
+    prefillFormValues(item, prefillKeys, setValue);
+    // for prefilling values with custom logic
+    setValue("expiry_date", formatDate(item?.expiry_date, YYYY_MM_DD));
   }, []);
-
-  const fillForm = () => {
-    setValue("name", "flour");
-    setValue("quantity", 150);
-    setValue("reorder", 50);
-    setValue("expiry_date", "2024-12-5");
-    setValue("notes", "High-quality wheat");
-    setValue("cost", "150");
-  };
-  console.log(watch("expiry_date"), "expiry date");
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="category-section">
-        <AddEditSectionHeading
-          onClose={onClose}
-          text={isEdit ? "Edit Raw material" : "Add Raw material"}
-        />
-        {/* <CommonButton text="fill form" type="button" onClick={fillForm} /> */}
-        <FormWrapper
-          onSubmit={onSubmit}
-          formConfig={formConfig}
-          className="orange_btn"
-          isCustomButtons={true}
-        >
+    <div>
+      {" "}
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+        <div className="category-section">
+          <AddEditSectionHeading onClose={onClose} text={"Raw Material"} />
+          {/* <CommonButton text="fill form" type="button" onClick={fillForm} /> */}
+
           <CommonTextField
             label="Material Name *"
             fieldName="name"
             rules={RawMaterialValidations["name"]}
             formConfig={formConfig}
             placeholder="Enter Material Name"
+            disabled={true}
           />
 
           <CommonTextField
@@ -75,6 +49,7 @@ const AddEditRawMaterial = ({
             formConfig={formConfig}
             isNumberOnly={true}
             placeholder="Enter Quantity Of Stock"
+            disabled={true}
           />
 
           <CommonSelect
@@ -86,6 +61,7 @@ const AddEditRawMaterial = ({
             fieldName="unit_of_measure"
             className="add-edit-input"
             rules={RawMaterialValidations["unit_of_measure"]}
+            disabled={true}
           />
           <CommonTextField
             label="Reorder Level"
@@ -94,6 +70,7 @@ const AddEditRawMaterial = ({
             rules={RawMaterialValidations["reorder"]}
             formConfig={formConfig}
             isNumberOnly={true}
+            disabled={true}
           />
 
           <CommonTextField
@@ -102,6 +79,7 @@ const AddEditRawMaterial = ({
             placeholder="Cost Per Unit"
             rules={RawMaterialValidations["cost"]}
             formConfig={formConfig}
+            disabled={true}
             isNumberOnly={true}
           />
 
@@ -113,6 +91,7 @@ const AddEditRawMaterial = ({
             placeholder="Enter Notes"
             type="textarea"
             rows={4}
+            disabled={true}
           />
           <CommonDateField
             formConfig={formConfig}
@@ -120,41 +99,20 @@ const AddEditRawMaterial = ({
             minDate={today}
             rules={RawMaterialValidations["expiry_date"]}
             label="Expiry Date *"
+            disabled={true}
           />
           {/* commented for future use */}
 
           {/* <CommonDateField
-            formConfig={formConfig}
-            fieldName="expiry_date"
-            minDate={today}
-            label="Expiration Date"
-          /> */}
-
-          <div className="button-section">
-            <CommonButton
-              type="submit"
-              text="Publish"
-              icon={publishIcon}
-              className="orange_btn"
-              name="publish"
-              loader={btnLoaders?.publish}
-              disabled={btnLoaders?.publish || btnLoaders?.draft}
-            />
-            {/* need to confirm functionality for this */}
-            <CommonButton
-              type="submit"
-              text="Draft"
-              icon={draftIcon}
-              className="grey_btn"
-              name="draft"
-              loader={btnLoaders?.draft}
-              disabled={btnLoaders?.publish || btnLoaders?.draft}
-            />
-          </div>
-        </FormWrapper>
+        formConfig={formConfig}
+        fieldName="expiry_date"
+        minDate={today}
+        label="Expiration Date"
+      /> */}
+        </div>
       </div>
     </div>
   );
 };
 
-export default AddEditRawMaterial;
+export default ViewRawMaterials;

@@ -38,7 +38,7 @@ const ImageUploadSection = ({
     <div>
       {label}
       <label htmlFor={inputId} className="image-upload-icon">
-        {!file.preview && imageUploadIcon}
+        {!file?.preview && imageUploadIcon}
       </label>
       <input
         onChange={(e) => {
@@ -63,7 +63,7 @@ const ImageUploadSection = ({
           </div>
         </div>
       )}
-      <ErrorMessage customError={file.error} />
+      <ErrorMessage customError={file?.error} />
     </div>
   );
 };

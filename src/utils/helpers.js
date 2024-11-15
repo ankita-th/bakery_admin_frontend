@@ -12,6 +12,7 @@ const routeTitles = {
   "/inventory": "Inventory Management",
   "/employee": "Employee Management",
   "/payment-history": "Payment History",
+  "/to-do": "To-Do List",
 };
 
 export const getHeadingTitleFromRoute = (pathName) => {
@@ -194,4 +195,14 @@ export const createFilesObject = (files) => {
 
 export const isFilesNotEmpty = (files) => {
   return files.some(({ file }) => file);
+};
+
+export const handleRawMaterialErrorToast = (err) => {
+  if (err?.response?.data?.name?.[0]) {
+    return err?.response?.data?.name?.[0];
+  } else if (err?.response?.data?.slug?.[0]) {
+    return err?.response?.data?.slug?.[0];
+  } else {
+    return DEFAULT_ERROR_MESSAGE;
+  }
 };

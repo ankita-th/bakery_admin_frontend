@@ -31,7 +31,9 @@ const AddEditCategorySection = ({
   onSubmit,
   editCategoryInfo,
   file,
-  setFile
+  setFile,
+  btnLoaders,
+  fromRecipe = false,
 }) => {
   const { watch, setValue, handleSubmit } = formConfig;
   const { isEdit, item } = editCategoryInfo;
@@ -54,15 +56,15 @@ const AddEditCategorySection = ({
         />
         {/* here custom logic is required that's why not using form wrapper */}
 
-        {/* <FormWrapper
+        <FormWrapper
           onSubmit={onSubmit}
           formConfig={formConfig}
           className="orange_btn"
-        > */}
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {" "}
+          isCustomButtons={true}
+        >
+          {/* <form onSubmit={handleSubmit(onSubmit)}> */}{" "}
           <CommonTextField
-            label="Title"
+            label="Title *"
             fieldName="name"
             formConfig={formConfig}
             className="add-edit-input"
@@ -70,7 +72,7 @@ const AddEditCategorySection = ({
             placeholder="Enter Title"
           />
           <CommonTextField
-            label="Slug"
+            label="Slug *"
             fieldName="slug"
             formConfig={formConfig}
             rules={CategoryValidations["slug"]}
@@ -78,16 +80,18 @@ const AddEditCategorySection = ({
             placeholder="Enter Slug"
           />
           {/* update this field according to the API */}
-          <CommonSelect
-            selectType="normal"
-            options={PARENT_CATEGORY_OPTIONS}
-            rules={CategoryValidations["parent"]}
-            fieldName="parent"
-            defaultOption="None"
-            formConfig={formConfig}
-            className="add-edit-input"
-            label="Parent Category"
-          />
+          {!fromRecipe && (
+            <CommonSelect
+              selectType="normal"
+              options={PARENT_CATEGORY_OPTIONS}
+              rules={CategoryValidations["parent"]}
+              fieldName="parent"
+              defaultOption="None"
+              formConfig={formConfig}
+              className="add-edit-input"
+              label="Parent Category"
+            />
+          )}
           <CommonTextField
             label="Description"
             fieldName="description"
@@ -95,7 +99,7 @@ const AddEditCategorySection = ({
             className="add-edit-input"
             rules={CategoryValidations["description"]}
             placeholder="Enter Description"
-            rows={6}
+            rows={4}
             type="textarea"
           />
           <ImageUploadSection
@@ -106,25 +110,40 @@ const AddEditCategorySection = ({
             setFile={setFile}
             allowedTypes={allowedImageTypes}
           />
-          <div className="button-section">
+          {!fromRecipe ? (
+            <div className="button-section">
+              <CommonButton
+                type="submit"
+                text="Publish"
+                className="orange_btn"
+                icon={publishIcon}
+                name="publish"
+                loader={btnLoaders?.publish}
+                disabled={btnLoaders?.publish || btnLoaders?.publish}
+              />
+
+              <CommonButton
+                type="submit"
+                text="Draft"
+                className="orange_btn"
+                icon={draftIcon}
+                name="draft"
+                loader={btnLoaders?.draft}
+                disabled={btnLoaders?.publish || btnLoaders?.publish}
+              />
+            </div>
+          ) : (
             <CommonButton
-              type="submit"
-              text="Publish"
+              text="Add category"
               className="orange_btn"
               icon={publishIcon}
               name="publish"
+              loader={btnLoaders?.publish}
+              disabled={btnLoaders?.publish}
             />
-
-            <CommonButton
-              type="submit"
-              text="Draft"
-              className="orange_btn"
-              icon={draftIcon}
-              name="draft"
-            />
-          </div>
-        </form>
-        {/* </FormWrapper> */}
+          )}
+          {/* </form> */}
+        </FormWrapper>
       </div>
     </div>
   );
