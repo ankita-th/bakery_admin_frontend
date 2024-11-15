@@ -1,4 +1,5 @@
 import React from "react";
+import { BUTTON_LOADER } from "../../assets/Icons/Svg";
 
 const CommonButton = ({
   onClick,
@@ -20,8 +21,7 @@ const CommonButton = ({
     >
       {icon}
       {text}
-      {/* add loader here */}
-      {loader ? "...loading":""}
+      {loader && BUTTON_LOADER}
     </button>
   );
 };

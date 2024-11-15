@@ -89,11 +89,11 @@ const AddEditConfiguration = ({
           />
 
           <CommonTextField
-            label="Delivery Threshold *"
+            label="Delivery Threshold ($) *"
             fieldName="delivery_threshold"
             rules={ConfigurationValidations["delivery_threshold"]}
             formConfig={formConfig}
-            placeholder="Enter Minimum Purchase Order"
+            placeholder="Enter Amount For Free Delivery"
             isNumberOnly={true}
           />
           <CommonSelect

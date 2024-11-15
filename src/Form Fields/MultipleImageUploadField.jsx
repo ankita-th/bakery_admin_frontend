@@ -11,6 +11,7 @@ const MultipleImageUploadField = ({
   allowedTypes,
   imageError,
   setImageError,
+  uploadButton,
 }) => {
   const inputId = `image-upload-${label}`;
 
@@ -49,9 +50,9 @@ const MultipleImageUploadField = ({
 
   return (
     <div>
-      {label}
-      <label htmlFor={inputId} className="image-upload-icon">
-        {imageUploadIcon}
+      <div className="label">{label}</div>
+      <label htmlFor={inputId} className={uploadButton.class}>
+        {uploadButton?.text}
       </label>
       <input
         onChange={(e) => handleImageUpload(e)}

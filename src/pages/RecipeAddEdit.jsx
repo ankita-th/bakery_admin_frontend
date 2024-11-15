@@ -3,21 +3,15 @@ import CommonTextField from "../Form Fields/CommonTextField";
 import { useFieldArray, useForm } from "react-hook-form";
 import { RecipeValidations } from "../Validations/validations";
 import FormWrapper from "../Wrappers/FormWrapper";
-import {
-  crossIcon,
-  draftIcon,
-  plusIcon,
-  publishIcon,
-} from "../assets/Icons/Svg";
+import { draftIcon, publishIcon } from "../assets/Icons/Svg";
 import CommonButton from "../Components/Common/CommonButton";
 import CommonSelect from "../Form Fields/CommonSelect";
 import CommonFieldArray from "../Components/Common/CommonFieldArray";
-import CommonSelectField from "../Form Fields/CommonSelectField";
-import { allowedImageTypes, DEFAULT_ERROR_MESSAGE, OPTIONS } from "../constant";
+import { allowedImageTypes, DEFAULT_ERROR_MESSAGE } from "../constant";
 import CommonTextEditor from "../Form Fields/CommonTextEditor";
 import {
   appendStepCountInObject,
-  createFilesObject,
+  createRequiredValidation,
   extractOption,
   isFilesNotEmpty,
   prefillFormValues,
@@ -29,7 +23,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import useLoader from "../hooks/useLoader";
 import PageLoader from "../loaders/PageLoader";
 import MultipleImageUploadField from "../Form Fields/MultipleImageUploadField";
-import ImageUploadSection from "../Form Fields/ImageUploadSection";
+import CategorySection from "../Components/CategorySection";
 const ALLERGEN_OPTIONS = [{ value: "CN", label: "Contain Nuts" }];
 const DIETRY_OPTIONS = [{ value: "GF", label: "Gluten-free" }];
 const DIFFICULTY_OPTIONS = [
@@ -43,20 +37,20 @@ const INGREDIENTS_ITEMS = [
   {
     fieldName: "name",
     placeholder: "Enter name",
-    label: "Ingredient Name",
+    label: "Ingredient Name *",
     isRequired: true,
   },
   {
     fieldName: "quantity",
     placeholder: "Enter Quantity",
-    label: "Ingredient Quantity",
+    label: "Ingredient Quantity *",
     isRequired: true,
     isNumberOnly: true,
   },
   {
     fieldName: "unit_of_measure",
     placeholder: "Quantity Unit",
-    label: "Unit of Measure",
+    label: "Unit of Measure *",
     isRequired: true,
   },
 ];
@@ -72,7 +66,7 @@ const INSTRUCTION_ITEMS = [
   {
     fieldName: "instructions",
     placeholder: "Enter Instructions",
-    label: "Instructions",
+    label: "Instructions *",
     isRequired: true,
   },
   {
@@ -95,7 +89,9 @@ const RecipeAddEdit = () => {
   });
   const {
     control,
+    handleSubmit,
     setValue,
+    trigger,
     formState: { errors },
   } = formConfig;
   const { append, fields, remove } = useFieldArray({
@@ -167,10 +163,7 @@ const RecipeAddEdit = () => {
 
   const onSubmit = (values, event) => {
     // in case required validation is required uncomment this code
-    if (isFilesNotEmpty(files)) {
-      setImageError("Category image is required");
-      return;
-    }
+
     // in case required validation is required uncomment this code
 
     const buttonType = event.nativeEvent.submitter.name;
@@ -187,7 +180,7 @@ const RecipeAddEdit = () => {
       allergen_information: values?.allergen_information?.value,
       status: buttonType === "publish" ? "True" : "False",
       // update required make this category key dynamic
-      category: +10,
+      category: +16,
     };
 
     // converting payload into formdata
@@ -268,22 +261,23 @@ const RecipeAddEdit = () => {
                 onSubmit={onSubmit}
                 isCustomButtons={true}
               >
+                {/* <form onSubmit={handleSubmit(onSubmit)}> */}
                 {/* update required: need to confirm about category field */}
                 <CommonTextField
                   formConfig={formConfig}
-                  label="Recipe Title"
+                  label="Recipe Title *"
                   fieldName="recipe_title"
                   placeholder="Enter Recipe Title"
                   className="recipe-input"
-                  rules={RecipeValidations["recipe_title"]}
+                  rules={createRequiredValidation("Recipe title")}
                 />
                 <div className="description mt-2">
                   <CommonTextEditor
-                    label="Description"
+                    label="Description *"
                     fieldName="description"
                     formConfig={formConfig}
                     placeholder="Type..."
-                    requiredMessage="This field is required" //validations works a bit different in text editor that's why
+                    requiredMessage="Description field is required" //validations works a bit different in text editor that's why
                   />
                 </div>
 
@@ -291,21 +285,21 @@ const RecipeAddEdit = () => {
                   <div className="sec-1">
                     <CommonTextField
                       formConfig={formConfig}
-                      label="Preparation Time"
+                      label="Preparation Time *"
                       fieldName="preparation_time"
                       placeholder="Enter the prep time in minutes or hours"
                       className="recipe-input"
-                      rules={RecipeValidations["preparation_time"]}
+                      rules={createRequiredValidation("Preparation time")}
                       isNumberOnly={true}
                     />
 
                     <CommonTextField
                       formConfig={formConfig}
-                      label="Cook Time"
+                      label="Cook Time *"
                       fieldName="cook_time"
                       placeholder="Enter the cook time"
                       className="recipe-input"
-                      rules={RecipeValidations["cook_time"]}
+                      rules={createRequiredValidation("Cook time")}
                       isNumberOnly={true}
                     />
                   </div>
@@ -313,22 +307,22 @@ const RecipeAddEdit = () => {
                   <div className="sec-2">
                     <CommonTextField
                       formConfig={formConfig}
-                      label="Serving Size"
+                      label="Serving Size *"
                       fieldName="serving_size"
                       placeholder="Number of servings the recipe make."
                       className="recipe-input"
-                      rules={RecipeValidations["serving_size"]}
+                      rules={createRequiredValidation("Serving size")}
                       isNumberOnly={true}
                     />
                     <CommonSelect
                       formConfig={formConfig}
-                      label="Difficulty Level"
+                      label="Difficulty Level *"
                       fieldName="difficulty_level"
                       placeholder="Select difficulty level"
                       className="recipe-input"
                       selectType="react-select"
                       options={DIFFICULTY_OPTIONS}
-                      rules={RecipeValidations["difficulty_level"]}
+                      rules={createRequiredValidation("Difficulty level")}
                     />
                   </div>
 
@@ -354,7 +348,7 @@ const RecipeAddEdit = () => {
                   <div className="dietry-section flex items-center space-x-4">
                     {/* may be need to update this field into text field further */}
                     <CommonSelect
-                      label="Dietary Information"
+                      label="Dietary Information *"
                       selectType="react-select"
                       options={DIETRY_OPTIONS}
                       fieldName="dietary_plan"
@@ -364,7 +358,7 @@ const RecipeAddEdit = () => {
                     />
 
                     <CommonSelect
-                      label="Allergen Informations"
+                      label="Allergen Informations *"
                       selectType="react-select"
                       options={ALLERGEN_OPTIONS}
                       fieldName="allergen_information"
@@ -393,7 +387,12 @@ const RecipeAddEdit = () => {
                       setFiles={setFiles}
                       allowedTypes={allowedImageTypes}
                       imageError={imageError}
+                      label="Recipe Image"
                       setImageError={setImageError}
+                      uploadButton={{
+                        text: "Upload Recipe images",
+                        class: "cursor-pointer",
+                      }}
                     />
                   </div>
                 </div>
@@ -418,6 +417,12 @@ const RecipeAddEdit = () => {
                   />
                 </div>
               </FormWrapper>
+              <CategorySection
+                formConfig={formConfig}
+                fieldName="category"
+                rules={createRequiredValidation("Category")}
+              />
+              {/* </form> */}
             </div>
           </div>
         </div>

@@ -17,6 +17,7 @@ const CommonTextField = ({
   rows = null,
   customError = null,
   labelClassName = "",
+  disabled = false,
 }) => {
   const {
     register,
@@ -40,6 +41,7 @@ const CommonTextField = ({
             placeholder={placeholder}
             className={className}
             maxlength={maxlength}
+            disabled={disabled}
           />
         ) : type === "textarea" ? (
           <textarea
@@ -49,6 +51,7 @@ const CommonTextField = ({
             className={className}
             maxlength={maxlength}
             rows={rows}
+            disabled={disabled}
           />
         ) : (
           <input
@@ -57,6 +60,7 @@ const CommonTextField = ({
             placeholder={placeholder}
             className={className}
             maxlength={maxlength}
+            disabled={disabled}
           />
         )}
 

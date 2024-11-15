@@ -11,6 +11,7 @@ const CommonDateField = ({
   className = DEFAULT_CLASS,
   label,
   icon = null,
+  disabled = false,
 }) => {
   const {
     register,
@@ -27,6 +28,7 @@ const CommonDateField = ({
           min={minDate}
           max={maxDate}
           className={className}
+          disabled={disabled}
         />
         {icon}
       </div>

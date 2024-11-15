@@ -6,17 +6,17 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const CategoryValidations = {
   name: {
-    required: "Name is required",
+    required: "Title is required",
   },
   slug: {
     required: "Slug is required",
   },
   description: {
-    required: "Description is required",
+    // required: "Description is required",
   },
   // need to be changed according to the api
   parent_category: {
-    required: "Parent category is required",
+    // required: "Parent category is required",
   },
 };
 

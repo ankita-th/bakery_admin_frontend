@@ -30,7 +30,7 @@ import PageLoader from "../loaders/PageLoader";
 const filterFields = [
   {
     type: "select",
-    defaultOption: "Sort-By",
+    defaultOption: "Sort by",
     options: SORT_BY_OPTIONS,
     filterName: "sort_by",
   },
@@ -53,6 +53,7 @@ export const TODO_COLUMNS = [
 ];
 const Todo = () => {
   const { page, onPageChange, setPage } = usePagination();
+  const [assignLoader, setAssignLoader] = useState(false);
   const { buttonLoader, pageLoader, toggleLoader } = useLoader();
   // for add and edit todo section
   const todoSection = useModalToggle();
@@ -76,6 +77,8 @@ const Todo = () => {
     unassigned: false,
     assigned: false,
   });
+  // flow 1
+  const [assignOnly, setAssignOnly] = useState(false);
 
   useEffect(() => {
     toggleLoader("pageLoader");
@@ -83,7 +86,6 @@ const Todo = () => {
       ...filters,
       page: page,
     };
-    // setTodos(DUMMY_TODO_DATA);
 
     makeApiRequest({
       endPoint: TODO_ENDPOINT,
@@ -236,6 +238,40 @@ const Todo = () => {
         handleTodoSection({ action: "close" });
         setBtnLoaders({ unassigned: false, assigned: false });
         setPage(1);
+        // flow1
+        // setAssignOnly(true)
+      });
+  };
+
+  const handleAssignTask = (editItem) => {
+    setAssignLoader((prev) => true);
+    // flow 1 (Assigne is not required so click of it complete screen will be shown ,task will be assigned and then assign the task)
+    // setAssignOnly(true)
+    // handleActions({ action: "edit", editItem: editItem });
+
+    // flow 2 (Assigne is required field hence only need to call the API on assign task)
+    const payload = {
+      ...editItem,
+      status: "assigned",
+    };
+    makeApiRequest({
+      endPoint: TODO_ENDPOINT,
+      method: METHODS.patch,
+      payload: payload,
+      update_id: editItem?.id,
+    })
+      .then((res) => {
+        console.log(res, "this is response");
+        // need updated data inside response
+        setTodos(handleEdit(todos, editItem?.id, res?.data)); //array , id to update , data to update
+        toastMessage("Task Assigned Successfully", successType);
+      })
+      .catch((err) => {
+        toastMessage(err?.response?.data?.task_id[0] || DEFAULT_ERROR_MESSAGE);
+      })
+      .finally(() => {
+        setAssignLoader((prev) => false);
+        setPage(1);
       });
   };
 
@@ -267,6 +303,8 @@ const Todo = () => {
                   item={it}
                   handleActions={handleActions}
                   employeeList={employeeList}
+                  handleAssignTask={handleAssignTask}
+                  assignLoader={assignLoader}
                 />
               ))
             ) : (
@@ -303,6 +341,7 @@ const Todo = () => {
               employeeList={employeeList}
               btnLoaders={btnLoaders}
               handleTodoSection={handleTodoSection}
+              assignOnly={assignOnly}
             />
           )}
         </>

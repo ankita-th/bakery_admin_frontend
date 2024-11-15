@@ -5,7 +5,7 @@ import { renderSerialNumber } from "../../utils/helpers";
 
 const SingleCategoryRow = ({ item, currentPage, index, handleActions }) => {
   console.log(item, "this is data");
-  const { name, description, id, slug } = item;
+  const { name, description, id, slug, product_count } = item;
   // const {name, description, product_category, slug} = item;
   return (
     <tr className="text-center">
@@ -15,7 +15,7 @@ const SingleCategoryRow = ({ item, currentPage, index, handleActions }) => {
       <td className="py-2 px-4 border">{name}</td>
       <td className="py-2 px-4 border">{slug}</td>
       <td className="py-2 px-4 border">{description}</td>
-      <td className="py-2 px-4 border"></td>
+      <td className="py-2 px-4 border">{product_count}</td>
       <td className="py-2 px-4 border space-x-2">
         <button
           onClick={() => handleActions({ action: "edit", editItem: item })}
