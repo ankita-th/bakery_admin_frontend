@@ -14,6 +14,8 @@ const routeTitles = {
   "/payment-history": "Payment History",
   "/to-do": "To-Do List",
   "/add-edit-product": "New Product",
+  "/customers": "Customers Management",
+  "/support": "Customers Support Management"
 };
 
 export const getHeadingTitleFromRoute = (pathName) => {

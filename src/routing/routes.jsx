@@ -12,6 +12,8 @@ import RecipeAddEdit from "../pages/RecipeAddEdit";
 import InventoryManagement from "../pages/InventoryManagement";
 import EmployeeManagement from "../pages/EmployeeManagement";
 import PaymentHistory from "../pages/PaymentHistory";
+import Customers from "../pages/Customers";
+import Support from "../pages/Support";
 
 export const routes = [
   {
@@ -88,6 +90,16 @@ export const routes = [
   {
     path: "/payment-history/",
     element: <PaymentHistory />,
+    private: true,
+  },
+  {
+    path: "/customers",
+    element: <Customers />,
+    private: true,
+  },
+  {
+    path: "/support",
+    element: <Support />,
     private: true,
   },
   {
