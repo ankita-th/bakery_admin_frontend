@@ -18,7 +18,7 @@ import { successType, toastMessage } from "../utils/toastMessage";
 import "react-toastify/dist/ReactToastify.css";
 import useLoader from "../hooks/useLoader";
 import PageLoader from "../loaders/PageLoader";
-import SingleProductRow from "../Components/SingleproductTableRow";
+// import SingleProductRow from "../Components/SingleproductTableRow";
 import NoDataFound from "../Components/Common/NoDataFound";
 import { useNavigate } from "react-router-dom";
 import TableWrapper from "../Wrappers/TableWrapper";
@@ -171,20 +171,7 @@ const Products = () => {
         </FilterSection>
         {/* product listing */}
         <TableWrapper columns={PRODUCT_PAGE_COLUMNS}>
-          {products?.length ? (
-            products?.map((dt, idx) => (
-              <SingleProductRow
-                key={idx}
-                data={dt}
-                currentPage={page}
-                index={idx}
-                handleActions={handleActions}
-              />
-            ))
-          ) : (
-            // updates required:Create a better no data found component
-            <NoDataFound />
-          )}
+         
         </TableWrapper>
 
         <Pagination

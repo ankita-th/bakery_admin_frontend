@@ -7,6 +7,8 @@ export const CONFIGURATION_ENDPOINT = "/zip/configuration/";
 export const RECIPE_ENDPOINT = "/recipe/";
 export const INVENTORY_ENDPOINT = "/inventory/";
 export const EMPLOYEE_MANAGEMENT_ENDPOINT = "/employee/";
-export const LOGOUT_ENDPOINT = "/"
+export const LOGOUT_ENDPOINT = "/";
+export const CUSTOMER_ENDPOINT = "/customer/";
+export const PAYMENT_ENDPOINT = "/payment-history/";
 
 
