@@ -10,5 +10,5 @@ export const EMPLOYEE_MANAGEMENT_ENDPOINT = "/employee/";
 export const LOGOUT_ENDPOINT = "/";
 export const CUSTOMER_ENDPOINT = "/customer/";
 export const PAYMENT_ENDPOINT = "/payment-history/";
-
-
+export const NOTIFICTION_GET_ENDPOINT = "/notification/";
+export const NOTIFICATION_DELETE_ENDPOINT = "/notification/update/"

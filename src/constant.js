@@ -389,3 +389,48 @@ export const DUMMY_PAYMENT_DATA = [
     transaction_id:"Txpdjnm"
   }
 ]
+
+export const DUMMY_NOTIFICATION_DATA = [
+  {
+    id: 1,
+    title: "Lorem posted new job Housekeeping", 
+    description: "A description is a statement that provides details about a person or thing, or a communication method that aims to make something vivid",
+    time: "2 min ago",
+  },
+  {
+    id: 2,
+    title: "Lorem posted new job Housekeeping", 
+    description: "A description is a statement that provides details about a person or thing, or a communication method that aims to make something vivid",
+    time: "2 min ago",
+  },
+  {
+    id: 3,
+    title: "Lorem posted new job Housekeeping", 
+    description: "A description is a statement that provides details about a person or thing, or a communication method that aims to make something vivid",
+    time: "2 min ago",
+  },
+  {
+    id: 4,
+    title: "Lorem posted new job Housekeeping", 
+    description: "A description is a statement that provides details about a person or thing, or a communication method that aims to make something vivid",
+    time: "2 min ago",
+  },
+  {
+    id: 5,
+    title: "Lorem posted new job Housekeeping", 
+    description: "A description is a statement that provides details about a person or thing, or a communication method that aims to make something vivid",
+    time: "2 min ago",
+  },
+  {
+    id: 6,
+    title: "Lorem posted new job Housekeeping", 
+    description: "A description is a statement that provides details about a person or thing, or a communication method that aims to make something vivid",
+    time: "2 min ago",
+  },
+  {
+    id: 7,
+    title: "Lorem posted new job Housekeeping", 
+    description: "A description is a statement that provides details about a person or thing, or a communication method that aims to make something vivid",
+    time: "2 min ago",
+  },
+]
