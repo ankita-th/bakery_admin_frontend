@@ -14,6 +14,7 @@ import EmployeeManagement from "../pages/EmployeeManagement";
 import PaymentHistory from "../pages/PaymentHistory";
 import Customers from "../pages/Customers";
 import Support from "../pages/Support";
+import Notifications from "../pages/Notifications";
 
 export const routes = [
   {
@@ -100,6 +101,11 @@ export const routes = [
   {
     path: "/support",
     element: <Support />,
+    private: true,
+  },
+  {
+    path: "/notifications",
+    element: <Notifications />,
     private: true,
   },
   {
