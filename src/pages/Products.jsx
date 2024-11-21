@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 import TableWrapper from "../Wrappers/TableWrapper";
 import TableComponent from "../Components/Common/TableComponent";
 import { deleteItemBasedOnId } from "../utils/helpers";
-import SingleProductTableRow from "../Components/SingleProductTableRow";
+import SingleProductRow from "../Components/SingleproductTableRow";
 
 const OPTIONS = [
   { value: "Option1", label: "Option1" },
