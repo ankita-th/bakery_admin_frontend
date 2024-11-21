@@ -17,6 +17,7 @@ import AddEditDiscount from "../pages/AddEditDiscount";
 import Customers from "../pages/Customers";
 import Support from "../pages/Support";
 import Notifications from "../pages/Notifications";
+import Settings from "../pages/Settings";
 
 export const routes = [
   {
@@ -124,6 +125,16 @@ export const routes = [
   {
     path: "/add-edit-discount/",
     element: <AddEditDiscount />,
+    private: true,
+  },
+  {
+    path: "/settings",
+    element: <Settings />,
+    private: true,
+  },
+  {
+    path: "/support",
+    element: <Support />,
     private: true,
   },
 ];
