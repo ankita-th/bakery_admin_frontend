@@ -1,6 +1,10 @@
 import React from "react";
 import { editIcon, eyeIcon, printIcon, trashIcon } from "../assets/Icons/Svg";
-import { formatDate, renderSerialNumber } from "../utils/helpers";
+import {
+  formatDate,
+  listCategories,
+  renderSerialNumber,
+} from "../utils/helpers";
 import { RAW_MATERIALS_ITEMS_PER_PAGE, YYYY_MM_DD } from "../constant";
 const STATUS_TO_TEXT = {
   true: "Published",
@@ -31,7 +35,7 @@ const SingleRecipeRow = ({
     <tr className="text-center">
       <td className="py-2 px-4 border"></td>
       <td className="py-2 px-4 border">{recipe_title}</td>
-      <td className="py-2 px-4 border">{category}</td>
+      <td className="py-2 px-4 border">{listCategories(category)}</td>
       {/* update required :need to confirm about this mins and hours query */}
       <td className="py-2 px-4 border">{preparation_time} mins</td>
       <td className="py-2 px-4 border">{cook_time} mins</td>

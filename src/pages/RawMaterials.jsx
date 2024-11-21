@@ -6,8 +6,8 @@ import useLoader from "../hooks/useLoader";
 import { successType, toastMessage } from "../utils/toastMessage";
 import {
   DEFAULT_ERROR_MESSAGE,
+  ITEMS_PER_PAGE,
   OPTIONS,
-  RAW_MATERIALS_ITEMS_PER_PAGE,
   YYYY_MM_DD,
 } from "../constant";
 import TableWrapper from "../Wrappers/TableWrapper";
@@ -254,7 +254,7 @@ const RawMaterials = () => {
 
           <Pagination
             onPageChange={onPageChange}
-            itemsPerPage={RAW_MATERIALS_ITEMS_PER_PAGE}
+            itemsPerPage={ITEMS_PER_PAGE}
             totalData={totalData}
           />
 

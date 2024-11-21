@@ -28,7 +28,7 @@ const ProductDataSection = ({ formConfig, activeTab, handleActiveTab }) => {
         <h2 className="text-lg font-semibold text-gray-700 mb-4">
           Product Data
         </h2>
-
+    
         <div className="flex space-x-6">
           <TabListing
             tabs={TABS}

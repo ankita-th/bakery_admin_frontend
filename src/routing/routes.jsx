@@ -12,6 +12,8 @@ import RecipeAddEdit from "../pages/RecipeAddEdit";
 import InventoryManagement from "../pages/InventoryManagement";
 import EmployeeManagement from "../pages/EmployeeManagement";
 import PaymentHistory from "../pages/PaymentHistory";
+import Discounts from "../pages/Discounts";
+import AddEditDiscount from "../pages/AddEditDiscount";
 
 export const routes = [
   {
@@ -91,7 +93,22 @@ export const routes = [
     private: true,
   },
   {
+    path: "/payment-history/",
+    element: <PaymentHistory />,
+    private: true,
+  },
+  {
     path: "/*",
     element: <NotFound />,
+  },
+  {
+    path: "/discounts/",
+    element: <Discounts />,
+    private: true,
+  },
+  {
+    path: "/add-edit-discount/",
+    element: <AddEditDiscount />,
+    private: true,
   },
 ];

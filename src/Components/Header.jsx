@@ -38,7 +38,7 @@ const Header = () => {
                 <span class="text-[#EC7F1A] font-bold text-xl">{userName}</span>
               </h5>
             ) : (
-              <h5 class="text-lg font-normal">{title}</h5>
+              <h2 class="text-lg ">{title}</h2>
             )}
           </div>
           {/* <div

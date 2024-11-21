@@ -98,6 +98,7 @@ const InventoryTab = ({ formConfig }) => {
             rules={createRequiredValidation("Weight")}
             formConfig={formConfig}
             placeholder="Enter Weight Of Product"
+            isNumberOnly={true}
           />
           <CommonSelect
             label="Unit *"

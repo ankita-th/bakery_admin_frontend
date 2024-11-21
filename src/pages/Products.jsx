@@ -150,49 +150,52 @@ const Products = () => {
   return (
     <>
       {/* update required : depending on the css of the loader make sure we have to show other data or not */}
-      {pageLoader && <PageLoader />}
-      <div>
-        <FilterSection
-          filterFields={filterFields}
-          handleFilterChange={handleFilterChange}
-        >
-          <CommonButton
-            text="Categories"
-            onClick={() => navigate("/categories")}
-            type="button"
-            className="grey_btn"
-          />
-          <CommonButton
-            text="Add New Product"
-            onClick={() => navigate("/add-edit-product")}
-            type="button"
-            className="orange_btn"
-          />
-        </FilterSection>
-        {/* product listing */}
-        <TableWrapper columns={PRODUCT_PAGE_COLUMNS}>
-          {products?.length ? (
-            products?.map((dt, idx) => (
-              <SingleProductRow
-                key={idx}
-                data={dt}
-                currentPage={page}
-                index={idx}
-                handleActions={handleActions}
-              />
-            ))
-          ) : (
-            // updates required:Create a better no data found component
-            <NoDataFound />
-          )}
-        </TableWrapper>
+      {pageLoader ? (
+        <PageLoader />
+      ) : (
+        <div>
+          <FilterSection
+            filterFields={filterFields}
+            handleFilterChange={handleFilterChange}
+          >
+            <CommonButton
+              text="Categories"
+              onClick={() => navigate("/categories")}
+              type="button"
+              className="grey_btn"
+            />
+            <CommonButton
+              text="Add New Product"
+              onClick={() => navigate("/add-edit-product")}
+              type="button"
+              className="orange_btn"
+            />
+          </FilterSection>
+          {/* product listing */}
+          <TableWrapper columns={PRODUCT_PAGE_COLUMNS}>
+            {products?.length ? (
+              products?.map((dt, idx) => (
+                <SingleProductRow
+                  key={idx}
+                  data={dt}
+                  currentPage={page}
+                  index={idx}
+                  handleActions={handleActions}
+                />
+              ))
+            ) : (
+              // updates required:Create a better no data found component
+              <NoDataFound />
+            )}
+          </TableWrapper>
 
-        <Pagination
-          onPageChange={onPageChange}
-          itemsPerPage={ITEMS_PER_PAGE}
-          totalData={totalData}
-        />
-      </div>
+          <Pagination
+            onPageChange={onPageChange}
+            itemsPerPage={ITEMS_PER_PAGE}
+            totalData={totalData}
+          />
+        </div>
+      )}
       {showModal && (
         <DeleteConfirmationModal
           icon={trashIcon}

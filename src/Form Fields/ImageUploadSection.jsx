@@ -36,7 +36,7 @@ const ImageUploadSection = ({
         setFile({
           ...file,
           preview: null,
-          error: "Please upload a valid image", //update required:Need to update the error message
+          error: "Please upload a valid image i.e .png and .jpg", //update required:Need to update the error message
           file: null,
         });
       }
