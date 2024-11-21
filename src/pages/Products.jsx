@@ -16,7 +16,7 @@ import NoDataFound from "../Components/Common/NoDataFound";
 import { useNavigate } from "react-router-dom";
 import TableWrapper from "../Wrappers/TableWrapper";
 import { deleteItemBasedOnId } from "../utils/helpers";
-import SingleProductTableRow from "../Components/SingleproductTableRow";
+import SingleProductTableRow from "../Components/SingleProductTableRow";
 
 const OPTIONS = [
   { value: "Option1", label: "Option1" },
