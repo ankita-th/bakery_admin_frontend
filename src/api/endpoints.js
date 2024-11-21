@@ -11,4 +11,5 @@ export const LOGOUT_ENDPOINT = "/";
 export const CUSTOMER_ENDPOINT = "/customer/";
 export const PAYMENT_ENDPOINT = "/payment-history/";
 export const NOTIFICTION_GET_ENDPOINT = "/notification/";
-export const NOTIFICATION_DELETE_ENDPOINT = "/notification/update/"
+export const NOTIFICATION_DELETE_ENDPOINT = "/notification/update/";
+export const SUPPORT_ENDPOINT = "/support/";

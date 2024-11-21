@@ -15,6 +15,7 @@ import PaymentHistory from "../pages/PaymentHistory";
 import Customers from "../pages/Customers";
 import Support from "../pages/Support";
 import Notifications from "../pages/Notifications";
+import Settings from "../pages/Settings";
 
 export const routes = [
   {
@@ -106,6 +107,11 @@ export const routes = [
   {
     path: "/notifications",
     element: <Notifications />,
+    private: true,
+  },
+  {
+    path: "/settings",
+    element: <Settings />,
     private: true,
   },
   {

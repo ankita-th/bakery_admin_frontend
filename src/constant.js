@@ -434,3 +434,61 @@ export const DUMMY_NOTIFICATION_DATA = [
     time: "2 min ago",
   },
 ]
+
+export const DUMMY_SUPPORT_DATA = [
+  
+    {
+      id:1,
+      name:"John Doe",
+      email:"Individual",
+      issue_description:"michael Johnson",
+      status:"John@example.com",
+      date_created:"45 bakery lane  london",
+      assigned_to:"5 orders",
+    },
+    {
+      id:2,
+      name:"John Doe",
+      email:"Individual",
+      issue_description:"michael Johnson",
+      status:"John@example.com",
+      date_created:"45 bakery lane  london",
+      assigned_to:"5 orders",
+    },
+    {
+      id:3,
+      name:"John Doe",
+      email:"Individual",
+      issue_description:"michael Johnson",
+      status:"John@example.com",
+      date_created:"45 bakery lane  london",
+      assigned_to:"5 orders",
+    },
+    {
+      id:4,
+      name:"John Doe",
+      email:"Individual",
+      issue_description:"michael Johnson",
+      status:"John@example.com",
+      date_created:"45 bakery lane  london",
+      assigned_to:"5 orders",
+    },
+    {
+      id:5,
+      name: "John Doe",
+      email: "Individual",
+      issue_description: "michael Johnson",
+      status: "John@example.com",
+      date_created: "45 bakery lane  london",
+      assigned_to: "5 orders",
+    },
+    {
+      id: 6,
+      name: "John Doe",
+      email: "Individual",
+      issue_description: "michael Johnson",
+      status: "John@example.com",
+      date_created: "45 bakery lane  london",
+      assigned_to: "5 orders",
+    },
+]

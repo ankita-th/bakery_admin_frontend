@@ -3,7 +3,7 @@ import { editIcon, eyeIcon, trashIcon } from "../assets/Icons/Svg";
 import { renderSerialNumber } from "../utils/helpers";
 import { ITEMS_PER_PAGE } from "../constant";
 
-const SingleProductRow = ({ data, currentPage, index, handleActions }) => {
+const SingleProductTableRow = ({ data, currentPage, index, handleActions }) => {
   // updates required: price published status in date,date are not given and also category is in number
   const { id, category, name, product_detail, status, is_active } = data;
 
@@ -62,4 +62,4 @@ const SingleProductRow = ({ data, currentPage, index, handleActions }) => {
   );
 };
 
-export default SingleProductRow;
+export default SingleProductTableRow;

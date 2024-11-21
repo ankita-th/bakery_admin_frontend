@@ -24,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 import TableWrapper from "../Wrappers/TableWrapper";
 import TableComponent from "../Components/Common/TableComponent";
 import { deleteItemBasedOnId } from "../utils/helpers";
+import SingleProductTableRow from "../Components/SingleProductTableRow";
 
 const OPTIONS = [
   { value: "Option1", label: "Option1" },
@@ -171,7 +172,19 @@ const Products = () => {
         </FilterSection>
         {/* product listing */}
         <TableWrapper columns={PRODUCT_PAGE_COLUMNS}>
-         
+        {products?.length ? (
+              products?.map((dt, idx) => (
+                <SingleProductTableRow
+                  key={idx}
+                  data={dt}
+                  currentPage={page}
+                  index={idx}
+                  handleActions={handleActions}
+                />
+              ))
+            ) : (
+              <NoDataFound />
+            )}
         </TableWrapper>
 
         <Pagination

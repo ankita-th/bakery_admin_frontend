@@ -35,3 +35,4 @@ const SingleCustomerRow = ({ item, handleActions }) => {
 };
 
 export default SingleCustomerRow;
+
