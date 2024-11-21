@@ -132,4 +132,14 @@ export const routes = [
     element: <AddEditDiscount />,
     private: true,
   },
+  {
+    path: "/settings",
+    element: <Settings />,
+    private: true,
+  },
+  {
+    path: "/support",
+    element: <Support />,
+    private: true,
+  },
 ];

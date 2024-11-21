@@ -10,7 +10,7 @@ const routeTitles = {
   "/recipe": "Recipe",
   "/add-edit-recipe": "New Recipe",
   "/inventory": "Inventory Management",
-  "/employee": "Employee Management", 
+  "/employee": "Employee Management",
   "/payment-history": "Payment History",
   "/to-do": "To-Do List",
   "/add-edit-product": "New Product",
@@ -19,6 +19,7 @@ const routeTitles = {
   "/notifications": "Notifications and Alerts",
   "/settings": "Notifications and Alerts"
   "/discounts": "Discounts & Promotions Management",
+  "/settings": "Settings",
 };
 
 export const getHeadingTitleFromRoute = (pathName) => {
