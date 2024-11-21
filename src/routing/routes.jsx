@@ -99,8 +99,12 @@ export const routes = [
   {
     path: "/customers",
     element: <Customers />,
+    path: "/payment-history/",
+    element: <PaymentHistory />,
     private: true,
   },
+  { path: "/customers", element: <Customers />, private: true },
+
   {
     path: "/support",
     element: <Support />,

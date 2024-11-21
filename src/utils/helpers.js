@@ -20,6 +20,7 @@ const routeTitles = {
   "/settings": "Notifications and Alerts"
   "/discounts": "Discounts & Promotions Management",
   "/settings": "Settings",
+  "/settings": "Notifications and Alerts",
 };
 
 export const getHeadingTitleFromRoute = (pathName) => {

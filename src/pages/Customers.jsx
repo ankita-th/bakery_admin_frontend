@@ -128,7 +128,7 @@ const Customers = () => {
             handleFilterChange={handleFilterChange}
           >
             <CommonButton
-              text="Add New Employee"
+              text="Add New Customer"
               className="orange_btn"
               type="button"
               onClick={() => {
