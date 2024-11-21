@@ -207,6 +207,9 @@ export const SORT_BY_OPTIONS = [
   { value: "newest", label: "Newest" },
   { value: "oldest", label: "Oldest" },
 ];
+export const PAYMENT_TYPE_OPTIONS = [
+  { value: "card", label: "Card" },
+]
 
 export const DUMMY_TODO_DATA = [
   {
@@ -331,3 +334,112 @@ export const INVENTORY_PAGE_COLUMNS = [
   "Status",
   "Action",
 ];
+export const DUMMY_CUSTOMER_DATA = [
+  // Update required: update according to the api parameters ///////// 
+  {
+    id:1,
+    customer_type:"Individual",
+    name:"John Doe",
+    contact_person:"michael Johnson",
+    contact_details:"John@example.com",
+    address:"45 bakery lane  london",
+    order_history:"5 orders",
+  },
+  {
+    id:2,
+    customer_type:"Company",
+    name:"Alice Smith",
+    contact_person:"michael Johnson",
+    contact_details:"John@example.com",
+    address:"45 bakery lane  london",
+    order_history:"5 orders",
+  },
+  {
+    id: 3,
+    customer_type:"Company",
+    name: "John Doe",
+    contact_person:"michael Johnson",
+    contact_details:"John@example.com",
+    address:"45 bakery lane  london",
+    order_history:"5 orders",
+
+  },
+]
+
+export const DUMMY_PAYMENT_DATA = [
+  {
+    id:1,
+    customer_name:"Sarah Wiliiams",
+    date:"19/11/2024",
+    order_id:"Botal",
+    payment_method:"Credit Card",
+    amount:100,
+    status:'Successful',
+    transaction_id:"Txpdjnm"
+  },
+  {
+    id:2,
+    customer_name:"Jake Wiliiams",
+    date:"19/11/2024",
+    order_id:"Botal",
+    payment_method:"Credit Card",
+    amount:100,
+    status:'Successful',
+    transaction_id:"Txpdjnm"
+  },
+  {
+    id:3,
+    customer_name:"devid Wiliiams",
+    date:"19/11/2024",
+    order_id:"Botal",
+    payment_method:"Credit Card",
+    amount:100,
+    status:'Successful',
+    transaction_id:"Txpdjnm"
+  }
+]
+
+export const DUMMY_NOTIFICATION_DATA = [
+  {
+    id: 1,
+    title: "Lorem posted new job Housekeeping", 
+    description: "A description is a statement that provides details about a person or thing, or a communication method that aims to make something vivid",
+    time: "2 min ago",
+  },
+  {
+    id: 2,
+    title: "Lorem posted new job Housekeeping", 
+    description: "A description is a statement that provides details about a person or thing, or a communication method that aims to make something vivid",
+    time: "2 min ago",
+  },
+  {
+    id: 3,
+    title: "Lorem posted new job Housekeeping", 
+    description: "A description is a statement that provides details about a person or thing, or a communication method that aims to make something vivid",
+    time: "2 min ago",
+  },
+  {
+    id: 4,
+    title: "Lorem posted new job Housekeeping", 
+    description: "A description is a statement that provides details about a person or thing, or a communication method that aims to make something vivid",
+    time: "2 min ago",
+  },
+  {
+    id: 5,
+    title: "Lorem posted new job Housekeeping", 
+    description: "A description is a statement that provides details about a person or thing, or a communication method that aims to make something vivid",
+    time: "2 min ago",
+  },
+  {
+    id: 6,
+    title: "Lorem posted new job Housekeeping", 
+    description: "A description is a statement that provides details about a person or thing, or a communication method that aims to make something vivid",
+    time: "2 min ago",
+  },
+  {
+    id: 7,
+    title: "Lorem posted new job Housekeeping", 
+    description: "A description is a statement that provides details about a person or thing, or a communication method that aims to make something vivid",
+    time: "2 min ago",
+  },
+]

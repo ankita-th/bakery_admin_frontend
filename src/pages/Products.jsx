@@ -18,7 +18,7 @@ import { successType, toastMessage } from "../utils/toastMessage";
 import "react-toastify/dist/ReactToastify.css";
 import useLoader from "../hooks/useLoader";
 import PageLoader from "../loaders/PageLoader";
-import SingleProductRow from "../Components/SingleproductTableRow";
+// import SingleProductRow from "../Components/SingleproductTableRow";
 import NoDataFound from "../Components/Common/NoDataFound";
 import { useNavigate } from "react-router-dom";
 import TableWrapper from "../Wrappers/TableWrapper";

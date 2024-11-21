@@ -14,6 +14,9 @@ import EmployeeManagement from "../pages/EmployeeManagement";
 import PaymentHistory from "../pages/PaymentHistory";
 import Discounts from "../pages/Discounts";
 import AddEditDiscount from "../pages/AddEditDiscount";
+import Customers from "../pages/Customers";
+import Support from "../pages/Support";
+import Notifications from "../pages/Notifications";
 
 export const routes = [
   {
@@ -95,6 +98,18 @@ export const routes = [
   {
     path: "/payment-history/",
     element: <PaymentHistory />,
+    path: "/customers",
+    element: <Customers />,
+    private: true,
+  },
+  {
+    path: "/support",
+    element: <Support />,
+    private: true,
+  },
+  {
+    path: "/notifications",
+    element: <Notifications />,
     private: true,
   },
   {

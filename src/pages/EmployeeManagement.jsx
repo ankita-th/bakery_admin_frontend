@@ -90,7 +90,7 @@ const EmployeeManagement = () => {
       .finally(() => {
         toggleLoader("pageLoader");
       });
-  }, [page, filters]);
+  }, [page,filters]);
 
   const handleFilterChange = (filterName, value) => {
     const temp = { ...filters };
