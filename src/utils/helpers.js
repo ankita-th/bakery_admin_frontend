@@ -18,6 +18,7 @@ const routeTitles = {
   "/support": "Customers Support Management",
   "/notifications": "Notifications and Alerts",
   "/settings": "Notifications and Alerts"
+  "/discounts": "Discounts & Promotions Management",
 };
 
 export const getHeadingTitleFromRoute = (pathName) => {
@@ -136,9 +137,14 @@ export const appendStepCountInObject = (instructions) => {
   }
 };
 
-export const createRequiredValidation = (fieldName) => {
-  const field = fieldName || "This field";
-  return { required: `${field} is required` };
+export const createRequiredValidation = (fieldName, customMessage) => {
+  if (customMessage) {
+    // if custom message is true then inside fieldname custom message will be passed
+    return { required: customMessage };
+  } else {
+    const field = fieldName || "This field";
+    return { required: `${field} is required` };
+  }
 };
 
 export const createProductSeo = (values) => {
@@ -224,4 +230,19 @@ export const convertIntoSelectOptions = (options, labelKey, valueKey) => {
 
 export const createPreview = (imagePreview) => {
   return `${base_url}${imagePreview}`;
+};
+
+export const listCategories = (categories) => {
+  if (categories?.length) {
+    const categoryNames = categories.map(({ name, ...rest }) => name);
+    return categoryNames.join(", ");
+  }
+};
+
+export const handleCategory = (categories) => {
+  console.log(categories);
+  if (categories?.length) {
+    const result = categories?.map(({ id }) => String(id));
+    return result;
+  }
 };

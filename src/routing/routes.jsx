@@ -16,6 +16,8 @@ import Customers from "../pages/Customers";
 import Support from "../pages/Support";
 import Notifications from "../pages/Notifications";
 import Settings from "../pages/Settings";
+import Discounts from "../pages/Discounts";
+import AddEditDiscount from "../pages/AddEditDiscount";
 
 export const routes = [
   {
@@ -112,10 +114,22 @@ export const routes = [
   {
     path: "/settings",
     element: <Settings />,
+    path: "/payment-history/",
+    element: <PaymentHistory />,
     private: true,
   },
   {
     path: "/*",
     element: <NotFound />,
+  },
+  {
+    path: "/discounts/",
+    element: <Discounts />,
+    private: true,
+  },
+  {
+    path: "/add-edit-discount/",
+    element: <AddEditDiscount />,
+    private: true,
   },
 ];

@@ -38,7 +38,7 @@ const filterFields = [
 const RECIPE_COLUMNS = [
   "",
   "Recipe Name",
-  "Category",
+  "Categories",
   "Prep Time",
   "Cook Time",
   "Serving Size",

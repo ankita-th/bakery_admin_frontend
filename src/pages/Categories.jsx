@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { INSTANCE, makeApiRequest, METHODS } from "../api/apiFunctions";
-import { CATEGORIES_ENDPOINT } from "../api/endpoints";
+import { CATEGORIES_ENDPOINT, SUBCATEGORY_ENDPOINT } from "../api/endpoints";
 import { successType, toastMessage } from "../utils/toastMessage";
 import { DEFAULT_ERROR_MESSAGE, ITEMS_PER_PAGE, OPTIONS } from "../constant";
 import useLoader from "../hooks/useLoader";
@@ -71,11 +71,15 @@ const Categories = () => {
     error: "",
   });
   const [categories, setCategories] = useState([]);
-  const [itemToDelete, setItemToDelete] = useState(null);
+  const [itemToDelete, setItemToDelete] = useState({
+    id: null,
+    type: "", // for checking whether to delete category or subcategory
+  });
   const [totalData, setTotalData] = useState();
   const [editCategoryInfo, setEditCategoryInfo] = useState({
     isEdit: false,
     editItem: null,
+    type: "", // for managing whether to edit category or subcategory
   });
   const [btnLoaders, setBtnLoaders] = useState({
     publish: false,
@@ -90,6 +94,10 @@ const Categories = () => {
   const categoryModal = useModalToggle();
 
   useEffect(() => {
+    fetchData();
+  }, [filters, page]);
+
+  const fetchData = () => {
     toggleLoader("pageLoader");
     const apiFilters = {
       ...filters,
@@ -109,15 +117,14 @@ const Categories = () => {
         console.log(err);
       })
       .finally(() => toggleLoader("pageLoader"));
-  }, [filters, page]);
+  };
 
-  const handleActions = ({ action, editItem, deleteId }) => {
+  const handleActions = ({ action, editItem, deleteId, type }) => {
     if (action === "edit") {
       categoryModal?.toggleModal();
-      setEditCategoryInfo({ isEdit: true, item: editItem });
-    } else {
-      // delete action
-      setItemToDelete(deleteId);
+      setEditCategoryInfo({ isEdit: true, item: editItem, type: type });
+    } else if (action === "delete") {
+      setItemToDelete({ id: deleteId, type: type });
       toggleModal();
     }
   };
@@ -125,15 +132,28 @@ const Categories = () => {
   const handleDeleteCategory = () => {
     setDeleteLoader((prev) => true);
     makeApiRequest({
-      endPoint: CATEGORIES_ENDPOINT,
+      endPoint:
+        itemToDelete.type === "category"
+          ? CATEGORIES_ENDPOINT
+          : SUBCATEGORY_ENDPOINT,
+
       method: METHODS.delete,
       instanceType: INSTANCE.authorized,
-      delete_id: itemToDelete,
+      delete_id: itemToDelete?.id,
     })
       .then((res) => {
-        setCategories(deleteItemBasedOnId(categories, itemToDelete));
-        // or  setCategories((prev)=>prev?.filter((el) => el.id! == itemToDelete))
-        toastMessage("Category Deleted Successfully", successType);
+        if (res.status === 204) {
+          toastMessage(
+            `${
+              itemToDelete.type === "category" ? "Category" : "Subcategory"
+            } Deleted Successfully`,
+            successType
+          );
+          fetchData();
+          // Update the categories or subcategories
+        } else {
+          throw new Error("Unexpected response");
+        }
       })
       .catch((err) => {
         toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
@@ -141,7 +161,8 @@ const Categories = () => {
       .finally(() => {
         setDeleteLoader((prev) => false);
         toggleModal();
-        setItemToDelete(null);
+        setItemToDelete({ id: null, type: "" });
+        setPage(1);
       });
   };
 
@@ -156,8 +177,8 @@ const Categories = () => {
       categoryModal?.toggleModal();
     } else if (action === "close") {
       reset();
-      setEditCategoryInfo({ isEdit: false, item: null });
-      setItemToDelete(null);
+      setEditCategoryInfo({ isEdit: false, item: null, type: "" });
+      setItemToDelete({ id: null, type: "" });
       setFile({ preview: "", file: null, error: "" });
       setPage(1);
       categoryModal?.toggleModal();
@@ -166,7 +187,10 @@ const Categories = () => {
   };
 
   const handleAddEditCategory = (values, event) => {
-    const { isEdit, item } = editCategoryInfo;
+    if (file.error) {
+      return;
+    }
+    const { isEdit, item, type } = editCategoryInfo;
     const buttonType = event.nativeEvent.submitter.name;
 
     handleButtonLoaders(buttonType);
@@ -193,12 +217,12 @@ const Categories = () => {
       formData.append("category_image", file.file);
     }
     if (values?.parent) {
-      formData.append("parent", values.parent);
+      formData.append("parent", values.parent?.value);
     }
 
     const data = Object.fromEntries(formData.entries()); // Convert to object
     makeApiRequest({
-      endPoint: CATEGORIES_ENDPOINT,
+      endPoint: manageApiEndpoint(),
       method: isEdit ? METHODS?.patch : METHODS?.post,
       update_id: isEdit && item?.id,
       payload: formData,
@@ -206,15 +230,13 @@ const Categories = () => {
       // payload: payload,
     })
       .then((res) => {
-        if (isEdit) {
-          setCategories(handleEdit(categories, item?.id, res?.data)); //array , id to update , data to update
-        } else {
-          setCategories((prev) => [...prev, res?.data]);
-        }
         toastMessage(
-          `Category ${isEdit ? "updated" : "added"} sucessfully`,
+          `${type === "subcategory" ? "Subcategory" : "Category"} ${
+            isEdit ? "updated" : "added"
+          } sucessfully`,
           successType
         );
+        fetchData();
       })
       .catch((err) => {
         toastMessage(handleCategoryErrorToast(err));
@@ -238,6 +260,18 @@ const Categories = () => {
   };
   const handleButtonLoaders = (type) => {
     setBtnLoaders({ ...btnLoaders, [type]: !btnLoaders[type] });
+  };
+
+  const manageApiEndpoint = () => {
+    if (editCategoryInfo?.isEdit) {
+      if (editCategoryInfo?.type === "category") {
+        return CATEGORIES_ENDPOINT;
+      } else {
+        return SUBCATEGORY_ENDPOINT;
+      }
+    } else {
+      return CATEGORIES_ENDPOINT;
+    }
   };
 
   return (
@@ -287,10 +321,14 @@ const Categories = () => {
           />
           {showModal && (
             <DeleteConfirmationModal
-              title="Are you sure you want to delete this category?"
-              description="This action cannot be redo. Deleting this category will permanently remove it from your inventory"
+              title={`Are you sure you want to delete this ${
+                itemToDelete?.type === "category" ? "Category" : "Subcategory"
+              }?`}
+              description={`This action cannot be redo. Deleting this  ${
+                itemToDelete?.type === "category" ? "Category" : "Subcategory"
+              } will permanently remove it from your inventory`}
               onCancel={() => {
-                setItemToDelete(null);
+                setItemToDelete({ id: null, type: "" });
                 toggleModal();
               }}
               onDelete={handleDeleteCategory}

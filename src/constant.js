@@ -187,8 +187,8 @@ export const DEFAULT_ERROR_MESSAGE = "Something Went Wrong";
 
 export const allowedImageTypes = [
   "image/png",
-  "image/svg+xml",
   "image/jpeg", // Covers both .jpg and .jpeg
+  // "image/svg+xml",
   //   "image/gif",
   //   "image/webp",
 ];
@@ -213,7 +213,7 @@ export const PAYMENT_TYPE_OPTIONS = [
 
 export const DUMMY_TODO_DATA = [
   {
-    id:3,
+    id: 3,
     task_id: 100,
     title: "Order Ingredients",
     description: "Order 50 lbs of flour and sugar",
@@ -223,7 +223,7 @@ export const DUMMY_TODO_DATA = [
     end_date: "2024-10-15",
     status: "Not Started",
     notes: "Use supplier ABC",
-    status:"unassigned"
+    status: "unassigned",
   },
   {
     task_id: 101,
@@ -492,3 +492,12 @@ export const DUMMY_SUPPORT_DATA = [
       assigned_to: "5 orders",
     },
 ]
+export const INVENTORY_PAGE_COLUMNS = [
+  "#Name",
+  "Current Stock",
+  "Reorder Level",
+  "Barcode No.",
+  "SKU",
+  "Status",
+  "Action",
+];

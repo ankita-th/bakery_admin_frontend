@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import FormWrapper from "../Wrappers/FormWrapper";
-import { closeIcon, draftIcon, publishIcon } from "../assets/Icons/Svg";
+import { draftIcon, publishIcon } from "../assets/Icons/Svg";
 import AddEditSectionHeading from "./AddEditSectionHeading";
 import CommonTextField from "../Form Fields/CommonTextField";
 import { CategoryValidations } from "../Validations/validations";
-import CommonSelectField from "../Form Fields/CommonSelectField";
 import CommonSelect from "../Form Fields/CommonSelect";
 import ImageUploadSection from "../Form Fields/ImageUploadSection";
 import { allowedImageTypes } from "../constant";
@@ -16,21 +14,13 @@ import {
   prefillFormValues,
 } from "../utils/helpers";
 import CommonButton from "./Common/CommonButton";
-import { baseURL } from "../api/apiConfig";
 const PARENT_CATEGORY_OPTIONS = [
   { value: "option1", label: "Option 1" },
   { value: "option2", label: "Option 2" },
   { value: "option3", label: "Option 3" },
 ];
 
-const keysToPrefill = [
-  "name",
-  "description",
-  "parent_count",
-  "slug",
-  // "parent_category",
-];
-const BASE_URL = "http://192.168.1.86:8000";
+const keysToPrefill = ["name", "description", "parent_count", "slug"];
 
 const AddEditCategorySection = ({
   onClose,
@@ -43,9 +33,10 @@ const AddEditCategorySection = ({
   fromRecipe = false,
   categories = null,
 }) => {
-  const { setValue } = formConfig;
-  const { isEdit, item } = editCategoryInfo;
+  const { setValue, watch } = formConfig;
+  const { isEdit, item, type } = editCategoryInfo;
   const [categoryOptions, setCategoryOptions] = useState([]);
+  console.log(item, "this is category item");
   useEffect(() => {
     if (isEdit) {
       // function for prefilling normal values
@@ -55,12 +46,15 @@ const AddEditCategorySection = ({
       if (item?.category_image) {
         setFile({ preview: createPreview(item?.category_image), file: null });
       }
-      const category = extractOption(categories, item?.parent, "id");
+      const category = extractOption(categories, item?.parent?.id, "id");
+      console.log(category, "this is category extracted");
       if (category) {
         setValue("parent", { label: category?.name, value: category?.id });
       }
     }
   }, []);
+  console.log(watch("parent"), "log this is parent");
+  console.log(categoryOptions, "log categoryoptions");
 
   useEffect(() => {
     const categoryOptions = [];
@@ -73,14 +67,18 @@ const AddEditCategorySection = ({
   const shouldShowParentCategoryField = () => {
     return !fromRecipe && categories?.length;
   };
+  const renderHeading = () => {
+    if (isEdit) {
+      return `Edit ${type === "category" ? "Category" : "Subcategory"}`;
+    } else {
+      return "Add Category";
+    }
+  };
   return (
     // update required: Update this from modal to section according to the figma
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="category-section">
-        <AddEditSectionHeading
-          onClose={onClose}
-          text={isEdit ? "Edit Category" : "Add New Category"}
-        />
+        <AddEditSectionHeading onClose={onClose} text={renderHeading()} />
         {/* here custom logic is required that's why not using form wrapper */}
 
         <FormWrapper
@@ -109,7 +107,7 @@ const AddEditCategorySection = ({
           {/* update this field according to the API */}
           {shouldShowParentCategoryField() && (
             <CommonSelect
-              selectType="normal"
+              selectType="react-select"
               options={categoryOptions}
               rules={CategoryValidations["parent"]}
               fieldName="parent"
@@ -117,6 +115,7 @@ const AddEditCategorySection = ({
               formConfig={formConfig}
               className="add-edit-input"
               label="Parent Category"
+              placeholder="None"
             />
           )}
           <CommonTextField

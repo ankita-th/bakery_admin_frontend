@@ -14,6 +14,7 @@ import {
   createPreview,
   createRequiredValidation,
   extractOption,
+  handleCategory,
   prefillFormValues,
 } from "../utils/helpers";
 import { INSTANCE, makeApiRequest, METHODS } from "../api/apiFunctions";
@@ -161,13 +162,11 @@ const RecipeAddEdit = () => {
           } else {
             setValue("ingredients", DEFAULT_INGREDIENT);
           }
-          // updateRequired: add according to the new key and type
-          setValue("category", ["17", "24"]);
-          // update required:May be need to update key name here
-          if (response?.category_images) {
+          setValue("category", handleCategory(response?.category));
+          if (response?.recipe_images?.length) {
             setFile({
               file: null,
-              preview: createPreview(response?.category_images),
+              preview: createPreview(response?.recipe_images?.[0]?.image),
             });
           }
           // for prefilling values that requires custom logic
@@ -182,12 +181,9 @@ const RecipeAddEdit = () => {
         });
     }
   }, []);
+  console.log(file, "this is file");
 
   const onSubmit = (values, event) => {
-    // in case required validation is required uncomment this code
-
-    // in case required validation is required uncomment this code
-
     const buttonType = event.nativeEvent.submitter.name;
     setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
     // creating payload
@@ -202,14 +198,19 @@ const RecipeAddEdit = () => {
       allergen_information: values?.allergen_information?.value,
       status: buttonType === "publish" ? "True" : "False",
       // update required make this category key dynamic
-      category: +6,
-      // category:values?.category
+      // category: +6,
+      // Converting catgeory array elements to
+      category: values?.category.map(Number),
     };
 
     // converting payload into formdata
     const formData = new FormData();
     for (let key in payload) {
-      if (key === "ingredients" || key === "instructions") {
+      if (
+        key === "ingredients" ||
+        key === "instructions" ||
+        key === "category"
+      ) {
         // because these are array of objects and to pass these in form data we need to pass it as stringified
         const striginfiedResult = JSON.stringify(payload[key]);
         formData.append(key, striginfiedResult);
@@ -221,11 +222,11 @@ const RecipeAddEdit = () => {
     // Appending files here
     // files.forEach(({ file }) => {
     //   if (file) {
-    //     formData.append("category_images", file);
+    //     formData.append("recipe_images", file);
     //   }
     // });
     if (file?.file) {
-      formData.append("category_images", file?.file);
+      formData.append("recipe_images", file?.file);
     }
 
     // Appending files here
@@ -286,8 +287,6 @@ const RecipeAddEdit = () => {
                 onSubmit={onSubmit}
                 isCustomButtons={true}
               >
-                {/* <form onSubmit={handleSubmit(onSubmit)}> */}
-                {/* update required: need to confirm about category field */}
                 <CommonTextField
                   formConfig={formConfig}
                   label="Recipe Title *"

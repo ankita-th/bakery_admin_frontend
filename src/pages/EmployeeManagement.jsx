@@ -12,6 +12,7 @@ import CommonButton from "../Components/Common/CommonButton";
 import {
   DEFAULT_ERROR_MESSAGE,
   DUMMY_EMPLOYEE_DATA,
+  DUMMY_TODO_DATA,
   SORT_BY_OPTIONS,
 } from "../constant";
 import useModalToggle from "../hooks/useModalToggle";
@@ -24,7 +25,7 @@ import AddEditEmployee from "../Components/AddEditEmployee";
 const filterFields = [
   {
     type: "select",
-    defaultOption: "Sort BY",
+    defaultOption: "Sort by",
     options: SORT_BY_OPTIONS,
     filterName: "sort_by",
   },
@@ -74,24 +75,22 @@ const EmployeeManagement = () => {
       ...filters,
       page: page,
     };
-    // update required: comment this and uncomment state updation inside then block
     setEmployees(DUMMY_EMPLOYEE_DATA);
 
     makeApiRequest({
-      // update required: Update with the actual endpoint
       endPoint: EMPLOYEE_MANAGEMENT_ENDPOINT,
       params: apiParams,
       method: METHODS.get,
     })
       .then((res) => {
-        // setEmployees(res?.data?.results);
+        setEmployees(res?.data?.results);
         setTotalData(res?.data?.count);
       })
       .catch((err) => console.log(err))
       .finally(() => {
         toggleLoader("pageLoader");
       });
-  }, [page,filters]);
+  }, [page, filters]);
 
   const handleFilterChange = (filterName, value) => {
     const temp = { ...filters };
