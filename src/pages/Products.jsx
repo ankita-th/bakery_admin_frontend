@@ -25,6 +25,7 @@ import TableWrapper from "../Wrappers/TableWrapper";
 import TableComponent from "../Components/Common/TableComponent";
 import { deleteItemBasedOnId } from "../utils/helpers";
 import SingleProductRow from "../Components/SingleproductTableRow";
+import SingleProductTableRow from "../Components/SingleproductTableRow";
 
 const OPTIONS = [
   { value: "Option1", label: "Option1" },
@@ -176,7 +177,7 @@ const Products = () => {
           <TableWrapper columns={PRODUCT_PAGE_COLUMNS}>
             {products?.length ? (
               products?.map((dt, idx) => (
-                <SingleProductRow
+                <SingleProductTableRow
                   key={idx}
                   data={dt}
                   currentPage={page}

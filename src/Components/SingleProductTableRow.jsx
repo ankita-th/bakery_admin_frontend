@@ -4,7 +4,7 @@ import { listCategories, renderSerialNumber } from "../utils/helpers";
 import { ITEMS_PER_PAGE } from "../constant";
 import Checkbox from "./Common/Checkbox";
 
-const SingleProductRow = ({ data, currentPage, index, handleActions }) => {
+const SingleProductTableRow = ({ data, currentPage, index, handleActions }) => {
   // updates required: price published status in date,date are not given and also category is in number
   const { id, name, product_detail, category, status } = data;
 
@@ -65,4 +65,4 @@ const SingleProductRow = ({ data, currentPage, index, handleActions }) => {
   );
 };
 
-export default SingleProductRow;
+export default SingleProductTableRow;
