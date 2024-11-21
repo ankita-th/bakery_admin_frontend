@@ -6,6 +6,7 @@ import { GET_INVENTORY_ENDPOINT } from "../api/endpoints";
 import FilterSection from "../Components/Common/FilterSection";
 import CommonButton from "../Components/Common/CommonButton";
 import {
+  DUMMY_INVENTORY_DATA,
   INVENTORY_PAGE_COLUMNS,
   ITEMS_PER_PAGE,
   SORT_BY_OPTIONS,
@@ -55,20 +56,21 @@ const InventoryManagement = () => {
       ...filters,
       page: page,
     };
-    makeApiRequest({
-      // update required: Update with the actual endpoint
-      endPoint: GET_INVENTORY_ENDPOINT,
-      params: apiParams,
-      method: METHODS.get,
-    })
-      .then((res) => {
-        setInventories(res?.data?.results);
-        setTotalData(res?.data?.count);
-      })
-      .catch((err) => console.log(err))
-      .finally(() => {
-        toggleLoader("pageLoader");
-      });
+    setInventories(DUMMY_INVENTORY_DATA);
+    // makeApiRequest({
+    //   // update required: Update with the actual endpoint
+    //   endPoint: GET_INVENTORY_ENDPOINT,
+    //   params: apiParams,
+    //   method: METHODS.get,
+    // })
+    //   .then((res) => {
+    //     setInventories(res?.data?.results);
+    //     setTotalData(res?.data?.count);
+    //   })
+    //   .catch((err) => console.log(err))
+    //   .finally(() => {
+    //     toggleLoader("pageLoader");
+    //   });
   }, [page, filters]);
 
   const handleFilterChange = (filterName, value) => {
