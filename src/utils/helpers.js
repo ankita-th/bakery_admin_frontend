@@ -257,3 +257,7 @@ export const generateRandomCode = (length = 5) => {
   }
   return code;
 };
+// extract from is for label or value
+export const convertSelectOptionToValue = (option, extractFrom = "value") => {
+  return option[extractFrom];
+};

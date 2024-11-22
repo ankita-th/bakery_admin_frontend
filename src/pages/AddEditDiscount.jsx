@@ -15,7 +15,7 @@ const AddEditDiscount = () => {
   const renderComponent = () => {
     switch (type) {
       case "amount_off_order":
-        return <AmountOffProduct formConfig={formConfig} onSubmit={onSubmit} />;
+        return <AmountOffProduct />;
       default:
         return <AmountOffProduct formConfig={formConfig} onSubmit={onSubmit} />;
     }

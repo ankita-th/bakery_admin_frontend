@@ -604,3 +604,8 @@ export const COMBINATION_OPTIONS = [
     value: "shipping_discounts",
   },
 ];
+
+export const APPLIES_TO_OPTIONS = [
+  { label: "All Collections", value: "all_products" },
+  { label: "Specific Collections", value: "specific_products" },
+];

@@ -232,10 +232,6 @@ const RecipeAddEdit = () => {
     // Appending files here
 
     const data = Object.fromEntries(formData.entries()); // Convert to object
-    console.log(data, "formData payload");
-    console.log(payload, "recipe payload");
-    console.log(watch("categories"), "categories");
-
     // if receipe id is there in the params means it is a edit scenario
     makeApiRequest({
       endPoint: RECIPE_ENDPOINT,
