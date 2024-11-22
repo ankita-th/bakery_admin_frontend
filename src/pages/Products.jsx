@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import CommonSelectField from "../Form Fields/CommonSelectField";
-import { useForm } from "react-hook-form";
 import FilterSection from "../Components/Common/FilterSection";
 import { deleteProduct, getProducts } from "../api/apiFunctions";
 import usePagination from "../hooks/usePagination";
 import Pagination from "../Components/Common/Pagination";
 import {
   DEFAULT_ERROR_MESSAGE,
-  DUMMY_PRODUCT_DATA,
   ITEMS_PER_PAGE,
 } from "../constant";
 import CommonButton from "../Components/Common/CommonButton";
@@ -18,14 +15,11 @@ import { successType, toastMessage } from "../utils/toastMessage";
 import "react-toastify/dist/ReactToastify.css";
 import useLoader from "../hooks/useLoader";
 import PageLoader from "../loaders/PageLoader";
-// import SingleProductRow from "../Components/SingleproductTableRow";
 import NoDataFound from "../Components/Common/NoDataFound";
 import { useNavigate } from "react-router-dom";
 import TableWrapper from "../Wrappers/TableWrapper";
-import TableComponent from "../Components/Common/TableComponent";
 import { deleteItemBasedOnId } from "../utils/helpers";
-import SingleProductRow from "../Components/SingleproductTableRow";
-import SingleProductTableRow from "../Components/SingleproductTableRow";
+import SingleProductTableRow from "../Components/SingleProductTableRow";
 
 const OPTIONS = [
   { value: "Option1", label: "Option1" },
@@ -33,16 +27,16 @@ const OPTIONS = [
   { value: "Option3", label: "Option3" },
 ];
 
-const DUMMY_COLUMNS = [
-  { label: "S.no", key: "projectName" },
-  { label: "Name", key: "name" },
-  { label: "SKU", key: "sku" },
-  { label: "Stock", key: "status" },
-  { label: "Price", key: "" },
-  { label: "Category", key: "category" },
-  { label: "Date", key: "" },
-  { label: "Action", key: "projectStatus" },
-];
+// const DUMMY_COLUMNS = [
+//   { label: "S.no", key: "projectName" },
+//   { label: "Name", key: "name" },
+//   { label: "SKU", key: "sku" },
+//   { label: "Stock", key: "status" },
+//   { label: "Price", key: "" },
+//   { label: "Category", key: "category" },
+//   { label: "Date", key: "" },
+//   { label: "Action", key: "projectStatus" },
+// ];
 const PRODUCT_PAGE_COLUMNS = [
   "checkbox",
   "S.no",

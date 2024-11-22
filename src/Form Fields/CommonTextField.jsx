@@ -12,12 +12,15 @@ const CommonTextField = ({
   label,
   icon,
   onIconClick,
-  isNumberOnly = false,
   maxlength = null,
   rows = null,
   customError = null,
   labelClassName = "",
   disabled = false,
+  isNumberOnly = false,
+  isDecimal = false,
+  //Number only will used for phone number inputs only and will not include any decimal , 
+  // for decimal values like currency etc. will use isDecimal
 }) => {
   const {
     register,
@@ -34,7 +37,8 @@ const CommonTextField = ({
               ...rules,
               onChange: (e) => {
                 const numbersOnly = e.target.value.replace(/[^0-9]/g, "");
-                setValue(fieldName, numbersOnly);
+                const decimalOnly = e.target.value.replace(/[^0-9.]/g, "");
+                setValue(fieldName, isDecimal ? decimalOnly : numbersOnly);
               },
             })}
             type={type}

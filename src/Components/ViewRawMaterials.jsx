@@ -81,6 +81,7 @@ const ViewRawMaterials = ({ item, onClose, formConfig }) => {
             formConfig={formConfig}
             disabled={true}
             isNumberOnly={true}
+            isDecimal={true}
           />
 
           <CommonTextField

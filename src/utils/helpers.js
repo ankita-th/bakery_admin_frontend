@@ -246,3 +246,7 @@ export const handleCategory = (categories) => {
     return result;
   }
 };
+
+export const combineBarcode = (from, to) => {
+  return `${from}-${to}`;
+}

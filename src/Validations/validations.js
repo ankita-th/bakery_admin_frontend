@@ -28,9 +28,17 @@ export const RawMaterialValidations = {
   },
   quantity: {
     required: "Quantity is required",
+    max:{
+      value:2147483647,
+      message:"Quantity value must be less than or equal to 2147483647"
+    }
   },
   cost: {
     required: "Cost per unit is required",
+    maxLength:{
+      value:10,
+      message:"Value must not be more than 10 digits in total"
+    }
   },
   unit_of_measure: {
     required: "Unit of measure is required",
@@ -38,6 +46,12 @@ export const RawMaterialValidations = {
   expiry_date: {
     required: "Expiry date is required",
   },
+  reorder:{
+    max:{
+      value:2147483647,
+      message:"Reorder value must be less than or equal to 2147483647"
+    }
+  }
 };
 
 // validations for todo
@@ -108,9 +122,17 @@ export const RecipeValidations = {
   },
   preparation_time: {
     required: "Preparation time is required",
+    max:{
+      value:300,
+      message:"Preparation time value must be less than or equal to 300 minutes."
+    }
   },
   cook_time: {
     required: "Cook time is required",
+    max:{
+      value:600,
+      message:"Cook time value must be less than or equal to 600 minutes."
+    }
   },
   difficulty_level: {
     required: "Difficulty level is required",
@@ -120,6 +142,10 @@ export const RecipeValidations = {
   },
   serving_size: {
     required: "Serving size is required",
+    max:{
+      value:99999,
+      message:"Cook time value must be less than or equal to 99999"
+    }
   },
   description: {
     required: "This field is required",
