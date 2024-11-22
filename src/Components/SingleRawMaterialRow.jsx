@@ -19,7 +19,7 @@ const SingleRawMaterialRow = ({ item, currentPage, index, handleActions }) => {
   return (
     <tr className=" border border-gray-400 ">
       <td className="py-2 px-4"></td>
-
+      
       {/* <td className="py-2 px-4">
         {renderSerialNumber(currentPage, RAW_MATERIALS_ITEMS_PER_PAGE, index)}
       </td> */}

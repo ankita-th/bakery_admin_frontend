@@ -3,7 +3,10 @@ import FilterSection from "../Components/Common/FilterSection";
 import { deleteProduct, getProducts } from "../api/apiFunctions";
 import usePagination from "../hooks/usePagination";
 import Pagination from "../Components/Common/Pagination";
-import { DEFAULT_ERROR_MESSAGE, ITEMS_PER_PAGE } from "../constant";
+import {
+  DEFAULT_ERROR_MESSAGE,
+  ITEMS_PER_PAGE,
+} from "../constant";
 import CommonButton from "../Components/Common/CommonButton";
 import useModalToggle from "../hooks/useModalToggle";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
@@ -16,7 +19,7 @@ import NoDataFound from "../Components/Common/NoDataFound";
 import { useNavigate } from "react-router-dom";
 import TableWrapper from "../Wrappers/TableWrapper";
 import { deleteItemBasedOnId } from "../utils/helpers";
-import SingleProductTableRow from "../Components/SingleproductTableRow";
+import SingleProductTableRow from "../Components/SingleProductTableRow";
 
 const OPTIONS = [
   { value: "Option1", label: "Option1" },
@@ -24,16 +27,16 @@ const OPTIONS = [
   { value: "Option3", label: "Option3" },
 ];
 
-const DUMMY_COLUMNS = [
-  { label: "S.no", key: "projectName" },
-  { label: "Name", key: "name" },
-  { label: "SKU", key: "sku" },
-  { label: "Stock", key: "status" },
-  { label: "Price", key: "" },
-  { label: "Category", key: "category" },
-  { label: "Date", key: "" },
-  { label: "Action", key: "projectStatus" },
-];
+// const DUMMY_COLUMNS = [
+//   { label: "S.no", key: "projectName" },
+//   { label: "Name", key: "name" },
+//   { label: "SKU", key: "sku" },
+//   { label: "Stock", key: "status" },
+//   { label: "Price", key: "" },
+//   { label: "Category", key: "category" },
+//   { label: "Date", key: "" },
+//   { label: "Action", key: "projectStatus" },
+// ];
 const PRODUCT_PAGE_COLUMNS = [
   "checkbox",
   "S.no",

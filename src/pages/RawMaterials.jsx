@@ -206,15 +206,18 @@ const RawMaterials = () => {
         } else {
           setRawMaterials((prev) => [...prev, res?.data]);
         }
-      })
-      .catch((err) => {
-        toastMessage(err?.response?.data?.name?.[0] || DEFAULT_ERROR_MESSAGE);
-      })
-      .finally(() => {
         setbtnLoaders({ publish: false, draft: false });
         handleRawMaterialCancel();
         setPage(1);
-      });
+      })
+      .catch((err) => {
+        toastMessage(err?.response?.data?.name?.[0] || DEFAULT_ERROR_MESSAGE);
+        if (!err?.response?.data?.name?.[0]) {
+          handleRawMaterialCancel();
+          setPage(1);
+        }
+      })
+      .finally(setbtnLoaders({ publish: false, draft: false }));
   };
   // for managing loaders for  publish and draft buttons
   const handleButtonLoaders = (type) => {

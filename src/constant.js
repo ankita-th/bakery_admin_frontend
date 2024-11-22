@@ -456,7 +456,8 @@ export const DUMMY_INVENTORY_DATA = [
     reorder: "20 loaves",
     sku: "SOU1234",
     status: "in_stock",
-    barcode_no: "78901-78653",
+    barcode_no: "78901",
+    barcode_to: "78653"
   },
   {
     id: 2,
@@ -465,7 +466,8 @@ export const DUMMY_INVENTORY_DATA = [
     reorder: "20 loaves",
     sku: "SOU1234",
     status: "in_stock",
-    barcode_no: "78901-78653",
+    barcode_no: "78901",
+    barcode_to: "78653"
   },
 
   {
@@ -475,7 +477,8 @@ export const DUMMY_INVENTORY_DATA = [
     reorder: "20 loaves",
     sku: "SOU1234",
     status: "in_stock",
-    barcode_no: "78901-78653",
+    barcode_no: "78901",
+    barcode_to: "78653"
   },
 ];
 export const DUMMY_SUPPORT_DATA = [

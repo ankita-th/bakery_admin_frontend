@@ -270,14 +270,14 @@ const RecipeAddEdit = () => {
       {pageLoader ? (
         <PageLoader />
       ) : (
-        <div className="bg-[#FFFFFF]-100 p-6 rounded-lg shadow-md max-w-100">
+        <div className="">
           <div className="grid grid-cols-1 gap-4">
             <div>
-              <CommonButton
+              {/* <CommonButton
                 text="Fill form with dummy values"
                 onClick={fillForm}
                 className="orange_btn"
-              />
+              /> */}
               <FormWrapper
                 formConfig={formConfig}
                 onSubmit={onSubmit}
@@ -288,7 +288,8 @@ const RecipeAddEdit = () => {
                   label="Recipe Title *"
                   fieldName="recipe_title"
                   placeholder="Enter Recipe Title"
-                  className="recipe-input"
+                  className="px-4 py-2 w-full rounded-lg"
+                  labelClassName=""
                   rules={createRequiredValidation("Recipe title")}
                 />
                 <div className="description mt-2">
@@ -302,38 +303,52 @@ const RecipeAddEdit = () => {
                 </div>
 
                 <div className="recipe-section-two">
-                  <div className="sec-1">
+                  <div className="sec-1 flex gap-4 mt-2">
+                    <div className="flex-1">
                     <CommonTextField
                       formConfig={formConfig}
-                      label="Preparation Time *"
+                      label="Preparation Time (in minutes) *"
                       fieldName="preparation_time"
                       placeholder="Enter the prep time in minutes or hours"
+                      labelClassName=""
                       className="recipe-input"
-                      rules={createRequiredValidation("Preparation time")}
+                      rules={{
+                        ...createRequiredValidation("Preparation time"),
+                        ...RecipeValidations["preparation_time"]
+                      }}
                       isNumberOnly={true}
                     />
-
+                    </div>
+                    <div className="flex-1">
                     <CommonTextField
                       formConfig={formConfig}
-                      label="Cook Time *"
+                      label="Cook Time (in minutes) *"
                       fieldName="cook_time"
                       placeholder="Enter the cook time"
                       className="recipe-input"
-                      rules={createRequiredValidation("Cook time")}
+                      rules={{...createRequiredValidation("Cook time"),
+                        ...RecipeValidations["cook_time"]
+                      }}
                       isNumberOnly={true}
                     />
+                    </div>
                   </div>
 
-                  <div className="sec-2">
+                  <div className="sec-2 mt-2 flex gap-4">
+                    <div className="flex-1">
                     <CommonTextField
                       formConfig={formConfig}
                       label="Serving Size *"
                       fieldName="serving_size"
                       placeholder="Number of servings the recipe make."
                       className="recipe-input"
-                      rules={createRequiredValidation("Serving size")}
+                      rules={{...createRequiredValidation("Serving size"),
+                        ...RecipeValidations["serving_size"]
+                      }}
                       isNumberOnly={true}
                     />
+                    </div>
+                    <div className="flex-1">
                     <CommonSelect
                       formConfig={formConfig}
                       label="Difficulty Level *"
@@ -344,6 +359,7 @@ const RecipeAddEdit = () => {
                       options={DIFFICULTY_OPTIONS}
                       rules={createRequiredValidation("Difficulty level")}
                     />
+                    </div>
                   </div>
 
                   <div className="ingredients-section">

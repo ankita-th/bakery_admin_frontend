@@ -86,6 +86,8 @@ const AddEditRawMaterial = ({
             className="add-edit-input"
             rules={RawMaterialValidations["unit_of_measure"]}
           />
+            {/* update required: need to update the maximum value for reorder */}
+
           <CommonTextField
             label="Reorder Level"
             fieldName="reorder"
@@ -102,6 +104,7 @@ const AddEditRawMaterial = ({
             rules={RawMaterialValidations["cost"]}
             formConfig={formConfig}
             isNumberOnly={true}
+            isDecimal={true}
           />
 
           <CommonTextField

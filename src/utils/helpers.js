@@ -261,3 +261,6 @@ export const generateRandomCode = (length = 5) => {
 export const convertSelectOptionToValue = (option, extractFrom = "value") => {
   return option[extractFrom];
 };
+export const combineBarcode = (from, to) => {
+  return `${from}-${to}`;
+}
