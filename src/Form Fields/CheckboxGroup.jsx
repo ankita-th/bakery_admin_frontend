@@ -1,13 +1,13 @@
-import React, { Fragment } from "react";
+import React from "react";
 import ErrorMessage from "../Components/Common/ErrorMessage";
-// options must be an array of object and the object must contain label and value keys
-const RadioGroup = ({
+
+const CheckboxGroup = ({
   formConfig,
   fieldName,
   options,
   label,
   rules,
-  className,
+  className = "",
 }) => {
   const {
     register,
@@ -19,7 +19,11 @@ const RadioGroup = ({
       <div className={className}>
         {options?.map(({ value, label: optionLabel }, idx) => (
           <div key={idx} className="flex gap-4">
-            <input {...register(fieldName, rules)} type="radio" value={value} />
+            <input
+              {...register(fieldName, rules)}
+              type="checkbox"
+              value={value}
+            />
             <div className="option-label">{optionLabel}</div>
           </div>
         ))}
@@ -29,4 +33,4 @@ const RadioGroup = ({
   );
 };
 
-export default RadioGroup;
+export default CheckboxGroup;
