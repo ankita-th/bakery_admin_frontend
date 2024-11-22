@@ -448,7 +448,6 @@ export const DUMMY_NOTIFICATION_DATA = [
   },
 ];
 
-
 export const DUMMY_INVENTORY_DATA = [
   {
     id: 1,
@@ -480,45 +479,44 @@ export const DUMMY_INVENTORY_DATA = [
   },
 ];
 export const DUMMY_SUPPORT_DATA = [
-  
   {
-    id:1,
-    name:"John Doe",
-    email:"Individual",
-    issue_description:"michael Johnson",
-    status:"John@example.com",
-    date_created:"45 bakery lane  london",
-    assigned_to:"5 orders",
+    id: 1,
+    name: "John Doe",
+    email: "Individual",
+    issue_description: "michael Johnson",
+    status: "John@example.com",
+    date_created: "45 bakery lane  london",
+    assigned_to: "5 orders",
   },
   {
-    id:2,
-    name:"John Doe",
-    email:"Individual",
-    issue_description:"michael Johnson",
-    status:"John@example.com",
-    date_created:"45 bakery lane  london",
-    assigned_to:"5 orders",
+    id: 2,
+    name: "John Doe",
+    email: "Individual",
+    issue_description: "michael Johnson",
+    status: "John@example.com",
+    date_created: "45 bakery lane  london",
+    assigned_to: "5 orders",
   },
   {
-    id:3,
-    name:"John Doe",
-    email:"Individual",
-    issue_description:"michael Johnson",
-    status:"John@example.com",
-    date_created:"45 bakery lane  london",
-    assigned_to:"5 orders",
+    id: 3,
+    name: "John Doe",
+    email: "Individual",
+    issue_description: "michael Johnson",
+    status: "John@example.com",
+    date_created: "45 bakery lane  london",
+    assigned_to: "5 orders",
   },
   {
-    id:4,
-    name:"John Doe",
-    email:"Individual",
-    issue_description:"michael Johnson",
-    status:"John@example.com",
-    date_created:"45 bakery lane  london",
-    assigned_to:"5 orders",
+    id: 4,
+    name: "John Doe",
+    email: "Individual",
+    issue_description: "michael Johnson",
+    status: "John@example.com",
+    date_created: "45 bakery lane  london",
+    assigned_to: "5 orders",
   },
   {
-    id:5,
+    id: 5,
     name: "John Doe",
     email: "Individual",
     issue_description: "michael Johnson",
@@ -535,4 +533,74 @@ export const DUMMY_SUPPORT_DATA = [
     date_created: "45 bakery lane  london",
     assigned_to: "5 orders",
   },
-]
+];
+
+export const DISCOUNT_TYPE_OPTIONS = [
+  { label: "Fixed", value: "fixed" },
+  { label: "Percentage", value: "percentage" },
+];
+
+export const PURCHASE_REQUIREMENT_OPTIONS = [
+  // update these things according
+  {
+    label: "No minimum requirements",
+    value: "no_requirements",
+  },
+  {
+    label: "Minimum purchase amount ($)",
+    value: "minimum_purchase",
+  },
+  {
+    label: "Minimum quantity of items",
+    value: "minimum_quantity",
+  },
+];
+
+export const CUSTOMER_ELIGIBILITY_OPTIONS = [
+  {
+    label: "All customers",
+    value: "all_customer",
+  },
+  {
+    label: "Specific customer segments",
+    value: "specific_customer",
+  },
+];
+
+export const CUSTOMER_SPECIFIC_OPTIONS = [
+  {
+    label: "Customers who haven't purchased",
+    value: "havent_purchased",
+  },
+  {
+    label: "Customers who have purchased more than once",
+    value: "purchased_more_than_once",
+  },
+  {
+    label: "Abandoned checkouts in the last 30 days",
+    value: "abandoned_checkouts",
+  },
+  {
+    label: "Email subscribers",
+    value: "email_subscribers",
+  },
+  {
+    label: "Customers who have purchased at least once",
+    value: "purchased_at_least_once",
+  },
+];
+
+export const COMBINATION_OPTIONS = [
+  {
+    label: "Product discounts",
+    value: "product_discounts",
+  },
+  {
+    label: "Other discounts",
+    value: "other_discounts",
+  },
+  {
+    label: "Shipping discounts",
+    value: "shipping_discounts",
+  },
+];

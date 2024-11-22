@@ -19,6 +19,7 @@ const routeTitles = {
   "/support": "Customers Support Management",
   "/notifications": "Notifications and Alerts",
   "/settings": "Notifications and Alerts",
+  "/add-edit-discount": "Amount Off products",
 };
 
 export const getHeadingTitleFromRoute = (pathName) => {
@@ -245,4 +246,14 @@ export const handleCategory = (categories) => {
     const result = categories?.map(({ id }) => String(id));
     return result;
   }
+};
+
+export const generateRandomCode = (length = 5) => {
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let code = "";
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    code += characters[randomIndex];
+  }
+  return code;
 };

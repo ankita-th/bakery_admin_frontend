@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from "react";
-import CommonSelectField from "../Form Fields/CommonSelectField";
-import { useForm } from "react-hook-form";
 import FilterSection from "../Components/Common/FilterSection";
 import { deleteProduct, getProducts } from "../api/apiFunctions";
 import usePagination from "../hooks/usePagination";
 import Pagination from "../Components/Common/Pagination";
-import {
-  DEFAULT_ERROR_MESSAGE,
-  DUMMY_PRODUCT_DATA,
-  ITEMS_PER_PAGE,
-} from "../constant";
+import { DEFAULT_ERROR_MESSAGE, ITEMS_PER_PAGE } from "../constant";
 import CommonButton from "../Components/Common/CommonButton";
 import useModalToggle from "../hooks/useModalToggle";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
@@ -18,13 +12,10 @@ import { successType, toastMessage } from "../utils/toastMessage";
 import "react-toastify/dist/ReactToastify.css";
 import useLoader from "../hooks/useLoader";
 import PageLoader from "../loaders/PageLoader";
-// import SingleProductRow from "../Components/SingleproductTableRow";
 import NoDataFound from "../Components/Common/NoDataFound";
 import { useNavigate } from "react-router-dom";
 import TableWrapper from "../Wrappers/TableWrapper";
-import TableComponent from "../Components/Common/TableComponent";
 import { deleteItemBasedOnId } from "../utils/helpers";
-import SingleProductRow from "../Components/SingleproductTableRow";
 import SingleProductTableRow from "../Components/SingleproductTableRow";
 
 const OPTIONS = [
