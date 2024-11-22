@@ -17,11 +17,12 @@ const discountOptions = [
   {
     title: "Buy X Get Y",
     description: "Discount products based on a customer's purchase.",
-    buttonText: "Product Discount", // update required:Need to update this text
+    buttonText: "Product Discount", // update required:Need to update this
     icon: productDiscountIcon, // update required:Need to update this icon
   },
   {
-    title: "Amount Off Order",
+    // update required: confirm title for this
+    title: "Order Discount",
     description: "Discount the total order amount.",
     buttonText: "Order Discount",
     icon: orderDiscountIcon,
@@ -37,7 +38,22 @@ const discountOptions = [
 const DiscountTypeSection = ({ onClose }) => {
   const navigate = useNavigate();
   const handleRedirection = (title) => {
-    navigate("/add-edit-discount", { state: { title } });
+    navigate("/add-edit-discount", { state: { type: addType(title) } });
+  };
+  const addType = (title) => {
+    // update required need to confirm for two amount off products titles
+    switch (title) {
+      case "Amount Off Products":
+        return "amount_off_order";
+      case "Amount Off Products":
+        return "amount_off_order";
+      case "Free Shipping":
+        return "free_shipping";
+      case "Buy X Get Y":
+        return "buy_x_get_y";
+      case "Order Discount":
+        return "order_discount";
+    }
   };
 
   return (
