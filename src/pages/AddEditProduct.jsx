@@ -6,18 +6,32 @@ import RadioGroup from "../Form Fields/RadioGroup";
 import CommonSelect from "../Form Fields/CommonSelect";
 import CommonTextField from "../Form Fields/CommonTextField";
 import {
+  convertSelectOptionToValue,
+  convertValuesIntoLabelAndValue,
   createAdvancedPayload,
   createInventoryPayload,
   createProductSeo,
   createRequiredValidation,
+  createVariantPayload,
+  extractOption,
   extractSelectOptions,
+  handleCategory,
+  prefillFormValues,
 } from "../utils/helpers";
 import CommonButton from "../Components/Common/CommonButton";
 import { draftIcon, pencilIcon, publishIcon } from "../assets/Icons/Svg";
 import ProductDataSection from "../Components/ProductDataSection";
 import CategorySection from "../Components/CategorySection";
 import ImageUploadSection from "../Form Fields/ImageUploadSection";
-import { PNG_AND_JPG } from "../constant";
+import {
+  DEFAULT_ERROR_MESSAGE,
+  MEASURE_OPTIONS,
+  PNG_AND_JPG,
+} from "../constant";
+import { INSTANCE, makeApiRequest, METHODS } from "../api/apiFunctions";
+import { PRODUCT_ENDPOINT } from "../api/endpoints";
+import { successType, toastMessage } from "../utils/toastMessage";
+import { useLocation, useNavigate } from "react-router-dom";
 const options = [
   { label: "option1", value: "options1" },
   { label: "option2", value: "options2" },
@@ -55,6 +69,9 @@ const PREVIEW_AS_OPTIONS = [
   { value: "mobile", label: "Mobile Result" },
 ];
 const AddEditProduct = () => {
+  const location = useLocation();
+  const editId = location?.state?.id;
+  const navigate = useNavigate();
   const formConfig = useForm({
     defaultValues: {
       bulking_price_rules: DEFAULT_BULKING_PRICE,
@@ -69,21 +86,103 @@ const AddEditProduct = () => {
   const [productImage, setProductImage] = useState(null);
 
   console.log(featuredImage, "featured image");
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (editId) {
+      makeApiRequest({
+        endPoint: `${PRODUCT_ENDPOINT}${editId}`,
+        method: METHODS.get,
+      })
+        .then((res) => {
+          const data = res?.data;
+          console.log(res?.data, "this is response");
+          // for directly prefilling form values
+
+          // for name and desription
+          const prefillKeys = ["name", "description"];
+          prefillFormValues(data, prefillKeys, setValue);
+          // for name and desription
+
+          // for seo section
+          const seoKeys = [
+            "meta_description",
+            "preview_as",
+            "seo_title",
+            "slug",
+          ];
+          prefillFormValues(data?.product_seo, seoKeys, setValue);
+          setValue("category", handleCategory(data?.category));
+          // for seo section
+
+          // for categories section
+          setValue(
+            "focused_keyword",
+            convertValuesIntoLabelAndValue(data?.product_seo?.focused_keyword)
+          );
+          // for categories section
+
+          // for advanced tab
+          const advanceTabKeys = ["purchase_note", "min_order_quantity"];
+          prefillFormValues(
+            data?.product_detail?.advanced,
+            advanceTabKeys,
+            setValue
+          );
+
+          // for advanced tab
+
+          // for inventory
+          const inventoryKeys = [
+            "regular_price",
+            "sale_price",
+            "sale_price_dates_from",
+            "sale_price_dates_to",
+            "sku",
+            "weight",
+            "bulking_price_rules",
+          ];
+          prefillFormValues(
+            data?.product_detail?.inventory,
+            inventoryKeys,
+            setValue
+          );
+          setValue(
+            "unit",
+            extractOption(
+              MEASURE_OPTIONS,
+              data?.product_detail?.inventory?.unit,
+              "value"
+            )
+          );
+          // for inventory
+          // for prefilling form values with custom logic
+          setValue(
+            "product_tag",
+            convertValuesIntoLabelAndValue(data?.product_tag)
+          );
+          // for variants
+          setValue("variants", data?.product_detail?.variants);
+          // for variants
+        })
+        .catch((err) => {
+          console.log(err);
+          toastMessage("Invalid product id");
+          // navigate("/products");
+        });
+    }
+  }, [editId]);
   const onSubmit = (values, event) => {
     console.log(values, "these are values");
     const buttonType = event.nativeEvent.submitter.name;
     const payload = {
       name: values?.name,
+      status: buttonType === "publish",
       description: values?.description,
       product_tag: extractSelectOptions(values?.product_tag, "value"),
       category: values?.category.map(Number),
-      // update required: currently this field is not there in the API
-      // is_active: buttonType === "publish",
       product_seo: createProductSeo(values),
       product_detail: {
         inventory: createInventoryPayload(values),
-        // variants: [{}],
+        variants: createVariantPayload(values),
         advanced: createAdvancedPayload(values),
       },
     };
@@ -107,69 +206,91 @@ const AddEditProduct = () => {
     }
     const data = Object.fromEntries(formData.entries()); // Convert to object
     console.log(data, "formData payload");
+    // api call
+    makeApiRequest({
+      endPoint:PRODUCT_ENDPOINT,
+      method:editId ? METHODS.patch : METHODS.post,
+      payload:formData,
+      instanceType:INSTANCE.formInstance,
+      update_id:editId
+    })
+      .then((res) => {
+        toastMessage(`Product ${editId ? "Updated" : "Created"} Successfully`,successType);
+        navigate("/products");
+      })
+      .catch((err) => {
+        console.log(err);
+        toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+      });
   };
   const handleActiveTab = (tabName) => {
     setActiveTab(tabName);
   };
 
-  const fillDummyValues = () => {
-    setValue("name", "Premium Breads");
-    setValue("sku", 2312445);
-    setValue("product_tag", [{ label: "Hot Deals", value: "hot-deals" }]);
-    setValue("regular_price", 231);
-    setValue("sale_price", 250);
-    setValue("weight", 25);
-    setValue("unit", { label: "Kilogram", value: "Kg" });
-    setValue("bulking_price_rules", [
-      { quantity_from: 30, quantity_to: 40, price: "200" },
-    ]);
-    setValue("sale_price_dates_from", "2024-11-14");
-    setValue("sale_price_dates_to", "2024-11-22");
-    setValue("seo_title", "Breads");
-    setValue("slug", "Dummy Slug");
-    setValue("purchase_note", "Dummy Purchase note");
-    setValue("minimum_order_quantity", "12");
-    setValue("meta_description", "Dummy meta description text");
-  };
+  // const fillDummyValues = () => {
+  //   setValue("name", "Premium Breads");
+  //   setValue("sku", 2312445);
+  //   setValue("product_tag", [{ label: "Hot Deals", value: "hot-deals" }]);
+  //   setValue("regular_price", 231);
+  //   setValue("sale_price", 250);
+  //   setValue("weight", 25);
+  //   setValue("unit", { label: "Kilogram", value: "Kg" });
+  //   setValue("bulking_price_rules", [
+  //     { quantity_from: 30, quantity_to: 40, price: "200" },
+  //   ]);
+  //   setValue("sale_price_dates_from", "2024-11-14");
+  //   setValue("sale_price_dates_to", "2024-11-22");
+  //   setValue("seo_title", "Breads");
+  //   setValue("slug", "Dummy Slug");
+  //   setValue("purchase_note", "Dummy Purchase note");
+  //   setValue("minimum_order_quantity", "12");
+  //   setValue("meta_description", "Dummy meta description text");
+  // };
 
   return (
-    <>
-      <div>
-        <CommonButton
+<>
+      <div className="flex gap-4">
+        {/* <CommonButton
           text="Fill Dummy values"
           className="buttonTwo"
           onClick={fillDummyValues}
-        />
+        /> */}
+        <div className="flex-1">
         <FormWrapper
           formConfig={formConfig}
           onSubmit={onSubmit}
           isCustomButtons={true}
         >
-          <div className="product-info-section">
-            <div className="">
-              <CommonTextField
-                fieldName="name"
-                label="Product Name *"
-                rules={createRequiredValidation("Product name")}
-                placeholder="Product Name"
-                formConfig={formConfig}
-              />
-              <CommonSelect
-                fieldName="product_tag"
-                selectType="creatable"
-                rules={createRequiredValidation(
-                  null,
-                  "Product tags are required"
-                )}
-                options={PRODUCT_TAG_OPTIONS}
-                isMulti={true}
-                formConfig={formConfig}
-                label="Product Tags"
-                placeholder="Select Tags"
-              />
+          <div className="product-info-section mb-4">
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <CommonTextField
+                  fieldName="name"
+                  label="Product Name *"
+                  rules={createRequiredValidation("Product name")}
+                  placeholder="Product Name"
+                  formConfig={formConfig}
+                  className="px-4 py-2 bg-white focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all mt-2"
+                />
+              </div>
+              <div className="flex-1">
+                <CommonSelect
+                  fieldName="product_tag"
+                  selectType="creatable"
+                  rules={createRequiredValidation(
+                    null,
+                    "Product tags are required"
+                  )}
+                  options={PRODUCT_TAG_OPTIONS}
+                  isMulti={true}
+                  formConfig={formConfig}
+                  label="Product Tags"
+                  placeholder="Select Tags"
+                />
+              </div>
             </div>
           </div>
-          <div className="description">
+          <div className="description mt-4 p-4 rounded-lg bg-white my-4">
             <CommonTextEditor
               formConfig={formConfig}
               label="Description"
@@ -185,59 +306,82 @@ const AddEditProduct = () => {
             activeTab={activeTab}
             handleActiveTab={handleActiveTab}
           />
-          <div className="seo-section">
-            <h5>SEO</h5>
-            <CommonSelect
-              fieldName="focused_keyword"
-              selectType="creatable"
-              // options={PRODUCT_TAG_OPTIONS}
-              isMulti={true}
-              formConfig={formConfig}
-              label="Focus Keywords"
-              placeholder="Enter Keywords You Need To Focus"
-            />{" "}
-            <RadioGroup
-              fieldName="preview_as"
-              formConfig={formConfig}
-              options={PREVIEW_AS_OPTIONS}
-              // rules={createRequiredValidation()}
-            />
-            <div className="snippet">
-              {/* update required: need to integrate this section */}
-              <CommonButton
-                text="Edit Snippet"
-                onClick={() => {}}
-                icon={pencilIcon}
-                type="button"
-                className="buttonTwo"
+          <div className="seo-section mt-4 bg-white p-4 rounded-lg">
+            <div className="w-3/5">
+              <h5 className="text-black font-medium">SEO</h5>
+              <CommonSelect
+                fieldName="focused_keyword"
+                selectType="creatable"
+                // options={PRODUCT_TAG_OPTIONS}
+                isMulti={true}
+                formConfig={formConfig}
+                label="Focus Keyphrase"
+                placeholder="Enter Keywords You Need To Focus"
+              />{" "}
+              <div className="flex gap-8 mt-4">
+                <div>Preview as:</div>
+                <RadioGroup
+                  fieldName="preview_as"
+                  formConfig={formConfig}
+                  options={PREVIEW_AS_OPTIONS}
+                  className="flex gap-4"
+                  // rules={createRequiredValidation()}
+                />
+              </div>
+              <div className="snippet mb-4">
+                {/* update required: need to integrate this section */}
+                <div className="border p-4 space-y-2 rounded-lg mt-4 shadow-md">
+                  <div className="text-black">The Bakery</div>
+                  <div className="text-[#FF6D2F]">https://www.bakery.com/</div>
+                  <div className="text-[#666666]">
+                    Lorem Ipsum has been the industry's standard dummy text ever
+                    since the 1500s, when an unknown printer took a galley of
+                    type and scrambled it to make a type specimen book. It has
+                    survived not only five centuries, but also...
+                  </div>
+                </div>
+                <CommonButton
+                  text="Edit Snippet"
+                  onClick={() => {}}
+                  icon={pencilIcon}
+                  type="button"
+                  className="buttonTwo bg-[#FF6D2F] flex px-4 py-2 rounded-lg mt-4 gap-4 text-white items-center"
+                />
+              </div>
+              <CommonTextField
+                fieldName="seo_title"
+                label="SEO Title *"
+                rules={createRequiredValidation("SEO title")}
+                placeholder="Enter SEO Title"
+                formConfig={formConfig}
+                className="px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all my-2"
+              />
+              <CommonTextField
+                fieldName="slug"
+                label="Slug *"
+                rules={createRequiredValidation("Slug")}
+                placeholder="Enter Page Slug"
+                formConfig={formConfig}
+                className="px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all my-2"
+              />
+              <CommonTextField
+                fieldName="meta_description"
+                label="Meta Description"
+                // rules={createRequiredValidation("Meta Description")}
+                placeholder="Enter Meta Description"
+                formConfig={formConfig}
+                type="textarea"
+                rows={4}
+                className="px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all my-2"
               />
             </div>
-            <CommonTextField
-              fieldName="seo_title"
-              label="SEO Title *"
-              rules={createRequiredValidation("SEO title")}
-              placeholder="Enter SEO Title"
-              formConfig={formConfig}
-            />
-            <CommonTextField
-              fieldName="slug"
-              label="Slug *"
-              rules={createRequiredValidation("Slug")}
-              placeholder="Enter Page Slug"
-              formConfig={formConfig}
-            />
-            <CommonTextField
-              fieldName="meta_description"
-              label="Meta Description"
-              // rules={createRequiredValidation("Meta Description")}
-              placeholder="Enter Meta Description"
-              formConfig={formConfig}
-              type="textarea"
-              rows={4}
-            />
           </div>
 
-          <div className="button-section">
+        </FormWrapper>
+        </div>
+        {/* side section */}
+        <div className="flex flex-col">
+        <div className="button-section flex justify-center">
             <CommonButton
               text="Publish"
               name="publish"
@@ -253,10 +397,8 @@ const AddEditProduct = () => {
               icon={draftIcon}
             />
           </div>
-        </FormWrapper>
-        {/* side section */}
-        <div className="flex flex-col gap-4">
-          <div className="flex gap-4">
+        <div className="flex flex-col gap-4 mt-4">
+          <div className="flex gap-4 flex-col">
             <CategorySection
               formConfig={formConfig}
               fieldName="category"
@@ -277,6 +419,7 @@ const AddEditProduct = () => {
               accept={PNG_AND_JPG}
             />
           </div>
+        </div>
         </div>
       </div>
     </>

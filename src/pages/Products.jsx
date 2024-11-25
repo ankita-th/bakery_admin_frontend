@@ -3,10 +3,7 @@ import FilterSection from "../Components/Common/FilterSection";
 import { deleteProduct, getProducts } from "../api/apiFunctions";
 import usePagination from "../hooks/usePagination";
 import Pagination from "../Components/Common/Pagination";
-import {
-  DEFAULT_ERROR_MESSAGE,
-  ITEMS_PER_PAGE,
-} from "../constant";
+import { DEFAULT_ERROR_MESSAGE, ITEMS_PER_PAGE } from "../constant";
 import CommonButton from "../Components/Common/CommonButton";
 import useModalToggle from "../hooks/useModalToggle";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
@@ -137,7 +134,7 @@ const Products = () => {
     if (action === "view") {
     } else if (action === "edit") {
       // update required: make the route name better
-      navigate("/add-edit-product", { state: id });
+      navigate("/add-edit-product", { state: { id: id } });
     } else if (action === "delete") {
       toggleModal();
       setItemToDelete(id);

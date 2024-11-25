@@ -99,10 +99,6 @@ const RecipeAddEdit = () => {
     trigger,
     formState: { errors },
   } = formConfig;
-  const { append, fields, remove } = useFieldArray({
-    control,
-    name: "ingredients",
-  });
 
   const [btnLoaders, setBtnLoaders] = useState({
     publish: false,
@@ -181,7 +177,7 @@ const RecipeAddEdit = () => {
         });
     }
   }, []);
-  console.log(file, "this is file");
+  console.log(watch("category"), "this is category");
 
   const onSubmit = (values, event) => {
     const buttonType = event.nativeEvent.submitter.name;
@@ -305,60 +301,62 @@ const RecipeAddEdit = () => {
                 <div className="recipe-section-two">
                   <div className="sec-1 flex gap-4 mt-2">
                     <div className="flex-1">
-                    <CommonTextField
-                      formConfig={formConfig}
-                      label="Preparation Time (in minutes) *"
-                      fieldName="preparation_time"
-                      placeholder="Enter the prep time in minutes or hours"
-                      labelClassName=""
-                      className="recipe-input"
-                      rules={{
-                        ...createRequiredValidation("Preparation time"),
-                        ...RecipeValidations["preparation_time"]
-                      }}
-                      isNumberOnly={true}
-                    />
+                      <CommonTextField
+                        formConfig={formConfig}
+                        label="Preparation Time (in minutes) *"
+                        fieldName="preparation_time"
+                        placeholder="Enter the prep time in minutes or hours"
+                        labelClassName=""
+                        className="recipe-input"
+                        rules={{
+                          ...createRequiredValidation("Preparation time"),
+                          ...RecipeValidations["preparation_time"],
+                        }}
+                        isNumberOnly={true}
+                      />
                     </div>
                     <div className="flex-1">
-                    <CommonTextField
-                      formConfig={formConfig}
-                      label="Cook Time (in minutes) *"
-                      fieldName="cook_time"
-                      placeholder="Enter the cook time"
-                      className="recipe-input"
-                      rules={{...createRequiredValidation("Cook time"),
-                        ...RecipeValidations["cook_time"]
-                      }}
-                      isNumberOnly={true}
-                    />
+                      <CommonTextField
+                        formConfig={formConfig}
+                        label="Cook Time (in minutes) *"
+                        fieldName="cook_time"
+                        placeholder="Enter the cook time"
+                        className="recipe-input"
+                        rules={{
+                          ...createRequiredValidation("Cook time"),
+                          ...RecipeValidations["cook_time"],
+                        }}
+                        isNumberOnly={true}
+                      />
                     </div>
                   </div>
 
                   <div className="sec-2 mt-2 flex gap-4">
                     <div className="flex-1">
-                    <CommonTextField
-                      formConfig={formConfig}
-                      label="Serving Size *"
-                      fieldName="serving_size"
-                      placeholder="Number of servings the recipe make."
-                      className="recipe-input"
-                      rules={{...createRequiredValidation("Serving size"),
-                        ...RecipeValidations["serving_size"]
-                      }}
-                      isNumberOnly={true}
-                    />
+                      <CommonTextField
+                        formConfig={formConfig}
+                        label="Serving Size *"
+                        fieldName="serving_size"
+                        placeholder="Number of servings the recipe make."
+                        className="recipe-input"
+                        rules={{
+                          ...createRequiredValidation("Serving size"),
+                          ...RecipeValidations["serving_size"],
+                        }}
+                        isNumberOnly={true}
+                      />
                     </div>
                     <div className="flex-1">
-                    <CommonSelect
-                      formConfig={formConfig}
-                      label="Difficulty Level *"
-                      fieldName="difficulty_level"
-                      placeholder="Select difficulty level"
-                      className="recipe-input"
-                      selectType="react-select"
-                      options={DIFFICULTY_OPTIONS}
-                      rules={createRequiredValidation("Difficulty level")}
-                    />
+                      <CommonSelect
+                        formConfig={formConfig}
+                        label="Difficulty Level *"
+                        fieldName="difficulty_level"
+                        placeholder="Select difficulty level"
+                        className="recipe-input"
+                        selectType="react-select"
+                        options={DIFFICULTY_OPTIONS}
+                        rules={createRequiredValidation("Difficulty level")}
+                      />
                     </div>
                   </div>
 

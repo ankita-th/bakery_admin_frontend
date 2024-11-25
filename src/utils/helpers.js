@@ -48,7 +48,6 @@ export const deleteItemBasedOnId = (arr, id) => {
     return arr.filter((el) => el.id !== id);
   }
 };
-
 // to check whether the uploaded image is of valid type of not
 
 export const isValidType = (file, allowedTypes) => {
@@ -162,7 +161,7 @@ export const createProductSeo = (values) => {
 };
 
 export const createInventoryPayload = (values) => {
-  const { sku, regular_price, sale_price, weight, unit, bulking_price_rules } =
+  const { sku, regular_price, sale_price, weight, unit, bulking_price_rules, sale_price_dates_from, sale_price_dates_to } =
     values;
   const result = {
     sku: sku,
@@ -171,6 +170,8 @@ export const createInventoryPayload = (values) => {
     weight: weight,
     unit: unit?.value,
     bulking_price_rules: bulking_price_rules,
+    sale_price_dates_from:sale_price_dates_from,
+    sale_price_dates_to:sale_price_dates_to
   };
   return result;
 };
@@ -194,6 +195,22 @@ export const createAdvancedPayload = (values) => {
   };
 };
 
+export const createVariantPayload = (values) => {
+  if (values?.variants?.length) {
+    const temp = [...values.variants];
+    const result = [];
+    temp.forEach((curElem) => {
+      const item = {
+        ...curElem,
+        allow_backorders: curElem?.allow_backorders.value,
+        unit: curElem?.unit?.value,
+        quantity: +curElem?.quantity,
+      };
+      result.push(item);
+    });
+    return result;
+  }
+};
 export const createFilesObject = (files) => {
   const result = {};
   files.forEach(({ file }) => {
@@ -263,4 +280,15 @@ export const convertSelectOptionToValue = (option, extractFrom = "value") => {
 };
 export const combineBarcode = (from, to) => {
   return `${from}-${to}`;
-}
+};
+
+export const convertValuesIntoLabelAndValue = (data) => {
+  if (data?.length) {
+    const result = [];
+    data.forEach((curElem) => {
+      const item = { label: curElem, value: curElem };
+      result.push(item);
+    });
+    return result;
+  }
+};
