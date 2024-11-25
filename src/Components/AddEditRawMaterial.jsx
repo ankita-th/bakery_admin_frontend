@@ -40,7 +40,8 @@ const AddEditRawMaterial = ({
     setValue("name", "flour");
     setValue("quantity", 150);
     setValue("reorder", 50);
-    setValue("expiry_date", "2024-12-5");
+    setValue("expiry_date", "2024-12-5");+
+    
     setValue("notes", "High-quality wheat");
     setValue("cost", "150");
   };

@@ -36,7 +36,7 @@ const SIDEBAR_LINKS_TOP = [
   {
     label: "Orders",
     icon: OrdersIcon,
-    href: "/orders",
+    href: "/orders-management",
   },
   {
     label: "Inventory",

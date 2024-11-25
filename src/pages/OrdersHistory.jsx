@@ -1,75 +1,89 @@
 import React, { useEffect, useState } from "react";
 import FilterSection from "../Components/Common/FilterSection";
-import {
-  PAYMENT_TYPE_OPTIONS,
-  SORT_BY_OPTIONS,
-  DUMMY_PAYMENT_DATA,
-  ITEMS_PER_PAGE,
-} from "../constant";
-import { PAYMENT_ENDPOINT } from "../api/endpoints";
-import usePagination from "../hooks/usePagination";
-import useLoader from "../hooks/useLoader";
 import { makeApiRequest, METHODS } from "../api/apiFunctions";
+import { ORDERS_ENDPOINT } from "../api/endpoints";
 import TableWrapper from "../Wrappers/TableWrapper";
 import NoDataFound from "../Components/Common/NoDataFound";
-import SinglePaymentRow from "../Components/SinglePaymentRow";
+import SingleOrdersRow from "../Components/SingleOrdersRow";
+import usePagination from "../hooks/usePagination";
+import useLoader from "../hooks/useLoader";
 import Pagination from "../Components/Common/Pagination";
 import PageLoader from "../loaders/PageLoader";
+import { useForm } from "react-hook-form";
+import useModalToggle from "../hooks/useModalToggle";
+import ViewOrderHistory from "../Components/ViewOrderHistory";
+import {
+  DUMMY_ORDERS_DATA,
+  ITEMS_PER_PAGE,
+  OPTIONS,
+  ORDERS_TYPE_OPTIONS,
+  SORT_BY_OPTIONS,
+} from "../constant";
 const filterFields = [
   {
     type: "select",
-    filterName: "paymentType",
-    defaultOption: "Select Payment Type",
-    options: PAYMENT_TYPE_OPTIONS,
+    filterName: "orders_history",
+    defaultOption: "Order Status",
+    options: ORDERS_TYPE_OPTIONS,
   },
   {
     type: "select",
-    filterName: "date",
-    defaultOption: "Date",
+    filterName: "orders_type",
+    defaultOption: "Orders Type",
+    options: OPTIONS,
+  },
+  {
+    type: "select",
+    filterName: "sort_by",
+    defaultOption: "Sort by",
     options: SORT_BY_OPTIONS,
   },
   {
     type: "search",
     filterName: "name",
-    placeholder: "Search Payment",
+    placeholder: "Search Order History",
   },
 ];
-const PAYMENT_COLUMNS = [
+const ORDER_COLUMNS = [
   "Id",
   "Customer Name",
   "Date",
-  "Order Id",
-  "Payment Method",
-  "Amount",
-  "Status",
-  "Transaction ID",
+  "Items",
+  "Quantity",
+  "Reason for Decline",
   "Actions",
 ];
-const PaymentHistory = () => {
+const OrdersHistory = () => {
+  const formConfig = useForm();
   const { page, onPageChange } = usePagination();
+  const { showModal: showViewSection, toggleModal: toggleViewSection } =
+    useModalToggle();
   const { toggleLoader, pageLoader } = useLoader();
+  const [orderHistory, setOrderHistory] = useState([]);
+  const [totalData, setTotalData] = useState(null);
+  const [viewItem, setViewItem] = useState();
   const [filters, setFilters] = useState({
-    paymentType: "",
-    date: "",
+    orders_history: "",
+    orders_type: "",
+    sort_by: "",
     name: "",
   });
-  const [totalData, setTotalData] = useState(null);
-  const [paymentHistory, setPaymentHistory] = useState([]);
+
   useEffect(() => {
     toggleLoader("pageLoader");
     const apiParams = {
       ...filters,
       page: page,
     };
-    setPaymentHistory(DUMMY_PAYMENT_DATA);
+    setOrderHistory(DUMMY_ORDERS_DATA);
     makeApiRequest({
       // update required: Update with the actual endpoint
-      endPoint: PAYMENT_ENDPOINT,
+      endPoint: ORDERS_ENDPOINT,
       params: apiParams,
       method: METHODS.get,
     })
       .then((res) => {
-        setPaymentHistory(res?.data?.results);
+        setOrderHistory(res?.data?.results);
         setTotalData(res?.data?.count);
       })
       .catch((err) => console.log(err))
@@ -77,17 +91,20 @@ const PaymentHistory = () => {
         toggleLoader("pageLoader");
       });
   }, [page, filters]);
-  const handleActions = ({ action, id }) => {
-    if (action === "view") {
-      // Update required : add logic for view here
-    } else {
-      // Update required: add logic for print here
-    }
-  };
+
   const handleFilterChange = (filterName, value) => {
     const temp = { ...filters };
     temp[filterName] = value;
     setFilters(temp);
+  };
+
+  const handleActions = ({ action, id, viewItem }) => {
+    if (action === "view") {
+      setViewItem(viewItem);
+      toggleViewSection();
+    } else {
+      // Update required: add logic for print here
+    }
   };
   return (
     <>
@@ -99,10 +116,10 @@ const PaymentHistory = () => {
             filterFields={filterFields}
             handleFilterChange={handleFilterChange}
           />
-          <TableWrapper columns={PAYMENT_COLUMNS}>
-            {paymentHistory?.length ? (
-              paymentHistory?.map((it, idx) => (
-                <SinglePaymentRow
+          <TableWrapper columns={ORDER_COLUMNS}>
+            {orderHistory?.length ? (
+              orderHistory?.map((it, idx) => (
+                <SingleOrdersRow
                   key={idx}
                   item={it}
                   index={idx}
@@ -119,10 +136,19 @@ const PaymentHistory = () => {
             itemsPerPage={ITEMS_PER_PAGE}
             totalData={totalData}
           />
+          {showViewSection && (
+            <ViewOrderHistory
+              item={viewItem}
+              onClose={() => {
+                toggleViewSection();
+              }}
+              formConfig={formConfig}
+            />
+          )}
         </>
       )}
     </>
   );
 };
 
-export default PaymentHistory;
+export default OrdersHistory;

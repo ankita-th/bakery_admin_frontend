@@ -202,13 +202,16 @@ export const OPTIONS = [
   { value: "Option2", label: "Option2" },
   { value: "Option3", label: "Option3" },
 ];
-
 export const SORT_BY_OPTIONS = [
   { value: "newest", label: "Newest" },
   { value: "oldest", label: "Oldest" },
 ];
 export const PAYMENT_TYPE_OPTIONS = [{ value: "card", label: "Card" }];
-
+export const ORDERS_TYPE_OPTIONS = [
+  { value: "declined", label: "Declined" },
+  { value: "accepted", label: "Accepted" },
+  { value: "pending", label: "Pending" },
+];
 export const DUMMY_TODO_DATA = [
   {
     id: 3,
@@ -593,5 +596,39 @@ export const COMBINATION_OPTIONS = [
   {
     label: "Shipping discounts",
     value: "shipping_discounts",
+  },
+];
+export const DUMMY_ORDERS_DATA = [
+  {
+    id: 1,
+    customer_name: "Sarah Wiliiams",
+    date: "2024-11-23T00:00:00Z",
+    items: "4X Dinner role",
+    quantity: "02",
+    reason_for_decline: "out of stock",
+  },
+  {
+    id: 2,
+    customer_name: "Sarah Wiliiams",
+    date: "2024-11-23T00:00:00Z",
+    items: "6X Dinner role",
+    quantity: "01",
+    reason_for_decline: 100,
+  },
+  {
+    id: 3,
+    customer_name: "Sarah Wiliiams",
+    date: "2024-11-23T00:00:00Z",
+    items: "8X Dinner role",
+    quantity: "98",
+    reason_for_decline: 100,
+  },
+  {
+    id: 4,
+    customer_name: "Sarah Wiliiams",
+    date: "2024-11-23T00:00:00Z",
+    items: "7X Dinner role",
+    quantity: "7",
+    reason_for_decline: 100,
   },
 ];

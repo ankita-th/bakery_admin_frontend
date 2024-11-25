@@ -54,7 +54,6 @@ const filterFields = [
     placeholder: "Search Materials",
   },
 ];
-
 const RawMaterials = () => {
   const formConfig = useForm();
   const { reset } = formConfig;
@@ -86,7 +85,6 @@ const RawMaterials = () => {
     draft: false,
   });
   const [viewInfo, setViewInfo] = useState({ show: false, item: null });
-
   useEffect(() => {
     toggleLoader("pageLoader");
     const apiFilters = {
@@ -280,6 +278,7 @@ const RawMaterials = () => {
               btnLoaders={btnLoaders}
             />
           )}
+          
           {viewInfo?.show && (
             <ViewRawMaterials
               item={viewInfo?.item}

@@ -19,6 +19,8 @@ import Settings from "../pages/Settings";
 import Discounts from "../pages/Discounts";
 import AddEditDiscount from "../pages/AddEditDiscount";
 
+import OrdersHistory from "../pages/OrdersHistory";
+import OrderManagement from "../pages/OrderManagement";
 export const routes = [
   {
     path: "/",
@@ -144,6 +146,16 @@ export const routes = [
   {
     path: "/support",
     element: <Support />,
+    private: true,
+  },
+  {
+    path: "/orders-history",
+    element: <OrdersHistory />,
+    private: true,
+  },
+  {
+    path: "/orders-management",
+    element: <OrderManagement />,
     private: true,
   },
 ];
