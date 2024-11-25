@@ -37,20 +37,21 @@ const InventoryTab = ({ formConfig }) => {
   };
   return (
     <div>
-      <div className="w-3/4 space-y-4">
+      <div className="w-full space-y-4">
         <CommonTextField
           label="SKU"
           fieldName="sku"
-          className="w-full p-2 border rounded-md"
+          className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
           //   rules={createRequiredValidation("SKU")}
           formConfig={formConfig}
+          placeholder="Enter SKU"
         />
 
         <div className="grid grid-cols-2 gap-4">
           <CommonTextField
             label="Regular Price ($) *"
             fieldName="regular_price"
-            className="w-full p-2 border rounded-md"
+            className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
             rules={createRequiredValidation("Regular Price")}
             formConfig={formConfig}
             placeholder="Enter Price of Product"
@@ -60,7 +61,7 @@ const InventoryTab = ({ formConfig }) => {
           <CommonTextField
             label="Sale Price ($) *"
             fieldName="sale_price"
-            className="w-full p-2 border rounded-md"
+            className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
             rules={createRequiredValidation("Sale Price")}
             formConfig={formConfig}
             placeholder="Enter Sale Price"
@@ -73,7 +74,7 @@ const InventoryTab = ({ formConfig }) => {
             fieldName="sale_price_dates_from"
             rules={createRequiredValidation("Sale price date from")}
             formConfig={formConfig}
-            className="w-full p-2 border rounded-md"
+            className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
           />
           <CommonDateField
             label="Sale Price Date To *"
@@ -86,7 +87,7 @@ const InventoryTab = ({ formConfig }) => {
                 "Sale price end date must be greater than or equal to the start date",
             }}
             formConfig={formConfig}
-            className="w-full p-2 border rounded-md"
+            className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
           />
         </div>
 
@@ -94,7 +95,7 @@ const InventoryTab = ({ formConfig }) => {
           <CommonTextField
             label="Weight *"
             fieldName="weight"
-            className="w-full p-2 border rounded-md"
+            className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
             rules={createRequiredValidation("Weight")}
             formConfig={formConfig}
             placeholder="Enter Weight Of Product"
@@ -106,6 +107,7 @@ const InventoryTab = ({ formConfig }) => {
             fieldName="unit"
             options={MEASURE_OPTIONS}
             placeholder="Select Unit Of Product"
+            className="bg-[#F5F5F5] mt-2"
           />
         </div>
 
@@ -116,6 +118,7 @@ const InventoryTab = ({ formConfig }) => {
             items={BULKING_PRICE_ITEMS}
             itemToAppend={BULKING_APPEND_ITEM}
             formConfig={formConfig}
+            className="bg-[#F5F5F5] mt-2"
           />
         </div>
       </div>

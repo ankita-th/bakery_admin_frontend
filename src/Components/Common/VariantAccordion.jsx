@@ -12,14 +12,15 @@ const VariantAccordion = ({ remove, watch, children, index }) => {
       <button
         type="button"
         // onClick={() => handleToggle(index)}
-        className={`w-full text-base text-left font-semibold p-5 ${
+        className={`w-full font-semibold ${
           openIndex === index
             ? "text-blue-600"
             : "text-gray-800 hover:text-blue-600"
         } flex items-center transition-all`}
       >
-        <span className="mr-4">
-          <div className="flex items-center justify-between mb-4">
+        {/* <span className="mr-4"> */}
+          <div className="flex items-center justify-between mb-4 w-full">
+            <div className="flex gap-4 items-center">
             <div className="variation-count text-bold-500">#${index + 1}</div>
             <select
               className="border border-gray-300 text-sm text-gray-700 rounded-lg p-2"
@@ -27,6 +28,7 @@ const VariantAccordion = ({ remove, watch, children, index }) => {
             >
               <option value="1">100 gm</option>
             </select>
+            </div>
             <div className="flex gap-2">
               <button
                 type="button"
@@ -45,8 +47,8 @@ const VariantAccordion = ({ remove, watch, children, index }) => {
               )}
             </div>
           </div>
-        </span>
-        <svg
+        {/* </span> */}
+        {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           className={`w-4 fill-current ml-auto shrink-0 transition-transform ${
             openIndex === index ? "rotate-180" : "-rotate-90"
@@ -59,12 +61,12 @@ const VariantAccordion = ({ remove, watch, children, index }) => {
             clipRule="evenodd"
             data-original="#000000"
           ></path>
-        </svg>
+        </svg> */}
       </button>
 
       <div
         className={`transition-all ${
-          openIndex === index ? "block py-4 px-6" : "hidden"
+          openIndex === index ? "block" : "hidden"
         }`}
       >
         <div>{children}</div>
