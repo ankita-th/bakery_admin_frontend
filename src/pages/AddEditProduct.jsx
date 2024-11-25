@@ -77,6 +77,7 @@ const AddEditProduct = () => {
       name: values?.name,
       description: values?.description,
       product_tag: extractSelectOptions(values?.product_tag, "value"),
+      category: values?.category.map(Number),
       // update required: currently this field is not there in the API
       // is_active: buttonType === "publish",
       product_seo: createProductSeo(values),
@@ -95,7 +96,8 @@ const AddEditProduct = () => {
       if (
         key === "product_tag" ||
         key === "product_seo" ||
-        key === "product_detail"
+        key === "product_detail" ||
+        key === "category"
       ) {
         const striginfiedResult = JSON.stringify(payload[key]);
         formData.append(key, striginfiedResult);
@@ -213,8 +215,8 @@ const AddEditProduct = () => {
             <CommonTextField
               fieldName="seo_title"
               label="SEO Title *"
-              rules={createRequiredValidation("Product name")}
-              placeholder="Enter Product Name"
+              rules={createRequiredValidation("SEO title")}
+              placeholder="Enter SEO Title"
               formConfig={formConfig}
             />
             <CommonTextField
@@ -257,8 +259,8 @@ const AddEditProduct = () => {
           <div className="flex gap-4">
             <CategorySection
               formConfig={formConfig}
-              fieldName="categories"
-              rules={createRequiredValidation("Category is required")}
+              fieldName="category"
+              rules={createRequiredValidation("Category")}
             />
             <ImageUploadSection
               file={featuredImage}

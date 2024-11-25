@@ -178,7 +178,7 @@ const VariantsTab = ({ formConfig }) => {
                       ...createRequiredValidation(),
                       validate: (value) =>
                         value >=
-                          watch("variants.${index}.sale_price_dates_from") ||
+                          watch(`variants.${index}.sale_price_dates_from`) ||
                         "End date must be greater than or equal to the start date",
                     }}
                     className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-blue-500 focus:border-blue-500"

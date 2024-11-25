@@ -20,6 +20,7 @@ const VariantAccordion = ({ remove, watch, children, index }) => {
       >
         <span className="mr-4">
           <div className="flex items-center justify-between mb-4">
+            <div className="variation-count text-bold-500">#${index + 1}</div>
             <select
               className="border border-gray-300 text-sm text-gray-700 rounded-lg p-2"
               disabled={true}
