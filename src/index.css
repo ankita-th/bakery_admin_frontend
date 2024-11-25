@@ -219,17 +219,25 @@ header.header {
 .cross-icon {
   background: #ff6d2f;
   border-radius: 12px;
-  height: 33px;
-  width: 32px;
+  margin-top: 20px;
+  height: 43px;
+  width: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding:10px
 }
 .add-row-button {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 8px;
   background: #e4e4e4;
   border-radius: 12px;
   padding: 5px;
   margin-top: 5px;
+  width: 15%;
+  justify-content: center;
+  text-wrap: nowrap;
 }
 
 /* Header CSS */

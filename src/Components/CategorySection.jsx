@@ -102,18 +102,19 @@ const CategorySection = ({ formConfig, fieldName, rules }) => {
   };
   return (
     <div>
-      <div className="category-container">
+      <div className="category-container p-4">
         <div className="category-heading">
           <h5>Categories</h5>
           <span
             onClick={() => {
               setShowCateoryAddSection(true);
             }}
+            className="text-[#FF6D2F]"
           >
             +Add
           </span>
         </div>
-        <div className="catgoryListing">
+        <div className="catgoryListing mt-4">
           {categories?.length > 0 ? (
             categories.map(({ id, name }, index) => {
               return (
