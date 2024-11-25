@@ -24,6 +24,7 @@ import FilterSection from "../Components/Common/FilterSection";
 import CommonButton from "../Components/Common/CommonButton";
 import PageLoader from "../loaders/PageLoader";
 import ViewRawMaterials from "../Components/ViewRawMaterials";
+import { T } from "../utils/languageTranslator";
 const RAW_MATERIAL_COLUMNS = [
   "",
   "ID",

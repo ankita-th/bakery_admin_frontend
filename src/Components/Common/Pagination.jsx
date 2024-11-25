@@ -16,12 +16,12 @@ const Pagination = ({ onPageChange, totalData, itemsPerPage }) => {
           nextLabel={">"}
           pageCount={totalPages}
           onPageChange={onPageChange}
-          containerClassName={"pagination flex-wrap"}
-          previousLinkClassName={"page-link"}
-          nextLinkClassName={"page-link"}
+          containerClassName={"flex gap-4 items-center"}
+          previousLinkClassName={"border px-2 bg-[#F5F5F5] rounded-md py-1"}
+          nextLinkClassName={"border px-2 bg-[#F5F5F5] rounded-md py-1"}
           disabledClassName={"pagination__link--disabled"}
-          activeClassName={"active"}
-          pageClassName={"page-item"}
+          activeClassName={"bg-[#FF6363] text-white"}
+          pageClassName={"border px-2 bg-[#F5F5F5] rounded-md"}
         />
       )}
     </>

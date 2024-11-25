@@ -7,7 +7,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .nav-item {
   color: black;
   font-size: 15px;
@@ -225,7 +224,7 @@ header.header {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding:10px
+  padding: 10px;
 }
 .add-row-button {
   display: flex;
@@ -235,7 +234,7 @@ header.header {
   border-radius: 12px;
   padding: 5px;
   margin-top: 5px;
-  width: 15%;
+  width: 25%;
   justify-content: center;
   text-wrap: nowrap;
 }

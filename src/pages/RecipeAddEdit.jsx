@@ -267,204 +267,203 @@ const RecipeAddEdit = () => {
         <PageLoader />
       ) : (
         <div className="">
-          <div className="grid grid-cols-1 gap-4">
-            <div className="flex gap-4">
-              <div>
-            <div>
-              {/* <CommonButton
+          <FormWrapper
+            formConfig={formConfig}
+            onSubmit={onSubmit}
+            isCustomButtons={true}
+          >
+            <div className="grid grid-cols-1 gap-4">
+              <div className="flex gap-4">
+                <div>
+                  <div>
+                    {/* <CommonButton
                 text="Fill form with dummy values"
                 onClick={fillForm}
                 className="orange_btn"
               /> */}
-              <FormWrapper
-                formConfig={formConfig}
-                onSubmit={onSubmit}
-                isCustomButtons={true}
-              >
-                <CommonTextField
-                  formConfig={formConfig}
-                  label="Recipe Title *"
-                  fieldName="recipe_title"
-                  placeholder="Enter Recipe Title"
-                  className="px-4 py-2 w-full rounded-lg"
-                  labelClassName=""
-                  rules={createRequiredValidation("Recipe title")}
-                />
-                <div className="description mt-4 p-4 rounded-lg bg-white mt-4">
-                  <CommonTextEditor
-                    // label="Description *"
-                    fieldName="description"
-                    formConfig={formConfig}
-                    placeholder="Type..."
-                    requiredMessage="Description field is required" //validations works a bit different in text editor that's why
-                  />
-                </div>
 
-                <div className="px-4 py-2 rounded-lg bg-white mt-4">
-                <div className="recipe-section-two">
-                  <div className="sec-1 flex gap-4 mt-2">
-                    <div className="flex-1">
-                      <CommonTextField
-                        formConfig={formConfig}
-                        label="Preparation Time (in minutes) *"
-                        fieldName="preparation_time"
-                        placeholder="Enter the prep time in minutes or hours"
-                        labelClassName=""
-                        className="recipe-input"
-                        rules={{
-                          ...createRequiredValidation("Preparation time"),
-                          ...RecipeValidations["preparation_time"],
-                        }}
-                        isNumberOnly={true}
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <CommonTextField
-                        formConfig={formConfig}
-                        label="Cook Time (in minutes) *"
-                        fieldName="cook_time"
-                        placeholder="Enter the cook time"
-                        className="recipe-input"
-                        rules={{
-                          ...createRequiredValidation("Cook time"),
-                          ...RecipeValidations["cook_time"],
-                        }}
-                        isNumberOnly={true}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="sec-2 mt-2 flex gap-4">
-                    <div className="flex-1">
-                      <CommonTextField
-                        formConfig={formConfig}
-                        label="Serving Size *"
-                        fieldName="serving_size"
-                        placeholder="Number of servings the recipe make."
-                        className="recipe-input"
-                        rules={{
-                          ...createRequiredValidation("Serving size"),
-                          ...RecipeValidations["serving_size"],
-                        }}
-                        isNumberOnly={true}
-                      />
-                    </div>
-                    <div className="flex-1">
-                    <CommonSelect
-                      formConfig={formConfig}
-                      label="Difficulty Level *"
-                      fieldName="difficulty_level"
-                      placeholder="Select difficulty level"
-                      className="bg-[#F5F5F5] w-full border border-gray-300 rounded-md focus:outline-none"
-
-                      selectType="react-select"
-                      options={DIFFICULTY_OPTIONS}
-                      rules={createRequiredValidation("Difficulty level")}
-                    />
-                    </div>
-                  </div>
-
-                  <div className="ingredients-section mt-4">
-                    <CommonFieldArray
-                      heading="Ingredients"
-                      fieldArrayName="ingredients"
-                      formConfig={formConfig}
-                      itemToAppend={INGREDIENT_TO_APPEND}
-                      items={INGREDIENTS_ITEMS}
-                    />
-                  </div>
-                  <div className="instructions-section mt-4">
-                    <CommonFieldArray
-                      heading="Instructions/Steps"
-                      fieldArrayName="instructions"
-                      formConfig={formConfig}
-                      itemToAppend={INSTRUCTION_TO_APPEND}
-                      items={INSTRUCTION_ITEMS}
-                    />
-                  </div>
-
-                  <div className="dietry-section flex items-center space-x-4 mt-4 flex">
-                    {/* may be need to update this field into text field further */}
-                    <div className="flex-1">
-                    <CommonSelect
-                      label="Dietary Information *"
-                      selectType="react-select"
-                      options={DIETRY_OPTIONS}
-                      fieldName="dietary_plan"
-                      formConfig={formConfig}
-                      placeholder="Select"
-                      rules={RecipeValidations["dietary_plan"]}
-                    />
-                    </div>
-                    <div className="flex-1">
-                    <CommonSelect
-                      label="Allergen Informations *"
-                      selectType="react-select"
-                      options={ALLERGEN_OPTIONS}
-                      fieldName="allergen_information"
-                      formConfig={formConfig}
-                      placeholder="Select"
-                      rules={RecipeValidations["allergen_informations"]}
-                    />
-                    </div>
-                  </div>
-                  <div className="notes mt-4">
                     <CommonTextField
                       formConfig={formConfig}
-                      label="Notes/Additional Information"
-                      fieldName="notes"
-                      placeholder="Any additional notes or tips"
-                      className="recipe-input"
-                      rules={RecipeValidations["notes"]}
-                      type="textarea"
-                      rows={4}
+                      label="Recipe Title *"
+                      fieldName="recipe_title"
+                      placeholder="Enter Recipe Title"
+                      className="px-4 py-2 w-full rounded-lg"
+                      labelClassName=""
+                      rules={createRequiredValidation("Recipe title")}
                     />
+                    <div className="description mt-4 p-4 rounded-lg bg-white mt-4">
+                      <CommonTextEditor
+                        // label="Description *"
+                        fieldName="description"
+                        formConfig={formConfig}
+                        placeholder="Type..."
+                        requiredMessage="Description field is required" //validations works a bit different in text editor that's why
+                      />
+                    </div>
+
+                    <div className="px-4 py-2 rounded-lg bg-white mt-4">
+                      <div className="recipe-section-two">
+                        <div className="sec-1 flex gap-4 mt-2">
+                          <div className="flex-1">
+                            <CommonTextField
+                              formConfig={formConfig}
+                              label="Preparation Time (in minutes) *"
+                              fieldName="preparation_time"
+                              placeholder="Enter the prep time in minutes or hours"
+                              labelClassName=""
+                              className="recipe-input"
+                              rules={{
+                                ...createRequiredValidation("Preparation time"),
+                                ...RecipeValidations["preparation_time"],
+                              }}
+                              isNumberOnly={true}
+                            />
+                          </div>
+                          <div className="flex-1">
+                            <CommonTextField
+                              formConfig={formConfig}
+                              label="Cook Time (in minutes) *"
+                              fieldName="cook_time"
+                              placeholder="Enter the cook time"
+                              className="recipe-input"
+                              rules={{
+                                ...createRequiredValidation("Cook time"),
+                                ...RecipeValidations["cook_time"],
+                              }}
+                              isNumberOnly={true}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="sec-2 mt-2 flex gap-4">
+                          <div className="flex-1">
+                            <CommonTextField
+                              formConfig={formConfig}
+                              label="Serving Size *"
+                              fieldName="serving_size"
+                              placeholder="Number of servings the recipe make."
+                              className="recipe-input"
+                              rules={{
+                                ...createRequiredValidation("Serving size"),
+                                ...RecipeValidations["serving_size"],
+                              }}
+                              isNumberOnly={true}
+                            />
+                          </div>
+                          <div className="flex-1">
+                            <CommonSelect
+                              formConfig={formConfig}
+                              label="Difficulty Level *"
+                              fieldName="difficulty_level"
+                              placeholder="Select difficulty level"
+                              className="bg-[#F5F5F5] w-full border border-gray-300 rounded-md focus:outline-none"
+                              selectType="react-select"
+                              options={DIFFICULTY_OPTIONS}
+                              rules={createRequiredValidation(
+                                "Difficulty level"
+                              )}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="ingredients-section mt-4">
+                          <CommonFieldArray
+                            heading="Ingredients"
+                            fieldArrayName="ingredients"
+                            formConfig={formConfig}
+                            itemToAppend={INGREDIENT_TO_APPEND}
+                            items={INGREDIENTS_ITEMS}
+                          />
+                        </div>
+                        <div className="instructions-section mt-4">
+                          <CommonFieldArray
+                            heading="Instructions/Steps"
+                            fieldArrayName="instructions"
+                            formConfig={formConfig}
+                            itemToAppend={INSTRUCTION_TO_APPEND}
+                            items={INSTRUCTION_ITEMS}
+                          />
+                        </div>
+
+                        <div className="dietry-section flex items-center space-x-4 mt-4 flex">
+                          {/* may be need to update this field into text field further */}
+                          <div className="flex-1">
+                            <CommonSelect
+                              label="Dietary Information *"
+                              selectType="react-select"
+                              options={DIETRY_OPTIONS}
+                              fieldName="dietary_plan"
+                              formConfig={formConfig}
+                              placeholder="Select"
+                              rules={RecipeValidations["dietary_plan"]}
+                            />
+                          </div>
+                          <div className="flex-1">
+                            <CommonSelect
+                              label="Allergen Informations *"
+                              selectType="react-select"
+                              options={ALLERGEN_OPTIONS}
+                              fieldName="allergen_information"
+                              formConfig={formConfig}
+                              placeholder="Select"
+                              rules={RecipeValidations["allergen_informations"]}
+                            />
+                          </div>
+                        </div>
+                        <div className="notes mt-4">
+                          <CommonTextField
+                            formConfig={formConfig}
+                            label="Notes/Additional Information"
+                            fieldName="notes"
+                            placeholder="Any additional notes or tips"
+                            className="recipe-input"
+                            rules={RecipeValidations["notes"]}
+                            type="textarea"
+                            rows={4}
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </div>
-
-                </div>
-                </div>
-              </FormWrapper>
-              </div>
-
-              
                 </div>
                 <div className="button-section flex flex-col">
                   <div className="flex justify-center gap-4 mb-4">
-                  <CommonButton
-                    type="submit"
-                    text="Publish"
-                    icon={publishIcon}
-                    className="orange_btn"
-                    name="publish"
-                    loader={btnLoaders?.publish}
-                    disabled={btnLoaders?.publish || btnLoaders?.draft}
-                  />
-                  <CommonButton
-                    type="submit"
-                    text="Draft"
-                    icon={draftIcon}
-                    className="orange_btn"
-                    name="draft"
-                    loader={btnLoaders?.draft}
-                    disabled={btnLoaders?.publish || btnLoaders?.draft}
-                  />
+                    <CommonButton
+                      type="submit"
+                      text="Publish"
+                      icon={publishIcon}
+                      className="orange_btn"
+                      name="publish"
+                      loader={btnLoaders?.publish}
+                      disabled={btnLoaders?.publish || btnLoaders?.draft}
+                    />
+                    <CommonButton
+                      type="submit"
+                      text="Draft"
+                      icon={draftIcon}
+                      className="orange_btn"
+                      name="draft"
+                      loader={btnLoaders?.draft}
+                      disabled={btnLoaders?.publish || btnLoaders?.draft}
+                    />
                   </div>
-              <CategorySection
-                formConfig={formConfig}
-                fieldName="category"
-                rules={createRequiredValidation("Category")}
-              />
-              <div className="recipe-image-upload">
+                  <CategorySection
+                    formConfig={formConfig}
+                    fieldName="category"
+                    rules={createRequiredValidation("Category")}
+                  />
+                  <div className="recipe-image-upload">
                     <ImageUploadSection
                       file={file}
                       setFile={setFile}
                       label="Recipe Image"
                     />
                   </div>
+                </div>
+                {/* </form> */}
               </div>
-              {/* </form> */}
             </div>
-          </div>
+          </FormWrapper>
         </div>
       )}
     </div>

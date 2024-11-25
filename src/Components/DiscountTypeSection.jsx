@@ -17,7 +17,7 @@ const discountOptions = [
   {
     title: "Buy X Get Y",
     description: "Discount products based on a customer's purchase.",
-    buttonText: "Product Discount", // update required:Need to update this
+    buttonText: "Buy X Get Y", // update required:Need to update this
     icon: productDiscountIcon, // update required:Need to update this icon
   },
   {
