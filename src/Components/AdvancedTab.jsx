@@ -4,14 +4,14 @@ import { createRequiredValidation } from "../utils/helpers";
 
 const AdvancedTab = ({ formConfig }) => {
   return (
-    <div>
+    <div className="w-full">
       <div className="w-full space-y-4">
         {/* update required: may be need to change field name after updation in API */}
         <CommonTextField
           label="Purchase Note"
           fieldName="purchase_note"
           placeholder="Enter Purchase Note"
-          className="w-full p-2 border rounded-md"
+          className="w-full p-2 rounded-lg mt-2 bg-[#F5F5F5]"
           rules={createRequiredValidation("Purchase Note")}
           formConfig={formConfig}
           type="textarea"
@@ -22,7 +22,7 @@ const AdvancedTab = ({ formConfig }) => {
           label="Minimum Order Quantity"
           fieldName="minimum_order_quantity"
           placeholder="Enter Order Quantity"
-          className="w-full p-2 border rounded-md"
+          className="w-full p-2 rounded-lg mt-2 bg-[#F5F5F5]"
           rules={createRequiredValidation("Minimum Order Quantity")}
           formConfig={formConfig}
         />

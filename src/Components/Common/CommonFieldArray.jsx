@@ -91,7 +91,7 @@ const CommonFieldArray = ({
         icon={plusIcon}
         onClick={() => append(itemToAppend)}
         type="button"
-        className="add-row-button"
+        className="add-row-button px-6"
       />
     </div>
   );

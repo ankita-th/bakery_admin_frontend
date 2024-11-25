@@ -60,10 +60,10 @@ const VariantsTab = ({ formConfig }) => {
   console.log(watch("variants"), "these are variants");
   console.log(errors, "errors");
   return (
-    <div className="font-[sans-serif] border divide-y rounded-lg">
+    <div className="font-[sans-serif] rounded-lg w-full">
       {fields.map((field, index) => (
         <Fragment key={field.id}>
-          <div className="p-6 bg-white shadow rounded-lg w-full max-w-3xl mx-auto">
+          <div className="p-2 w-full border-b my-2">
             <VariantAccordion
               index={index}
               remove={remove}
@@ -96,7 +96,8 @@ const VariantsTab = ({ formConfig }) => {
               // }
             >
               {/* accordion data will be passed as children */}
-              <div className="flex gap-4 items-center mb-6">
+              <div className="flex">
+              <div className="flex gap-4 mb-6 flex-col w-1/5">
                 <Checkbox
                   fieldName={`variants.${index}.enabled`}
                   label="Enabled"
@@ -115,8 +116,8 @@ const VariantsTab = ({ formConfig }) => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <div>
+              <div className="mb-6 flex-1 w-4/5 space-y-4">
+                <div className="w-full">
                   <CommonTextField
                     label="SKU"
                     fieldName={`variants.${index}.sku`}
@@ -126,7 +127,7 @@ const VariantsTab = ({ formConfig }) => {
                     customError={
                       errors?.["variants"]?.[index]?.["sku"]?.message
                     }
-                    className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-blue-500 focus:border-blue-500 mt-2"
                   />
                 </div>
                 <div className="flex gap-4">
@@ -142,6 +143,7 @@ const VariantsTab = ({ formConfig }) => {
                         errors?.["variants"]?.[index]?.["regular_price"]
                           ?.message
                       }
+                      className="px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all mt-2"
                     />
                   </div>
                   <div className="w-1/2">
@@ -155,20 +157,22 @@ const VariantsTab = ({ formConfig }) => {
                       customError={
                         errors?.["variants"]?.[index]?.["sale_price"]?.message
                       }
+                      className="px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all mt-2"
                     />
                   </div>
                 </div>
-                <div>
+                <div className="flex gap-4">
+                <div className="flex-1">
                   <CommonDateField
                     formConfig={formConfig}
                     label="Sale Price Dates From"
                     fieldName={`variants.${index}.sale_price_dates_from`}
                     rules={createRequiredValidation()}
                     minDate={today}
-                    className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full bg-gray-100 rounded-lg p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
-                <div>
+                <div className="flex-1">
                   <CommonDateField
                     formConfig={formConfig}
                     label="Sale Price Dates To"
@@ -181,13 +185,16 @@ const VariantsTab = ({ formConfig }) => {
                           watch(`variants.${index}.sale_price_dates_from`) ||
                         "End date must be greater than or equal to the start date",
                     }}
-                    className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full bg-gray-100 rounded-lg p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                </div>
+              </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4 mb-6">
-                <div>
+              <div className="mb-6">
+                <div className="flex gap-4 mb-2">
+                <div className="flex-1">
                   <CommonTextField
                     label="Stock Quantity"
                     fieldName={`variants.${index}.quantity`}
@@ -198,10 +205,10 @@ const VariantsTab = ({ formConfig }) => {
                     customError={
                       errors?.["variants"]?.[index]?.["quantity"]?.message
                     }
-                    className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-blue-500 focus:border-blue-500 mt-2"
                   />
                 </div>
-                <div>
+                <div className="flex-1">
                   <CommonSelect
                     label="Allow Backorders?"
                     fieldName={`variants.${index}.allow_backorders`}
@@ -217,7 +224,9 @@ const VariantsTab = ({ formConfig }) => {
                     }
                   />
                 </div>
-                <div>
+                </div>
+                <div className="flex gap-4">
+                <div className="flex-1">
                   <CommonTextField
                     label="Weight"
                     formConfig={formConfig}
@@ -228,10 +237,10 @@ const VariantsTab = ({ formConfig }) => {
                     customError={
                       errors?.["variants"]?.[index]?.["weight"]?.message
                     }
-                    className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-blue-500 focus:border-blue-500 mt-2"
                   />
                 </div>
-                <div>
+                <div className="flex-1">
                   <CommonSelect
                     label="Unit"
                     fieldName={`variants.${index}.unit`}
@@ -246,6 +255,7 @@ const VariantsTab = ({ formConfig }) => {
                     }
                   />
                 </div>
+                </div>
               </div>
 
               <div>
@@ -255,6 +265,7 @@ const VariantsTab = ({ formConfig }) => {
                   type="textarea"
                   rows={4}
                   formConfig={formConfig}
+                  className="rounded-lg mt-2 w-full bg-[#F5F5F5]"
                 />
               </div>
               {/* accordion data will be passed as children */}
