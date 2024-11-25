@@ -37,14 +37,16 @@ const ActiveDates = ({ formConfig }) => {
           formConfig={formConfig}
         />
       </div>
-      <div
+      {/* commented for future use */}
+
+      {/* <div
         className="text-[#FF6D2F] underline cursor-pointer"
         onClick={toggleEndDate}
       >
         {showEndDate ? "Remove End Date" : "Set End Date"}
-      </div>
+      </div> */}
 
-      {showEndDate && (
+      {/* {showEndDate && (
         <CommonDateField
           label="End Date *"
           formConfig={formConfig}
@@ -57,7 +59,27 @@ const ActiveDates = ({ formConfig }) => {
               "End date must be greater than or equal to the start date",
           }}
         />
-      )}
+      )} */}
+      <CommonDateField
+        label="End Date *"
+        formConfig={formConfig}
+        fieldName="end_date"
+        minDate={watch("start_date")}
+        rules={{
+          ...createRequiredValidation("End date"),
+          validate: (value) =>
+            value >= watch("start_date") ||
+            "End date must be greater than or equal to the start date",
+        }}
+      />
+      <CommonDateField
+        label="End Time *"
+        formConfig={formConfig}
+        type="time"
+        fieldName="end_time"
+        minDate={watch("end_time")}
+        rules={createRequiredValidation("end_time")}
+      />
     </div>
   );
 };

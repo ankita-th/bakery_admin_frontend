@@ -57,7 +57,7 @@ const ImageUploadSection = ({
         type="file"
         id={inputId}
         className="hidden"
-        accept={accept}
+        accept={accept} //"image/*"
       />
 
       {file?.preview && (

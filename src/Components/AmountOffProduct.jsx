@@ -8,7 +8,7 @@ import FormWrapper from "../Wrappers/FormWrapper";
 import CommonButton from "./Common/CommonButton";
 import { draftIcon, publishIcon } from "../assets/Icons/Svg";
 import CommonSelect from "../Form Fields/CommonSelect";
-import { APPLIES_TO_OPTIONS, DISCOUNT_TYPE_OPTIONS } from "../constant";
+import { DISCOUNT_TYPE_OPTIONS } from "../constant";
 import GenrateRandomCode from "./Common/GenrateRandomCode";
 import CustomerEligibility from "./Common/CustomerEligibility";
 import Combinations from "./Common/Combinations";
@@ -18,9 +18,12 @@ import { useForm } from "react-hook-form";
 import SummarySection from "./Common/SummarySection";
 import AppliesTo from "./Common/AppliesTo";
 import { makeApiRequest, METHODS } from "../api/apiFunctions";
-import { DISCOUNT_ENDPOINT } from "../api/endpoints";
+import { DISCOUNT_ENDPOINT, PRODUCT_ENDPOINT } from "../api/endpoints";
 import { successType, toastMessage } from "../utils/toastMessage";
 import { useNavigate } from "react-router-dom";
+import DiscountSideSection from "./DiscountSideSection";
+import DiscountCodeSection from "./Common/DiscountCodeSection";
+import DiscountTypeAndValue from "./Common/DiscountTypeAndValue";
 
 const AmountOffProduct = () => {
   const navigate = useNavigate();
@@ -52,28 +55,41 @@ const AmountOffProduct = () => {
       "start_time",
       "minimum_purchase_value",
       "minimum_quantity_value",
+      "end_time",
     ];
     const coupon_type = "amount_off_product";
-    const payload = {
+    let payload = {
       coupon_type: coupon_type,
       applies_to: convertSelectOptionToValue(values?.applies_to), //for onverting {label:"vssd",value:"sdf"} into sdf
       discount_types: convertSelectOptionToValue(values?.discount_types),
     };
     fields.forEach((key) => {
       if (values?.[key]) {
-        payload[key] = values[key];
+        if (key === "combination") {
+          payload[key] = values[key][0];
+        } else {
+          payload[key] = values[key];
+        }
       }
     });
+    payload = {
+      ...payload,
+      product: "Crosionr",
+    };
+
     makeApiRequest({
-      endpoint: DISCOUNT_ENDPOINT,
+      endPoint: DISCOUNT_ENDPOINT,
       method: METHODS.post,
       payload: payload,
-    }).then((res) => {
-      toastMessage("Discount created successfully", successType);
-      navigate("/discounts");
-      console.log(res, "this is response");
-    });
-    console.log(payload, "this is payload");
+    })
+      .then((res) => {
+        toastMessage("Discount created successfully", successType);
+        navigate("/discounts");
+        console.log(res, "this is response");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <FormWrapper
@@ -84,40 +100,12 @@ const AmountOffProduct = () => {
       <div className="flex gap-6">
         <div className="flex flex-col gap-8 w-3/4">
           {/* first */}
-          <GenrateRandomCode fieldName="code" setValue={setValue} />
-
-          <CommonTextField
-            label="Discount Code *"
-            fieldName="code"
-            rules={createRequiredValidation("Discount code")}
-            formConfig={formConfig}
-            className="px-4 py-2 w-full rounded-lg"
-            placeholder="Enter Code"
-          />
-          <div className="div">Customers must enter this code at checkout.</div>
+          <DiscountCodeSection formConfig={formConfig} />
 
           {/* second */}
 
           <div className="bg-white p-6 rounded-lg">
-            <CommonSelect
-              label="Discount Type *"
-              formConfig={formConfig}
-              options={DISCOUNT_TYPE_OPTIONS}
-              rules={createRequiredValidation("Discount type")}
-              fieldName="discount_types"
-              selectType="react-select"
-              placeholder="Select type"
-            />
-
-            <CommonTextField
-              label="Discount Value *"
-              fieldName="discount_value"
-              rules={createRequiredValidation("Discount value")}
-              formConfig={formConfig}
-              className="px-4 py-2 w-full rounded-lg bg-[#F5F5F5]"
-              icon={watch("discount_types")?.value === "percentage" && "%"}
-              isNumberOnly={true} // update required: may be need to update into isDecimal
-            />
+            <DiscountTypeAndValue formConfig={formConfig} />
             <AppliesTo formConfig={formConfig} />
           </div>
 
@@ -127,25 +115,9 @@ const AmountOffProduct = () => {
           <ActiveDates formConfig={formConfig} />
         </div>
         {/* sidebar */}
-        <div className="flex flex-col gap-4">
-          <div className="flex gap-4">
-            <CommonButton
-              text="Draft"
-              name="draft"
-              className="px-4 py-2 bg-[#E4E4E4] rounded-lg orange_btn"
-              type="submit"
-              icon={draftIcon}
-            />
-            <CommonButton
-              text="Save Discount"
-              name="save"
-              className="px-4 py-2 bg-[#E4E4E4] rounded-lg orange_btn"
-              type="submit"
-              icon={publishIcon}
-            />
-          </div>
+        <DiscountSideSection>
           <SummarySection formConfig={formConfig} />
-        </div>
+        </DiscountSideSection>
       </div>
     </FormWrapper>
   );

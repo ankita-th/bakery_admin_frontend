@@ -41,18 +41,15 @@ const DiscountTypeSection = ({ onClose }) => {
     navigate("/add-edit-discount", { state: { type: addType(title) } });
   };
   const addType = (title) => {
-    // update required need to confirm for two amount off products titles
     switch (title) {
       case "Amount Off Products":
-        return "amount_off_order";
-      case "Amount Off Products":
-        return "amount_off_order";
+        return "amount_off_product";
       case "Free Shipping":
         return "free_shipping";
       case "Buy X Get Y":
         return "buy_x_get_y";
       case "Order Discount":
-        return "order_discount";
+        return "amount_off_order";
     }
   };
 

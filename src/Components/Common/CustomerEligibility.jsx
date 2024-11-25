@@ -26,18 +26,19 @@ const CustomerEligibility = ({ formConfig }) => {
         rules={createRequiredValidation("Customer eligibility")}
       />
       {watch("customer_eligibility") === "specific_customer" && (
-        <CommonSelect
-          formConfig={formConfig}
-          label="Customer Specification"
-          fieldName="customer_specification"
-          options={CUSTOMER_SPECIFIC_OPTIONS}
-          rules={createRequiredValidation("Customer specification")}
-          placeholder="Select Customer Specification"
-          className="px-4 py-2 w-full rounded-lg bg-[#F5F5F5]"
-        />
+        <>
+          <CommonSelect
+            formConfig={formConfig}
+            label="Customer Specification"
+            fieldName="customer_specification"
+            options={CUSTOMER_SPECIFIC_OPTIONS}
+            rules={createRequiredValidation("Customer specification")}
+            placeholder="Select Customer Specification"
+            className="px-4 py-2 w-full rounded-lg bg-[#F5F5F5]"
+          />
+          <div>Applies only to selected collections.</div>
+        </>
       )}
-
-      <div>Applies only to selected collections.</div>
     </div>
   );
 };

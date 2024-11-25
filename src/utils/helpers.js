@@ -19,7 +19,7 @@ const routeTitles = {
   "/support": "Customers Support Management",
   "/notifications": "Notifications and Alerts",
   "/settings": "Notifications and Alerts",
-  "/add-edit-discount": "Amount Off products",
+  "/add-edit-discount": "Buy X Get Y",
 };
 
 export const getHeadingTitleFromRoute = (pathName) => {

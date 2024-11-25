@@ -1,8 +1,8 @@
 import React from "react";
 import TabListing from "./TabListing";
 import InventoryTab from "./InventoryTab";
-import VariationTab from "./VariationTab";
 import AdvancedTab from "./AdvancedTab";
+import VariantsTab from "./VariantsTab";
 
 const TABS = [
   { label: "Inventory", value: "inventory" },
@@ -16,7 +16,7 @@ const ProductDataSection = ({ formConfig, activeTab, handleActiveTab }) => {
       case "inventory":
         return <InventoryTab formConfig={formConfig} />;
       case "variations":
-        return <VariationTab formConfig={formConfig} />;
+        return <VariantsTab formConfig={formConfig} />;
       case "advanced":
         return <AdvancedTab formConfig={formConfig} />;
     }
@@ -28,7 +28,7 @@ const ProductDataSection = ({ formConfig, activeTab, handleActiveTab }) => {
         <h2 className="text-lg font-semibold text-gray-700 mb-4">
           Product Data
         </h2>
-    
+
         <div className="flex space-x-6">
           <TabListing
             tabs={TABS}

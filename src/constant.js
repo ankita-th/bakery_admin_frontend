@@ -457,7 +457,7 @@ export const DUMMY_INVENTORY_DATA = [
     sku: "SOU1234",
     status: "in_stock",
     barcode_no: "78901",
-    barcode_to: "78653"
+    barcode_to: "78653",
   },
   {
     id: 2,
@@ -467,7 +467,7 @@ export const DUMMY_INVENTORY_DATA = [
     sku: "SOU1234",
     status: "in_stock",
     barcode_no: "78901",
-    barcode_to: "78653"
+    barcode_to: "78653",
   },
 
   {
@@ -478,7 +478,7 @@ export const DUMMY_INVENTORY_DATA = [
     sku: "SOU1234",
     status: "in_stock",
     barcode_no: "78901",
-    barcode_to: "78653"
+    barcode_to: "78653",
   },
 ];
 export const DUMMY_SUPPORT_DATA = [
@@ -547,7 +547,7 @@ export const PURCHASE_REQUIREMENT_OPTIONS = [
   // update these things according
   {
     label: "No minimum requirements",
-    value: "no_requirements",
+    value: "no_requirement",
   },
   {
     label: "Minimum purchase amount ($)",
@@ -612,3 +612,42 @@ export const APPLIES_TO_OPTIONS = [
   { label: "All Collections", value: "all_products" },
   { label: "Specific Collections", value: "specific_products" },
 ];
+
+export const DISCOUNTED_VALUE_OPTIONS = [
+  { label: "Percentage", value: "percentage" },
+  { label: "Amount off each", value: "amount_off_each" },
+  { label: "Free", value: "free" },
+];
+
+export const DISCOUNTED_USAGE_OPTIONS = [
+  {
+    label: "Limit to one use per customer",
+    value: "per_customer",
+  },
+  {
+    label: "Limit number of times this discount can be used in total",
+    value: "limit_number_of_times",
+  },
+];
+export const COMBINATION_OPTIONS_SHIPPING = [
+  {
+    label: "Product discounts",
+    value: "product_discounts",
+  },
+  {
+    label: "Other discounts",
+    value: "other_discounts",
+  },
+];
+export const BACKDOOR_OPTIONS = [
+  {
+    label: "Allow ",
+    value: "allow",
+  },
+  {
+    label: "Do Not Allow",
+    value: "Do Not Allow",
+  },
+];
+
+export const PNG_AND_JPG = "image/png, image/jpeg"

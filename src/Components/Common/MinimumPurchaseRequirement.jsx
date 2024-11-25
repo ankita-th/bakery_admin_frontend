@@ -51,8 +51,9 @@ const MinimumPurchaseRequirement = ({ formConfig }) => {
           "Minimum Quantity Of Items *",
           "minimum_quantity_value"
         )}
-
-      <div>Applies only to selected collections.</div>
+      {watch("minimum_purchase_requirement") === "no_requirement" && (
+        <div>Applies only to selected collections.</div>
+      )}
     </div>
   );
 };

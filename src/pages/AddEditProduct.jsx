@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import FormWrapper from "../Wrappers/FormWrapper";
 import CommonTextEditor from "../Form Fields/CommonTextEditor";
@@ -15,6 +15,9 @@ import {
 import CommonButton from "../Components/Common/CommonButton";
 import { draftIcon, pencilIcon, publishIcon } from "../assets/Icons/Svg";
 import ProductDataSection from "../Components/ProductDataSection";
+import CategorySection from "../Components/CategorySection";
+import ImageUploadSection from "../Form Fields/ImageUploadSection";
+import { PNG_AND_JPG } from "../constant";
 const options = [
   { label: "option1", value: "options1" },
   { label: "option2", value: "options2" },
@@ -22,6 +25,30 @@ const options = [
   { label: "option4", value: "options4" },
 ];
 const PRODUCT_TAG_OPTIONS = [{ label: "Hot Deals", value: "hot-deals" }];
+const DEFAULT_BULKING_PRICE = [
+  {
+    quantity_from: null,
+    quantity_to: null,
+    price: "",
+  },
+];
+
+const DEFAULT_VARIANTS_DATA = [
+  {
+    sku: "",
+    regular_price: "",
+    sale_price: "",
+    sale_price_dates_from: "",
+    sale_price_dates_to: "",
+    quantity: null,
+    weight: "",
+    unit: "",
+    enabled: false,
+    managed_stock: false,
+    allow_backorders: "",
+    description: "",
+  },
+];
 
 const PREVIEW_AS_OPTIONS = [
   { value: "desktop", label: "Desktop Result" },
@@ -30,21 +57,22 @@ const PREVIEW_AS_OPTIONS = [
 const AddEditProduct = () => {
   const formConfig = useForm({
     defaultValues: {
-      bulking_price_rules: [
-        {
-          quantity_from: null,
-          quantity_to: null,
-          price: "",
-        },
-      ],
+      bulking_price_rules: DEFAULT_BULKING_PRICE,
+      variants: DEFAULT_VARIANTS_DATA,
     },
+
+    reValidateMode: "onChange",
   });
   const { watch, register, setValue } = formConfig;
   const [activeTab, setActiveTab] = useState("inventory");
+  const [featuredImage, setFeaturedImage] = useState(null);
+  const [productImage, setProductImage] = useState(null);
+
+  console.log(featuredImage, "featured image");
+  useEffect(() => {}, []);
   const onSubmit = (values, event) => {
     console.log(values, "these are values");
     const buttonType = event.nativeEvent.submitter.name;
-
     const payload = {
       name: values?.name,
       description: values?.description,
@@ -101,7 +129,6 @@ const AddEditProduct = () => {
     setValue("minimum_order_quantity", "12");
     setValue("meta_description", "Dummy meta description text");
   };
-  console.log(watch("product_tag"), "product_tag");
 
   return (
     <>
@@ -225,6 +252,30 @@ const AddEditProduct = () => {
             />
           </div>
         </FormWrapper>
+        {/* side section */}
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-4">
+            <CategorySection
+              formConfig={formConfig}
+              fieldName="categories"
+              rules={createRequiredValidation("Category is required")}
+            />
+            <ImageUploadSection
+              file={featuredImage}
+              setFile={setFeaturedImage}
+              label="Featured Image"
+              uniqueId={`featured-image`}
+              accept={PNG_AND_JPG}
+            />{" "}
+            <ImageUploadSection
+              file={productImage}
+              setFile={setProductImage}
+              label="Product Image"
+              uniqueId={`product-image`}
+              accept={PNG_AND_JPG}
+            />
+          </div>
+        </div>
       </div>
     </>
   );

@@ -1,0 +1,22 @@
+import React from "react";
+import ErrorMessage from "../Components/Common/ErrorMessage";
+
+const Checkbox = ({ formConfig, fieldName, label }) => {
+  const {
+    register,
+    formState: { errors },
+  } = formConfig;
+  return (
+    <label className="flex items-center text-gray-700 text-sm">
+      <input
+        type="checkbox"
+        {...register(fieldName)}
+        className="w-4 h-4 text-blue-600 focus:ring-blue-500 rounded border-gray-300 mr-2"
+      />
+      {label}
+      <ErrorMessage fieldName={fieldName} errors={errors} />
+    </label>
+  );
+};
+
+export default Checkbox;

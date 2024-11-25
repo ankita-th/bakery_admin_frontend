@@ -19,7 +19,7 @@ const CommonTextField = ({
   disabled = false,
   isNumberOnly = false,
   isDecimal = false,
-  //Number only will used for phone number inputs only and will not include any decimal , 
+  //Number only will used for phone number inputs only and will not include any decimal ,
   // for decimal values like currency etc. will use isDecimal
 }) => {
   const {
@@ -31,7 +31,7 @@ const CommonTextField = ({
     <div>
       <label className={labelClassName}>{label}</label>
       <div className="common-field relative">
-        {isNumberOnly ? (
+        {isNumberOnly || isDecimal ? (
           <input
             {...register(fieldName, {
               ...rules,
