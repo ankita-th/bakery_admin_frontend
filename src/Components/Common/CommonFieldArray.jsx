@@ -23,7 +23,7 @@ const CommonFieldArray = ({
   });
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <h4 className="font-bold">{heading}</h4>
       {fields?.map((field, index) => (
         <div key={field.id} className="flex space-x-4 items-center">

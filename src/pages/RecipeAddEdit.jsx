@@ -272,6 +272,8 @@ const RecipeAddEdit = () => {
       ) : (
         <div className="">
           <div className="grid grid-cols-1 gap-4">
+            <div className="flex gap-4">
+              <div>
             <div>
               {/* <CommonButton
                 text="Fill form with dummy values"
@@ -292,9 +294,9 @@ const RecipeAddEdit = () => {
                   labelClassName=""
                   rules={createRequiredValidation("Recipe title")}
                 />
-                <div className="description mt-2">
+                <div className="description mt-4 p-4 rounded-lg bg-white mt-4">
                   <CommonTextEditor
-                    label="Description *"
+                    // label="Description *"
                     fieldName="description"
                     formConfig={formConfig}
                     placeholder="Type..."
@@ -302,6 +304,7 @@ const RecipeAddEdit = () => {
                   />
                 </div>
 
+                <div className="px-4 py-2 rounded-lg bg-white mt-4">
                 <div className="recipe-section-two">
                   <div className="sec-1 flex gap-4 mt-2">
                     <div className="flex-1">
@@ -354,7 +357,8 @@ const RecipeAddEdit = () => {
                       label="Difficulty Level *"
                       fieldName="difficulty_level"
                       placeholder="Select difficulty level"
-                      className="recipe-input"
+                      className="bg-[#F5F5F5] w-full border border-gray-300 rounded-md focus:outline-none"
+
                       selectType="react-select"
                       options={DIFFICULTY_OPTIONS}
                       rules={createRequiredValidation("Difficulty level")}
@@ -362,7 +366,7 @@ const RecipeAddEdit = () => {
                     </div>
                   </div>
 
-                  <div className="ingredients-section">
+                  <div className="ingredients-section mt-4">
                     <CommonFieldArray
                       heading="Ingredients"
                       fieldArrayName="ingredients"
@@ -371,7 +375,7 @@ const RecipeAddEdit = () => {
                       items={INGREDIENTS_ITEMS}
                     />
                   </div>
-                  <div className="instructions-section">
+                  <div className="instructions-section mt-4">
                     <CommonFieldArray
                       heading="Instructions/Steps"
                       fieldArrayName="instructions"
@@ -381,8 +385,9 @@ const RecipeAddEdit = () => {
                     />
                   </div>
 
-                  <div className="dietry-section flex items-center space-x-4">
+                  <div className="dietry-section flex items-center space-x-4 mt-4 flex">
                     {/* may be need to update this field into text field further */}
+                    <div className="flex-1">
                     <CommonSelect
                       label="Dietary Information *"
                       selectType="react-select"
@@ -392,7 +397,8 @@ const RecipeAddEdit = () => {
                       placeholder="Select"
                       rules={RecipeValidations["dietary_plan"]}
                     />
-
+                    </div>
+                    <div className="flex-1">
                     <CommonSelect
                       label="Allergen Informations *"
                       selectType="react-select"
@@ -402,8 +408,9 @@ const RecipeAddEdit = () => {
                       placeholder="Select"
                       rules={RecipeValidations["allergen_informations"]}
                     />
+                    </div>
                   </div>
-                  <div className="notes">
+                  <div className="notes mt-4">
                     <CommonTextField
                       formConfig={formConfig}
                       label="Notes/Additional Information"
@@ -416,28 +423,15 @@ const RecipeAddEdit = () => {
                     />
                   </div>
 
-                  <div className="recipe-image-upload">
-                    <ImageUploadSection
-                      file={file}
-                      setFile={setFile}
-                      label="Recipe Image"
-                    />
-                    {/* <MultipleImageUploadField
-                      fieldName="category-image"
-                      files={files}
-                      setFiles={setFiles}
-                      allowedTypes={allowedImageTypes}
-                      imageError={imageError}
-                      label="Recipe Image"
-                      setImageError={setImageError}
-                      uploadButton={{
-                        text: "Upload Recipe images",
-                        class: "cursor-pointer",
-                      }}
-                    /> */}
-                  </div>
                 </div>
-                <div className="button-section">
+                </div>
+              </FormWrapper>
+              </div>
+
+              
+                </div>
+                <div className="button-section flex flex-col">
+                  <div className="flex justify-center gap-4 mb-4">
                   <CommonButton
                     type="submit"
                     text="Publish"
@@ -456,13 +450,20 @@ const RecipeAddEdit = () => {
                     loader={btnLoaders?.draft}
                     disabled={btnLoaders?.publish || btnLoaders?.draft}
                   />
-                </div>
-              </FormWrapper>
+                  </div>
               <CategorySection
                 formConfig={formConfig}
                 fieldName="category"
                 rules={createRequiredValidation("Category")}
               />
+              <div className="recipe-image-upload">
+                    <ImageUploadSection
+                      file={file}
+                      setFile={setFile}
+                      label="Recipe Image"
+                    />
+                  </div>
+              </div>
               {/* </form> */}
             </div>
           </div>

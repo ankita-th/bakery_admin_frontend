@@ -96,7 +96,7 @@ const CommonSelect = ({
   };
   return (
     <div>
-      <div className="label">{label}</div>
+      <div className="label mb-2">{label}</div>
       {renderFieldAccordingToType()}
       <ErrorMessage errors={errors} fieldName={fieldName} />
     </div>
