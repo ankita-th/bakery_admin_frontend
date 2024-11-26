@@ -152,9 +152,6 @@ export const RecipeValidations = {
   difficulty_level: {
     required: "Difficulty level is required",
   },
-  difficulty_level: {
-    required: "Difficulty level is required",
-  },
   serving_size: {
     required: "Serving size is required",
     max: {
@@ -174,16 +171,43 @@ export const RecipeValidations = {
 };
 
 export const EmployeeValidations = {
-  name: {
-    required: "Employee name is required",
+  employee_id: {
+    required: "Employee ID is required",
+  },
+  first_name: {
+    required: "First name is required",
+  },
+  last_name: {
+    required: "Last name is required",
+  },
+  role: {
+    required: "Please select a valid role",
   },
   email: {
     pattern: {
       value: EMAIL_REGEX,
       message: "Please enter a valid email",
     },
+    required: "Email is required",
   },
-
+  contact_no: {
+    required: "Phone number is required",
+  },
+  shift: {
+    required: "Please select a valid shift.",
+  },
+  hiring_date: {
+    required: "Hiring Date is required",
+  },
+  address: {
+    required: "Address is required",
+  },
+  city: {
+    required: "City is required",
+  },
+  state: {
+    required: "State is required",
+  },
   zip_code: {
     required: "ZIP code  is required",
   },

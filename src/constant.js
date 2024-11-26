@@ -680,3 +680,13 @@ export const AVAILABILITY_OPTIONS = [
   { label: "Available", value: "available" },
   { label: "Not Available", value: "unavailable" },
 ];
+
+export const SHIFT = [
+  { value: "morning", label: "Morning" },
+  { value: "night", label: "Night" },
+]
+
+export const ROLE = [
+  { value: "admin", label: "Admin" },
+  { value: "employee", label: "Employee" },
+]
