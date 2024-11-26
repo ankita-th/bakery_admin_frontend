@@ -65,7 +65,7 @@ export const prefillFormValues = (data, prefillkeys, setValue) => {
 export const employeeListIntoOptions = (employeeList) => {
   let result = [];
   employeeList.forEach(({ first_name, last_name, id }) => {
-    const option = { label: `${first_name} ${last_name}`, value: id };
+    const option = { label: `${first_name} ${last_name} (${id})`, value: id };
     result.push(option);
   });
   return result;
@@ -161,8 +161,16 @@ export const createProductSeo = (values) => {
 };
 
 export const createInventoryPayload = (values) => {
-  const { sku, regular_price, sale_price, weight, unit, bulking_price_rules, sale_price_dates_from, sale_price_dates_to } =
-    values;
+  const {
+    sku,
+    regular_price,
+    sale_price,
+    weight,
+    unit,
+    bulking_price_rules,
+    sale_price_dates_from,
+    sale_price_dates_to,
+  } = values;
   const result = {
     sku: sku,
     regular_price: regular_price,
@@ -170,8 +178,8 @@ export const createInventoryPayload = (values) => {
     weight: weight,
     unit: unit?.value,
     bulking_price_rules: bulking_price_rules,
-    sale_price_dates_from:sale_price_dates_from,
-    sale_price_dates_to:sale_price_dates_to
+    sale_price_dates_from: sale_price_dates_from,
+    sale_price_dates_to: sale_price_dates_to,
   };
   return result;
 };

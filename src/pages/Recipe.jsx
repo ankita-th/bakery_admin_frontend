@@ -36,7 +36,7 @@ const filterFields = [
   },
 ];
 const RECIPE_COLUMNS = [
-  "",
+  "checkbox",
   "Recipe Name",
   "Categories",
   "Prep Time",
@@ -107,11 +107,12 @@ const Recipe = () => {
       delete_id: itemToDelete,
     })
       .then((res) => {
-        console.log(itemToDelete);
+        console.log(res, "delete response");
         toastMessage("Recipe deleted successfully", successType);
-        setTodos(deleteItemBasedOnId(recipes, itemToDelete)); //itemTo delete contains the id
+        setRecipes(deleteItemBasedOnId(recipes, itemToDelete)); //itemTo delete contains the id
       })
       .catch((err) => {
+        console.log(err, "tthis is err for recipe");
         toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
       })
       .finally((res) => {

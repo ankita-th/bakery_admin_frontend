@@ -1,27 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import FormWrapper from "../Wrappers/FormWrapper";
 import AddEditSectionHeading from "./AddEditSectionHeading";
 import CommonTextField from "../Form Fields/CommonTextField";
-import {
-  ConfigurationValidations,
-  TodoValidations,
-} from "../Validations/validations";
+import { ConfigurationValidations } from "../Validations/validations";
 import CommonSelect from "../Form Fields/CommonSelect";
 import CommonButton from "./Common/CommonButton";
-import CommonDateField from "../Form Fields/CommonDateField";
-import { PRIORITY_OPTIONS, STATE_OPTIONS, today } from "../constant";
-import {
-  employeeListIntoOptions,
-  extractOption,
-  prefillFormValues,
-} from "../utils/helpers";
-import { makeApiRequest, METHODS } from "../api/apiFunctions";
-import { EMPLOYEE_ENDPOINT, TODO_ENDPOINT } from "../api/endpoints";
+import { AVAILABILITY_OPTIONS, SWEDEN_COUNTY_OPTIONS } from "../constant";
+import { extractOption, prefillFormValues } from "../utils/helpers";
 import LocationField from "../Form Fields/LocationField";
-const AVAILABILITY_OPTIONS = [
-  { label: "Available", value: "available" },
-  { label: "Not Available", value: "unavailable" },
-];
+
 const AddEditConfiguration = ({
   onClose,
   onSubmit,
@@ -35,7 +22,7 @@ const AddEditConfiguration = ({
     const prefillKeys = [
       "zip_code",
       "min_order_quantity",
-      "delivery_threshold",
+      // "delivery_threshold",
       "notes",
       "address",
       "city",
@@ -51,13 +38,16 @@ const AddEditConfiguration = ({
         "value"
       )
     );
-    setValue("state", extractOption(STATE_OPTIONS, editItem?.state, "value"));
+    setValue(
+      "state",
+      extractOption(SWEDEN_COUNTY_OPTIONS, editItem?.state, "value")
+    );
     setValue("address", editItem?.address);
   }, []);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="category-section">
+      <div className="category-section overflow-auto">
         <AddEditSectionHeading
           onClose={onClose}
           text={isEdit ? "Edit Configuration" : "Add Configuration"}
@@ -77,44 +67,6 @@ const AddEditConfiguration = ({
             placeholder="Enter ZIP code e.g (12345)"
             maxlength={5}
           />
-
-          <CommonTextField
-            label="Min. Order Quantity *"
-            fieldName="min_order_quantity"
-            rules={ConfigurationValidations["min_order_quantity"]}
-            formConfig={formConfig}
-            placeholder="Enter Minimum Purchase Order"
-            isNumberOnly={true}
-          />
-
-          <CommonTextField
-            label="Delivery Threshold ($) *"
-            fieldName="delivery_threshold"
-            rules={ConfigurationValidations["delivery_threshold"]}
-            formConfig={formConfig}
-            placeholder="Enter Amount For Free Delivery"
-            isNumberOnly={true}
-          />
-          <CommonSelect
-            formConfig={formConfig}
-            label="State *"
-            selectType="react-select"
-            placeholder="Select State"
-            options={STATE_OPTIONS}
-            fieldName="state"
-            rules={ConfigurationValidations["state"]}
-            className="add-edit-input"
-          />
-          <CommonSelect
-            formConfig={formConfig}
-            label="Delivery Available *"
-            selectType="react-select"
-            placeholder="Select Availability"
-            options={AVAILABILITY_OPTIONS}
-            fieldName="delivery_availability"
-            rules={ConfigurationValidations["delivery_availability"]}
-            className="add-edit-input"
-          />
           <LocationField
             fieldName="address"
             formConfig={formConfig}
@@ -123,8 +75,18 @@ const AddEditConfiguration = ({
             rules={ConfigurationValidations["address"]}
             options={{
               types: ["address"],
-              componentRestrictions: { country: ["us"] },
+              componentRestrictions: { country: ["se"] },
             }}
+          />
+          <CommonSelect
+            formConfig={formConfig}
+            label="State *"
+            selectType="react-select"
+            placeholder="Select State"
+            options={SWEDEN_COUNTY_OPTIONS}
+            fieldName="state"
+            rules={ConfigurationValidations["state"]}
+            className="add-edit-input"
           />
           <LocationField
             fieldName="city"
@@ -134,8 +96,37 @@ const AddEditConfiguration = ({
             rules={ConfigurationValidations["city"]}
             options={{
               types: ["(cities)"],
-              componentRestrictions: { country: ["us"] },
+              componentRestrictions: { country: ["se"] },
             }}
+          />
+          <CommonTextField
+            label="Min. Order Quantity *"
+            fieldName="min_order_quantity"
+            rules={ConfigurationValidations["min_order_quantity"]}
+            formConfig={formConfig}
+            placeholder="Enter Minimum Purchase Order"
+            isNumberOnly={true}
+            maxlength={5}
+          />
+
+          {/* <CommonTextField
+            label="Delivery Threshold ($) *"
+            fieldName="delivery_threshold"
+            rules={ConfigurationValidations["delivery_threshold"]}
+            formConfig={formConfig}
+            placeholder="Enter Amount For Free Delivery"
+            isNumberOnly={true}
+          /> */}
+
+          <CommonSelect
+            formConfig={formConfig}
+            label="Delivery Available *"
+            selectType="react-select"
+            placeholder="Select Availability"
+            options={AVAILABILITY_OPTIONS}
+            fieldName="delivery_availability"
+            rules={ConfigurationValidations["delivery_availability"]}
+            // className="add-edit-input"
           />
 
           <CommonTextField

@@ -8,11 +8,12 @@ const FormWrapper = ({
   children,
   formConfig,
   className = "",
+  wrapperClass="",
   isCustomButtons = false, // for this case button will also be passed as children
 }) => {
   const { handleSubmit } = formConfig;
   return (
-    <div>
+    <div className={wrapperClass}>
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* form fields will come as children */}
         {children}

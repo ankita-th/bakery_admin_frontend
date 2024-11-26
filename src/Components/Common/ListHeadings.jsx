@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import Checkbox from "./Checkbox";
 
 const ListHeadings = ({
   columns,
@@ -12,11 +13,7 @@ const ListHeadings = ({
           <Fragment>
             {hd === "checkbox" ? (
               <th className={columnClassName}>
-                <input
-                  type="checkbox"
-                  id="checkbox"
-                  className="w-6 h-6 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                />
+                <Checkbox />
               </th>
             ) : (
               <th className={columnClassName}>{hd}</th>

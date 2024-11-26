@@ -6,7 +6,7 @@ import CommonTextField from "../Form Fields/CommonTextField";
 import { CategoryValidations } from "../Validations/validations";
 import CommonSelect from "../Form Fields/CommonSelect";
 import ImageUploadSection from "../Form Fields/ImageUploadSection";
-import { allowedImageTypes } from "../constant";
+import { allowedImageTypes, PNG_AND_JPG } from "../constant";
 import {
   convertIntoSelectOptions,
   createPreview,
@@ -77,7 +77,7 @@ const AddEditCategorySection = ({
   return (
     // update required: Update this from modal to section according to the figma
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="category-section">
+      <div className="category-section overflow-auto">
         <AddEditSectionHeading onClose={onClose} text={renderHeading()} />
         {/* here custom logic is required that's why not using form wrapper */}
 
@@ -85,6 +85,7 @@ const AddEditCategorySection = ({
           onSubmit={onSubmit}
           formConfig={formConfig}
           className="orange_btn"
+          // wrapperClass="scroll"
           isCustomButtons={true}
         >
           {/* <form onSubmit={handleSubmit(onSubmit)}> */}{" "}
@@ -113,7 +114,7 @@ const AddEditCategorySection = ({
               fieldName="parent"
               defaultOption="None"
               formConfig={formConfig}
-              className="add-edit-input"
+              // className="add-edit-input"
               label="Parent Category"
               placeholder="None"
             />
@@ -136,6 +137,7 @@ const AddEditCategorySection = ({
             setFile={setFile}
             allowedTypes={allowedImageTypes}
             uniqueId={"cat-img"}
+            accept={PNG_AND_JPG}
           />
           {!fromRecipe ? (
             <div className="button-section">

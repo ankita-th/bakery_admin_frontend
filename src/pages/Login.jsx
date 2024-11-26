@@ -26,17 +26,20 @@ const Login = () => {
       .then((res) => {
         // update the token logic with actual token
         localStorage.setItem("token", res?.data?.access);
-        toastMessage("Logged In Successfully", successType);
+        // toastMessage("Logged In Successfully", successType);
         localStorage.setItem("refreshToken", res?.data?.refresh);
         const userName = `${res?.data?.first_name} ${res?.data?.last_name}`;
-        localStorage.setItem("userName", userName);
+        // update required:update this later
+        localStorage.setItem("userName", "Admin");
         navigate("/dashboard");
       })
       .catch((err) => {
-        console.log(err?.response?.data?.non_field_errors[0], "error");
-        toastMessage(
-          err?.response?.data?.non_field_errors[0] || DEFAULT_ERROR_MESSAGE
-        );
+        const fieldError =
+          err?.response?.data?.non_field_errors?.[0] ||
+          err?.response?.data?.email?.[0];
+        if (fieldError) {
+          toastMessage(fieldError || DEFAULT_ERROR_MESSAGE);
+        }
       })
       .finally(() => setBtnLoader((prev) => false));
   };
@@ -58,9 +61,9 @@ const Login = () => {
           fieldName="email"
           formConfig={formConfig}
           type="text"
-          placeholder="Enter Username"
+          placeholder="Enter Email"
           rules={LoginValidations["email"]}
-          label="Username or email address"
+          label="Email address"
           className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:border-black"
           labelClassName="block text-sm font-medium mb-2"
         />

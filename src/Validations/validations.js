@@ -1,12 +1,14 @@
-// regex
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-// regex
-
 // validations for category section
+
+import { EMAIL_REGEX, SPECIAL_CHARACTERS_REGEX } from "../regex/regex";
 
 export const CategoryValidations = {
   name: {
     required: "Title is required",
+    pattern: {
+      value: SPECIAL_CHARACTERS_REGEX,
+      message: "Special characters are not allowed",
+    },
   },
   slug: {
     required: "Slug is required",
@@ -25,20 +27,32 @@ export const CategoryValidations = {
 export const RawMaterialValidations = {
   name: {
     required: "Material name is required",
+    pattern: {
+      value: SPECIAL_CHARACTERS_REGEX,
+      message: "Special characters are not allowed",
+    },
   },
   quantity: {
     required: "Quantity is required",
-    max:{
-      value:2147483647,
-      message:"Quantity value must be less than or equal to 2147483647"
-    }
+    // max: {
+    //   value: 100000,
+    //   message: "Quantity value must be less than or equal to 100,000",
+    // },
+    maxLength: {
+      value: 8,
+      message: "Quantity value must not be more than 8 digits in total",
+    },
+    min: {
+      value: 1,
+      message: "Quantity must be greater than zero",
+    },
   },
   cost: {
     required: "Cost per unit is required",
-    maxLength:{
-      value:10,
-      message:"Value must not be more than 10 digits in total"
-    }
+    maxLength: {
+      value: 8,
+      message: "Cost per unit not be more than 8 digits in total",
+    },
   },
   unit_of_measure: {
     required: "Unit of measure is required",
@@ -46,12 +60,12 @@ export const RawMaterialValidations = {
   expiry_date: {
     required: "Expiry date is required",
   },
-  reorder:{
-    max:{
-      value:2147483647,
-      message:"Reorder value must be less than or equal to 2147483647"
-    }
-  }
+  reorder: {
+    maxLength: {
+      value: 8,
+      message: "Reorder value not be more than 8 digits in total",
+    },
+  },
 };
 
 // validations for todo
@@ -122,17 +136,18 @@ export const RecipeValidations = {
   },
   preparation_time: {
     required: "Preparation time is required",
-    max:{
-      value:300,
-      message:"Preparation time value must be less than or equal to 300 minutes."
-    }
+    max: {
+      value: 300,
+      message:
+        "Preparation time value must be less than or equal to 300 minutes.",
+    },
   },
   cook_time: {
     required: "Cook time is required",
-    max:{
-      value:600,
-      message:"Cook time value must be less than or equal to 600 minutes."
-    }
+    max: {
+      value: 600,
+      message: "Cook time value must be less than or equal to 600 minutes.",
+    },
   },
   difficulty_level: {
     required: "Difficulty level is required",
@@ -142,10 +157,10 @@ export const RecipeValidations = {
   },
   serving_size: {
     required: "Serving size is required",
-    max:{
-      value:99999,
-      message:"Cook time value must be less than or equal to 99999"
-    }
+    max: {
+      value: 100,
+      message: "Cook time value must be less than or equal to 100",
+    },
   },
   description: {
     required: "This field is required",

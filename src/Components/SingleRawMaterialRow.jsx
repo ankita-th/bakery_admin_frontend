@@ -2,8 +2,9 @@ import React from "react";
 import { editIcon, eyeIcon, trashIcon } from "../assets/Icons/Svg";
 import { formatDate, renderSerialNumber } from "../utils/helpers";
 import { RAW_MATERIALS_ITEMS_PER_PAGE, YYYY_MM_DD } from "../constant";
+import Checkbox from "./Common/Checkbox";
 
-const SingleRawMaterialRow = ({ item, currentPage, index, handleActions }) => {
+const SingleRawMaterialRow = ({ item, handleActions }) => {
   // values in the figma name, id, quantity, reorder level, expiration date, last updated, notes:
   const {
     id,
@@ -18,14 +19,15 @@ const SingleRawMaterialRow = ({ item, currentPage, index, handleActions }) => {
   } = item;
   return (
     <tr className=" border border-gray-400 ">
-      <td className="py-2 px-4"></td>
-      
+      <td className="text-center rounded-tl-[10px] rounded-bl-[10px] bg-white ">
+        <Checkbox />
+      </td>
       {/* <td className="py-2 px-4">
         {renderSerialNumber(currentPage, RAW_MATERIALS_ITEMS_PER_PAGE, index)}
       </td> */}
       <td className="py-2 px-4">{id}</td>
 
-      <td className="py-2 px-4">{name}</td>
+      <td className="py-2">{name}</td>
       <td className="py-2 px-4">{`${quantity} ${unit_of_measure}`}</td>
       <td
         className={`py-2 px-4 ${
@@ -37,9 +39,9 @@ const SingleRawMaterialRow = ({ item, currentPage, index, handleActions }) => {
         {reorder}
       </td>
       <td className="py-2 px-4">{formatDate(expiry_date, YYYY_MM_DD)}</td>
-      <td className="py-2 px-4">{formatDate(updated_at, YYYY_MM_DD)}</td>
+      <td className="py-2">{formatDate(updated_at, YYYY_MM_DD)}</td>
       <td className="py-2 px-4">{description}</td>
-      <td className="py-2 px-4 space-x-2">
+      <td className="py-2 px-4">
         <button
           className="text-blue-500 hover:text-blue-700"
           onClick={() => handleActions({ action: "view", viewItem: item })}

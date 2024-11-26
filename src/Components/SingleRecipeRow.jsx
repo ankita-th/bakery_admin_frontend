@@ -1,11 +1,7 @@
 import React from "react";
-import { editIcon, eyeIcon, printIcon, trashIcon } from "../assets/Icons/Svg";
-import {
-  formatDate,
-  listCategories,
-  renderSerialNumber,
-} from "../utils/helpers";
-import { RAW_MATERIALS_ITEMS_PER_PAGE, YYYY_MM_DD } from "../constant";
+import { editIcon, trashIcon } from "../assets/Icons/Svg";
+import { listCategories } from "../utils/helpers";
+import Checkbox from "./Common/Checkbox";
 const STATUS_TO_TEXT = {
   true: "Published",
   false: "Draft",
@@ -14,13 +10,7 @@ const STATUS_TO_CLASS = {
   true: "text-green-500",
   false: "text-red-500",
 };
-const SingleRecipeRow = ({
-  item,
-  currentPage,
-  index,
-  handleActions,
-  isRecipe = false,
-}) => {
+const SingleRecipeRow = ({ item, handleActions }) => {
   // values in the figma name, id, quantity, reorder level, expiration date, last updated, notes:
   const {
     id,
@@ -33,7 +23,9 @@ const SingleRecipeRow = ({
   } = item;
   return (
     <tr className="text-center">
-      <td className="py-2 px-4 border"></td>
+      <td className="py-2 px-4 border">
+        <Checkbox />
+      </td>
       <td className="py-2 px-4 border">{recipe_title}</td>
       <td className="py-2 px-4 border">{listCategories(category)}</td>
       {/* update required :need to confirm about this mins and hours query */}
@@ -45,12 +37,13 @@ const SingleRecipeRow = ({
       </td>
 
       <td className="py-2 px-4 border space-x-2">
-        <button
+        {/* uncomment this  */}
+        {/* <button
           className="text-blue-500 hover:text-blue-700"
           onClick={() => handleActions({ action: "view" })}
         >
           {isRecipe ? printIcon : eyeIcon}
-        </button>
+        </button> */}
         <button
           onClick={() => handleActions({ action: "edit", id: id })}
           className="text-blue-500 hover:text-blue-700"

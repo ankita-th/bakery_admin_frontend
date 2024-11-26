@@ -7,7 +7,11 @@ import { draftIcon, publishIcon } from "../assets/Icons/Svg";
 import CommonButton from "../Components/Common/CommonButton";
 import CommonSelect from "../Form Fields/CommonSelect";
 import CommonFieldArray from "../Components/Common/CommonFieldArray";
-import { allowedImageTypes, DEFAULT_ERROR_MESSAGE } from "../constant";
+import {
+  allowedImageTypes,
+  DEFAULT_ERROR_MESSAGE,
+  PNG_AND_JPG,
+} from "../constant";
 import CommonTextEditor from "../Form Fields/CommonTextEditor";
 import {
   appendStepCountInObject,
@@ -26,6 +30,7 @@ import PageLoader from "../loaders/PageLoader";
 import MultipleImageUploadField from "../Form Fields/MultipleImageUploadField";
 import CategorySection from "../Components/CategorySection";
 import ImageUploadSection from "../Form Fields/ImageUploadSection";
+import { SPECIAL_CHARACTERS_REGEX } from "../regex/regex";
 const ALLERGEN_OPTIONS = [{ value: "CN", label: "Contain Nuts" }];
 const DIETRY_OPTIONS = [{ value: "GF", label: "Gluten-free" }];
 const DIFFICULTY_OPTIONS = [
@@ -168,7 +173,6 @@ const RecipeAddEdit = () => {
           // for prefilling values that requires custom logic
         })
         .catch((err) => {
-          console.log(err); // update required: Check in which field error message`
           toastMessage("Recipe not found");
           navigate("/recipe");
         })
@@ -177,9 +181,11 @@ const RecipeAddEdit = () => {
         });
     }
   }, []);
-  console.log(watch("category"), "this is category");
 
   const onSubmit = (values, event) => {
+    if (file?.error) {
+      return;
+    }
     const buttonType = event.nativeEvent.submitter.name;
     setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
     // creating payload
@@ -244,21 +250,16 @@ const RecipeAddEdit = () => {
         navigate("/recipe");
       })
       .catch((err) => {
-        toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+        const recipeError = err?.response?.data?.error;
+        if (recipeError.includes("duplicate key")) {
+          toastMessage("Recipe name with this title already exists ");
+        } else {
+          toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+        }
       })
       .finally(() => {
         setBtnLoaders({ publish: false, draft: false });
       });
-  };
-
-  const fillForm = () => {
-    setValue("recipe_title", "Cookie2");
-    setValue("cook_time", 34);
-    setValue("preparation_time", 214);
-    setValue("serving_size", 21);
-    setValue("difficulty_level", { label: "Easy", value: "E" });
-    setValue("allergen_information", { value: "CN", label: "Contain Nuts" });
-    setValue("notes", "String");
   };
 
   return (
@@ -276,12 +277,6 @@ const RecipeAddEdit = () => {
               <div className="flex gap-4">
                 <div>
                   <div>
-                    {/* <CommonButton
-                text="Fill form with dummy values"
-                onClick={fillForm}
-                className="orange_btn"
-              /> */}
-
                     <CommonTextField
                       formConfig={formConfig}
                       label="Recipe Title *"
@@ -289,11 +284,17 @@ const RecipeAddEdit = () => {
                       placeholder="Enter Recipe Title"
                       className="px-4 py-2 w-full rounded-lg"
                       labelClassName=""
-                      rules={createRequiredValidation("Recipe title")}
+                      rules={{
+                        ...createRequiredValidation("Recipe title"),
+                        pattern: {
+                          value: SPECIAL_CHARACTERS_REGEX,
+                          message: "Special characters are not allowed",
+                        },
+                      }}
                     />
                     <div className="description mt-4 p-4 rounded-lg bg-white mt-4">
                       <CommonTextEditor
-                        // label="Description *"
+                        label="Description *"
                         fieldName="description"
                         formConfig={formConfig}
                         placeholder="Type..."
@@ -457,6 +458,7 @@ const RecipeAddEdit = () => {
                       file={file}
                       setFile={setFile}
                       label="Recipe Image"
+                      accept={PNG_AND_JPG}
                     />
                   </div>
                 </div>

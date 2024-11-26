@@ -8,12 +8,10 @@ import CommonButton from "./Common/CommonButton";
 import CommonDateField from "../Form Fields/CommonDateField";
 import { PRIORITY_OPTIONS, today } from "../constant";
 import {
-  employeeListIntoOptions,
+  createRequiredValidation,
   extractOption,
   prefillFormValues,
 } from "../utils/helpers";
-import { makeApiRequest, METHODS } from "../api/apiFunctions";
-import { EMPLOYEE_ENDPOINT, TODO_ENDPOINT } from "../api/endpoints";
 const AddEditTodo = ({
   onClose,
   onSubmit,
@@ -50,25 +48,14 @@ const AddEditTodo = ({
         editItem?.assigned_to,
         "value"
       );
+      console.log(employeeOption, "this is employee options");
       setValue("assigned_to", employeeOption);
     }
   }, [employeeList]);
 
-  const fillForm = () => {
-    setValue("task_id", 125);
-    setValue("title", "Equipment Service");
-    setValue("description", "Order 50 lbs of flour and sugar");
-    setValue("assigned_to", { label: "Vandana Devi", value: 4 });
-    setValue("start_date", "2024-11-04");
-    setValue("end_date", "2024-20-04");
-    setValue("notes", "Pending approval from vendor");
-    setValue("priority", { label: "High", value: "high" });
-  };
-  console.log(watch("assigned_to"), "assigned to");
-
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="category-section">
+      <div className="category-section overflow-auto">
         <AddEditSectionHeading
           onClose={onClose}
           text={isEdit ? "Edit Todo List" : "Add Todo List"}
@@ -79,17 +66,19 @@ const AddEditTodo = ({
           className="orange_btn"
           isCustomButtons={true}
         >
-          <CommonButton
+          {/* <CommonButton
             type="button"
             text="Fill Form"
             className="orange_btn"
             onClick={fillForm}
-          />
+          /> */}
+
           <CommonTextField
             label="Task ID *"
             fieldName="task_id"
             rules={TodoValidations["task_id"]}
             formConfig={formConfig}
+            placeholder="Enter Task ID"
             isNumberOnly={true}
           />
           <CommonTextField
@@ -97,6 +86,7 @@ const AddEditTodo = ({
             fieldName="title"
             rules={TodoValidations["title"]}
             formConfig={formConfig}
+            placeholder="Enter Task Name"
           />
 
           <CommonTextField
@@ -106,6 +96,7 @@ const AddEditTodo = ({
             formConfig={formConfig}
             rows={4}
             type="textarea"
+            placeholder="Enter Description"
           />
           {/* currently this is not required */}
 
@@ -118,7 +109,7 @@ const AddEditTodo = ({
             placeholder="Select employee"
             options={employeeList}
             defaultOption="Assign"
-            className="add-edit-input"
+            // className="add-edit-input"
           />
 
           <CommonSelect
@@ -129,7 +120,8 @@ const AddEditTodo = ({
             options={PRIORITY_OPTIONS}
             defaultOption="Select priority"
             fieldName="priority"
-            className="add-edit-input"
+            rules={createRequiredValidation("Priority")}
+            // className="add-edit-input"
           />
 
           {/* add start and end dates */}
@@ -160,9 +152,16 @@ const AddEditTodo = ({
             label="End Date"
             rules={{
               required: "End Date is required",
-              validate: (value) =>
-                value >= watch("start_date") ||
-                "End date must be greater than or equal to the start date",
+              validate: (value) => {
+                const startDate = watch("start_date");
+                if (value < startDate) {
+                  return "End date must be greater than or equal to the start date";
+                }
+                if (value === startDate) {
+                  return "Start date and end date must not be the same";
+                }
+                return true;
+              },
             }}
           />
 

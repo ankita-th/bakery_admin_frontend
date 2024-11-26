@@ -3,6 +3,7 @@ import { ITEMS_PER_PAGE } from "../../constant";
 import { editIcon, imageUploadIcon, trashIcon } from "../../assets/Icons/Svg";
 import { createPreview, renderSerialNumber } from "../../utils/helpers";
 import ImageUploadSection from "../../Form Fields/ImageUploadSection";
+import Checkbox from "./Checkbox";
 
 const SingleCategoryRow = ({
   item,
@@ -12,7 +13,6 @@ const SingleCategoryRow = ({
   // setFile,
   // file,
 }) => {
-  console.log(item, "this is data");
   const {
     name,
     description,
@@ -22,10 +22,22 @@ const SingleCategoryRow = ({
     category_image,
     subcategories,
   } = item;
+  console.log(item, "item inside");
   return (
     <>
       <tr className="text-center">
-        <td>{imageUploadIcon}</td>
+        <td className="text-center rounded-tl-[10px] rounded-bl-[10px] bg-white ">
+          <Checkbox />
+        </td>
+        <td>
+          {category_image ? (
+            <div className="image-display">
+              <img src={createPreview(category_image)} />
+            </div>
+          ) : (
+            imageUploadIcon
+          )}
+        </td>
         <td className="py-2 px-4 border">{name}</td>
         <td className="py-2 px-4 border">{slug}</td>
         <td className="py-2 px-4 border">{description}</td>
@@ -63,6 +75,9 @@ const SingleCategoryRow = ({
         ? subcategories.map((subCategory, subCategoryIndex) => (
             <Fragment key={subCategoryIndex}>
               <tr className="text-center">
+                <td className="text-center rounded-tl-[10px] rounded-bl-[10px] bg-white ">
+                  <Checkbox />
+                </td>
                 <td>{imageUploadIcon}</td>
                 <td className="py-2 px-4 border"> • {subCategory?.name}</td>
                 <td className="py-2 px-4 border">{subCategory?.slug}</td>

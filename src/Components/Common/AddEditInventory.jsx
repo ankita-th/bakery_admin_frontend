@@ -2,7 +2,10 @@ import React, { useEffect } from "react";
 import FormWrapper from "../../Wrappers/FormWrapper";
 import AddEditSectionHeading from "../AddEditSectionHeading";
 import CommonTextField from "../../Form Fields/CommonTextField";
-import { createRequiredValidation, prefillFormValues } from "../../utils/helpers";
+import {
+  createRequiredValidation,
+  prefillFormValues,
+} from "../../utils/helpers";
 import CommonSelect from "../../Form Fields/CommonSelect";
 import CommonButton from "./CommonButton";
 const AddEditInventory = ({
@@ -14,29 +17,29 @@ const AddEditInventory = ({
 }) => {
   const { isEdit, item } = editInfo;
   const { setValue, watch } = formConfig;
-    useEffect(() => {
-      const prefillKeys = [
-        "name",
-        "reorder",
-        "sku",
-        "current_stock",
-        "barcode_no",
-        "barcode_to",
-      ];
-      if (isEdit) {
-        // for filling normal keys
-        prefillFormValues(item, prefillKeys, setValue);
-        // for prefilling values with custom logic
-        // setValue("expiry_date", formatDate(item?.expiry_date, YYYY_MM_DD));
-      }
-    }, []);
+  useEffect(() => {
+    const prefillKeys = [
+      "name",
+      "reorder",
+      "sku",
+      "current_stock",
+      "barcode_no",
+      "barcode_to",
+    ];
+    if (isEdit) {
+      // for filling normal keys
+      prefillFormValues(item, prefillKeys, setValue);
+      // for prefilling values with custom logic
+      // setValue("expiry_date", formatDate(item?.expiry_date, YYYY_MM_DD));
+    }
+  }, []);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="category-section">
         <AddEditSectionHeading
           onClose={onClose}
-          text={isEdit ? "Edit Raw Material" : "Add Raw Material"}
+          text={isEdit ? "Edit Inventory" : "Add Inventory"}
         />
         {/* <CommonButton text="fill form" type="button" onClick={fillForm} /> */}
         <FormWrapper
@@ -105,7 +108,7 @@ const AddEditInventory = ({
           <div className="button-section">
             <CommonButton
               type="submit"
-              text= {isEdit ? "Update Inventory" : "Add Inventory"}
+              text={isEdit ? "Update Inventory" : "Add Inventory"}
               // icon={publishIcon}
               className="orange_btn"
               name="inventory"

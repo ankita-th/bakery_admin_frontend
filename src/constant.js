@@ -297,6 +297,30 @@ export const STATE_OPTIONS = [
   { label: "Wyoming", value: "WY" },
 ];
 
+export const SWEDEN_COUNTY_OPTIONS = [
+  { label: "Blekinge", value: "BL" },
+  { label: "Dalarna", value: "DL" },
+  { label: "Gotland", value: "GT" },
+  { label: "Gävleborg", value: "GV" },
+  { label: "Halland", value: "HL" },
+  { label: "Jämtland", value: "JM" },
+  { label: "Jönköping", value: "JK" },
+  { label: "Kalmar", value: "KL" },
+  { label: "Kronoberg", value: "KR" },
+  { label: "Norrbotten", value: "NB" },
+  { label: "Skåne", value: "SN" },
+  { label: "Stockholm", value: "ST" },
+  { label: "Södermanland", value: "SD" },
+  { label: "Uppsala", value: "UP" },
+  { label: "Värmland", value: "VL" },
+  { label: "Västerbotten", value: "VB" },
+  { label: "Västernorrland", value: "VN" },
+  { label: "Västmanland", value: "VM" },
+  { label: "Västra Götaland", value: "VG" },
+  { label: "Örebro", value: "OR" },
+  { label: "Östergötland", value: "OG" },
+];
+
 export const DUMMY_EMPLOYEE_DATA = [
   {
     id: 1,
@@ -650,4 +674,9 @@ export const BACKDOOR_OPTIONS = [
   },
 ];
 
-export const PNG_AND_JPG = "image/png, image/jpeg"
+export const PNG_AND_JPG = "image/png, image/jpeg";
+
+export const AVAILABILITY_OPTIONS = [
+  { label: "Available", value: "available" },
+  { label: "Not Available", value: "unavailable" },
+];

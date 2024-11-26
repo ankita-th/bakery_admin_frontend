@@ -59,7 +59,7 @@ const Todo = () => {
   const todoSection = useModalToggle();
   const deleteModal = useModalToggle();
   const formConfig = useForm();
-  const { reset } = formConfig;
+  const { reset, watch } = formConfig;
   const [todos, setTodos] = useState([]);
   const [filters, setFilters] = useState({
     sort_by: "",
@@ -198,6 +198,7 @@ const Todo = () => {
       });
     }
   };
+  console.log(watch(), "form values todoform values todo");
 
   // for creating and updating todo
 
@@ -218,8 +219,6 @@ const Todo = () => {
       update_id: isEdit ? editItem?.id : null,
     })
       .then((res) => {
-        console.log(res, "this is response");
-        // need updated data inside response
         if (isEdit) {
           setTodos(handleEdit(todos, editItem?.id, res?.data)); //array , id to update , data to update
         } else {
@@ -229,17 +228,18 @@ const Todo = () => {
           isEdit ? "Task Updated successfully" : "Task Created Successfully",
           successType
         );
+        handleTodoSection({ action: "close" });
+        setPage(1);
+        setBtnLoaders({ unassigned: false, assigned: false });
       })
       .catch((err) => {
         console.log(err?.response?.data?.task_id[0], "this is err");
         toastMessage(err?.response?.data?.task_id[0] || DEFAULT_ERROR_MESSAGE);
-      })
-      .finally(() => {
-        handleTodoSection({ action: "close" });
+        if (!err?.response?.data?.task_id[0]) {
+          handleTodoSection({ action: "close" });
+          setPage(1);
+        }
         setBtnLoaders({ unassigned: false, assigned: false });
-        setPage(1);
-        // flow1
-        // setAssignOnly(true)
       });
   };
 

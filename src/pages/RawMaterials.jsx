@@ -26,7 +26,7 @@ import PageLoader from "../loaders/PageLoader";
 import ViewRawMaterials from "../Components/ViewRawMaterials";
 import { T } from "../utils/languageTranslator";
 const RAW_MATERIAL_COLUMNS = [
-  "",
+  "checkbox",
   "ID",
   "Name",
   "Qty in Stock",
@@ -58,7 +58,7 @@ const filterFields = [
 
 const RawMaterials = () => {
   const formConfig = useForm();
-  const { reset } = formConfig;
+  const { reset, watch } = formConfig;
   const { showModal: showDeleteModal, toggleModal: toggleDeleteModal } =
     useModalToggle();
   //   for the section coming from side for adding and updating raw materials
@@ -114,21 +114,6 @@ const RawMaterials = () => {
       });
   }, [filters, page]);
 
-  const dummyRawData = [
-    {
-      cost: 123,
-      reorder: 123,
-      quantity: 12,
-      unit_of_measure: "kg",
-      product_count: 12,
-      expiry_date: "11-15-2024",
-      description: "random product",
-      name: "Wheat",
-      updated_at: "11-15-2024",
-      id: 3,
-    },
-  ];
-
   const handleActions = ({ action, deleteId, editItem, viewItem }) => {
     if (action === "view") {
       setViewInfo({ show: true, item: viewItem });
@@ -176,6 +161,7 @@ const RawMaterials = () => {
     toggleRawMaterialSection();
     setEditInfo({ isEdit: false, item: null });
     reset(); // for resetting form values
+    setViewInfo({ show: false, item: null });
   };
 
   const handleAddEditRawMaterial = (values, event) => {
@@ -224,6 +210,7 @@ const RawMaterials = () => {
   const handleButtonLoaders = (type) => {
     setbtnLoaders({ ...btnLoaders, [type]: !btnLoaders[type] });
   };
+  console.log(watch(), "form values");
   return (
     <>
       {pageLoader ? (
@@ -235,7 +222,7 @@ const RawMaterials = () => {
             handleFilterChange={handleFilterChange}
           >
             <CommonButton
-              text="Add Raw Product"
+              text="Add Raw Material"
               className="orange_btn"
               onClick={toggleRawMaterialSection}
             />
@@ -289,6 +276,7 @@ const RawMaterials = () => {
               item={viewInfo?.item}
               onClose={() => {
                 setViewInfo({ show: false, item: null });
+                reset();
               }}
               formConfig={formConfig}
             />

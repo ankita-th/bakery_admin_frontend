@@ -146,17 +146,19 @@ const ZipConfiguration = () => {
         } else {
           setConfigurations((prev) => [...prev, res?.data]);
         }
-      })
-      .catch((err) => {
-        console.log(err?.response?.data?.zip_code?.[0], "configuration error");
-        toastMessage(
-          err?.response?.data?.zip_code?.[0] || DEFAULT_ERROR_MESSAGE
-        );
-      })
-      .finally(() => {
         handleConfigurationSection({ action: "close" });
         setBtnLoaders({ publish: false, draft: false });
         setPage(1);
+      })
+      .catch((err) => {
+        const zipCodeError = err?.response?.data?.zip_code?.[0];
+        console.log(zipCodeError, "configuration error");
+        toastMessage(zipCodeError || DEFAULT_ERROR_MESSAGE);
+        if (!zipCodeError) {
+          handleConfigurationSection({ action: "close" });
+          setPage(1);
+        }
+        setBtnLoaders({ publish: false, draft: false });
       });
   };
 

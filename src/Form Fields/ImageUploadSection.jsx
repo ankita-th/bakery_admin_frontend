@@ -46,8 +46,8 @@ const ImageUploadSection = ({
 
   return (
     <div>
-      {label}
-      <label htmlFor={inputId} className="image-upload-icon">
+      <div className="label">{label}</div>
+      <label htmlFor={inputId} className="image-upload-icon cursor-pointer">
         {!file?.preview && imageUploadIcon}
       </label>
       <input

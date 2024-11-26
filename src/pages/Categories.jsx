@@ -18,6 +18,7 @@ import CommonButton from "../Components/Common/CommonButton";
 import AddEditCategorySection from "../Components/AddEditCategorySection";
 import PageLoader from "../loaders/PageLoader";
 const CATEGORY_PAGE_COLUMNS = [
+  "checkbox",
   "", // for image section
   "Name",
   "Slug",
@@ -187,7 +188,7 @@ const Categories = () => {
   };
 
   const handleAddEditCategory = (values, event) => {
-    if (file.error) {
+    if (file?.error) {
       return;
     }
     const { isEdit, item, type } = editCategoryInfo;
@@ -221,6 +222,7 @@ const Categories = () => {
     }
 
     const data = Object.fromEntries(formData.entries()); // Convert to object
+    const isSubCategory = values?.parent;
     makeApiRequest({
       endPoint: manageApiEndpoint(),
       method: isEdit ? METHODS?.patch : METHODS?.post,
@@ -231,21 +233,35 @@ const Categories = () => {
     })
       .then((res) => {
         toastMessage(
-          `${type === "subcategory" ? "Subcategory" : "Category"} ${
-            isEdit ? "updated" : "added"
-          } sucessfully`,
+          `${
+            isSubCategory
+              ? "Subcategory"
+              : type === "subcategory"
+              ? "Subcategory"
+              : "Category"
+          } ${isEdit ? "updated" : "added"} sucessfully`,
           successType
         );
         fetchData();
-      })
-      .catch((err) => {
-        toastMessage(handleCategoryErrorToast(err));
-      })
-      .finally(() => {
         setBtnLoaders({ publish: false, draft: false });
         handleCategoryModal({ action: "close" });
         reset();
         setFile(null);
+      })
+      .catch((err) => {
+        const fieldError =
+          err?.response?.data?.name?.[0] || err?.response?.data?.slug?.[0];
+        console.log(fieldError);
+        if (fieldError) {
+          toastMessage(fieldError);
+        } else {
+          toastMessage(handleCategoryErrorToast(err));
+          fetchData();
+          handleCategoryModal({ action: "close" });
+          reset();
+          setFile(null);
+        }
+        setBtnLoaders({ publish: false, draft: false });
       });
   };
 

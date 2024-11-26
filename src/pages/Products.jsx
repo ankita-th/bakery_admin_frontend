@@ -143,7 +143,6 @@ const Products = () => {
 
   return (
     <>
-      {/* update required : depending on the css of the loader make sure we have to show other data or not */}
       {pageLoader ? (
         <PageLoader />
       ) : (

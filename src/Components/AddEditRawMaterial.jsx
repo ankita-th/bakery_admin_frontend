@@ -17,7 +17,7 @@ const AddEditRawMaterial = ({
   btnLoaders,
 }) => {
   const { isEdit, item } = editInfo;
-  const { setValue, watch } = formConfig;
+  const { setValue } = formConfig;
   useEffect(() => {
     const prefillKeys = [
       "description",
@@ -36,18 +36,9 @@ const AddEditRawMaterial = ({
     }
   }, []);
 
-  const fillForm = () => {
-    setValue("name", "flour");
-    setValue("quantity", 150);
-    setValue("reorder", 50);
-    setValue("expiry_date", "2024-12-5");
-    setValue("notes", "High-quality wheat");
-    setValue("cost", "150");
-  };
-  console.log(watch("expiry_date"), "expiry date");
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="category-section">
+    <div className="  fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+      <div className="category-section overflow-auto">
         <AddEditSectionHeading
           onClose={onClose}
           text={isEdit ? "Edit Raw Material" : "Add Raw Material"}
@@ -56,6 +47,7 @@ const AddEditRawMaterial = ({
         <FormWrapper
           onSubmit={onSubmit}
           formConfig={formConfig}
+          // wrapperClass="scroll"
           className="orange_btn"
           isCustomButtons={true}
         >
@@ -86,7 +78,7 @@ const AddEditRawMaterial = ({
             className="add-edit-input"
             rules={RawMaterialValidations["unit_of_measure"]}
           />
-            {/* update required: need to update the maximum value for reorder */}
+          {/* update required: need to update the maximum value for reorder */}
 
           <CommonTextField
             label="Reorder Level"
@@ -104,7 +96,6 @@ const AddEditRawMaterial = ({
             rules={RawMaterialValidations["cost"]}
             formConfig={formConfig}
             isNumberOnly={true}
-            isDecimal={true}
           />
 
           <CommonTextField
@@ -123,14 +114,6 @@ const AddEditRawMaterial = ({
             rules={RawMaterialValidations["expiry_date"]}
             label="Expiry Date *"
           />
-          {/* commented for future use */}
-
-          {/* <CommonDateField
-            formConfig={formConfig}
-            fieldName="expiry_date"
-            minDate={today}
-            label="Expiration Date"
-          /> */}
 
           <div className="button-section">
             <CommonButton

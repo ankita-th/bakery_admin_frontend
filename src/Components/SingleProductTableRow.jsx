@@ -25,7 +25,7 @@ const SingleProductTableRow = ({ data, currentPage, index, handleActions }) => {
           status === "available" ? "text-green-500" : "text-red-500"
         }`}
       >
-        {/* {status} */}
+        {status}
       </td>
       <td className="py-2 px-4 border-0 bg-white">
         {product_detail?.inventory?.regular_price}
@@ -33,14 +33,14 @@ const SingleProductTableRow = ({ data, currentPage, index, handleActions }) => {
       <td className="py-2 px-4 border-0 bg-white">
         {listCategories(category)}
       </td>
-      <td className="py-2 px-4 border-0 bg-white">Product Date</td>
-      <td
+      <td className="py-2 px-4 border-0 bg-white">21/10/2024</td>
+      {/* <td
         className={`py-2 px-4 border-0 bg-white  ${
           status === "available" ? "text-green-500" : "text-gray-500"
         }`}
       >
         {status}
-      </td>
+      </td> */}
       <td className="py-2 px-4 border-0 space-x-2 bg-white rounded-tr-[10px] rounded-br-[10px]">
         <button
           className="text-blue-500 hover:text-blue-700"
