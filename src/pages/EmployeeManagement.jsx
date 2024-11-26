@@ -22,6 +22,7 @@ import NoDataFound from "../Components/Common/NoDataFound";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import { successType, toastMessage } from "../utils/toastMessage";
 import AddEditEmployee from "../Components/AddEditEmployee";
+import { handleEdit } from "../utils/helpers";
 const filterFields = [
   {
     type: "select",
@@ -98,14 +99,30 @@ const EmployeeManagement = () => {
     setFilters(temp);
   };
 
-  const handleActions = ({ action, delete_id, editItem }) => {
-    if (action === "delete") {
-      toggleDeleteModal();
-      setItemToDelete(delete_id);
+  // const handleActions = ({ action, delete_id, editItem }) => {
+  //   if (action === "delete") {
+  //     toggleDeleteModal();
+  //     setItemToDelete(delete_id);
+  //   } else {
+  //     // for edit
+  //   }
+  // };
+
+
+  const handleActions = ({ action, deleteId, editItem }) => {
+     if (action === "edit") {
+      setEditInfo({
+        isEdit: true,
+        item: editItem,
+      });
+      toggleEmployeeSection();
     } else {
-      // for edit
+      setItemToDelete(deleteId);
+      toggleDeleteModal();
     }
   };
+
+
   const handleEmployeeSection = ({ action }) => {
     if (action === "open") {
       toggleEmployeeSection();
@@ -142,9 +159,70 @@ const EmployeeManagement = () => {
       });
   };
 
+
+  const handleEmployeeCancel = () => {
+    toggleEmployeeSection();
+    setEditInfo({ isEdit: false, item: null });
+    reset(); // for resetting form values
+  };
+
   const onSubmit = (values) => {
     console.log(values, "these are values");
+    // const buttonType = event.nativeEvent.submitter.name; //contains publish and draft
+    // handleButtonLoaders(buttonType);
+    const payload = {
+        email: values.email,
+        role: values.role,
+        first_name: values.first_name,
+        last_name: values.last_name,
+        employee_detail: {
+          employee_id: values.employee_id,
+          address: values.address,
+          city: values.city.formatted_address,
+          // state: values.state,
+          state: "CA",
+          // country: "SE",
+          country: "US",
+          zip_code: values.zip_code,
+          contact_no: values.contact_no,
+          hiring_date: values.hiring_date,
+          // shift:values.shift
+          shift: "Morning"
+        }
+    };
+
+    makeApiRequest({
+      endPoint: EMPLOYEE_MANAGEMENT_ENDPOINT,
+      payload: payload,
+      method: editInfo?.isEdit ? METHODS?.patch : METHODS.post,
+      update_id: editInfo?.isEdit && editInfo?.item?.id,
+    })
+      .then((res) => {
+        toastMessage(
+          `Employee ${editInfo?.isEdit ? "updated" : "added"} successfully`,
+          successType
+        );
+        if (editInfo?.isEdit) {
+          setEmployees(
+            handleEdit(employees, editInfo?.item?.id, res?.data)
+          );
+        } else {
+          setEmployees((prev) => [...prev, res?.data]);
+        }
+        // setbtnLoaders({ publish: false, draft: false });
+        handleEmployeeCancel();
+        setPage(1);
+      })
+      .catch((err) => {
+        toastMessage(err?.response?.data?.name?.[0] || DEFAULT_ERROR_MESSAGE);
+        if (!err?.response?.data?.name?.[0]) {
+          handleEmployeeCancel();
+          setPage(1);
+        }
+      })
+      // .finally(setbtnLoaders({ publish: false, draft: false }));
   };
+
   return (
     <div>
       {" "}

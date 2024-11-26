@@ -10,7 +10,7 @@ import {
 import CommonSelect from "../Form Fields/CommonSelect";
 import CommonButton from "./Common/CommonButton";
 import CommonDateField from "../Form Fields/CommonDateField";
-import { PRIORITY_OPTIONS, STATE_OPTIONS, today } from "../constant";
+import { OPTIONS, PRIORITY_OPTIONS, ROLE, SHIFT, STATE_OPTIONS, SWEDEN_COUNTY_OPTIONS, today } from "../constant";
 import {
   employeeListIntoOptions,
   extractOption,
@@ -29,15 +29,23 @@ const AddEditEmployee = ({ onClose, onSubmit, formConfig, editInfo }) => {
   console.log(editItem, "editItem");
   useEffect(() => {
     const prefillKeys = [
-      "zip_code",
-      "min_order_quantity",
-      "delivery_threshold",
-      "notes",
-      "address",
-      "city",
+     "employee_id",
+     "first_name",
+     "last_name",
+     "role",
+     "email",
+     "contact_no",
+     "shift",
+     "hiring_date",
+     "address",
+     "city",
+     "state",
+     "zip_code"
     ];
     // basic fields prefilling
+    if(isEdit){
     prefillFormValues(editItem, prefillKeys, setValue);
+    }
     // custom values prefilling
     setValue(
       "delivery_availability",
@@ -63,12 +71,39 @@ const AddEditEmployee = ({ onClose, onSubmit, formConfig, editInfo }) => {
           isCustomButtons={true}
         >
           {/* update required:need to update field name and after that name inside validations as well */}
+
           <CommonTextField
-            label="Name *"
-            fieldName="name"
-            placeholder="Name of Employee"
-            rules={EmployeeValidations["name"]}
+            label="Employee ID *"
+            fieldName="employee_id"
+            placeholder="Enter Employee ID"
+            rules={EmployeeValidations["employee_id"]}
             formConfig={formConfig}
+          />
+
+          <CommonTextField
+            label="First Name *"
+            fieldName="first_name"
+            placeholder="First Name of Employee"
+            rules={EmployeeValidations["first_name"]}
+            formConfig={formConfig}
+          />
+          <CommonTextField
+            label="Last Name *"
+            fieldName="last_name"
+            placeholder="Last Name of Employee"
+            rules={EmployeeValidations["last_name"]}
+            formConfig={formConfig}
+            />
+
+            <CommonSelect
+            formConfig={formConfig}
+            label="Role *"
+            selectType="normal"
+            options={ROLE}
+            defaultOption="Role"
+            fieldName="role"
+            className="add-edit-input"
+            rules={EmployeeValidations["role"]}
           />
 
           <CommonTextField
@@ -77,6 +112,65 @@ const AddEditEmployee = ({ onClose, onSubmit, formConfig, editInfo }) => {
             rules={EmployeeValidations["email"]}
             fieldName="email"
             formConfig={formConfig}
+          />
+
+          <CommonTextField
+            label="Phone Number *"
+            fieldName="contact_no"
+            placeholder="Enter Phone Number"
+            rules={EmployeeValidations["contact_no"]}
+            formConfig={formConfig}
+            isNumberOnly={true}
+            isDecimal={false}
+          />
+
+          <CommonSelect
+            formConfig={formConfig}
+            label="Shift *"
+            selectType="normal"
+            options={SHIFT}
+            defaultOption="Shift"
+            fieldName="shift"
+            className="add-edit-input"
+            rules={EmployeeValidations["shift"]}
+          />
+
+          <CommonDateField
+            formConfig={formConfig}
+            fieldName="hiring_date"
+            // minDate={today}
+            rules={EmployeeValidations["hiring_date"]}
+            label="Hiring Date *"
+          />
+
+          <CommonTextField
+            label="Address *"
+            placeholder="Enter Employee Address"
+            rules={EmployeeValidations["address"]}
+            fieldName="address"
+            formConfig={formConfig}
+          />
+          <LocationField
+            fieldName="city"
+            formConfig={formConfig}
+            placeholder="Enter City"
+            label="City *"
+            rules={EmployeeValidations["city"]}
+            options={{
+              types: ["(cities)"],
+              componentRestrictions: { country: ["se"] },
+            }}
+          />
+
+          <CommonSelect
+            formConfig={formConfig}
+            label="State *"
+            selectType="normal"
+            options={SWEDEN_COUNTY_OPTIONS}
+            defaultOption="State"
+            fieldName="state"
+            className="add-edit-input"
+            rules={EmployeeValidations["state"]}
           />
 
           <CommonTextField
@@ -93,6 +187,7 @@ const AddEditEmployee = ({ onClose, onSubmit, formConfig, editInfo }) => {
               type="submit"
               text={`${isEdit ? "Update" : "Add"} Employee`}
               className="orange_btn"
+              name="addEmployee"
             />
             {/* need to confirm functionality for this */}
             <CommonButton type="button" text="Cancel" className="orange_btn" onClick={onClose} />
