@@ -6,7 +6,7 @@ import { LoginValidations } from "../Validations/loginValidations";
 import { createRequiredValidation } from "../utils/helpers";
 import CommonButton from "./Common/CommonButton";
 
-const ChangePassword = ({ onPasswordChange, fieldOneName, fieldTwoName }) => {
+const ChangePassword = ({ onPasswordChange, fieldOneName, fieldTwoName,loader }) => {
   const formConfig = useForm();
   const {
     setValue,
@@ -49,11 +49,11 @@ const ChangePassword = ({ onPasswordChange, fieldOneName, fieldTwoName }) => {
   };
 
   return (
-    <div>
-      <h5>Add new password</h5>
+    <div className="space-y-6">
+      <h5 className="text-3xl font-bold mb-4">Add new password</h5>
       {/* password */}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
+        <div className="relative space-y-2 mb-4">
           <div className="label">Password</div>
           <input
             {...register(fieldOneName, {
@@ -67,14 +67,14 @@ const ChangePassword = ({ onPasswordChange, fieldOneName, fieldTwoName }) => {
             placeholder={"Enter your password"}
             className={"commonInput"}
           />
-          <div className="icon" onClick={() => handleToglePassword("password")}>
+          <div className="icon absolute top-10 right-2" onClick={() => handleToglePassword("password")}>
             {showPass?.password ? ClosedEye : OpenEye}
           </div>
           <ErrorMessage fieldName={fieldOneName} errors={errors} />
         </div>
 
         {/* confirm password */}
-        <div>
+        <div className="relative space-y-2 mb-4">
           <div className="label">Confirm Password</div>
           <input
             {...register(fieldTwoName, {
@@ -92,14 +92,20 @@ const ChangePassword = ({ onPasswordChange, fieldOneName, fieldTwoName }) => {
             className={"commonInput"}
           />
           <div
-            className="icon"
+            className="icon absolute top-10 right-2"
             onClick={() => handleToglePassword("confirm_password")}
           >
             {showPass?.confirm_password ? ClosedEye : OpenEye}
           </div>
           <ErrorMessage fieldName={fieldTwoName} errors={errors} />
         </div>
-        <CommonButton text="Submit" type="submit" />
+        <CommonButton
+          text="Submit"
+          type="submit"
+          className="sign-in-button w-full py-3 mt-4 bg-gray-300 text-gray-600 font-semibold rounded-md hover:bg-[#5F6F52] hover:text-white rounded-[50px] cursor-pointer transition-all duration-400 ease-in-out"
+          disabled={loader}
+          loader={loader}
+        />
       </form>
     </div>
   );
