@@ -68,3 +68,4 @@ const createAuthorizedInstance = (type) => {
 
 export const authorizeAxios = createAuthorizedInstance();
 export const authorizeFileInstance = createAuthorizedInstance(MULTIPART);
+export const googleClientID = import.meta.env.VITE_GOOGLE_AUTH_LOGIN;

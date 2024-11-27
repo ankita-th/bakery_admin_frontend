@@ -5,6 +5,7 @@ import { editIcon, trashIcon } from "../assets/Icons/Svg";
 const SingleEmployeeRow = ({ item, handleActions, index, currentPage }) => {
   // update required : update the keys according to the api and list accordingly here
   const { id, name, role, email, phone, shift, status } = item;
+  console.log(item, "single employee");
   return (
     <tr className="text-center">
       <td className="py-2 px-4 border">{id}</td>
@@ -36,7 +37,7 @@ const SingleEmployeeRow = ({ item, handleActions, index, currentPage }) => {
           onClick={() => {
             // need to confirm about id or task id
             // update this accordingly
-            handleActions({ action: "delete", delete_id: id });
+            handleActions({ action: "delete", deleteId: id });
           }}
           className="text-red-500 hover:text-red-700"
         >

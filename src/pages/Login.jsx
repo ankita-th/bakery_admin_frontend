@@ -10,6 +10,7 @@ import { successType, toastMessage } from "../utils/toastMessage";
 import { toast } from "react-toastify";
 import googleIcon from "../assets/images/google_logo.svg";
 import CommonButton from "../Components/Common/CommonButton";
+import SocialLogin from "../Components/SocialLogin";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ const Login = () => {
       })
       .finally(() => setBtnLoader((prev) => false));
   };
+  const afterAPISuccess = () => {};
   return (
     <>
       {/* <AuthRedirectSection
@@ -80,11 +82,12 @@ const Login = () => {
           onIconClick={toggleShowPassword}
           icon={showPassword ? ClosedEye : OpenEye}
         />
+        {/* commented for future  use */}
         {/* <AuthRedirectSection
           text=""
           linkText="Forgot your password"
-          linkUrl="/forgot-password"
-          className="text-left text-gray-500 hover:text-black mt-2"
+          linkUrl="/forget-password"
+          className="text-right text-gray-500 hover:text-black mt-2 underline"
         /> */}
         <CommonButton
           text="Sign in"
@@ -92,32 +95,12 @@ const Login = () => {
           loader={btnLoader}
           className="sign-in-button w-full py-3 mt-4 bg-gray-300 text-gray-600 font-semibold rounded-md hover:bg-[#5F6F52] hover:text-white rounded-[50px] cursor-pointer transition-all duration-400 ease-in-out"
         />
-        {/* <AuthRedirectSection
-          text="Don't have an acount? "
-          linkText="Sign up"
-          linkUrl="/sign-up"
+        {/* commented for future  use */}
+        {/* <SocialLogin
+          afterAPISuccess={() => {
+            afterAPISuccess;
+          }}
         /> */}
-
-        {/* <p className="text-center text-sm mt-4">
-          Don’t have an account?{" "}
-          <a
-            href="#"
-            className="text-grey-500 underline hover:text-blue-500 transition-all duration-400 ease-in-out"
-          >
-            Sign up
-          </a>
-        </p> */}
-
-        {/* <div className="flex items-center my-4">
-          <div className="flex-grow border-t border-gray-300"></div>
-          <span className="mx-4 text-gray-500">OR</span>
-          <div className="flex-grow border-t border-gray-300"></div>
-        </div> */}
-        {/* 
-        <button className="w-full py-3 flex items-center justify-center border border-gray-300 hover:bg-gray-100 rounded-[50px]">
-          <img src={googleIcon} alt="Google" className="w-5 h-5 mr-2" />
-          Continue with Google
-        </button> */}
       </form>
     </>
   );

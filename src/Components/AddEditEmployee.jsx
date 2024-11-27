@@ -1,65 +1,56 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import FormWrapper from "../Wrappers/FormWrapper";
 import AddEditSectionHeading from "./AddEditSectionHeading";
 import CommonTextField from "../Form Fields/CommonTextField";
-import {
-  ConfigurationValidations,
-  EmployeeValidations,
-  TodoValidations,
-} from "../Validations/validations";
+import { EmployeeValidations } from "../Validations/validations";
 import CommonSelect from "../Form Fields/CommonSelect";
 import CommonButton from "./Common/CommonButton";
 import CommonDateField from "../Form Fields/CommonDateField";
-import { OPTIONS, PRIORITY_OPTIONS, ROLE, SHIFT, STATE_OPTIONS, SWEDEN_COUNTY_OPTIONS, today } from "../constant";
 import {
-  employeeListIntoOptions,
-  extractOption,
-  prefillFormValues,
-} from "../utils/helpers";
-import { makeApiRequest, METHODS } from "../api/apiFunctions";
-import { EMPLOYEE_ENDPOINT, TODO_ENDPOINT } from "../api/endpoints";
+  DUMMY_EMPLOYEE,
+  ROLE_OPTIONS,
+  SHIFT_OPTIONS,
+  SWEDEN_COUNTY_OPTIONS,
+} from "../constant";
+import { prefillFormValues } from "../utils/helpers";
 import LocationField from "../Form Fields/LocationField";
-const AVAILABILITY_OPTIONS = [
-  { label: "Available", value: "available" },
-  { label: "Not Available", value: "unavailable" },
-];
-const AddEditEmployee = ({ onClose, onSubmit, formConfig, editInfo }) => {
+const AddEditEmployee = ({
+  onClose,
+  onSubmit,
+  formConfig,
+  editInfo,
+  loader,
+}) => {
   const { isEdit, editItem } = editInfo;
-  const { setValue, watch } = formConfig;
-  console.log(editItem, "editItem");
+  const { setValue } = formConfig;
+  console.log(DUMMY_EMPLOYEE, "editItem");
   useEffect(() => {
-    const prefillKeys = [
-     "employee_id",
-     "first_name",
-     "last_name",
-     "role",
-     "email",
-     "contact_no",
-     "shift",
-     "hiring_date",
-     "address",
-     "city",
-     "state",
-     "zip_code"
-    ];
-    // basic fields prefilling
-    if(isEdit){
-    prefillFormValues(editItem, prefillKeys, setValue);
+    if (isEdit) {
+      // for first and last name and role and email
+      const prefillKeys = ["first_name", "last_name", "email", "role"];
+      prefillFormValues(DUMMY_EMPLOYEE, prefillKeys, setValue);
+
+      // for employee id, phone number, shift, hiring date, address, city state and zip code
+      const prefillKeys2 = [
+        "employee_id",
+        "contact_no",
+        "shift",
+        "state",
+        "zip_code",
+        "city",
+        "address",
+      ];
+      prefillFormValues(
+        DUMMY_EMPLOYEE?.employee_detail,
+        prefillKeys2,
+        setValue
+      );
     }
-    // custom values prefilling
-    setValue(
-      "delivery_availability",
-      extractOption(
-        AVAILABILITY_OPTIONS,
-        editItem?.delivery_availability,
-        "value"
-      )
-    );
   }, []);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="category-section">
+      <div className="category-section overflow-auto">
         <AddEditSectionHeading
           onClose={onClose}
           text={` ${isEdit ? "Update" : "Add"} Employee`}
@@ -93,14 +84,14 @@ const AddEditEmployee = ({ onClose, onSubmit, formConfig, editInfo }) => {
             placeholder="Last Name of Employee"
             rules={EmployeeValidations["last_name"]}
             formConfig={formConfig}
-            />
+          />
 
-            <CommonSelect
+          <CommonSelect
             formConfig={formConfig}
             label="Role *"
             selectType="normal"
-            options={ROLE}
-            defaultOption="Role"
+            options={ROLE_OPTIONS}
+            defaultOption="Select Role"
             fieldName="role"
             className="add-edit-input"
             rules={EmployeeValidations["role"]}
@@ -128,8 +119,8 @@ const AddEditEmployee = ({ onClose, onSubmit, formConfig, editInfo }) => {
             formConfig={formConfig}
             label="Shift *"
             selectType="normal"
-            options={SHIFT}
-            defaultOption="Shift"
+            options={SHIFT_OPTIONS}
+            defaultOption="Select Shift"
             fieldName="shift"
             className="add-edit-input"
             rules={EmployeeValidations["shift"]}
@@ -143,12 +134,16 @@ const AddEditEmployee = ({ onClose, onSubmit, formConfig, editInfo }) => {
             label="Hiring Date *"
           />
 
-          <CommonTextField
-            label="Address *"
-            placeholder="Enter Employee Address"
-            rules={EmployeeValidations["address"]}
+          <LocationField
             fieldName="address"
             formConfig={formConfig}
+            placeholder="Enter Employee Address"
+            label="Address *"
+            rules={EmployeeValidations["address"]}
+            options={{
+              types: ["address"],
+              componentRestrictions: { country: ["se"] },
+            }}
           />
           <LocationField
             fieldName="city"
@@ -188,9 +183,16 @@ const AddEditEmployee = ({ onClose, onSubmit, formConfig, editInfo }) => {
               text={`${isEdit ? "Update" : "Add"} Employee`}
               className="orange_btn"
               name="addEmployee"
+              loader={loader}
+              disabled={loader}
             />
             {/* need to confirm functionality for this */}
-            <CommonButton type="button" text="Cancel" className="orange_btn" onClick={onClose} />
+            <CommonButton
+              type="button"
+              text="Cancel"
+              className="orange_btn"
+              onClick={onClose}
+            />
           </div>
         </FormWrapper>
       </div>

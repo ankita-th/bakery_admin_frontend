@@ -18,6 +18,7 @@ import Customers from "../pages/Customers";
 import Support from "../pages/Support";
 import Notifications from "../pages/Notifications";
 import Settings from "../pages/Settings";
+import ForgetPassword from "../pages/ForgetPassword";
 
 export const routes = [
   {
@@ -136,5 +137,10 @@ export const routes = [
     path: "/support",
     element: <Support />,
     private: true,
+  },
+  {
+    path: "/forget-password",
+    element: <ForgetPassword />,
+    public: true,
   },
 ];

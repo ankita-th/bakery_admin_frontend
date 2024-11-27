@@ -91,3 +91,19 @@ export const makeApiRequest = async ({
     throw error;
   }
 };
+
+// forget password flow
+export const sendEmailOtp = (payload) => {
+  console.log("forget password payload: ", payload);
+  return authAxios.post("/password/forget/", payload);
+};
+
+export const verifyOtp = (payload) => {
+  console.log("Veriy Otp payload: ", payload);
+  return authAxios.post("/password/otp-verify/", payload);
+};
+
+export const changePassword = (payload) => {
+  console.log("change password payload: ", payload);
+  return authAxios.post("/password/reset/", payload);
+};

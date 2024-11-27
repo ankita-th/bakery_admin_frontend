@@ -183,7 +183,7 @@ export const DUMMY_PRODUCT_DATA = [
   },
 ];
 
-export const DEFAULT_ERROR_MESSAGE = "Something Went Wrong";
+export const DEFAULT_ERROR_MESSAGE = "Something went wrong! please try again";
 
 export const allowedImageTypes = [
   "image/png",
@@ -681,12 +681,42 @@ export const AVAILABILITY_OPTIONS = [
   { label: "Not Available", value: "unavailable" },
 ];
 
-export const SHIFT = [
-  { value: "morning", label: "Morning" },
-  { value: "night", label: "Night" },
-]
+export const SHIFT_OPTIONS = [
+  { value: "Morning", label: "Morning" },
+  { value: "Night", label: "Night" },
+];
 
-export const ROLE = [
+export const ROLE_OPTIONS = [
+  { value: "accountant", label: "Accountant" },
+  { value: "worker", label: "Worker" },
   { value: "admin", label: "Admin" },
-  { value: "employee", label: "Employee" },
-]
+];
+export const PRODUCT_ALL_OPTIONS = [
+  { label: "Published", value: "published" },
+  { label: "Drafts", value: "drafts" },
+];
+
+export const PRODUCT_ACTIONS = [
+  { label: "Duplicate", value: "duplicate" },
+  { label: "Delete", value: "delete" },
+  { label: "Draft", value: "draft" },
+];
+
+export const DUMMY_EMPLOYEE = {
+  id: 4,
+  email: "candidate2@email.com",
+  role: "worker",
+  first_name: "Candidate",
+  last_name: "Vashisht",
+  employee_detail: {
+    employee_id: "kjhhkiu",
+    address: "Artillerigatan, Stockholm, Sweden",
+    city: "Alingsås, Sweden",
+    state: "VB",
+    country: "SE",
+    zip_code: "14010",
+    contact_no: "0987654411",
+    hiring_date: "2024-11-12",
+    shift: "Night",
+  },
+};

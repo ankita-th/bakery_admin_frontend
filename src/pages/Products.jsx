@@ -3,7 +3,12 @@ import FilterSection from "../Components/Common/FilterSection";
 import { deleteProduct, getProducts } from "../api/apiFunctions";
 import usePagination from "../hooks/usePagination";
 import Pagination from "../Components/Common/Pagination";
-import { DEFAULT_ERROR_MESSAGE, ITEMS_PER_PAGE } from "../constant";
+import {
+  DEFAULT_ERROR_MESSAGE,
+  ITEMS_PER_PAGE,
+  PRODUCT_ACTIONS,
+  PRODUCT_ALL_OPTIONS,
+} from "../constant";
 import CommonButton from "../Components/Common/CommonButton";
 import useModalToggle from "../hooks/useModalToggle";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
@@ -52,13 +57,13 @@ const filterFields = [
   {
     type: "select",
     defaultOption: "All",
-    options: OPTIONS,
+    options: PRODUCT_ALL_OPTIONS,
     filterName: "type",
   },
   {
     type: "select",
     defaultOption: "Select Category",
-    options: OPTIONS,
+    options: PRODUCT_ACTIONS,
     filterName: "category",
   },
   {

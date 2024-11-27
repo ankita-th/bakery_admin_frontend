@@ -50,7 +50,7 @@ const EMPLOYEE_COLUMNS = [
 const EmployeeManagement = () => {
   // for now this is page is static update the required points after api is created
   const { page, onPageChange, setPage } = usePagination();
-  const { buttonLoader, pageLoader, toggleLoader } = useLoader();
+  const { pageLoader, toggleLoader } = useLoader();
   const formConfig = useForm();
   const { reset } = formConfig;
   const { showModal: showEmployeeSection, toggleModal: toggleEmployeeSection } =
@@ -60,7 +60,7 @@ const EmployeeManagement = () => {
   const [employees, setEmployees] = useState([]);
   const [editInfo, setEditInfo] = useState({
     isEdit: false,
-    edititem: null,
+    editItem: null,
   });
   const [totalData, setTotalData] = useState(null);
   const [itemToDelete, setItemToDelete] = useState(null);
@@ -68,7 +68,9 @@ const EmployeeManagement = () => {
     sort_by: "",
     name: "",
   });
+  // make it a single state for loaders
   const [deleteLoader, setDeleteLoader] = useState(false);
+  const [buttonLoader, setButtonLoader] = useState(false);
 
   useEffect(() => {
     toggleLoader("pageLoader");
@@ -76,8 +78,6 @@ const EmployeeManagement = () => {
       ...filters,
       page: page,
     };
-    setEmployees(DUMMY_EMPLOYEE_DATA);
-
     makeApiRequest({
       endPoint: EMPLOYEE_MANAGEMENT_ENDPOINT,
       params: apiParams,
@@ -91,7 +91,7 @@ const EmployeeManagement = () => {
       .finally(() => {
         toggleLoader("pageLoader");
       });
-  }, [page,filters]);
+  }, [page, filters]);
 
   const handleFilterChange = (filterName, value) => {
     const temp = { ...filters };
@@ -99,21 +99,11 @@ const EmployeeManagement = () => {
     setFilters(temp);
   };
 
-  // const handleActions = ({ action, delete_id, editItem }) => {
-  //   if (action === "delete") {
-  //     toggleDeleteModal();
-  //     setItemToDelete(delete_id);
-  //   } else {
-  //     // for edit
-  //   }
-  // };
-
-
   const handleActions = ({ action, deleteId, editItem }) => {
-     if (action === "edit") {
+    if (action === "edit") {
       setEditInfo({
         isEdit: true,
-        item: editItem,
+        editItem: editItem,
       });
       toggleEmployeeSection();
     } else {
@@ -121,7 +111,6 @@ const EmployeeManagement = () => {
       toggleDeleteModal();
     }
   };
-
 
   const handleEmployeeSection = ({ action }) => {
     if (action === "open") {
@@ -133,6 +122,7 @@ const EmployeeManagement = () => {
         isEdit: false,
         editItem: null,
       });
+      setButtonLoader((prev) => false);
       reset();
     }
   };
@@ -145,11 +135,9 @@ const EmployeeManagement = () => {
       delete_id: itemToDelete,
     })
       .then((res) => {
-        // update required:Add a proper message here
         toastMessage("Deleted Successfully", successType);
       })
       .catch((err) => {
-        // update required: chek in the api in which object error message is coming
         toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
       })
       .finally(() => {
@@ -159,7 +147,6 @@ const EmployeeManagement = () => {
       });
   };
 
-
   const handleEmployeeCancel = () => {
     toggleEmployeeSection();
     setEditInfo({ isEdit: false, item: null });
@@ -168,27 +155,27 @@ const EmployeeManagement = () => {
 
   const onSubmit = (values) => {
     console.log(values, "these are values");
+    setButtonLoader((prev) => true);
     // const buttonType = event.nativeEvent.submitter.name; //contains publish and draft
     // handleButtonLoaders(buttonType);
     const payload = {
-        email: values.email,
-        role: values.role,
-        first_name: values.first_name,
-        last_name: values.last_name,
-        employee_detail: {
-          employee_id: values.employee_id,
-          address: values.address,
-          city: values.city.formatted_address,
-          // state: values.state,
-          state: "CA",
-          // country: "SE",
-          country: "US",
-          zip_code: values.zip_code,
-          contact_no: values.contact_no,
-          hiring_date: values.hiring_date,
-          // shift:values.shift
-          shift: "Morning"
-        }
+      email: values.email,
+      role: values.role,
+      first_name: values.first_name,
+      last_name: values.last_name,
+      employee_detail: {
+        employee_id: values.employee_id,
+        address: values.address?.formatted_address,
+        city: values.city.formatted_address,
+        state: values.state,
+        country: "SE",
+        // state: "CA",
+        // country: "US",
+        zip_code: values.zip_code,
+        contact_no: values.contact_no,
+        hiring_date: values.hiring_date,
+        shift: values.shift,
+      },
     };
 
     makeApiRequest({
@@ -203,9 +190,7 @@ const EmployeeManagement = () => {
           successType
         );
         if (editInfo?.isEdit) {
-          setEmployees(
-            handleEdit(employees, editInfo?.item?.id, res?.data)
-          );
+          setEmployees(handleEdit(employees, editInfo?.item?.id, res?.data));
         } else {
           setEmployees((prev) => [...prev, res?.data]);
         }
@@ -214,13 +199,18 @@ const EmployeeManagement = () => {
         setPage(1);
       })
       .catch((err) => {
-        toastMessage(err?.response?.data?.name?.[0] || DEFAULT_ERROR_MESSAGE);
-        if (!err?.response?.data?.name?.[0]) {
+        console.log(err, "this is error");
+        const fieldError =
+          err?.response?.data?.message?.name?.[0] ||
+          err?.response?.data?.message?.email?.[0];
+        console.log(fieldError, "this is field error");
+        toastMessage(fieldError || DEFAULT_ERROR_MESSAGE);
+        if (!fieldError) {
           handleEmployeeCancel();
           setPage(1);
         }
       })
-      // .finally(setbtnLoaders({ publish: false, draft: false }));
+      .finally(setButtonLoader((prev) => false));
   };
 
   return (
@@ -273,6 +263,7 @@ const EmployeeManagement = () => {
           }}
           formConfig={formConfig}
           onSubmit={onSubmit}
+          loader={buttonLoader}
           editInfo={editInfo}
         />
       )}
