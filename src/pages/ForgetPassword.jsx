@@ -26,29 +26,32 @@ const ForgetPassword = () => {
     otp: "",
     email: "",
   });
+  const [loader, setLoader] = useState();
 
   // for step 1 (send otp)
   const onSubmit = (values) => {
+    setLoader(true);
     setPasswordUpdatePayload({
       ...passwordUpdatePayload,
       email: values?.email,
     });
-    setStep("otp");
-    toastMessage("OTP Sent successfully to you email", successType);
-
     sendEmailOtp(values)
       .then((res) => {
         setStep("otp");
-        toastMessage("OTP Sent successfully to you email", successType);
+        toastMessage("OTP Sent successfully to your email", successType);
       })
       .catch((err) => {
         // check which field is there for invalid email address
-        toastMessage("Invalid email address");
-      });
+        toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+      })
+      .finally(() => {
+        setLoader(false);
+      })
   };
 
   // step 2:verify otp
   const handleSubmitOTP = (otp) => {
+    setLoader(true);
     setPasswordUpdatePayload({ ...passwordUpdatePayload, otp: otp });
     // toastMessage("OTP verified successfully", successType);
     // setStep("password-change");
@@ -56,9 +59,6 @@ const ForgetPassword = () => {
       otp: otp,
       email: passwordUpdatePayload?.email,
     };
-    toastMessage("OTP verified successfully", successType);
-    setStep("password-change");
-
     verifyOtp(payload)
       .then((res) => {
         toastMessage("OTP verified successfully", successType);
@@ -68,12 +68,16 @@ const ForgetPassword = () => {
         // update required: add invalid otp message according to the api response
         console.log(err, "otp verify error");
         toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
-      });
+      })
+      .finally(() => {
+        setLoader(false);
+      })
   };
 
   // step 2:update password
 
   const onPasswordChange = (values) => {
+    setLoader(true);
     const { password } = values;
     const payload = {
       email: passwordUpdatePayload?.email,
@@ -86,14 +90,17 @@ const ForgetPassword = () => {
       })
       .catch((err) =>
         toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE)
-      );
+      )
+      .finally(() => {
+        setLoader(false);
+      })
   };
 
   return (
-    <div>
+    <div className="login-form w-full max-w-[450px] space-y-6">
       {step !== "password-change" && step !== "otp" && (
         <>
-          <h3>Forgot your Password?</h3>
+          <h3 className="text-3xl font-bold mb-4">Forgot your Password?</h3>
           <form onSubmit={handleSubmit(onSubmit)} className="login-form">
             <CommonTextField
               fieldName="email"
@@ -102,17 +109,25 @@ const ForgetPassword = () => {
               placeholder="Enter Email"
               rules={LoginValidations["email"]}
               label="Email address"
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:border-black"
             />
-            <CommonButton text="Send OTP" type="submit" />
+            <CommonButton
+              text="Send OTP"
+              type="submit"
+              className="sign-in-button w-full py-3 mt-4 bg-gray-300 text-gray-600 font-semibold rounded-md hover:bg-[#5F6F52] hover:text-white rounded-[50px] cursor-pointer transition-all duration-400 ease-in-out"
+              disabled={loader}
+              loader={loader}
+            />
           </form>
         </>
       )}
-      {step === "otp" && <OtpSection handleSubmitOTP={handleSubmitOTP} />}
+      {step === "otp" && <OtpSection handleSubmitOTP={handleSubmitOTP} loader={loader}/>}
       {step === "password-change" && (
         <ChangePassword
           onPasswordChange={onPasswordChange}
           fieldOneName="password"
           fieldTwoName="confirm_password"
+          loader={loader}
         />
       )}
     </div>

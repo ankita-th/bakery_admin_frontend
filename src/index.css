@@ -153,7 +153,8 @@ header.header {
   margin: 5px 3px 20px;
   width: 55px !important;
   border-radius: 8px;
-  border: 1px solid var(--Is-light-gray);
+  /* border: 1px solid var(--Is-light-gray); */
+  border:1px solid #dcdcdc;
   height: 55px;
   text-align: center;
 }
