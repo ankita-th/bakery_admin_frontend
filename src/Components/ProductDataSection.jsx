@@ -29,7 +29,7 @@ const ProductDataSection = ({
 
   return (
     <div className="product-data-section border">
-      <div className="w-full mx-auto p-4 bg-white rounded-lg shadow-md">
+      <div className="w-full mx-auto p-4 bg-white rounded-lg">
         <h2 className="text-lg font-semibold text-gray-700 mb-4">
           Product Data
         </h2>

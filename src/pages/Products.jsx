@@ -60,16 +60,16 @@ const filterFields = [
     options: PRODUCT_ALL_OPTIONS,
     filterName: "type",
   },
-  {
-    type: "select",
-    defaultOption: "Select Category",
-    options: PRODUCT_ACTIONS,
-    filterName: "category",
-  },
+  // {
+  //   type: "select",
+  //   defaultOption: "Select Category",
+  //   options: PRODUCT_ACTIONS,
+  //   filterName: "category",
+  // },
   {
     type: "select",
     defaultOption: "Select Action",
-    options: OPTIONS,
+    options: PRODUCT_ACTIONS,
     filterName: "action",
   },
   {
