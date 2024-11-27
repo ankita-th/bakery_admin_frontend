@@ -300,3 +300,7 @@ export const convertValuesIntoLabelAndValue = (data) => {
     return result;
   }
 };
+
+export const createName = (firstName, lastName) => {
+  return `${firstName} ${lastName}`;
+};

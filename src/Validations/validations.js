@@ -91,6 +91,10 @@ export const TodoValidations = {
 export const ConfigurationValidations = {
   zip_code: {
     required: "ZIP code is required",
+    pattern: {
+      value: /^[0-9]{5}$/,
+      message: "Zip code must be exactly 5 digits",
+    },
   },
   delivery_availability: {
     required: "Delivery availablity is required",
@@ -113,11 +117,11 @@ export const ConfigurationValidations = {
     required: "Min order quantity is required",
     min: {
       value: 1,
-      message: "Minimum order quantity must be greater than 1",
+      message: "Minimum order quantity must be between 1 and 9999",
     },
     max: {
-      value: 999999,
-      message: "Minimum order quantity must be less than 999999",
+      value: 9999,
+      message: "Minimum order quantity must be between 1 and 9999",
     },
   },
   state: {
@@ -233,6 +237,19 @@ export const EmployeeValidations = {
     required: "State is required",
   },
   zip_code: {
-    required: "ZIP code  is required",
+    required: "ZIP code is required",
+    pattern: {
+      value: /^[0-9]{5}$/,
+      message: "Zip code must be exactly 5 digits",
+    },
+  },
+};
+
+// common validations
+export const ZIP_CODE_VALIDATION = {
+  required: "ZIP code is required",
+  pattern: {
+    value: /^[0-9]{5}$/,
+    message: "Zip code must be exactly 5 digits",
   },
 };

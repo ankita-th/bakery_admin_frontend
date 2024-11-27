@@ -1,26 +1,36 @@
 import React from "react";
-import CommonButton from "./Common/CommonButton";
 import { editIcon, trashIcon } from "../assets/Icons/Svg";
+import { createName } from "../utils/helpers";
+const STATUS_TO_CLASS = {
+  true: "",
+  false: "",
+};
 
 const SingleEmployeeRow = ({ item, handleActions, index, currentPage }) => {
   // update required : update the keys according to the api and list accordingly here
-  const { id, name, role, email, phone, shift, status } = item;
+  const {
+    id,
+    first_name,
+    last_name,
+    role,
+    email,
+    phone,
+    shift,
+    status,
+    is_active,
+  } = item;
   console.log(item, "single employee");
   return (
     <tr className="text-center">
       <td className="py-2 px-4 border">{id}</td>
-      <td className="py-2 px-4 border">{name}</td>
+      <td className="py-2 px-4 border">{createName(first_name, last_name)}</td>
       <td className="py-2 px-4 border">{role}</td>
       <td className="py-2 px-4 border">{email}</td>
       <td className="py-2 px-4 border">{phone}</td>
       <td className="py-2 px-4 border">{shift}</td>
       {/* update required: add css for active-status and inactive-status class */}
-      <td
-        className={`py-2 px-4 border ${
-          status ? "active-status" : "inactive-status"
-        }`}
-      >
-        {status ? "Active" : "Inactive"}
+      <td className={`py-2 px-4 border ${STATUS_TO_CLASS[is_active]}`}>
+        {is_active ? "Active" : "Inactive"}
       </td>
 
       <td className="py-2 px-4 border space-x-2">

@@ -6,10 +6,7 @@ import {
   NOTIFICTION_GET_ENDPOINT,
 } from "../api/endpoints";
 import useLoader from "../hooks/useLoader";
-import {
-  DEFAULT_ERROR_MESSAGE,
-  ITEMS_PER_PAGE,
-} from "../constant";
+import { DEFAULT_ERROR_MESSAGE, ITEMS_PER_PAGE } from "../constant";
 import NoDataFound from "../Components/Common/NoDataFound";
 import Pagination from "../Components/Common/Pagination";
 import SingleNotificationCard from "../Components/SingleNotificationCard";
@@ -73,6 +70,7 @@ const Notifications = () => {
     toggleDeleteModal();
     setItemToDelete(delete_id);
   };
+  console.log(page, "page");
   return (
     <>
       {pageLoader ? (

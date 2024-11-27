@@ -86,7 +86,7 @@ const AddEditConfiguration = ({
             options={SWEDEN_COUNTY_OPTIONS}
             fieldName="state"
             rules={ConfigurationValidations["state"]}
-            className="add-edit-input"
+            // className="add-edit-input"
           />
           <LocationField
             fieldName="city"

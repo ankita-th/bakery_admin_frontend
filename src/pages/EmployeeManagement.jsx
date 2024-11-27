@@ -13,6 +13,8 @@ import {
   DEFAULT_ERROR_MESSAGE,
   DUMMY_EMPLOYEE_DATA,
   DUMMY_TODO_DATA,
+  EMPLOYEE_ID_ERROR,
+  ITEMS_PER_PAGE,
   SORT_BY_OPTIONS,
 } from "../constant";
 import useModalToggle from "../hooks/useModalToggle";
@@ -23,6 +25,7 @@ import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import { successType, toastMessage } from "../utils/toastMessage";
 import AddEditEmployee from "../Components/AddEditEmployee";
 import { handleEdit } from "../utils/helpers";
+import Pagination from "../Components/Common/Pagination";
 const filterFields = [
   {
     type: "select",
@@ -135,7 +138,7 @@ const EmployeeManagement = () => {
       delete_id: itemToDelete,
     })
       .then((res) => {
-        toastMessage("Deleted Successfully", successType);
+        toastMessage("Employee Deleted Successfully", successType);
       })
       .catch((err) => {
         toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
@@ -166,7 +169,7 @@ const EmployeeManagement = () => {
       employee_detail: {
         employee_id: values.employee_id,
         address: values.address?.formatted_address,
-        city: values.city.formatted_address,
+        city: values.city.formatted_address || values?.city,
         state: values.state,
         country: "SE",
         // state: "CA",
@@ -194,7 +197,6 @@ const EmployeeManagement = () => {
         } else {
           setEmployees((prev) => [...prev, res?.data]);
         }
-        // setbtnLoaders({ publish: false, draft: false });
         handleEmployeeCancel();
         setPage(1);
       })
@@ -202,15 +204,17 @@ const EmployeeManagement = () => {
         console.log(err, "this is error");
         const fieldError =
           err?.response?.data?.message?.name?.[0] ||
-          err?.response?.data?.message?.email?.[0];
-        console.log(fieldError, "this is field error");
+          err?.response?.data?.message?.email?.[0] ||
+          (err?.response?.data?.error === EMPLOYEE_ID_ERROR &&
+            err?.response?.data?.error);
+
         toastMessage(fieldError || DEFAULT_ERROR_MESSAGE);
         if (!fieldError) {
           handleEmployeeCancel();
           setPage(1);
         }
       })
-      .finally(setButtonLoader((prev) => false));
+      .finally(() => setButtonLoader((prev) => false));
   };
 
   return (
@@ -244,6 +248,11 @@ const EmployeeManagement = () => {
           <NoDataFound />
         )}
       </TableWrapper>
+      <Pagination
+        onPageChange={onPageChange}
+        itemsPerPage={ITEMS_PER_PAGE}
+        totalData={totalData}
+      />
       {showDeleteModal && (
         <DeleteConfirmationModal
           title="Are you sure you want to remove this employee?"

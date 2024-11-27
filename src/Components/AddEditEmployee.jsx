@@ -22,7 +22,7 @@ const AddEditEmployee = ({
   loader,
 }) => {
   const { isEdit, editItem } = editInfo;
-  const { setValue } = formConfig;
+  const { setValue, watch } = formConfig;
   console.log(DUMMY_EMPLOYEE, "editItem");
   useEffect(() => {
     if (isEdit) {
@@ -47,6 +47,7 @@ const AddEditEmployee = ({
       );
     }
   }, []);
+  console.log(watch("city"), "this is city value");
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">

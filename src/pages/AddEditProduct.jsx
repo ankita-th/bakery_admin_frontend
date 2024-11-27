@@ -230,26 +230,6 @@ const AddEditProduct = () => {
     setActiveTab(tabName);
   };
 
-  // const fillDummyValues = () => {
-  //   setValue("name", "Premium Breads");
-  //   setValue("sku", 2312445);
-  //   setValue("product_tag", [{ label: "Hot Deals", value: "hot-deals" }]);
-  //   setValue("regular_price", 231);
-  //   setValue("sale_price", 250);
-  //   setValue("weight", 25);
-  //   setValue("unit", { label: "Kilogram", value: "Kg" });
-  //   setValue("bulking_price_rules", [
-  //     { quantity_from: 30, quantity_to: 40, price: "200" },
-  //   ]);
-  //   setValue("sale_price_dates_from", "2024-11-14");
-  //   setValue("sale_price_dates_to", "2024-11-22");
-  //   setValue("seo_title", "Breads");
-  //   setValue("slug", "Dummy Slug");
-  //   setValue("purchase_note", "Dummy Purchase note");
-  //   setValue("minimum_order_quantity", "12");
-  //   setValue("meta_description", "Dummy meta description text");
-  // };
-
   return (
     <>
       <FormWrapper
@@ -258,11 +238,6 @@ const AddEditProduct = () => {
         isCustomButtons={true}
       >
         <div className="flex gap-4">
-          {/* <CommonButton
-          text="Fill Dummy values"
-          className="buttonTwo"
-          onClick={fillDummyValues}
-        /> */}
           <div className="flex-1">
             <div className="product-info-section mb-4">
               <div className="flex gap-4">
