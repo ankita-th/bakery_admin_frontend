@@ -12,38 +12,46 @@ const MultipleImageUploadField = ({
   imageError,
   setImageError,
   uploadButton,
+  accept = "image/*",
 }) => {
   const inputId = `image-upload-${label}`;
 
   const handleImageUpload = (e) => {
     const newFiles = Array.from(e.target.files);
-
-    newFiles.forEach((file, index) => {
-      if (isValidType(file, allowedTypes)) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const itemToAppend = {
-            preview: event.target.result,
-            file: file,
+    // add maximum file limit here
+    if (true) {
+      newFiles.forEach((file, index) => {
+        if (isValidType(file, allowedTypes)) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const itemToAppend = {
+              preview: event.target.result,
+              file: file,
+            };
+            setFiles([...files, itemToAppend]);
+            setImageError("");
           };
+          reader.readAsDataURL(file);
+        } else {
+          const itemToAppend = {
+            file: null,
+            preview: "",
+          };
+          setImageError("Please upload a valid image");
           setFiles([...files, itemToAppend]);
-          setImageError("");
-        };
-        reader.readAsDataURL(file);
-      } else {
-        const itemToAppend = {
-          file: null,
-          preview: "",
-        };
-        setImageError("Please upload a valid image");
-        setFiles([...files, itemToAppend]);
-      }
-    });
+        }
+      });
+    } else{
+      setImageError("At most 5 images can be added")
+    }
 
     e.target.value = ""; // Clear input to allow re-uploading same files
   };
 
   const removeImage = (index) => {
+    if(files?.length === 5){
+      setImageError("");
+    }
     setFiles((prev) => prev.filter((curElem, idx) => idx !== index));
   };
   console.log(imageError, "imageError");
@@ -51,15 +59,16 @@ const MultipleImageUploadField = ({
   return (
     <div>
       <div className="label">{label}</div>
-      <label htmlFor={inputId} className={uploadButton.class}>
+      <label htmlFor={inputId} className={uploadButton?.class}>
         {uploadButton?.text}
+        {imageUploadIcon}
       </label>
       <input
         onChange={(e) => handleImageUpload(e)}
         type="file"
         id={inputId}
         className="hidden"
-        accept="image/*"
+        accept={accept}
         multiple={true}
       />
 

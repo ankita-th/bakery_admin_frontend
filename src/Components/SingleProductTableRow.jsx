@@ -44,7 +44,7 @@ const SingleProductTableRow = ({ data, currentPage, index, handleActions }) => {
       <td className="py-2 px-4 border-0 space-x-2 bg-white rounded-tr-[10px] rounded-br-[10px]">
         <button
           className="text-blue-500 hover:text-blue-700"
-          onClick={() => handleActions("view")}
+          onClick={() => handleActions("view", id)}
         >
           {eyeIcon}
         </button>

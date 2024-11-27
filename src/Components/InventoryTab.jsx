@@ -5,7 +5,8 @@ import CommonDateField from "../Form Fields/CommonDateField";
 import CommonSelect from "../Form Fields/CommonSelect";
 import { MEASURE_OPTIONS } from "../constant";
 import CommonFieldArray from "./Common/CommonFieldArray";
-const InventoryTab = ({ formConfig }) => {
+import { SPECIAL_CHARACTERS_REGEX } from "../regex/regex";
+const InventoryTab = ({ formConfig, disabled }) => {
   const { watch } = formConfig;
   console.log(watch("sale_price_dates_to"), "form");
   const BULKING_PRICE_ITEMS = [
@@ -39,12 +40,19 @@ const InventoryTab = ({ formConfig }) => {
     <div>
       <div className="w-full space-y-4">
         <CommonTextField
-          label="SKU"
+          label="SKU *"
           fieldName="sku"
           className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
-          //   rules={createRequiredValidation("SKU")}
+          rules={{
+            ...createRequiredValidation("Product name"),
+            pattern: {
+              value: SPECIAL_CHARACTERS_REGEX,
+              message: "Special characters are not allowed",
+            },
+          }}
           formConfig={formConfig}
           placeholder="Enter SKU"
+          disabled={disabled}
         />
 
         <div className="grid grid-cols-2 gap-4">
@@ -55,6 +63,7 @@ const InventoryTab = ({ formConfig }) => {
             rules={createRequiredValidation("Regular Price")}
             formConfig={formConfig}
             placeholder="Enter Price of Product"
+            disabled={disabled}
           />
 
           {/* need to add schedule sale yet */}
@@ -65,6 +74,7 @@ const InventoryTab = ({ formConfig }) => {
             rules={createRequiredValidation("Sale Price")}
             formConfig={formConfig}
             placeholder="Enter Sale Price"
+            disabled={disabled}
           />
         </div>
 
@@ -75,11 +85,13 @@ const InventoryTab = ({ formConfig }) => {
             rules={createRequiredValidation("Sale price date from")}
             formConfig={formConfig}
             className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
+            disabled={disabled}
           />
           <CommonDateField
             label="Sale Price Date To *"
             fieldName="sale_price_dates_to"
             minDate={watch("sale_price_dates_from")}
+            disabled={disabled}
             rules={{
               ...createRequiredValidation("Sale price date to"),
               validate: (value) =>
@@ -94,6 +106,7 @@ const InventoryTab = ({ formConfig }) => {
         <div className="grid grid-cols-2 gap-4">
           <CommonTextField
             label="Weight *"
+            disabled={disabled}
             fieldName="weight"
             className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
             rules={createRequiredValidation("Weight")}
@@ -104,7 +117,9 @@ const InventoryTab = ({ formConfig }) => {
           <CommonSelect
             label="Unit *"
             formConfig={formConfig}
+            disabled={disabled}
             fieldName="unit"
+            rules={createRequiredValidation("Unit")}
             options={MEASURE_OPTIONS}
             placeholder="Select Unit Of Product"
             className="bg-[#F5F5F5] mt-2"
@@ -114,6 +129,7 @@ const InventoryTab = ({ formConfig }) => {
         <div>
           <CommonFieldArray
             heading="Bulking Pricing Rules"
+            disabled={disabled}
             fieldArrayName="bulking_price_rules"
             items={BULKING_PRICE_ITEMS}
             itemToAppend={BULKING_APPEND_ITEM}

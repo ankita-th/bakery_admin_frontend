@@ -3,16 +3,19 @@ import { INSTANCE, makeApiRequest, METHODS } from "../api/apiFunctions";
 import { CATEGORIES_ENDPOINT } from "../api/endpoints";
 import AddEditCategorySection from "./AddEditCategorySection";
 import { useForm } from "react-hook-form";
-import { editIcon } from "../assets/Icons/Svg";
 import ErrorMessage from "./Common/ErrorMessage";
 import { successType, toastMessage } from "../utils/toastMessage";
 import { DEFAULT_ERROR_MESSAGE } from "../constant";
 
-const CategorySection = ({ formConfig, fieldName, rules }) => {
+const CategorySection = ({
+  formConfig,
+  fieldName,
+  rules,
+  isViewOnly = false,
+}) => {
   const [file, setFile] = useState();
   const {
     register,
-    watch,
     formState: { errors },
   } = formConfig;
   const categoryFormConfig = useForm();
@@ -105,14 +108,16 @@ const CategorySection = ({ formConfig, fieldName, rules }) => {
       <div className="category-container p-4">
         <div className="category-heading">
           <h5>Categories</h5>
-          <span
-            onClick={() => {
-              setShowCateoryAddSection(true);
-            }}
-            className="text-[#FF6D2F]"
-          >
-            +Add
-          </span>
+          {!isViewOnly && (
+            <span
+              onClick={() => {
+                setShowCateoryAddSection(true);
+              }}
+              className="text-[#FF6D2F]"
+            >
+              +Add
+            </span>
+          )}
         </div>
         <div className="catgoryListing mt-4">
           {categories?.length > 0 ? (

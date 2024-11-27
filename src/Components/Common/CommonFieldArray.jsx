@@ -10,6 +10,7 @@ const CommonFieldArray = ({
   formConfig,
   items,
   itemToAppend,
+  disabled = false,
 }) => {
   const {
     control,
@@ -68,6 +69,7 @@ const CommonFieldArray = ({
                       required: isRequired ? "This field is required" : false,
                     }}
                     key={itemIndex}
+                    disabled={disabled}
                     customError={
                       errors?.[fieldArrayName]?.[index]?.[fieldName]?.message
                     }
@@ -82,17 +84,20 @@ const CommonFieldArray = ({
               type="button"
               onClick={() => remove(index)}
               className="cross-icon"
+              disabled={disabled}
             />
           )}
         </div>
       ))}
-      <CommonButton
-        text="Add Row"
-        icon={plusIcon}
-        onClick={() => append(itemToAppend)}
-        type="button"
-        className="add-row-button px-6"
-      />
+      {!disabled && (
+        <CommonButton
+          text="Add Row"
+          icon={plusIcon}
+          onClick={() => append(itemToAppend)}
+          type="button"
+          className="add-row-button px-6"
+        />
+      )}
     </div>
   );
 };

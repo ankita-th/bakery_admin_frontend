@@ -24,6 +24,7 @@ const CommonTextEditor = ({
   fieldName,
   requiredMessage,
   label,
+  disabled = false,
 }) => {
   const {
     control,
@@ -49,6 +50,7 @@ const CommonTextEditor = ({
               {...field}
               placeholder={placeholder}
               className={className}
+              readOnly={disabled}
               theme="snow"
               modules={{ toolbar: toolbarOptions }}
             />

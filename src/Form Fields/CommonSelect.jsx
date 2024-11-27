@@ -12,6 +12,7 @@ const CommonSelect = ({
   fieldName,
   rules,
   options,
+  disabled = false,
   placeholder = "",
   isMulti = false,
   isSearchable = true,
@@ -38,6 +39,7 @@ const CommonSelect = ({
                 <CreatableSelect
                   {...field}
                   options={options}
+                  isDisabled={disabled}
                   isMulti={isMulti}
                   isSearchable={isSearchable}
                   placeholder={placeholder}
@@ -55,7 +57,11 @@ const CommonSelect = ({
       case "normal":
         return (
           <>
-            <select className={className} {...register(fieldName, rules)}>
+            <select
+              disabled={disabled}
+              className={className}
+              {...register(fieldName, rules)}
+            >
               <option selected hidden value="" disabled>
                 {defaultOption}
               </option>
@@ -80,6 +86,7 @@ const CommonSelect = ({
                     options={options}
                     isMulti={isMulti}
                     isSearchable={isSearchable}
+                    isDisabled={disabled}
                     placeholder={placeholder}
                     onChange={(selected) => field.onChange(selected)}
                     value={field.value}

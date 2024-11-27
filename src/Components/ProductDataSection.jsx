@@ -10,15 +10,20 @@ const TABS = [
   { label: "Advanced", value: "advanced" },
 ];
 
-const ProductDataSection = ({ formConfig, activeTab, handleActiveTab }) => {
+const ProductDataSection = ({
+  formConfig,
+  activeTab,
+  handleActiveTab,
+  disabled = false,
+}) => {
   const renderActiveTab = () => {
     switch (activeTab) {
       case "inventory":
-        return <InventoryTab formConfig={formConfig} />;
+        return <InventoryTab formConfig={formConfig} disabled={disabled} />;
       case "variations":
-        return <VariantsTab formConfig={formConfig} />;
+        return <VariantsTab formConfig={formConfig}  disabled={disabled}/>;
       case "advanced":
-        return <AdvancedTab formConfig={formConfig} />;
+        return <AdvancedTab formConfig={formConfig}  disabled={disabled}/>;
     }
   };
 

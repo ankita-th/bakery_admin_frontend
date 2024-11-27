@@ -47,6 +47,11 @@ export const routes = [
     private: true,
   },
   {
+    path: "/view-product",
+    element: <AddEditProduct />,
+    private: true,
+  },
+  {
     path: "/categories",
     element: <Categories />,
     private: true,

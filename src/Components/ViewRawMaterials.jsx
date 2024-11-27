@@ -32,76 +32,78 @@ const ViewRawMaterials = ({ item, onClose, formConfig }) => {
         <div className="category-section overflow-auto">
           <AddEditSectionHeading onClose={onClose} text={"Raw Material"} />
           {/* <CommonButton text="fill form" type="button" onClick={fillForm} /> */}
+          <form>
+            <CommonTextField
+              label="Material Name"
+              fieldName="name"
+              rules={RawMaterialValidations["name"]}
+              formConfig={formConfig}
+              placeholder="Enter Material Name"
+              disabled={true}
+            />
 
-          <CommonTextField
-            label="Material Name"
-            fieldName="name"
-            rules={RawMaterialValidations["name"]}
-            formConfig={formConfig}
-            placeholder="Enter Material Name"
-            disabled={true}
-          />
+            <CommonTextField
+              label="Quantity In Stock"
+              fieldName="quantity"
+              rules={RawMaterialValidations["quantity"]}
+              formConfig={formConfig}
+              isNumberOnly={true}
+              placeholder="Enter Quantity Of Stock"
+              disabled={true}
+            />
 
-          <CommonTextField
-            label="Quantity In Stock"
-            fieldName="quantity"
-            rules={RawMaterialValidations["quantity"]}
-            formConfig={formConfig}
-            isNumberOnly={true}
-            placeholder="Enter Quantity Of Stock"
-            disabled={true}
-          />
+            <CommonSelect
+              formConfig={formConfig}
+              label="Unit Of Measure"
+              selectType="normal"
+              options={MEASURE_OPTIONS}
+              defaultOption="Select Unit Of Product"
+              fieldName="unit_of_measure"
+              className="add-edit-input"
+              rules={RawMaterialValidations["unit_of_measure"]}
+              disabled={true}
+            />
+            <CommonTextField
+              label="Reorder Level"
+              fieldName="reorder"
+              placeholder="Enter Reorder Level"
+              rules={RawMaterialValidations["reorder"]}
+              formConfig={formConfig}
+              isNumberOnly={true}
+              disabled={true}
+            />
 
-          <CommonSelect
-            formConfig={formConfig}
-            label="Unit Of Measure"
-            selectType="normal"
-            options={MEASURE_OPTIONS}
-            defaultOption="Select Unit Of Product"
-            fieldName="unit_of_measure"
-            className="add-edit-input"
-            rules={RawMaterialValidations["unit_of_measure"]}
-            disabled={true}
-          />
-          <CommonTextField
-            label="Reorder Level"
-            fieldName="reorder"
-            placeholder="Enter Reorder Level"
-            rules={RawMaterialValidations["reorder"]}
-            formConfig={formConfig}
-            isNumberOnly={true}
-            disabled={true}
-          />
+            <CommonTextField
+              label="Cost Per Unit ($)"
+              fieldName="cost"
+              placeholder="Cost Per Unit"
+              rules={RawMaterialValidations["cost"]}
+              formConfig={formConfig}
+              disabled={true}
+              isNumberOnly={true}
+              isDecimal={true}
+            />
 
-          <CommonTextField
-            label="Cost Per Unit ($)"
-            fieldName="cost"
-            placeholder="Cost Per Unit"
-            rules={RawMaterialValidations["cost"]}
-            formConfig={formConfig}
-            disabled={true}
-            isNumberOnly={true}
-            isDecimal={true}
-          />
+            <CommonTextField
+              label="Notes"
+              fieldName="description"
+              rules={RawMaterialValidations["description"]}
+              formConfig={formConfig}
+              placeholder="Enter Notes"
+              type="textarea"
+              rows={4}
+              disabled={true}
+            />
+            <CommonDateField
+              formConfig={formConfig}
+              fieldName="expiry_date"
+              minDate={today}
+              rules={RawMaterialValidations["expiry_date"]}
+              label="Expiry Date"
+              disabled={true}
+            />
+          </form>
 
-          <CommonTextField
-            label="Notes"
-            fieldName="description"
-            rules={RawMaterialValidations["description"]}
-            formConfig={formConfig}
-            placeholder="Enter Notes"
-            type="textarea"
-            rows={4}
-            disabled={true}
-          />
-          <CommonDateField
-            formConfig={formConfig}
-            fieldName="expiry_date"
-            minDate={today}
-            rules={RawMaterialValidations["expiry_date"]}
-            label="Expiry Date"
-            disabled={true}
-          />
           {/* commented for future use */}
 
           {/* <CommonDateField

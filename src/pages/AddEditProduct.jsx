@@ -24,6 +24,7 @@ import ProductDataSection from "../Components/ProductDataSection";
 import CategorySection from "../Components/CategorySection";
 import ImageUploadSection from "../Form Fields/ImageUploadSection";
 import {
+  allowedImageTypes,
   DEFAULT_ERROR_MESSAGE,
   MEASURE_OPTIONS,
   PNG_AND_JPG,
@@ -32,6 +33,8 @@ import { INSTANCE, makeApiRequest, METHODS } from "../api/apiFunctions";
 import { PRODUCT_ENDPOINT } from "../api/endpoints";
 import { successType, toastMessage } from "../utils/toastMessage";
 import { useLocation, useNavigate } from "react-router-dom";
+import { SPECIAL_CHARACTERS_REGEX } from "../regex/regex";
+import MultipleImageUploadField from "../Form Fields/MultipleImageUploadField";
 const options = [
   { label: "option1", value: "options1" },
   { label: "option2", value: "options2" },
@@ -71,7 +74,9 @@ const PREVIEW_AS_OPTIONS = [
 const AddEditProduct = () => {
   const location = useLocation();
   const editId = location?.state?.id;
+  const isViewOnly = location?.state?.isViewOnly;
   const navigate = useNavigate();
+  console.log(location, "isViewOnly");
   const formConfig = useForm({
     defaultValues: {
       bulking_price_rules: DEFAULT_BULKING_PRICE,
@@ -83,7 +88,8 @@ const AddEditProduct = () => {
   const { watch, register, setValue } = formConfig;
   const [activeTab, setActiveTab] = useState("inventory");
   const [featuredImage, setFeaturedImage] = useState(null);
-  const [productImage, setProductImage] = useState(null);
+  const [productImages, setProductImages] = useState([]);
+  const [productImageError, setProductImageError] = useState([]);
 
   console.log(featuredImage, "featured image");
   useEffect(() => {
@@ -204,31 +210,44 @@ const AddEditProduct = () => {
         formData.append(key, payload[key]);
       }
     }
+
+    // appending files
+    if (featuredImage?.file) {
+      formData.append("images", featuredImage?.file);
+    }
+
+    productImages?.forEach((productImage) => {
+      if (productImage?.file) {
+        formData.append("images[]", productImage.file);
+      }
+    });
+
     const data = Object.fromEntries(formData.entries()); // Convert to object
     console.log(data, "formData payload");
     // api call
-    makeApiRequest({
-      endPoint: PRODUCT_ENDPOINT,
-      method: editId ? METHODS.patch : METHODS.post,
-      payload: formData,
-      instanceType: INSTANCE.formInstance,
-      update_id: editId,
-    })
-      .then((res) => {
-        toastMessage(
-          `Product ${editId ? "Updated" : "Created"} Successfully`,
-          successType
-        );
-        navigate("/products");
-      })
-      .catch((err) => {
-        console.log(err);
-        toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
-      });
+    // makeApiRequest({
+    //   endPoint: PRODUCT_ENDPOINT,
+    //   method: editId ? METHODS.patch : METHODS.post,
+    //   payload: formData,
+    //   instanceType: INSTANCE.formInstance,
+    //   update_id: editId,
+    // })
+    //   .then((res) => {
+    //     toastMessage(
+    //       `Product ${editId ? "Updated" : "Created"} Successfully`,
+    //       successType
+    //     );
+    //     navigate("/products");
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+    //   });
   };
   const handleActiveTab = (tabName) => {
     setActiveTab(tabName);
   };
+  console.log(productImages, "these are poduct image");
 
   return (
     <>
@@ -245,9 +264,16 @@ const AddEditProduct = () => {
                   <CommonTextField
                     fieldName="name"
                     label="Product Name *"
-                    rules={createRequiredValidation("Product name")}
+                    rules={{
+                      ...createRequiredValidation("Product name"),
+                      pattern: {
+                        value: SPECIAL_CHARACTERS_REGEX,
+                        message: "Special characters are not allowed",
+                      },
+                    }}
                     placeholder="Product Name"
                     formConfig={formConfig}
+                    disabled={isViewOnly}
                     className="px-4 py-2 bg-white focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all mt-2"
                   />
                 </div>
@@ -255,6 +281,7 @@ const AddEditProduct = () => {
                   <CommonSelect
                     fieldName="product_tag"
                     selectType="creatable"
+                    disabled={isViewOnly}
                     rules={createRequiredValidation(
                       null,
                       "Product tags are required"
@@ -262,7 +289,7 @@ const AddEditProduct = () => {
                     options={PRODUCT_TAG_OPTIONS}
                     isMulti={true}
                     formConfig={formConfig}
-                    label="Product Tags"
+                    label="Product Tags *"
                     placeholder="Select Tags"
                   />
                 </div>
@@ -271,7 +298,8 @@ const AddEditProduct = () => {
             <div className="description mt-4 p-4 rounded-lg bg-white my-4">
               <CommonTextEditor
                 formConfig={formConfig}
-                label="Description"
+                disabled={isViewOnly}
+                label="Description *"
                 fieldName="description"
                 placeholder="Type..."
                 // rules={} // for this required validation cannot be passed through rules because it has some different way to handle required validation
@@ -281,6 +309,7 @@ const AddEditProduct = () => {
 
             <ProductDataSection
               formConfig={formConfig}
+              disabled={isViewOnly}
               activeTab={activeTab}
               handleActiveTab={handleActiveTab}
             />
@@ -289,9 +318,11 @@ const AddEditProduct = () => {
                 <h5 className="text-black font-medium">SEO</h5>
                 <CommonSelect
                   fieldName="focused_keyword"
+                  disabled={isViewOnly}
                   selectType="creatable"
                   // options={PRODUCT_TAG_OPTIONS}
                   isMulti={true}
+                  rules={createRequiredValidation()}
                   formConfig={formConfig}
                   label="Focus Keyphrase"
                   placeholder="Enter Keywords You Need To Focus"
@@ -300,6 +331,7 @@ const AddEditProduct = () => {
                   <div>Preview as:</div>
                   <RadioGroup
                     fieldName="preview_as"
+                    disabled={isViewOnly}
                     formConfig={formConfig}
                     options={PREVIEW_AS_OPTIONS}
                     className="flex gap-4"
@@ -325,11 +357,13 @@ const AddEditProduct = () => {
                     onClick={() => {}}
                     icon={pencilIcon}
                     type="button"
+                    disabled={isViewOnly}
                     className="buttonTwo bg-[#FF6D2F] flex px-4 py-2 rounded-lg mt-4 gap-4 text-white items-center"
                   />
                 </div>
                 <CommonTextField
                   fieldName="seo_title"
+                  disabled={isViewOnly}
                   label="SEO Title *"
                   rules={createRequiredValidation("SEO title")}
                   placeholder="Enter SEO Title"
@@ -339,6 +373,7 @@ const AddEditProduct = () => {
                 <CommonTextField
                   fieldName="slug"
                   label="Slug *"
+                  disabled={isViewOnly}
                   rules={createRequiredValidation("Slug")}
                   placeholder="Enter Page Slug"
                   formConfig={formConfig}
@@ -346,6 +381,7 @@ const AddEditProduct = () => {
                 />
                 <CommonTextField
                   fieldName="meta_description"
+                  disabled={isViewOnly}
                   label="Meta Description"
                   // rules={createRequiredValidation("Meta Description")}
                   placeholder="Enter Meta Description"
@@ -359,25 +395,28 @@ const AddEditProduct = () => {
           </div>
           {/* side section */}
           <div className="flex flex-col">
-            <div className="button-section flex justify-center">
-              <CommonButton
-                text="Publish"
-                name="publish"
-                type="submit"
-                className="orange_btn"
-                icon={publishIcon}
-              />
-              <CommonButton
-                text="Draft"
-                name="draft"
-                type="submit"
-                className="orange_btn"
-                icon={draftIcon}
-              />
-            </div>
+            {!isViewOnly && (
+              <div className="button-section flex justify-center">
+                <CommonButton
+                  text="Publish"
+                  name="publish"
+                  type="submit"
+                  className="orange_btn"
+                  icon={publishIcon}
+                />
+                <CommonButton
+                  text="Draft"
+                  name="draft"
+                  type="submit"
+                  className="orange_btn"
+                  icon={draftIcon}
+                />
+              </div>
+            )}
             <div className="flex flex-col gap-4 mt-4">
               <div className="flex gap-4 flex-col">
                 <CategorySection
+                  isViewOnly={isViewOnly}
                   formConfig={formConfig}
                   fieldName="category"
                   rules={createRequiredValidation("Category")}
@@ -388,13 +427,22 @@ const AddEditProduct = () => {
                   label="Featured Image"
                   uniqueId={`featured-image`}
                   accept={PNG_AND_JPG}
+                  disabled={isViewOnly}
                 />{" "}
-                <ImageUploadSection
-                  file={productImage}
-                  setFile={setProductImage}
-                  label="Product Image"
+                <MultipleImageUploadField
+                  files={productImages}
+                  setFiles={setProductImages}
+                  label="Product Images"
+                  allowedTypes={allowedImageTypes}
+                  imageError={productImageError}
+                  setImageError={setProductImageError}
                   uniqueId={`product-image`}
                   accept={PNG_AND_JPG}
+                  uploadButton={{
+                    text: "Upload Product Image",
+                    class: "image-upload-icon cursor-pointer",
+                  }}
+                  disabled={isViewOnly}
                 />
               </div>
             </div>

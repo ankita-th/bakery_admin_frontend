@@ -2,7 +2,7 @@ import React from "react";
 import CommonTextField from "../Form Fields/CommonTextField";
 import { createRequiredValidation } from "../utils/helpers";
 
-const AdvancedTab = ({ formConfig }) => {
+const AdvancedTab = ({ formConfig, disabled = false }) => {
   return (
     <div className="w-full">
       <div className="w-full space-y-4">
@@ -16,6 +16,7 @@ const AdvancedTab = ({ formConfig }) => {
           formConfig={formConfig}
           type="textarea"
           rows={4}
+          disabled={disabled}
         />
 
         <CommonTextField
@@ -25,6 +26,7 @@ const AdvancedTab = ({ formConfig }) => {
           className="w-full p-2 rounded-lg mt-2 bg-[#F5F5F5]"
           rules={createRequiredValidation("Minimum Order Quantity")}
           formConfig={formConfig}
+          disabled={disabled}
         />
       </div>
     </div>

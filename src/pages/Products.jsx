@@ -137,6 +137,7 @@ const Products = () => {
 
   const handleActions = (action, id) => {
     if (action === "view") {
+      navigate("/view-product", { state: { id: id, isViewOnly: true } });
     } else if (action === "edit") {
       // update required: make the route name better
       navigate("/add-edit-product", { state: { id: id } });

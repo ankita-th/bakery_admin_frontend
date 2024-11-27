@@ -11,6 +11,7 @@ const ImageUploadSection = ({
   allowedTypes = allowedImageTypes,
   accept = "image/*",
   uniqueId,
+  disabled = false,
   uploadInfo = { isOnUploadRequired: false }, // {isOnUploadRequired:true/false , onUpload:() => {}}
   // rules
 }) => {
@@ -47,6 +48,23 @@ const ImageUploadSection = ({
   return (
     <div>
       <div className="label">{label}</div>
+      {/* {!disabled && (
+        <>
+          <label htmlFor={inputId} className="image-upload-icon cursor-pointer">
+            {!file?.preview && imageUploadIcon}
+          </label>
+          <input
+            onChange={(e) => {
+              handleImageUpload(e);
+            }}
+            type="file"
+            id={inputId}
+            className="hidden"
+            disabled={disabled}
+            accept={accept} //"image/*"
+          />
+        </>
+      )} */}
       <label htmlFor={inputId} className="image-upload-icon cursor-pointer">
         {!file?.preview && imageUploadIcon}
       </label>
@@ -57,6 +75,7 @@ const ImageUploadSection = ({
         type="file"
         id={inputId}
         className="hidden"
+        disabled={disabled}
         accept={accept} //"image/*"
       />
 

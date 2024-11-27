@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const VariantAccordion = ({ remove, watch, children, index }) => {
+const VariantAccordion = ({ remove, watch, children, index, isViewOnly }) => {
   const [openIndex, setOpenIndex] = useState(null);
 
   const handleToggle = (index) => {
@@ -11,7 +11,11 @@ const VariantAccordion = ({ remove, watch, children, index }) => {
     <div role="accordion">
       <button
         type="button"
-        // onClick={() => handleToggle(index)}
+        onClick={() => {
+          if (isViewOnly) {
+            handleToggle(index);
+          }
+        }}
         className={`w-full font-semibold ${
           openIndex === index
             ? "text-blue-600"
@@ -19,8 +23,8 @@ const VariantAccordion = ({ remove, watch, children, index }) => {
         } flex items-center transition-all`}
       >
         {/* <span className="mr-4"> */}
-          <div className="flex items-center justify-between mb-4 w-full">
-            <div className="flex gap-4 items-center">
+        <div className="flex items-center justify-between mb-4 w-full">
+          <div className="flex gap-4 items-center">
             <div className="variation-count text-bold-500">#${index + 1}</div>
             <select
               className="border border-gray-300 text-sm text-gray-700 rounded-lg p-2"
@@ -28,7 +32,8 @@ const VariantAccordion = ({ remove, watch, children, index }) => {
             >
               <option value="1">100 gm</option>
             </select>
-            </div>
+          </div>
+          {!isViewOnly && (
             <div className="flex gap-2">
               <button
                 type="button"
@@ -46,7 +51,8 @@ const VariantAccordion = ({ remove, watch, children, index }) => {
                 </button>
               )}
             </div>
-          </div>
+          )}
+        </div>
         {/* </span> */}
         {/* <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -65,9 +71,7 @@ const VariantAccordion = ({ remove, watch, children, index }) => {
       </button>
 
       <div
-        className={`transition-all ${
-          openIndex === index ? "block" : "hidden"
-        }`}
+        className={`transition-all ${openIndex === index ? "block" : "hidden"}`}
       >
         <div>{children}</div>
       </div>
