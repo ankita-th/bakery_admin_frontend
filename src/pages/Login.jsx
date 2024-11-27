@@ -83,12 +83,12 @@ const Login = () => {
           icon={showPassword ? ClosedEye : OpenEye}
         />
         {/* commented for future  use */}
-        {/* <AuthRedirectSection
+        <AuthRedirectSection
           text=""
           linkText="Forgot your password"
           linkUrl="/forget-password"
           className="text-right text-gray-500 hover:text-black mt-2 underline"
-        /> */}
+        />
         <CommonButton
           text="Sign in"
           type="submit"
