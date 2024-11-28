@@ -12,8 +12,8 @@ export const CategoryValidations = {
     },
   },
   slug: {
-    ...createSlugValidation
-},
+    ...createSlugValidation,
+  },
   description: {
     // required: "Description is required",
   },
@@ -218,8 +218,16 @@ export const EmployeeValidations = {
   contact_no: {
     required: "Phone number is required",
     pattern: {
-      value: /^(?:\+46|0)[\d\s\-]{7,13}$/,
+      value: /^(?:46|0)[\d\s\-]{7,13}$/,
       message: "Please enter a valid Swedish phone number",
+    },
+    minLength: {
+      value: 8,
+      message: "Phone number must be at least 8 digits long.",
+    },
+    maxLength: {
+      value: 10,
+      message: "Phone number cannot exceed 10 digits.",
     },
   },
   shift: {
@@ -254,4 +262,3 @@ export const ZIP_CODE_VALIDATION = {
     message: "Zip code must be exactly 5 digits",
   },
 };
-
