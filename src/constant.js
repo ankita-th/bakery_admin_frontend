@@ -375,7 +375,7 @@ export const DUMMY_EMPLOYEE_DATA = [
 export const MEASURE_OPTIONS = [
   { label: "Kilogram", value: "kg" },
   { label: "Gram", value: "g" },
-  { label: "Litre", value: "kg" },
+  { label: "Litre", value: "l" },
 ];
 
 export const INVENTORY_PAGE_COLUMNS = [
