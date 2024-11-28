@@ -26,17 +26,21 @@ const SingleRecipeRow = ({ item, handleActions }) => {
       <td className="py-2 px-4 border">
         <Checkbox />
       </td>
-      <td className="py-2 px-4 border">{recipe_title}</td>
-      <td className="py-2 px-4 border">{listCategories(category)}</td>
+      <td className="py-2 px-4 border text-nowrap">{recipe_title}</td>
+      <td className="py-2 px-4 border text-nowrap">
+        {listCategories(category)}
+      </td>
       {/* update required :need to confirm about this mins and hours query */}
-      <td className="py-2 px-4 border">{preparation_time} mins</td>
-      <td className="py-2 px-4 border">{cook_time} mins</td>
-      <td className="py-2 px-4 border">{serving_size} servings</td>
-      <td className={`py-2 px-4 border ${STATUS_TO_CLASS?.[status]}`}>
+      <td className="py-2 px-4 border text-nowrap">{preparation_time} mins</td>
+      <td className="py-2 px-4 border text-nowrap">{cook_time} mins</td>
+      <td className="py-2 px-4 border text-nowrap">{serving_size} servings</td>
+      <td
+        className={`py-2 px-4 border text-nowrap ${STATUS_TO_CLASS?.[status]}`}
+      >
         {STATUS_TO_TEXT?.[status]}
       </td>
 
-      <td className="py-2 px-4 border space-x-2 flex">
+      <td className="py-2 px-4 border space-x-2 flex text-nowrap">
         {/* uncomment this  */}
         {/* <button
           className="text-blue-500 hover:text-blue-700"
@@ -46,7 +50,7 @@ const SingleRecipeRow = ({ item, handleActions }) => {
         </button> */}
         <button
           onClick={() => handleActions({ action: "edit", id: id })}
-          className="text-blue-500 hover:text-blue-700"
+          className="text-blue-500 hover:text-blue-700 "
         >
           {editIcon}
         </button>

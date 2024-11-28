@@ -23,6 +23,9 @@ const routeTitles = {
 };
 
 export const getHeadingTitleFromRoute = (pathName) => {
+  if(localStorage?.getItem("isRecipeEdit")){
+    return "Edit Recipe"
+  }
   return routeTitles?.[pathName] || "";
 };
 

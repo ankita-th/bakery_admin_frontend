@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { BellIcon } from "../assets/Icons/Svg";
 import userImage from "../assets/images/Avatar.png";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { getHeadingTitleFromRoute } from "../utils/helpers";
 import { makeApiRequest } from "../api/apiFunctions";
 import { successType, toastMessage } from "../utils/toastMessage";
@@ -9,6 +9,7 @@ import { successType, toastMessage } from "../utils/toastMessage";
 const Header = () => {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
+  const params = useParams();
   const userName = localStorage.getItem("userName");
   const { pathname } = useLocation();
   const title = getHeadingTitleFromRoute(pathname);
@@ -54,7 +55,9 @@ const Header = () => {
                 </span>
               </h5>
             ) : (
-              <h2 class="text-lg ">{title}</h2>
+              <h2 class="text-lg ">
+                {params?.receipe_id ? "Edit Recipe" : title}
+              </h2>
             )}
           </div>
 
