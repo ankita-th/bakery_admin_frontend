@@ -188,9 +188,9 @@ const Categories = () => {
   };
 
   const handleAddEditCategory = (values, event) => {
-    if (file?.error) {
-      return;
-    }
+    // if (file?.error) {
+    //   return;
+    // }
     const { isEdit, item, type } = editCategoryInfo;
     const buttonType = event.nativeEvent.submitter.name;
 
@@ -202,7 +202,6 @@ const Categories = () => {
     const payload = {
       name: values.name,
       slug: values.slug,
-      // category_image: file.file,
       description: values.description,
       is_active: buttonType === "publish",
     };
@@ -301,7 +300,7 @@ const Categories = () => {
             handleFilterChange={handleFilterChange}
           >
             <CommonButton
-              text="Add Category"
+              text="Add Category/SubCategory"
               // may be need to change this action from here to somewhere else
               onClick={() => {
                 handleCategoryModal({ action: "open" });
@@ -324,7 +323,7 @@ const Categories = () => {
                   // file={file}
                 />
               ))
-            ) : (
+          ) : (
               // updates required:Create a better no data found component
               <NoDataFound />
             )}

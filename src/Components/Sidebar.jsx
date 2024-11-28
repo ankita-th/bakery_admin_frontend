@@ -39,8 +39,8 @@ const SIDEBAR_LINKS_TOP = [
   {
     label: "Orders",
     icon: OrdersIcon,
-    href: "/orders",
-    activeRoutes: ["/orders"],
+    href: "/orders-management",
+    activeRoutes: ["/orders-management"],
   },
   {
     label: "Inventory",

@@ -36,7 +36,7 @@ const SingleRecipeRow = ({ item, handleActions }) => {
         {STATUS_TO_TEXT?.[status]}
       </td>
 
-      <td className="py-2 px-4 border space-x-2">
+      <td className="py-2 px-4 border space-x-2 flex">
         {/* uncomment this  */}
         {/* <button
           className="text-blue-500 hover:text-blue-700"

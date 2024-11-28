@@ -109,7 +109,7 @@ const AddEditEmployee = ({
           <CommonTextField
             label="Phone Number *"
             fieldName="contact_no"
-            placeholder="Enter Phone Number"
+            placeholder="+46 123 456 789 or 012 345 6789"
             rules={EmployeeValidations["contact_no"]}
             formConfig={formConfig}
             isNumberOnly={true}

@@ -8,7 +8,6 @@ import FilterSection from "../Components/Common/FilterSection";
 import CommonButton from "../Components/Common/CommonButton";
 import {
   DEFAULT_ERROR_MESSAGE,
-  DUMMY_TODO_DATA,
   SORT_BY_OPTIONS,
   TODO_ITEMS_PER_PAGE,
 } from "../constant";
@@ -111,7 +110,7 @@ const Todo = () => {
       method: METHODS.get,
     })
       .then((res) => {
-        const options = employeeListIntoOptions(res?.data);
+        const options = employeeListIntoOptions(res?.data?.results);
         setEmployeeList(options);
         // const prefillKeys = [
         //   "task_id",
@@ -159,7 +158,6 @@ const Todo = () => {
       setItemToDelete(id);
     }
   };
-
   const deleteTask = () => {
     setDeleteLoader((prev) => true);
     makeApiRequest({
