@@ -2,7 +2,7 @@ import React from "react";
 import ReactPaginate from "react-paginate";
 import { login } from "../../api/apiFunctions";
 
-const Pagination = ({ onPageChange, totalData, itemsPerPage }) => {
+const Pagination = ({ onPageChange, totalData, itemsPerPage ,currentPage}) => {
   // if API returns total data then calculate page count by the following way otherwise page count (total Pages will be provided in the APi itself)
   const totalPages = Math.ceil(totalData / itemsPerPage);
 
