@@ -184,7 +184,7 @@ const EmployeeManagement = () => {
       endPoint: EMPLOYEE_MANAGEMENT_ENDPOINT,
       payload: payload,
       method: editInfo?.isEdit ? METHODS?.patch : METHODS.post,
-      update_id: editInfo?.isEdit && editInfo?.item?.id,
+      update_id: editInfo?.isEdit && editInfo?.editItem?.id,
     })
       .then((res) => {
         toastMessage(
@@ -192,7 +192,7 @@ const EmployeeManagement = () => {
           successType
         );
         if (editInfo?.isEdit) {
-          setEmployees(handleEdit(employees, editInfo?.item?.id, res?.data));
+          setEmployees(handleEdit(employees, editInfo?.editItem?.id, res?.data));
         } else {
           setEmployees((prev) => [...prev, res?.data]);
         }
@@ -215,7 +215,6 @@ const EmployeeManagement = () => {
       })
       .finally(() => setButtonLoader((prev) => false));
   };
-
   return (
     <div>
       {" "}
@@ -251,6 +250,7 @@ const EmployeeManagement = () => {
         onPageChange={onPageChange}
         itemsPerPage={ITEMS_PER_PAGE}
         totalData={totalData}
+        currentPage={page}
       />
       {showDeleteModal && (
         <DeleteConfirmationModal
