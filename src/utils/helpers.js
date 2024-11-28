@@ -307,3 +307,11 @@ export const convertValuesIntoLabelAndValue = (data) => {
 export const createName = (firstName, lastName) => {
   return `${firstName} ${lastName}`;
 };
+export const createSlugValidation = () => {
+  return {
+    required: "Slug is required",
+    pattern: {
+        value: /^[a-zA-Z0-9_-]+$/,
+        message: "Only numbers, alphabets, underscores, and hyphens are allowed",
+    },
+  }}

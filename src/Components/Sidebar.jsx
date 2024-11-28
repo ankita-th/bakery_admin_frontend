@@ -82,7 +82,7 @@ const SIDEBAR_LINKS_TOP = [
     label: "Recipe's",
     icon: RecipeIcon,
     href: "/recipe",
-    activeRoutes: ["/recipe", "add-edit-recipe"],
+    activeRoutes: ["/recipe", "/add-edit-recipe"],
   },
   {
     label: "Payment History",

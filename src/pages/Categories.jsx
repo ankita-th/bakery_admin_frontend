@@ -96,7 +96,9 @@ const Categories = () => {
 
   useEffect(() => {
     fetchData();
-  }, [filters, page]);
+  }, [page]);
+  // commented for future use
+  // }, [filters, page]);
 
   const fetchData = () => {
     toggleLoader("pageLoader");

@@ -2,8 +2,8 @@ import React from "react";
 import { editIcon, trashIcon } from "../assets/Icons/Svg";
 import { createName } from "../utils/helpers";
 const STATUS_TO_CLASS = {
-  true: "",
-  false: "",
+  true: "text-green-500",
+  false: "text-red-500",
 };
 
 const SingleEmployeeRow = ({ item, handleActions, index, currentPage }) => {
@@ -18,16 +18,16 @@ const SingleEmployeeRow = ({ item, handleActions, index, currentPage }) => {
     shift,
     status,
     is_active,
+    employee_detail
   } = item;
-  console.log(item, "single employee");
   return (
     <tr className="text-center">
       <td className="py-2 px-4 border">{id}</td>
       <td className="py-2 px-4 border text-nowrap">{createName(first_name, last_name)}</td>
       <td className="py-2 px-4 border">{role}</td>
       <td className="py-2 px-4 border">{email}</td>
-      <td className="py-2 px-4 border">{phone}</td>
-      <td className="py-2 px-4 border">{shift}</td>
+      <td className="py-2 px-4 border">{employee_detail?.contact_no}</td>
+      <td className="py-2 px-4 border">{employee_detail?.shift}</td>
       {/* update required: add css for active-status and inactive-status class */}
       <td className={`py-2 px-4 border ${STATUS_TO_CLASS[is_active]}`}>
         {is_active ? "Active" : "Inactive"}

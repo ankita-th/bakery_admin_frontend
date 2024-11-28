@@ -76,11 +76,10 @@ const AddEditProduct = () => {
   const editId = location?.state?.id;
   const isViewOnly = location?.state?.isViewOnly;
   const navigate = useNavigate();
-  console.log(location, "isViewOnly");
   const formConfig = useForm({
     defaultValues: {
       bulking_price_rules: DEFAULT_BULKING_PRICE,
-      variants: DEFAULT_VARIANTS_DATA,
+      // variants: DEFAULT_VARIANTS_DATA, update
     },
 
     reValidateMode: "onChange",
@@ -90,8 +89,14 @@ const AddEditProduct = () => {
   const [featuredImage, setFeaturedImage] = useState(null);
   const [productImages, setProductImages] = useState([]);
   const [productImageError, setProductImageError] = useState([]);
+  const [snippetInfo, setSnippetInfo] = useState({
+    seo_title: "",
+    slug: "",
+    meta_description: "",
+  });
 
-  console.log(featuredImage, "featured image");
+  const [isSnippetEdit, setIsSnippetEdit] = useState(false);
+
   useEffect(() => {
     if (editId) {
       makeApiRequest({
@@ -101,6 +106,13 @@ const AddEditProduct = () => {
         .then((res) => {
           const data = res?.data;
           console.log(res?.data, "this is response");
+          // Setting seo snippet section
+          const seoSnippetData = {
+            seo_title: data?.product_seo?.seo_title,
+            slug: data?.product_seo?.slug,
+            meta_description: data?.product_seo?.meta_description,
+          };
+          setSnippetInfo(seoSnippetData);
           // for directly prefilling form values
 
           // for name and desription
@@ -177,7 +189,7 @@ const AddEditProduct = () => {
     }
   }, [editId]);
   const onSubmit = (values, event) => {
-    console.log(values, "these are values");
+    console.log("inside on submit");
     const buttonType = event.nativeEvent.submitter.name;
     const payload = {
       name: values?.name,
@@ -188,7 +200,8 @@ const AddEditProduct = () => {
       product_seo: createProductSeo(values),
       product_detail: {
         inventory: createInventoryPayload(values),
-        variants: createVariantPayload(values),
+        // variants: createVariantPayload(values),
+        variants: [],
         advanced: createAdvancedPayload(values),
       },
     };
@@ -212,43 +225,70 @@ const AddEditProduct = () => {
     }
 
     // appending files
-    if (featuredImage?.file) {
-      formData.append("images", featuredImage?.file);
-    }
+    // if (featuredImage?.file) {
+    //   formData.append("images[]", featuredImage?.file);
+    // }
 
-    productImages?.forEach((productImage) => {
-      if (productImage?.file) {
-        formData.append("images[]", productImage.file);
-      }
-    });
+    // productImages?.forEach((productImage) => {
+    //   if (productImage?.file) {
+    //     formData.append("images[]", productImage.file);
+    //   } 
+    // });
 
     const data = Object.fromEntries(formData.entries()); // Convert to object
     console.log(data, "formData payload");
     // api call
-    // makeApiRequest({
-    //   endPoint: PRODUCT_ENDPOINT,
-    //   method: editId ? METHODS.patch : METHODS.post,
-    //   payload: formData,
-    //   instanceType: INSTANCE.formInstance,
-    //   update_id: editId,
-    // })
-    //   .then((res) => {
-    //     toastMessage(
-    //       `Product ${editId ? "Updated" : "Created"} Successfully`,
-    //       successType
-    //     );
-    //     navigate("/products");
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
-    //   });
+    makeApiRequest({
+      endPoint: PRODUCT_ENDPOINT,
+      method: editId ? METHODS.patch : METHODS.post,
+      payload: formData,
+      instanceType: INSTANCE.formInstance,
+      update_id: editId,
+    })
+      .then((res) => {
+        toastMessage(
+          `Product ${editId ? "Updated" : "Created"} Successfully`,
+          successType
+        );
+        navigate("/products");
+      })
+      .catch((err) => {
+        console.log(err);
+        toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+      });
   };
   const handleActiveTab = (tabName) => {
     setActiveTab(tabName);
   };
   console.log(productImages, "these are poduct image");
-
+  const prefillValues = () => {
+    setValue("name", "Dummy product");
+  };
+  const fillForm = () => {
+    setValue("name", "Dummy Product Name");
+    setValue("product_tag", { label: "Hot Deals", value: "hot-deals" });
+    setValue("focused_keyword", { label: "keyword1", value: "keyword" });
+    setValue("seo_title", "Dummy Seo title");
+    setValue("slug", "Dummy slug");
+    setValue("meta_description", "Dummy meta description");
+    setValue("sku", "qweert1");
+    setValue("regular_price", "1234");
+    setValue("sale_price", "123213");
+    setValue("sale_price_dates_from", "2024-11-28");
+    setValue("sale_price_dates_to", "2024-11-29");
+    setValue("unit", { label: "Kilogram", value: "kg" });
+    setValue("weight", "123");
+    setValue("preview_as", "desktop");
+    setValue("bulking_price_rules", [
+      { quantity_from: 12, quantity_to: 20, price: "1213" },
+    ]);
+    setSnippetInfo({
+      seo_title: "",
+      slug: "",
+      meta_description: "",
+    });
+  };
+  console.log(watch("preview_as"), "preview as");
   return (
     <>
       <FormWrapper
@@ -256,6 +296,12 @@ const AddEditProduct = () => {
         onSubmit={onSubmit}
         isCustomButtons={true}
       >
+        <CommonButton
+          text="Fill form"
+          type="button"
+          className="orange_button"
+          onClick={fillForm}
+        />
         <div className="flex gap-4">
           <div className="flex-1">
             <div className="product-info-section mb-4">
@@ -338,32 +384,38 @@ const AddEditProduct = () => {
                     // rules={createRequiredValidation()}
                   />
                 </div>
-                <div className="snippet mb-4">
+                <div
+                  className="snippet mb-4"
+                  style={{ width: watch("preview_as") === "mobile" && "50%" }}
+                >
                   {/* update required: need to integrate this section */}
                   <div className="border p-4 space-y-2 rounded-lg mt-4 shadow-md">
-                    <div className="text-black">The Bakery</div>
+                    <div className="text-black">
+                      {snippetInfo?.seo_title || "Title"}
+                    </div>
                     <div className="text-[#FF6D2F]">
-                      https://www.bakery.com/
+                      {snippetInfo?.slug || "Slug"}
                     </div>
                     <div className="text-[#666666]">
-                      Lorem Ipsum has been the industry's standard dummy text
-                      ever since the 1500s, when an unknown printer took a
-                      galley of type and scrambled it to make a type specimen
-                      book. It has survived not only five centuries, but also...
+                      {snippetInfo?.meta_description || "Meta Description"}
                     </div>
                   </div>
-                  <CommonButton
-                    text="Edit Snippet"
-                    onClick={() => {}}
-                    icon={pencilIcon}
-                    type="button"
-                    disabled={isViewOnly}
-                    className="buttonTwo bg-[#FF6D2F] flex px-4 py-2 rounded-lg mt-4 gap-4 text-white items-center"
-                  />
+                  {!isSnippetEdit && !isViewOnly && (
+                    <CommonButton
+                      text="Edit Snippet"
+                      onClick={() => {
+                        setIsSnippetEdit(true);
+                      }}
+                      icon={pencilIcon}
+                      type="button"
+                      disabled={isViewOnly}
+                      className="buttonTwo bg-[#FF6D2F] flex px-4 py-2 rounded-lg mt-4 gap-4 text-white items-center"
+                    />
+                  )}
                 </div>
                 <CommonTextField
                   fieldName="seo_title"
-                  disabled={isViewOnly}
+                  disabled={isViewOnly || !isSnippetEdit}
                   label="SEO Title *"
                   rules={createRequiredValidation("SEO title")}
                   placeholder="Enter SEO Title"
@@ -373,23 +425,41 @@ const AddEditProduct = () => {
                 <CommonTextField
                   fieldName="slug"
                   label="Slug *"
-                  disabled={isViewOnly}
+                  disabled={isViewOnly || !isSnippetEdit}
                   rules={createRequiredValidation("Slug")}
                   placeholder="Enter Page Slug"
                   formConfig={formConfig}
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all my-2"
                 />
+                <div></div>
                 <CommonTextField
                   fieldName="meta_description"
-                  disabled={isViewOnly}
+                  disabled={isViewOnly || !isSnippetEdit}
                   label="Meta Description"
                   // rules={createRequiredValidation("Meta Description")}
                   placeholder="Enter Meta Description"
                   formConfig={formConfig}
                   type="textarea"
                   rows={4}
+                  maxlength={250}
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all my-2"
                 />
+                <div className="max-limit">Max.250 characters</div>
+                {isSnippetEdit && !isViewOnly && (
+                  <CommonButton
+                    text="Update Snippet"
+                    onClick={() => {
+                      setIsSnippetEdit(false);
+                      setSnippetInfo({
+                        seo_title: watch("seo_title"),
+                        slug: watch("slug"),
+                        meta_description: watch("meta_description"),
+                      });
+                    }}
+                    type="button"
+                    className="updateSnippet"
+                  />
+                )}
               </div>
             </div>
           </div>

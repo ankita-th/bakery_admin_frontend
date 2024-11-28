@@ -23,12 +23,11 @@ const AddEditEmployee = ({
 }) => {
   const { isEdit, editItem } = editInfo;
   const { setValue, watch } = formConfig;
-  console.log(DUMMY_EMPLOYEE, "editItem");
   useEffect(() => {
     if (isEdit) {
       // for first and last name and role and email
       const prefillKeys = ["first_name", "last_name", "email", "role"];
-      prefillFormValues(DUMMY_EMPLOYEE, prefillKeys, setValue);
+      prefillFormValues(editItem, prefillKeys, setValue);
 
       // for employee id, phone number, shift, hiring date, address, city state and zip code
       const prefillKeys2 = [
@@ -41,7 +40,7 @@ const AddEditEmployee = ({
         "address",
       ];
       prefillFormValues(
-        DUMMY_EMPLOYEE?.employee_detail,
+        editItem?.employee_detail,
         prefillKeys2,
         setValue
       );

@@ -112,7 +112,9 @@ const RawMaterials = () => {
       .finally(() => {
         toggleLoader("pageLoader");
       });
-  }, [filters, page]);
+  }, [page]);
+  // commented for future use
+  // }, [filters, page]);
 
   const handleActions = ({ action, deleteId, editItem, viewItem }) => {
     if (action === "view") {
@@ -210,7 +212,6 @@ const RawMaterials = () => {
   const handleButtonLoaders = (type) => {
     setbtnLoaders({ ...btnLoaders, [type]: !btnLoaders[type] });
   };
-  console.log(watch(), "form values");
   return (
     <>
       {pageLoader ? (

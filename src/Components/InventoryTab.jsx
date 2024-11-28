@@ -36,6 +36,7 @@ const InventoryTab = ({ formConfig, disabled }) => {
     quantity_to: null,
     price: "",
   };
+  console.log(watch("sale_price_dates_from"), "assadsa");
   return (
     <div>
       <div className="w-full space-y-4">
@@ -44,7 +45,7 @@ const InventoryTab = ({ formConfig, disabled }) => {
           fieldName="sku"
           className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
           rules={{
-            ...createRequiredValidation("Product name"),
+            ...createRequiredValidation("SKU"),
             pattern: {
               value: SPECIAL_CHARACTERS_REGEX,
               message: "Special characters are not allowed",
@@ -60,10 +61,18 @@ const InventoryTab = ({ formConfig, disabled }) => {
             label="Regular Price ($) *"
             fieldName="regular_price"
             className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
-            rules={createRequiredValidation("Regular Price")}
+            rules={{
+              ...createRequiredValidation("Regular Price"),
+              maxLength: {
+                value: 8,
+                message:
+                  "Regular price must not be more than 8 digits in total",
+              },
+            }}
             formConfig={formConfig}
             placeholder="Enter Price of Product"
             disabled={disabled}
+            isNumberOnly={true}
           />
 
           {/* need to add schedule sale yet */}
@@ -71,8 +80,15 @@ const InventoryTab = ({ formConfig, disabled }) => {
             label="Sale Price ($) *"
             fieldName="sale_price"
             className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
-            rules={createRequiredValidation("Sale Price")}
+            rules={{
+              ...createRequiredValidation("Sale Price"),
+              maxLength: {
+                value: 8,
+                message: "Sale price must not be more than 8 digits in total",
+              },
+            }}
             formConfig={formConfig}
+            isNumberOnly={true}
             placeholder="Enter Sale Price"
             disabled={disabled}
           />

@@ -80,7 +80,9 @@ const Recipe = () => {
       })
       .catch((err) => console.log(err))
       .finally(() => toggleLoader("pageLoader"));
-  }, [filters, page]);
+  }, [page]);
+  // commented for future use
+  // }, [filters, page]);
 
   const handleFilterChange = (filterName, value) => {
     const temp = { ...filters };

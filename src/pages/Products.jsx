@@ -107,7 +107,9 @@ const Products = () => {
       })
       .catch((err) => console.log(err))
       .finally(() => toggleLoader("pageLoader"));
-  }, [filters, page]);
+  }, [page]);
+  // commented for future use
+  // }, [filters, page]);
 
   const handleFilterChange = (filterName, value) => {
     const temp = { ...filters };
@@ -205,7 +207,7 @@ const Products = () => {
             toggleModal();
           }}
           onDelete={handleDeleteProduct}
-          deleteLoader={deleteLoader}
+          loader={deleteLoader}
         />
       )}
     </>

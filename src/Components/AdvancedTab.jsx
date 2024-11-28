@@ -27,6 +27,7 @@ const AdvancedTab = ({ formConfig, disabled = false }) => {
           rules={createRequiredValidation("Minimum Order Quantity")}
           formConfig={formConfig}
           disabled={disabled}
+          isNumberOnly={true}
         />
       </div>
     </div>

@@ -22,17 +22,16 @@ const SingleCategoryRow = ({
     category_image,
     subcategories,
   } = item;
-  console.log(item, "item inside");
   return (
     <>
       <tr className="text-center">
-        <td className="text-center rounded-tl-[10px] rounded-bl-[10px] bg-white ">
+        <td className="text-center rounded-tl-[10px] rounded-bl-[10px] ">
           <Checkbox />
         </td>
         <td>
           {category_image ? (
             <div className="image-display">
-              <img src={createPreview(category_image)} />
+              <img src={createPreview(category_image)} className="w-[30px] h-[30px] object-cover rounded-2" />
             </div>
           ) : (
             imageUploadIcon
@@ -75,13 +74,13 @@ const SingleCategoryRow = ({
         ? subcategories.map((subCategory, subCategoryIndex) => (
             <Fragment key={subCategoryIndex}>
               <tr className="text-center">
-                <td className="text-center rounded-tl-[10px] rounded-bl-[10px] bg-white ">
+                <td className="text-center rounded-tl-[10px] rounded-bl-[10px]">
                   <Checkbox />
                 </td>
                 <td>
                   {subCategory?.category_image ? (
                     <div className="image-display">
-                      <img src={createPreview(subCategory?.category_image)} />
+                      <img src={createPreview(subCategory?.category_image)} className="w-[30px] h-[30px] object-cover rounded-2" />
                     </div>
                   ) : (
                     imageUploadIcon
