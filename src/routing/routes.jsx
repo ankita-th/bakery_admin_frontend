@@ -19,6 +19,8 @@ import Support from "../pages/Support";
 import Notifications from "../pages/Notifications";
 import Settings from "../pages/Settings";
 import ForgetPassword from "../pages/ForgetPassword";
+import OrdersHistory from "../Components/OrderHistory";
+import OrderManagement from "../Components/OrderManagement";
 
 export const routes = [
   {
@@ -147,5 +149,15 @@ export const routes = [
     path: "/forget-password",
     element: <ForgetPassword />,
     public: true,
+  },
+  {
+    path: "/orders-history",
+    element: <OrdersHistory />,
+    private: true,
+  },
+  {
+    path: "/orders-management",
+    element: <OrderManagement />,
+    private: true,
   },
 ];

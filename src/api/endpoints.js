@@ -17,3 +17,4 @@ export const PAYMENT_ENDPOINT = "/payment-history/";
 export const NOTIFICTION_GET_ENDPOINT = "/notification/";
 export const NOTIFICATION_DELETE_ENDPOINT = "/notification/update/";
 export const SUPPORT_ENDPOINT = "/support";
+export const ORDERS_ENDPOINT = "/orders-history/"

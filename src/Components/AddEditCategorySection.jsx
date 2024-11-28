@@ -71,7 +71,7 @@ const AddEditCategorySection = ({
     if (isEdit) {
       return `Edit ${type === "category" ? "Category" : "Subcategory"}`;
     } else {
-      return "Add Category";
+      return (shouldShowParentCategoryField() ? "Add Category/SubCategory" : "Add Category");
     }
   };
   return (
@@ -106,7 +106,7 @@ const AddEditCategorySection = ({
             placeholder="Enter Slug e.g (BRE-8700)"
           />
           {/* update this field according to the API */}
-          {shouldShowParentCategoryField() && (
+          {shouldShowParentCategoryField() ? (
             <CommonSelect
               selectType="react-select"
               options={categoryOptions}
@@ -118,7 +118,7 @@ const AddEditCategorySection = ({
               label="Parent Category"
               placeholder="None"
             />
-          )}
+          ):""}
           <CommonTextField
             label="Description"
             fieldName="description"
@@ -163,6 +163,7 @@ const AddEditCategorySection = ({
             </div>
           ) : (
             <CommonButton
+            type="submit"
               text="Add category"
               className="orange_btn"
               icon={publishIcon}

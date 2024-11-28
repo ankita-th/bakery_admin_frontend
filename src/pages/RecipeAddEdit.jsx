@@ -267,7 +267,7 @@ const RecipeAddEdit = () => {
       {pageLoader ? (
         <PageLoader />
       ) : (
-        <div className="">
+        <div className="flex">
           <FormWrapper
             formConfig={formConfig}
             onSubmit={onSubmit}
@@ -448,24 +448,26 @@ const RecipeAddEdit = () => {
                       disabled={btnLoaders?.publish || btnLoaders?.draft}
                     />
                   </div>
-                  <CategorySection
-                    formConfig={formConfig}
-                    fieldName="category"
-                    rules={createRequiredValidation("Category")}
-                  />
-                  <div className="recipe-image-upload">
-                    <ImageUploadSection
-                      file={file}
-                      setFile={setFile}
-                      label="Recipe Image"
-                      accept={PNG_AND_JPG}
-                    />
-                  </div>
                 </div>
                 {/* </form> */}
               </div>
             </div>
           </FormWrapper>
+          <div className="-ml-[252px] mt-[70px]">
+            <CategorySection
+              formConfig={formConfig}
+              fieldName="category"
+              rules={createRequiredValidation("Category")}
+            />
+            <div className="recipe-image-upload">
+              <ImageUploadSection
+                file={file}
+                setFile={setFile}
+                label="Recipe Image"
+                accept={PNG_AND_JPG}
+              />
+            </div>
+          </div>
         </div>
       )}
     </div>

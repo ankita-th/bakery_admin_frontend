@@ -27,8 +27,8 @@ const SingleRawMaterialRow = ({ item, handleActions }) => {
       </td> */}
       <td className="py-2 px-4">{id}</td>
 
-      <td className="py-2">{name}</td>
-      <td className="py-2 px-4">{`${quantity} ${unit_of_measure}`}</td>
+      <td className="py-2 text-nowrap">{name}</td>
+      <td className="py-2 px-4 text-nowrap">{`${quantity} ${unit_of_measure}`}</td>
       <td
         className={`py-2 px-4 ${
           // update required: Update this logic
@@ -40,8 +40,8 @@ const SingleRawMaterialRow = ({ item, handleActions }) => {
       </td>
       <td className="py-2 px-4">{formatDate(expiry_date, YYYY_MM_DD)}</td>
       <td className="py-2">{formatDate(updated_at, YYYY_MM_DD)}</td>
-      <td className="py-2 px-4">{description}</td>
-      <td className="py-2 px-4">
+      <td className="py-2 px-4 text-nowrap">{description}</td>
+      <td className="py-2 px-4 flex gap-4">
         <button
           className="text-blue-500 hover:text-blue-700"
           onClick={() => handleActions({ action: "view", viewItem: item })}

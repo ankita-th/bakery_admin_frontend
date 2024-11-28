@@ -55,7 +55,7 @@ const EmployeeManagement = () => {
   const { page, onPageChange, setPage } = usePagination();
   const { pageLoader, toggleLoader } = useLoader();
   const formConfig = useForm();
-  const { reset } = formConfig;
+  const { reset ,watch} = formConfig;
   const { showModal: showEmployeeSection, toggleModal: toggleEmployeeSection } =
     useModalToggle();
   const { showModal: showDeleteModal, toggleModal: toggleDeleteModal } =
@@ -155,7 +155,6 @@ const EmployeeManagement = () => {
     setEditInfo({ isEdit: false, item: null });
     reset(); // for resetting form values
   };
-
   const onSubmit = (values) => {
     console.log(values, "these are values");
     setButtonLoader((prev) => true);
@@ -168,7 +167,7 @@ const EmployeeManagement = () => {
       last_name: values.last_name,
       employee_detail: {
         employee_id: values.employee_id,
-        address: values.address?.formatted_address,
+        address: values.address?.formatted_address||values.address,
         city: values.city.formatted_address || values?.city,
         state: values.state,
         country: "SE",

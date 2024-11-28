@@ -16,8 +16,8 @@ const SingleProductTableRow = ({ data, currentPage, index, handleActions }) => {
       <td className="py-2 px-4 border-0 bg-white ">
         {renderSerialNumber(currentPage, ITEMS_PER_PAGE, index)}
       </td>
-      <td className="py-2 px-4 border-0 bg-white ">{name}</td>
-      <td className="py-2 px-4 border-0 bg-white ">
+      <td className="py-2 px-4 border-0 bg-white text-nowrap">{name}</td>
+      <td className="py-2 px-4 border-0 bg-white text-nowrap">
         {product_detail?.inventory?.sku}
       </td>
       <td
@@ -27,10 +27,10 @@ const SingleProductTableRow = ({ data, currentPage, index, handleActions }) => {
       >
         {status}
       </td>
-      <td className="py-2 px-4 border-0 bg-white">
+      <td className="py-2 px-4 border-0 bg-white text-nowrap">
         {product_detail?.inventory?.regular_price}
       </td>
-      <td className="py-2 px-4 border-0 bg-white">
+      <td className="py-2 px-4 border-0 bg-white text-nowrap">
         {listCategories(category)}
       </td>
       <td className="py-2 px-4 border-0 bg-white">21/10/2024</td>
@@ -41,7 +41,7 @@ const SingleProductTableRow = ({ data, currentPage, index, handleActions }) => {
       >
         {status}
       </td> */}
-      <td className="py-2 px-4 border-0 space-x-2 bg-white rounded-tr-[10px] rounded-br-[10px]">
+      <td className="py-2 px-4 border-0 space-x-2 bg-white rounded-tr-[10px] rounded-br-[10px] flex">
         <button
           className="text-blue-500 hover:text-blue-700"
           onClick={() => handleActions("view", id)}

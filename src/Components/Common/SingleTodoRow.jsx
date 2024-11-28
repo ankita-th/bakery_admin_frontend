@@ -5,6 +5,7 @@ import { extractOption } from "../../utils/helpers";
 const STATUS_TO_CLASS = {
   "Not Started": "status-pending",
   unassigned: "text-red-500",
+  assigned: "text-green-500",
   //  further add accordingly
 };
 const SingleTodoRow = ({

@@ -78,7 +78,15 @@ const SingleCategoryRow = ({
                 <td className="text-center rounded-tl-[10px] rounded-bl-[10px] bg-white ">
                   <Checkbox />
                 </td>
-                <td>{imageUploadIcon}</td>
+                <td>
+                  {subCategory?.category_image ? (
+                    <div className="image-display">
+                      <img src={createPreview(subCategory?.category_image)} />
+                    </div>
+                  ) : (
+                    imageUploadIcon
+                  )}
+                </td>
                 <td className="py-2 px-4 border"> • {subCategory?.name}</td>
                 <td className="py-2 px-4 border">{subCategory?.slug}</td>
                 <td className="py-2 px-4 border">{subCategory?.description}</td>

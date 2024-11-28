@@ -64,10 +64,13 @@ export const prefillFormValues = (data, prefillkeys, setValue) => {
 
 export const employeeListIntoOptions = (employeeList) => {
   let result = [];
-  employeeList.forEach(({ first_name, last_name, id }) => {
-    const option = { label: `${first_name} ${last_name} (${id})`, value: id };
-    result.push(option);
-  });
+  if(employeeList?.length){
+    employeeList?.forEach(({ first_name, last_name, id }) => {
+      const option = { label: `${first_name} ${last_name} (${id})`, value: id };
+      result.push(option);
+    });
+
+  }
   return result;
 };
 

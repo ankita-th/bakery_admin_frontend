@@ -23,7 +23,7 @@ const SingleEmployeeRow = ({ item, handleActions, index, currentPage }) => {
   return (
     <tr className="text-center">
       <td className="py-2 px-4 border">{id}</td>
-      <td className="py-2 px-4 border">{createName(first_name, last_name)}</td>
+      <td className="py-2 px-4 border text-nowrap">{createName(first_name, last_name)}</td>
       <td className="py-2 px-4 border">{role}</td>
       <td className="py-2 px-4 border">{email}</td>
       <td className="py-2 px-4 border">{phone}</td>
@@ -33,7 +33,7 @@ const SingleEmployeeRow = ({ item, handleActions, index, currentPage }) => {
         {is_active ? "Active" : "Inactive"}
       </td>
 
-      <td className="py-2 px-4 border space-x-2">
+      <td className="py-2 px-4 border space-x-2 flex">
         <button
           onClick={() => {
             // need to confirm about id or task id
