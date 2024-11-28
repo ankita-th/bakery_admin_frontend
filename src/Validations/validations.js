@@ -1,6 +1,7 @@
 // validations for category section
 
 import { EMAIL_REGEX, SPECIAL_CHARACTERS_REGEX } from "../regex/regex";
+import { createSlugValidation } from "../utils/helpers";
 
 export const CategoryValidations = {
   name: {
@@ -11,11 +12,7 @@ export const CategoryValidations = {
     },
   },
   slug: {
-    required: "Slug is required",
-    pattern: {
-        value: /^[a-zA-Z0-9_-]+$/,
-        message: "Only numbers, alphabets, underscores, and hyphens are allowed",
-    },
+    ...createSlugValidation
 },
   description: {
     // required: "Description is required",
@@ -257,3 +254,4 @@ export const ZIP_CODE_VALIDATION = {
     message: "Zip code must be exactly 5 digits",
   },
 };
+
