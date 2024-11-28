@@ -19,7 +19,7 @@ const MultipleImageUploadField = ({
   const handleImageUpload = (e) => {
     const newFiles = Array.from(e.target.files);
     // add maximum file limit here
-    if (true) {
+    if (files.length + newFiles.length <= 5) {
       newFiles.forEach((file, index) => {
         if (isValidType(file, allowedTypes)) {
           const reader = new FileReader();
@@ -41,15 +41,15 @@ const MultipleImageUploadField = ({
           setFiles([...files, itemToAppend]);
         }
       });
-    } else{
-      setImageError("At most 5 images can be added")
+    } else {
+      setImageError("At most 5 images can be added");
     }
 
     e.target.value = ""; // Clear input to allow re-uploading same files
   };
 
   const removeImage = (index) => {
-    if(files?.length === 5){
+    if (files?.length === 5) {
       setImageError("");
     }
     setFiles((prev) => prev.filter((curElem, idx) => idx !== index));
@@ -71,27 +71,31 @@ const MultipleImageUploadField = ({
         accept={accept}
         multiple={true}
       />
-
-      <div className="image-preview-section">
-        {files.map(
-          ({ preview, file }, index) =>
-            file && (
-              <div key={index} className="image-preview-wrapper">
-                <img
-                  className="image-preview"
-                  src={preview}
-                  //   alt={`preview-${index}`}
-                />
-                <div
-                  className="remove-image"
-                  onClick={() => removeImage(index)}
-                >
-                  {closeIcon}
+      {files?.length ? (
+        <div className="image-preview-section">
+          {files?.map(
+            ({ preview, file }, index) =>
+              file && (
+                <div key={index} className="image-preview-wrapper">
+                  <img
+                    className="image-preview"
+                    src={preview}
+                    //   alt={`preview-${index}`}
+                  />
+                  <div
+                    className="remove-image"
+                    onClick={() => removeImage(index)}
+                  >
+                    {closeIcon}
+                  </div>
                 </div>
-              </div>
-            )
-        )}
-      </div>
+              )
+          )}
+        </div>
+      ) : (
+        ""
+      )}
+
       {/* need to update this logic */}
       <ErrorMessage customError={imageError} />
     </div>

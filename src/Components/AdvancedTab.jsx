@@ -12,7 +12,7 @@ const AdvancedTab = ({ formConfig, disabled = false }) => {
           fieldName="purchase_note"
           placeholder="Enter Purchase Note"
           className="w-full p-2 rounded-lg mt-2 bg-[#F5F5F5]"
-          rules={createRequiredValidation("Purchase Note")}
+          // rules={createRequiredValidation("Purchase Note")}
           formConfig={formConfig}
           type="textarea"
           rows={4}
@@ -24,7 +24,7 @@ const AdvancedTab = ({ formConfig, disabled = false }) => {
           fieldName="minimum_order_quantity"
           placeholder="Enter Order Quantity"
           className="w-full p-2 rounded-lg mt-2 bg-[#F5F5F5]"
-          rules={createRequiredValidation("Minimum Order Quantity")}
+          // rules={createRequiredValidation("Minimum Order Quantity")}
           formConfig={formConfig}
           disabled={disabled}
           isNumberOnly={true}

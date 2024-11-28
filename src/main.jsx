@@ -9,9 +9,9 @@ import { googleClientID } from "./api/apiConfig.js";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <GoogleOAuthProvider clientId={googleClientID}>
+      {/* <GoogleOAuthProvider clientId={googleClientID}> */}
         <App />
-      </GoogleOAuthProvider>
+      {/* </GoogleOAuthProvider> */}
     </BrowserRouter>
   </StrictMode>
 );

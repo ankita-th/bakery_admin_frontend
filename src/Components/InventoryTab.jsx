@@ -138,7 +138,7 @@ const InventoryTab = ({ formConfig, disabled }) => {
             rules={createRequiredValidation("Unit")}
             options={MEASURE_OPTIONS}
             placeholder="Select Unit Of Product"
-            className="bg-[#F5F5F5] mt-2"
+            className="mt-2 border-2 border-solid border-black-500 rounded"
           />
         </div>
 

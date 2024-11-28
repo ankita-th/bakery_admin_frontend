@@ -789,3 +789,6 @@ export const DUMMY_ORDERS_DATA = [
     reason_for_decline: 100,
   },
 ];
+export const SAME_PRODUCT_NAME_ERROR = `duplicate key value violates unique constraint "product_product_name_04ac86ce_uniq"
+DETAIL:  Key (name)=(Wheat) already exists.
+ fieldError`;

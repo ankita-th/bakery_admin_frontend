@@ -127,6 +127,7 @@ const CategorySection = ({
                   <input
                     {...register(fieldName, rules)}
                     type="checkbox"
+                    disabled={isViewOnly}
                     value={id}
                   />
                   {name}

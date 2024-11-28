@@ -3,8 +3,6 @@ import { BellIcon } from "../assets/Icons/Svg";
 import userImage from "../assets/images/Avatar.png";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { getHeadingTitleFromRoute } from "../utils/helpers";
-import { makeApiRequest } from "../api/apiFunctions";
-import { successType, toastMessage } from "../utils/toastMessage";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -87,12 +85,12 @@ const Header = () => {
                   ref={dropdownRef}
                   className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5"
                 >
-                  <a
+                  {/* <a
                     href="#"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     My Profile
-                  </a>
+                  </a> */}
                   <span
                     onClick={() => {
                       navigate("/settings");
