@@ -86,10 +86,18 @@ const AddEditProduct = () => {
       preview_as: "desktop",
       // variants: DEFAULT_VARIANTS_DATA, update
     },
+    mode: "onChange", // Trigger validation on every change
 
-    reValidateMode: "onChange",
+    shouldUnregister: false,
   });
-  const { watch, register, setValue } = formConfig;
+  const {
+    watch,
+    register,
+    getValues,
+    trigger,
+    setValue,
+    formState: { errors },
+  } = formConfig;
   const [activeTab, setActiveTab] = useState("inventory");
   const [featuredImage, setFeaturedImage] = useState(null);
   const [productImages, setProductImages] = useState([]);
@@ -279,9 +287,37 @@ const AddEditProduct = () => {
       });
   };
   const handleActiveTab = (tabName) => {
-    setActiveTab(tabName);
+    const values = getValues();
+    if (activeTab === "inventory") {
+    }
+    console.log(values, "these are values");
+    if (shouldChangeTab("inventory")) {
+      setActiveTab(tabName);
+    }
   };
-  console.log(productImages, "these are poduct image");
+  const shouldChangeTab = async (activeTab) => {
+    if (activeTab === "inventory") {
+      const inventoryFields = [
+        "sku",
+        "regular_price",
+        "sale_price",
+        "sale_price_dates_from",
+        "sale_price_dates_to",
+        "weight",
+        "unit",
+      ];
+      const validations = [];
+      inventoryFields.forEach(async (field) => {
+        const result = await trigger(field);
+        validations.push(result);
+      });
+      const shouldChangeTab = validations.every((it) => it == true);
+      console.log(shouldChangeTab, "log should change tab");
+      console.log(validations, "log validations");
+      return shouldChangeTab;
+    }
+  };
+  console.log(errors, "errors");
 
   // const fillForm = () => {
   //   setValue("name", "Dummy Product Name");

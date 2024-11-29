@@ -27,6 +27,7 @@ import { successType, toastMessage } from "../utils/toastMessage";
 import AddEditEmployee from "../Components/AddEditEmployee";
 import { deleteItemBasedOnId, handleEdit } from "../utils/helpers";
 import Pagination from "../Components/Common/Pagination";
+import PageLoader from "../loaders/PageLoader";
 const filterFields = [
   {
     type: "select",
@@ -221,64 +222,69 @@ const EmployeeManagement = () => {
   };
   return (
     <div>
-      {" "}
-      <FilterSection
-        filterFields={filterFields}
-        handleFilterChange={handleFilterChange}
-      >
-        <CommonButton
-          text="Add New Employee"
-          className="orange_btn"
-          type="button"
-          onClick={() => {
-            handleEmployeeSection({ action: "open" });
-          }}
-        />
-      </FilterSection>
-      <TableWrapper columns={EMPLOYEE_COLUMNS}>
-        {employees?.length ? (
-          employees?.map((it, idx) => (
-            <SingleEmployeeRow
-              key={idx}
-              item={it}
-              index={idx}
-              currentPage={page}
-              handleActions={handleActions}
+      {pageLoader ? (
+        <PageLoader />
+      ) : (
+        <>
+          <FilterSection
+            filterFields={filterFields}
+            handleFilterChange={handleFilterChange}
+          >
+            <CommonButton
+              text="Add New Employee"
+              className="orange_btn"
+              type="button"
+              onClick={() => {
+                handleEmployeeSection({ action: "open" });
+              }}
             />
-          ))
-        ) : (
-          <NoDataFound />
-        )}
-      </TableWrapper>
-      <Pagination
-        onPageChange={onPageChange}
-        itemsPerPage={ITEMS_PER_PAGE}
-        totalData={totalData}
-        currentPage={page}
-      />
-      {showDeleteModal && (
-        <DeleteConfirmationModal
-          title="Are you sure you want to remove this employee?"
-          description="This action cannot be redo."
-          onCancel={() => {
-            setItemToDelete(null);
-            toggleDeleteModal();
-          }}
-          onDelete={deleteEmployee}
-          loader={deleteLoader}
-        />
-      )}
-      {showEmployeeSection && (
-        <AddEditEmployee
-          onClose={() => {
-            handleEmployeeSection({ action: "close" });
-          }}
-          formConfig={formConfig}
-          onSubmit={onSubmit}
-          loader={buttonLoader}
-          editInfo={editInfo}
-        />
-      )}
+          </FilterSection>
+          <TableWrapper columns={EMPLOYEE_COLUMNS}>
+            {employees?.length ? (
+              employees?.map((it, idx) => (
+                <SingleEmployeeRow
+                  key={idx}
+                  item={it}
+                  index={idx}
+                  currentPage={page}
+                  handleActions={handleActions}
+                />
+              ))
+            ) : (
+              <NoDataFound />
+            )}
+          </TableWrapper>
+          <Pagination
+            onPageChange={onPageChange}
+            itemsPerPage={ITEMS_PER_PAGE}
+            totalData={totalData}
+            currentPage={page}
+          />
+          {showDeleteModal && (
+            <DeleteConfirmationModal
+              title="Are you sure you want to remove this employee?"
+              description="This action cannot be redo."
+              onCancel={() => {
+                setItemToDelete(null);
+                toggleDeleteModal();
+              }}
+              onDelete={deleteEmployee}
+              loader={deleteLoader}
+            />
+          )}
+          {showEmployeeSection && (
+            <AddEditEmployee
+              onClose={() => {
+                handleEmployeeSection({ action: "close" });
+              }}
+              formConfig={formConfig}
+              onSubmit={onSubmit}
+              loader={buttonLoader}
+              editInfo={editInfo}
+            />
+          )}
+        </>
+      )}{" "}
     </div>
   );
 };

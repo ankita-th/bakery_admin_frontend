@@ -1,5 +1,5 @@
 import React from "react";
-import { editIcon, trashIcon } from "../assets/Icons/Svg";
+import { editIcon, printIcon, trashIcon } from "../assets/Icons/Svg";
 import { listCategories } from "../utils/helpers";
 import Checkbox from "./Common/Checkbox";
 const STATUS_TO_TEXT = {
@@ -46,7 +46,8 @@ const SingleRecipeRow = ({ item, handleActions }) => {
           className="text-blue-500 hover:text-blue-700"
           onClick={() => handleActions({ action: "view" })}
         >
-          {isRecipe ? printIcon : eyeIcon}
+          {/* {true ? printIcon : eyeIcon} */}
+          {printIcon}
         </button>
         <button
           onClick={() => handleActions({ action: "edit", id: id })}
