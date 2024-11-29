@@ -14,6 +14,7 @@ import {
   DUMMY_EMPLOYEE_DATA,
   DUMMY_TODO_DATA,
   EMPLOYEE_ID_ERROR,
+  EMPLOYEE_SORT_BY_OPTIONS,
   ITEMS_PER_PAGE,
   SORT_BY_OPTIONS,
 } from "../constant";
@@ -30,7 +31,7 @@ const filterFields = [
   {
     type: "select",
     defaultOption: "Sort by",
-    options: SORT_BY_OPTIONS,
+    options: EMPLOYEE_SORT_BY_OPTIONS,
     filterName: "sort_by",
   },
   {
@@ -55,7 +56,7 @@ const EmployeeManagement = () => {
   const { page, onPageChange, setPage } = usePagination();
   const { pageLoader, toggleLoader } = useLoader();
   const formConfig = useForm();
-  const { reset ,watch} = formConfig;
+  const { reset, watch } = formConfig;
   const { showModal: showEmployeeSection, toggleModal: toggleEmployeeSection } =
     useModalToggle();
   const { showModal: showDeleteModal, toggleModal: toggleDeleteModal } =
@@ -167,7 +168,7 @@ const EmployeeManagement = () => {
       last_name: values.last_name,
       employee_detail: {
         employee_id: values.employee_id,
-        address: values.address?.formatted_address||values.address,
+        address: values.address?.formatted_address || values.address,
         city: values.city.formatted_address || values?.city,
         state: values.state,
         country: "SE",
@@ -192,7 +193,9 @@ const EmployeeManagement = () => {
           successType
         );
         if (editInfo?.isEdit) {
-          setEmployees(handleEdit(employees, editInfo?.editItem?.id, res?.data));
+          setEmployees(
+            handleEdit(employees, editInfo?.editItem?.id, res?.data)
+          );
         } else {
           setEmployees((prev) => [...prev, res?.data]);
         }

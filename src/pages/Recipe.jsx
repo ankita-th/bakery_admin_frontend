@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import FilterSection from "../Components/Common/FilterSection";
-import { DEFAULT_ERROR_MESSAGE, ITEMS_PER_PAGE, OPTIONS } from "../constant";
+import {
+  ACTIONS,
+  DEFAULT_ERROR_MESSAGE,
+  ITEMS_PER_PAGE,
+  OPTIONS,
+  TYPE_OPTIONS,
+} from "../constant";
 import CommonButton from "../Components/Common/CommonButton";
 import { useNavigate } from "react-router-dom";
 import usePagination from "../hooks/usePagination";
@@ -19,14 +25,14 @@ import PageLoader from "../loaders/PageLoader";
 const filterFields = [
   {
     type: "select",
-    defaultOption: "All",
-    options: OPTIONS,
+    defaultOption: "Select type",
+    options: TYPE_OPTIONS,
     filterName: "type",
   },
   {
     type: "select",
     defaultOption: "Select Action",
-    options: OPTIONS,
+    options: ACTIONS,
     filterName: "action",
   },
   {

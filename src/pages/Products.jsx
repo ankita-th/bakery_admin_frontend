@@ -6,8 +6,8 @@ import Pagination from "../Components/Common/Pagination";
 import {
   DEFAULT_ERROR_MESSAGE,
   ITEMS_PER_PAGE,
-  PRODUCT_ACTIONS,
-  PRODUCT_ALL_OPTIONS,
+  ACTIONS,
+  TYPE_OPTIONS,
 } from "../constant";
 import CommonButton from "../Components/Common/CommonButton";
 import useModalToggle from "../hooks/useModalToggle";
@@ -56,8 +56,8 @@ const PRODUCT_PAGE_COLUMNS = [
 const filterFields = [
   {
     type: "select",
-    defaultOption: "All",
-    options: PRODUCT_ALL_OPTIONS,
+    defaultOption: "Select type",
+    options: TYPE_OPTIONS,
     filterName: "type",
   },
   // {
@@ -69,7 +69,7 @@ const filterFields = [
   {
     type: "select",
     defaultOption: "Select Action",
-    options: PRODUCT_ACTIONS,
+    options: ACTIONS,
     filterName: "action",
   },
   {

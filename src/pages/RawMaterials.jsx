@@ -5,9 +5,11 @@ import usePagination from "../hooks/usePagination";
 import useLoader from "../hooks/useLoader";
 import { successType, toastMessage } from "../utils/toastMessage";
 import {
+  ACTIONS,
   DEFAULT_ERROR_MESSAGE,
   ITEMS_PER_PAGE,
   OPTIONS,
+  TYPE_OPTIONS,
   YYYY_MM_DD,
 } from "../constant";
 import TableWrapper from "../Wrappers/TableWrapper";
@@ -39,14 +41,14 @@ const RAW_MATERIAL_COLUMNS = [
 const filterFields = [
   {
     type: "select",
-    defaultOption: "All",
-    options: OPTIONS,
+    defaultOption: "Select type",
+    options: TYPE_OPTIONS,
     filterName: "type",
   },
   {
     type: "select",
     defaultOption: "Select Action",
-    options: OPTIONS,
+    options: ACTIONS,
     filterName: "action",
   },
   {

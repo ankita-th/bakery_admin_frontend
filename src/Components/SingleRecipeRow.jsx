@@ -42,12 +42,12 @@ const SingleRecipeRow = ({ item, handleActions }) => {
 
       <td className="py-2 px-4 border space-x-2 flex text-nowrap">
         {/* uncomment this  */}
-        {/* <button
+        <button
           className="text-blue-500 hover:text-blue-700"
           onClick={() => handleActions({ action: "view" })}
         >
           {isRecipe ? printIcon : eyeIcon}
-        </button> */}
+        </button>
         <button
           onClick={() => handleActions({ action: "edit", id: id })}
           className="text-blue-500 hover:text-blue-700 "

@@ -725,12 +725,13 @@ export const ROLE_OPTIONS = [
   { value: "worker", label: "Worker" },
   { value: "admin", label: "Admin" },
 ];
-export const PRODUCT_ALL_OPTIONS = [
+export const TYPE_OPTIONS = [
   { label: "Published", value: "published" },
   { label: "Drafts", value: "drafts" },
+  { label: "All", value: "all" },
 ];
 
-export const PRODUCT_ACTIONS = [
+export const ACTIONS = [
   { label: "Duplicate", value: "duplicate" },
   { label: "Delete", value: "delete" },
   { label: "Draft", value: "draft" },
@@ -792,3 +793,7 @@ export const DUMMY_ORDERS_DATA = [
 export const SAME_PRODUCT_NAME_ERROR = `duplicate key value violates unique constraint "product_product_name_04ac86ce_uniq"
 DETAIL:  Key (name)=(Wheat) already exists.
  fieldError`;
+export const EMPLOYEE_SORT_BY_OPTIONS = [
+  { label: "Active", value: "active" },
+  { label: "In Active", value: "inactive" },
+];

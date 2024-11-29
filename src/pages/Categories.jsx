@@ -3,7 +3,13 @@ import { useForm } from "react-hook-form";
 import { INSTANCE, makeApiRequest, METHODS } from "../api/apiFunctions";
 import { CATEGORIES_ENDPOINT, SUBCATEGORY_ENDPOINT } from "../api/endpoints";
 import { successType, toastMessage } from "../utils/toastMessage";
-import { DEFAULT_ERROR_MESSAGE, ITEMS_PER_PAGE, OPTIONS } from "../constant";
+import {
+  ACTIONS,
+  DEFAULT_ERROR_MESSAGE,
+  ITEMS_PER_PAGE,
+  OPTIONS,
+  TYPE_OPTIONS,
+} from "../constant";
 import useLoader from "../hooks/useLoader";
 import usePagination from "../hooks/usePagination";
 import TableWrapper from "../Wrappers/TableWrapper";
@@ -39,14 +45,14 @@ const DEFAULT_CATEGORY_VALUES = {
 const filterFields = [
   {
     type: "select",
-    defaultOption: "All",
-    options: OPTIONS,
+    defaultOption: "select_type",
+    options: TYPE_OPTIONS,
     filterName: "type",
   },
   {
     type: "select",
     defaultOption: "Select Action",
-    options: OPTIONS,
+    options: ACTIONS,
     filterName: "action",
   },
   {
@@ -325,7 +331,7 @@ const Categories = () => {
                   // file={file}
                 />
               ))
-          ) : (
+            ) : (
               // updates required:Create a better no data found component
               <NoDataFound />
             )}
