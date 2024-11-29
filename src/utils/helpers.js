@@ -68,8 +68,8 @@ export const prefillFormValues = (data, prefillkeys, setValue) => {
 export const employeeListIntoOptions = (employeeList) => {
   let result = [];
   if(employeeList?.length){
-    employeeList?.forEach(({ first_name, last_name, id }) => {
-      const option = { label: `${first_name} ${last_name} (${id})`, value: id };
+    employeeList?.forEach(({ first_name, last_name, id,email }) => {
+      const option = { label: `${first_name} ${last_name} (${email})`, value: id };
       result.push(option);
     });
 
@@ -313,8 +313,8 @@ export const createName = (firstName, lastName) => {
 export const createSlugValidation = () => {
   return {
     required: "Slug is required",
-    pattern: {
-        value: /^[a-zA-Z0-9_-]+$/,
-        message: "Only numbers, alphabets, underscores, and hyphens are allowed",
-    },
+    // pattern: {
+    //     value: /^[a-zA-Z0-9_-]+$/,
+    //     message: "Only numbers, alphabets, underscores, and hyphens are allowed",
+    // },
   }}

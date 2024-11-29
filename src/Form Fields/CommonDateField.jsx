@@ -13,6 +13,7 @@ const CommonDateField = ({
   icon = null,
   disabled = false,
   type = "date",
+  customError = false,
 }) => {
   const {
     register,
@@ -33,7 +34,11 @@ const CommonDateField = ({
         />
         {icon}
       </div>
-      <ErrorMessage fieldName={fieldName} errors={errors} />
+      {customError ? (
+        <p className="text-red-600">{customError}</p>
+      ) : (
+        <ErrorMessage fieldName={fieldName} errors={errors} />
+      )}
     </div>
   );
 };

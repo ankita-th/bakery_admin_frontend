@@ -199,6 +199,21 @@ const AddEditProduct = () => {
           // for variants
 
           // for filling images
+          // if (data?.featured_image) {
+          //   preview = createPreview(data?.featured_image);
+          //   setFile(createPreview);
+          // }
+          // if (data?.product_images?.length) {
+          //   let result = [];
+          //   const product_images = data.product_images;
+
+          //   productImages?.forEach((img) => {
+          //     const item = { preview: img, error: null, file: null };
+          //     result.push(item);
+          //   });
+          //   setProductImages(result);
+          // }
+          // for filling images
         })
         .catch((err) => {
           console.log(err);
@@ -223,8 +238,7 @@ const AddEditProduct = () => {
       product_seo: createProductSeo(values),
       product_detail: {
         inventory: createInventoryPayload(values),
-        // variants: createVariantPayload(values),
-        variants: [],
+        variants: createVariantPayload(values),
         advanced: createAdvancedPayload(values),
       },
     };
@@ -249,12 +263,12 @@ const AddEditProduct = () => {
 
     // appending files
     if (featuredImage?.file) {
-      formData.append("images", featuredImage?.file);
+      formData.append("featured_image", featuredImage?.file);
     }
 
     productImages?.forEach((productImage) => {
       if (productImage?.file) {
-        formData.append("images[]", productImage.file);
+        formData.append("product_images[]", productImage.file);
       }
     });
 
@@ -278,46 +292,53 @@ const AddEditProduct = () => {
       })
       .catch((err) => {
         console.log(err);
+        // const error =
+        //   err?.response?.data?.name?.[0] || err?.response?.data?.sku?.[0];
+        // toastMessage(error || DEFAULT_ERROR_MESSAGE);
+
         const fieldError = err?.response?.data?.error;
-        console.log(fieldError == SAME_PRODUCT_NAME_ERROR, "fieldError");
-        // console.log(fieldError, "fieldError");
         setBtnLoaders({ publish: false, draft: false });
 
         toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
       });
   };
-  const handleActiveTab = (tabName) => {
-    const values = getValues();
-    if (activeTab === "inventory") {
-    }
-    console.log(values, "these are values");
-    if (shouldChangeTab("inventory")) {
+  const handleActiveTab = async (tabName) => {
+    const shouldChange = await shouldChangeTab(activeTab);
+    console.log(shouldChange, "shouldChange");
+    if (shouldChange) {
       setActiveTab(tabName);
     }
   };
   const shouldChangeTab = async (activeTab) => {
     if (activeTab === "inventory") {
       const inventoryFields = [
-        "sku",
-        "regular_price",
-        "sale_price",
         "sale_price_dates_from",
         "sale_price_dates_to",
         "weight",
         "unit",
+        "sku",
+        "sale_price",
+        "regular_price",
+        "bulking_price_rules",
       ];
-      const validations = [];
-      inventoryFields.forEach(async (field) => {
-        const result = await trigger(field);
-        validations.push(result);
-      });
-      const shouldChangeTab = validations.every((it) => it == true);
-      console.log(shouldChangeTab, "log should change tab");
-      console.log(validations, "log validations");
+
+      // Use map to create an array of promises
+      const validations = await Promise.all(
+        inventoryFields.map((field) => trigger(field))
+      );
+
+      console.log(validations, "validations");
+
+      // Check if all validations are true
+      const shouldChangeTab = validations.every((it) => it === true);
       return shouldChangeTab;
+    } else if (activeTab === "variations") {
+      const variantResult = await trigger("variants");
+      return variantResult;
+    } else {
+      return true;
     }
   };
-  console.log(errors, "errors");
 
   // const fillForm = () => {
   //   setValue("name", "Dummy Product Name");

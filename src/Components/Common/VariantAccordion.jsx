@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 
-const VariantAccordion = ({ remove, watch, children, index, isViewOnly }) => {
-  const [openIndex, setOpenIndex] = useState(null);
-
-  const handleToggle = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
-
+const VariantAccordion = ({
+  remove,
+  watch,
+  children,
+  index,
+  isViewOnly,
+  openIndex,
+  handleToggle,
+}) => {
   return (
     <div role="accordion">
       <button

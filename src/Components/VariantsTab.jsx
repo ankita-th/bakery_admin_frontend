@@ -56,6 +56,11 @@ const VariantsTab = ({ formConfig, disabled }) => {
     control,
     name: "variants",
   });
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const handleToggle = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
 
   console.log(watch("variants"), "these are variants");
   console.log(errors, "errors");
@@ -66,6 +71,8 @@ const VariantsTab = ({ formConfig, disabled }) => {
           <div className="p-2 w-full border-b my-2">
             <VariantAccordion
               index={index}
+              openIndex={openIndex}
+              handleToggle={handleToggle}
               remove={remove}
               watch={watch}
               isViewOnly={disabled}
@@ -126,7 +133,7 @@ const VariantsTab = ({ formConfig, disabled }) => {
                       disabled={disabled}
                       fieldName={`variants.${index}.sku`}
                       formConfig={formConfig}
-                      // rules={createRequiredValidation("SKU")}
+                      rules={createRequiredValidation("SKU")}
                       placeholder="Enter SKU"
                       customError={
                         errors?.["variants"]?.[index]?.["sku"]?.message
@@ -142,7 +149,7 @@ const VariantsTab = ({ formConfig, disabled }) => {
                         placeholder="Enter Regular Price"
                         formConfig={formConfig}
                         disabled={disabled}
-                        // rules={createRequiredValidation("Regular price")}
+                        rules={createRequiredValidation("Regular price")}
                         isDecimal={true}
                         customError={
                           errors?.["variants"]?.[index]?.["regular_price"]
@@ -158,7 +165,7 @@ const VariantsTab = ({ formConfig, disabled }) => {
                         placeholder="Enter Sale Price"
                         formConfig={formConfig}
                         disabled={disabled}
-                        // rules={createRequiredValidation("Sale price")}
+                        rules={createRequiredValidation("Sale price")}
                         isDecimal={true}
                         customError={
                           errors?.["variants"]?.[index]?.["sale_price"]?.message
@@ -173,7 +180,12 @@ const VariantsTab = ({ formConfig, disabled }) => {
                         formConfig={formConfig}
                         label="Sale Price Dates From"
                         fieldName={`variants.${index}.sale_price_dates_from`}
-                        // rules={createRequiredValidation()}
+                        rules={createRequiredValidation()}
+                        customError={
+                          errors?.["variants"]?.[index]?.[
+                            "sale_price_dates_from"
+                          ]?.message
+                        }
                         disabled={disabled}
                         minDate={today}
                         className="w-full bg-gray-100 rounded-lg p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
@@ -188,8 +200,12 @@ const VariantsTab = ({ formConfig, disabled }) => {
                         minDate={watch(
                           `variants.${index}.sale_price_dates_from`
                         )}
+                        customError={
+                          errors?.["variants"]?.[index]?.["sale_price_dates_to"]
+                            ?.message
+                        }
                         rules={{
-                          // ...createRequiredValidation(),
+                          ...createRequiredValidation(),
                           validate: (value) =>
                             value >=
                               watch(
@@ -212,7 +228,7 @@ const VariantsTab = ({ formConfig, disabled }) => {
                       fieldName={`variants.${index}.quantity`}
                       disabled={disabled}
                       placeholder="Enter Stock Quantity"
-                      // rules={createRequiredValidation("Stock quantity")}
+                      rules={createRequiredValidation("Stock quantity")}
                       isDecimal={true}
                       formConfig={formConfig}
                       customError={
@@ -226,7 +242,7 @@ const VariantsTab = ({ formConfig, disabled }) => {
                       label="Allow Backorders?"
                       fieldName={`variants.${index}.allow_backorders`}
                       placeholder="Select"
-                      // rules={createRequiredValidation()}
+                      rules={createRequiredValidation("Allow backdors")}
                       disabled={disabled}
                       // update required: need to update the values of these options
                       options={BACKDOOR_OPTIONS}
@@ -247,7 +263,7 @@ const VariantsTab = ({ formConfig, disabled }) => {
                       formConfig={formConfig}
                       isDecimal={true}
                       fieldName={`variants.${index}.weight`}
-                      // rules={createRequiredValidation("Weight")}
+                      rules={createRequiredValidation("Weight")}
                       placeholder="Enter Weight of product"
                       customError={
                         errors?.["variants"]?.[index]?.["weight"]?.message
@@ -260,7 +276,7 @@ const VariantsTab = ({ formConfig, disabled }) => {
                       label="Unit"
                       disabled={disabled}
                       fieldName={`variants.${index}.unit`}
-                      // rules={createRequiredValidation("unit")}
+                      rules={createRequiredValidation("Unit")}
                       // update required: need to update the values of these options
                       options={MEASURE_OPTIONS}
                       placeholder="Select Unit Of Product"
@@ -294,7 +310,9 @@ const VariantsTab = ({ formConfig, disabled }) => {
         <CommonButton
           text="Add Variant"
           icon={plusIcon}
-          onClick={() => append(itemToAppend)}
+          onClick={() => {
+            append(itemToAppend);
+          }}
           type="button"
           className="add-row-button"
         />

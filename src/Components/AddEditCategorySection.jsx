@@ -36,7 +36,6 @@ const AddEditCategorySection = ({
   const { setValue, watch } = formConfig;
   const { isEdit, item, type } = editCategoryInfo;
   const [categoryOptions, setCategoryOptions] = useState([]);
-  console.log(item, "this is category item");
   useEffect(() => {
     if (isEdit) {
       // function for prefilling normal values
@@ -53,8 +52,6 @@ const AddEditCategorySection = ({
       }
     }
   }, []);
-  console.log(watch("parent"), "log this is parent");
-  console.log(categoryOptions, "log categoryoptions");
 
   useEffect(() => {
     const categoryOptions = [];

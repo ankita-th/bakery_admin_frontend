@@ -7,6 +7,7 @@ import CreatableSelect from "react-select/creatable";
 
 const CommonSelect = ({
   className = "",
+  customError = false,
   label,
   formConfig,
   fieldName,
@@ -105,7 +106,11 @@ const CommonSelect = ({
     <div>
       <div className="label mb-2">{label}</div>
       {renderFieldAccordingToType()}
-      <ErrorMessage errors={errors} fieldName={fieldName} />
+      {customError ? (
+        <p className="text-red-600">{customError}</p>
+      ) : (
+        <ErrorMessage fieldName={fieldName} errors={errors} />
+      )}
     </div>
   );
 };

@@ -79,30 +79,27 @@ const CategorySection = ({
     })
       .then((res) => {
         setCategories((prev) => [...prev, res?.data]);
+        setBtnLoaders({ publish: false });
         toastMessage(`Category added sucessfully`, successType);
+        setShowCateoryAddSection(false);
+        reset();
+        setFile(null);
       })
       .catch((err) => {
-        toastMessage(handleCategoryErrorToast(err));
-      })
-      .finally(() => {
-        setShowCateoryAddSection(false);
-        handleReset();
+        const fieldError =
+          err?.response?.data?.name?.[0] || err?.response?.data?.slug?.[0];
+        if (fieldError) {
+          toastMessage(fieldError);
+        } else {
+          toastMessage(DEFAULT_ERROR_MESSAGE);
+          setShowCateoryAddSection(false);
+          reset();
+          setFile(null);
+        }
+        setBtnLoaders({ publish: false });
       });
   };
-  const handleReset = () => {
-    reset();
-    setFile(null);
-    setBtnLoaders({ publish: false });
-  };
-  const handleCategoryErrorToast = (err) => {
-    if (err?.response?.data?.name?.[0]) {
-      return err?.response?.data?.name?.[0];
-    } else if (err?.response?.data?.slug?.[0]) {
-      return err?.response?.data?.slug?.[0];
-    } else {
-      return DEFAULT_ERROR_MESSAGE;
-    }
-  };
+
   return (
     <div>
       <div className="category-container p-4">

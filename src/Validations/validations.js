@@ -12,7 +12,7 @@ export const CategoryValidations = {
     },
   },
   slug: {
-    ...createSlugValidation,
+    required: "Slug is required",
   },
   description: {
     // required: "Description is required",
@@ -77,6 +77,10 @@ export const TodoValidations = {
   },
   title: {
     required: "Task name is required",
+    pattern: {
+      value: SPECIAL_CHARACTERS_REGEX,
+      message: "Special characters are not allowed",
+    },
   },
   description: {
     required: "Description is required",
