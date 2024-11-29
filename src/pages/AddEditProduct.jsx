@@ -36,6 +36,8 @@ import { successType, toastMessage } from "../utils/toastMessage";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SPECIAL_CHARACTERS_REGEX } from "../regex/regex";
 import MultipleImageUploadField from "../Form Fields/MultipleImageUploadField";
+import useLoader from "../hooks/useLoader";
+import PageLoader from "../loaders/PageLoader";
 const options = [
   { label: "option1", value: "options1" },
   { label: "option2", value: "options2" },
@@ -76,6 +78,7 @@ const AddEditProduct = () => {
   const location = useLocation();
   const editId = location?.state?.id;
   const isViewOnly = location?.state?.isViewOnly;
+  const { pageLoader, toggleLoader } = useLoader();
   const navigate = useNavigate();
   const formConfig = useForm({
     defaultValues: {
@@ -104,6 +107,7 @@ const AddEditProduct = () => {
 
   useEffect(() => {
     if (editId) {
+      toggleLoader("pageLoader");
       makeApiRequest({
         endPoint: `${PRODUCT_ENDPOINT}${editId}`,
         method: METHODS.get,
@@ -192,6 +196,9 @@ const AddEditProduct = () => {
           console.log(err);
           toastMessage("Invalid product id");
           // navigate("/products");
+        })
+        .finally(() => {
+          toggleLoader("pageLoader");
         });
     }
   }, [editId]);
@@ -302,244 +309,253 @@ const AddEditProduct = () => {
   // };
   return (
     <>
-      <div className="flex">
-        <FormWrapper
-          formConfig={formConfig}
-          onSubmit={onSubmit}
-          isCustomButtons={true}
-        >
-          {/* <CommonButton
+      {pageLoader ? (
+        <PageLoader />
+      ) : (
+        <>
+          <div className="flex">
+            <FormWrapper
+              formConfig={formConfig}
+              onSubmit={onSubmit}
+              isCustomButtons={true}
+            >
+              {/* <CommonButton
           text="Fill form"
           type="button"
           className="orange_button"
           onClick={fillForm}
         /> */}
-          <div className="flex gap-4">
-            <div className="flex-1">
-              <div className="product-info-section mb-4">
-                <div className="flex gap-4">
-                  <div className="flex-1">
-                    <CommonTextField
-                      fieldName="name"
-                      label="Product Name *"
-                      rules={{
-                        ...createRequiredValidation("Product name"),
-                        pattern: {
-                          value: SPECIAL_CHARACTERS_REGEX,
-                          message: "Special characters are not allowed",
-                        },
-                      }}
-                      placeholder="Product Name"
-                      formConfig={formConfig}
-                      disabled={isViewOnly}
-                      className="px-4 py-2 bg-white focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all mt-2"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <CommonSelect
-                      fieldName="product_tag"
-                      selectType="creatable"
-                      disabled={isViewOnly}
-                      rules={createRequiredValidation(
-                        null,
-                        "Product tags are required"
-                      )}
-                      options={PRODUCT_TAG_OPTIONS}
-                      isMulti={true}
-                      formConfig={formConfig}
-                      label="Product Tags *"
-                      placeholder="Select Tags"
-                      className="mt-2 border-1 border-solid border-black-500 rounded"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="description mt-4 p-4 rounded-lg bg-white my-4">
-                <CommonTextEditor
-                  formConfig={formConfig}
-                  disabled={isViewOnly}
-                  label="Description *"
-                  fieldName="description"
-                  placeholder="Type..."
-                  // rules={} // for this required validation cannot be passed through rules because it has some different way to handle required validation
-                  requiredMessage={"Description is required"} // if this prop is not passed required validation is not applied
-                />
-              </div>
-
-              <ProductDataSection
-                formConfig={formConfig}
-                disabled={isViewOnly}
-                activeTab={activeTab}
-                handleActiveTab={handleActiveTab}
-              />
-              <div className="seo-section mt-4 bg-white p-4 rounded-lg">
-                <div className="w-3/5">
-                  <h5 className="text-black font-medium">SEO</h5>
-                  <CommonSelect
-                    fieldName="focused_keyword"
-                    disabled={isViewOnly}
-                    selectType="creatable"
-                    // options={PRODUCT_TAG_OPTIONS}
-                    isMulti={true}
-                    rules={createRequiredValidation()}
-                    formConfig={formConfig}
-                    label="Focus Keyphrase"
-                    placeholder="Enter Keywords You Need To Focus"
-                    className="mt-2 border-2 border-solid border-black-500 rounded"
-                  />{" "}
-                  <div className="flex gap-8 mt-4">
-                    <div>Preview as:</div>
-                    <RadioGroup
-                      fieldName="preview_as"
-                      disabled={isViewOnly}
-                      formConfig={formConfig}
-                      options={PREVIEW_AS_OPTIONS}
-                      className="flex gap-4"
-                      // rules={createRequiredValidation()}
-                    />
-                  </div>
-                  <div
-                    className="snippet mb-4"
-                    style={{ width: watch("preview_as") === "mobile" && "50%" }}
-                  >
-                    {/* update required: need to integrate this section */}
-                    <div className="border p-4 space-y-2 rounded-lg mt-4 shadow-md">
-                      <div className="text-black">
-                        {snippetInfo?.seo_title || "Title"}
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <div className="product-info-section mb-4">
+                    <div className="flex gap-4">
+                      <div className="flex-1">
+                        <CommonTextField
+                          fieldName="name"
+                          label="Product Name *"
+                          rules={{
+                            ...createRequiredValidation("Product name"),
+                            pattern: {
+                              value: SPECIAL_CHARACTERS_REGEX,
+                              message: "Special characters are not allowed",
+                            },
+                          }}
+                          placeholder="Product Name"
+                          formConfig={formConfig}
+                          disabled={isViewOnly}
+                          className="px-4 py-2 bg-white focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all mt-2"
+                        />
                       </div>
-                      <div className="text-[#FF6D2F]">
-                        {snippetInfo?.slug || "Slug"}
-                      </div>
-                      <div className="text-[#666666]">
-                        {snippetInfo?.meta_description || "Meta Description"}
+                      <div className="flex-1">
+                        <CommonSelect
+                          fieldName="product_tag"
+                          selectType="creatable"
+                          disabled={isViewOnly}
+                          rules={createRequiredValidation(
+                            null,
+                            "Product tags are required"
+                          )}
+                          options={PRODUCT_TAG_OPTIONS}
+                          isMulti={true}
+                          formConfig={formConfig}
+                          label="Product Tags *"
+                          placeholder="Select Tags"
+                          className="mt-2 border-1 border-solid border-black-500 rounded"
+                        />
                       </div>
                     </div>
-                    {!isSnippetEdit && !isViewOnly && (
-                      <CommonButton
-                        text="Edit Snippet"
-                        onClick={() => {
-                          setIsSnippetEdit(true);
-                        }}
-                        icon={pencilIcon}
-                        type="button"
-                        disabled={isViewOnly}
-                        className="buttonTwo bg-[#FF6D2F] flex px-4 py-2 rounded-lg mt-4 gap-4 text-white items-center"
-                      />
-                    )}
                   </div>
-                  <CommonTextField
-                    fieldName="seo_title"
-                    disabled={isViewOnly || !isSnippetEdit}
-                    label="SEO Title *"
-                    rules={createRequiredValidation("SEO title")}
-                    placeholder="Enter SEO Title"
-                    formConfig={formConfig}
-                    className="px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all my-2"
-                  />
-                  <CommonTextField
-                    fieldName="slug"
-                    label="Slug *"
-                    disabled={isViewOnly || !isSnippetEdit}
-                    rules={createRequiredValidation("Slug")}
-                    placeholder="Enter Page Slug"
-                    formConfig={formConfig}
-                    className="px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all my-2"
-                  />
-                  <div></div>
-                  <CommonTextField
-                    fieldName="meta_description"
-                    disabled={isViewOnly || !isSnippetEdit}
-                    label="Meta Description"
-                    // rules={createRequiredValidation("Meta Description")}
-                    placeholder="Enter Meta Description"
-                    formConfig={formConfig}
-                    type="textarea"
-                    rows={4}
-                    maxlength={250}
-                    className="px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all my-2"
-                  />
-                  <div className="max-limit">Max.250 characters</div>
-                  {isSnippetEdit && !isViewOnly && (
-                    <CommonButton
-                      text="Update Snippet"
-                      onClick={() => {
-                        setIsSnippetEdit(false);
-                        setSnippetInfo({
-                          seo_title: watch("seo_title"),
-                          slug: watch("slug"),
-                          meta_description: watch("meta_description"),
-                        });
-                      }}
-                      type="button"
-                      className="updateSnippet"
+                  <div className="description mt-4 p-4 rounded-lg bg-white my-4">
+                    <CommonTextEditor
+                      formConfig={formConfig}
+                      disabled={isViewOnly}
+                      label="Description *"
+                      fieldName="description"
+                      placeholder="Type..."
+                      // rules={} // for this required validation cannot be passed through rules because it has some different way to handle required validation
+                      requiredMessage={"Description is required"} // if this prop is not passed required validation is not applied
                     />
-                  )}
+                  </div>
+
+                  <ProductDataSection
+                    formConfig={formConfig}
+                    disabled={isViewOnly}
+                    activeTab={activeTab}
+                    handleActiveTab={handleActiveTab}
+                  />
+                  <div className="seo-section mt-4 bg-white p-4 rounded-lg">
+                    <div className="w-3/5">
+                      <h5 className="text-black font-medium">SEO</h5>
+                      <CommonSelect
+                        fieldName="focused_keyword"
+                        disabled={isViewOnly}
+                        selectType="creatable"
+                        // options={PRODUCT_TAG_OPTIONS}
+                        isMulti={true}
+                        rules={createRequiredValidation()}
+                        formConfig={formConfig}
+                        label="Focus Keyphrase"
+                        placeholder="Enter Keywords You Need To Focus"
+                        className="mt-2 border-2 border-solid border-black-500 rounded"
+                      />{" "}
+                      <div className="flex gap-8 mt-4">
+                        <div>Preview as:</div>
+                        <RadioGroup
+                          fieldName="preview_as"
+                          disabled={isViewOnly}
+                          formConfig={formConfig}
+                          options={PREVIEW_AS_OPTIONS}
+                          className="flex gap-4"
+                          // rules={createRequiredValidation()}
+                        />
+                      </div>
+                      <div
+                        className="snippet mb-4"
+                        style={{
+                          width: watch("preview_as") === "mobile" && "50%",
+                        }}
+                      >
+                        {/* update required: need to integrate this section */}
+                        <div className="border p-4 space-y-2 rounded-lg mt-4 shadow-md">
+                          <div className="text-black">
+                            {snippetInfo?.seo_title || "Title"}
+                          </div>
+                          <div className="text-[#FF6D2F]">
+                            {snippetInfo?.slug || "Slug"}
+                          </div>
+                          <div className="text-[#666666]">
+                            {snippetInfo?.meta_description ||
+                              "Meta Description"}
+                          </div>
+                        </div>
+                        {!isSnippetEdit && !isViewOnly && (
+                          <CommonButton
+                            text="Edit Snippet"
+                            onClick={() => {
+                              setIsSnippetEdit(true);
+                            }}
+                            icon={pencilIcon}
+                            type="button"
+                            disabled={isViewOnly}
+                            className="buttonTwo bg-[#FF6D2F] flex px-4 py-2 rounded-lg mt-4 gap-4 text-white items-center"
+                          />
+                        )}
+                      </div>
+                      <CommonTextField
+                        fieldName="seo_title"
+                        disabled={isViewOnly || !isSnippetEdit}
+                        label="SEO Title *"
+                        rules={createRequiredValidation("SEO title")}
+                        placeholder="Enter SEO Title"
+                        formConfig={formConfig}
+                        className="px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all my-2"
+                      />
+                      <CommonTextField
+                        fieldName="slug"
+                        label="Slug *"
+                        disabled={isViewOnly || !isSnippetEdit}
+                        rules={createRequiredValidation("Slug")}
+                        placeholder="Enter Page Slug"
+                        formConfig={formConfig}
+                        className="px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all my-2"
+                      />
+                      <div></div>
+                      <CommonTextField
+                        fieldName="meta_description"
+                        disabled={isViewOnly || !isSnippetEdit}
+                        label="Meta Description"
+                        // rules={createRequiredValidation("Meta Description")}
+                        placeholder="Enter Meta Description"
+                        formConfig={formConfig}
+                        type="textarea"
+                        rows={4}
+                        maxlength={250}
+                        className="px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all my-2"
+                      />
+                      <div className="max-limit">Max.250 characters</div>
+                      {isSnippetEdit && !isViewOnly && (
+                        <CommonButton
+                          text="Update Snippet"
+                          onClick={() => {
+                            setIsSnippetEdit(false);
+                            setSnippetInfo({
+                              seo_title: watch("seo_title"),
+                              slug: watch("slug"),
+                              meta_description: watch("meta_description"),
+                            });
+                          }}
+                          type="button"
+                          className="updateSnippet"
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+                {/* side section */}
+                <div className="flex flex-col">
+                  <div className="button-section flex justify-center">
+                    <CommonButton
+                      text="Publish"
+                      name="publish"
+                      type="submit"
+                      className="orange_btn"
+                      loader={btnLoaders?.publish}
+                      disabled={
+                        btnLoaders?.publish || btnLoaders?.draft || isViewOnly
+                      }
+                      icon={publishIcon}
+                    />
+                    <CommonButton
+                      text="Draft"
+                      name="draft"
+                      type="submit"
+                      className="orange_btn"
+                      icon={draftIcon}
+                      loader={btnLoaders?.draft}
+                      disabled={
+                        btnLoaders?.publish || btnLoaders?.draft || isViewOnly
+                      }
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            {/* side section */}
-            <div className="flex flex-col">
-              <div className="button-section flex justify-center">
-                <CommonButton
-                  text="Publish"
-                  name="publish"
-                  type="submit"
-                  className="orange_btn"
-                  loader={btnLoaders?.publish}
-                  disabled={
-                    btnLoaders?.publish || btnLoaders?.draft || isViewOnly
-                  }
-                  icon={publishIcon}
+            </FormWrapper>
+            <div className="flex flex-col gap-4 mt-4 -ms-[252px] mt-[70px]">
+              <div className="flex gap-4 flex-col">
+                <CategorySection
+                  isViewOnly={isViewOnly}
+                  formConfig={formConfig}
+                  fieldName="category"
+                  rules={createRequiredValidation("Category")}
                 />
-                <CommonButton
-                  text="Draft"
-                  name="draft"
-                  type="submit"
-                  className="orange_btn"
-                  icon={draftIcon}
-                  loader={btnLoaders?.draft}
-                  disabled={
-                    btnLoaders?.publish || btnLoaders?.draft || isViewOnly
-                  }
+                <ImageUploadSection
+                  file={featuredImage}
+                  setFile={setFeaturedImage}
+                  label="Featured Image"
+                  uniqueId={`featured-image`}
+                  accept={PNG_AND_JPG}
+                  disabled={isViewOnly}
+                />{" "}
+                <MultipleImageUploadField
+                  files={productImages}
+                  setFiles={setProductImages}
+                  label="Product Images"
+                  allowedTypes={allowedImageTypes}
+                  imageError={productImageError}
+                  setImageError={setProductImageError}
+                  uniqueId={`product-image`}
+                  accept={PNG_AND_JPG}
+                  uploadButton={{
+                    text: "Upload Product Image",
+                    class: "image-upload-icon cursor-pointer",
+                  }}
+                  disabled={isViewOnly}
                 />
               </div>
             </div>
           </div>
-        </FormWrapper>
-        <div className="flex flex-col gap-4 mt-4 -ms-[252px] mt-[70px]">
-          <div className="flex gap-4 flex-col">
-            <CategorySection
-              isViewOnly={isViewOnly}
-              formConfig={formConfig}
-              fieldName="category"
-              rules={createRequiredValidation("Category")}
-            />
-            <ImageUploadSection
-              file={featuredImage}
-              setFile={setFeaturedImage}
-              label="Featured Image"
-              uniqueId={`featured-image`}
-              accept={PNG_AND_JPG}
-              disabled={isViewOnly}
-            />{" "}
-            <MultipleImageUploadField
-              files={productImages}
-              setFiles={setProductImages}
-              label="Product Images"
-              allowedTypes={allowedImageTypes}
-              imageError={productImageError}
-              setImageError={setProductImageError}
-              uniqueId={`product-image`}
-              accept={PNG_AND_JPG}
-              uploadButton={{
-                text: "Upload Product Image",
-                class: "image-upload-icon cursor-pointer",
-              }}
-              disabled={isViewOnly}
-            />
-          </div>
-        </div>
-      </div>
+        </>
+      )}
     </>
   );
 };
