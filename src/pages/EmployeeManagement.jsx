@@ -139,8 +139,8 @@ const EmployeeManagement = () => {
       delete_id: itemToDelete,
     })
       .then((res) => {
+        setEmployees(deleteItemBasedOnId(employees, itemToDelete));
         toastMessage("Employee Deleted Successfully", successType);
-        deleteItemBasedOnId(employees,itemToDelete);
       })
       .catch((err) => {
         toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);

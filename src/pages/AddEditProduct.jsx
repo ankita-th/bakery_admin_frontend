@@ -479,28 +479,30 @@ const AddEditProduct = () => {
             </div>
             {/* side section */}
             <div className="flex flex-col">
-              {!isViewOnly && (
-                <div className="button-section flex justify-center">
-                  <CommonButton
-                    text="Publish"
-                    name="publish"
-                    type="submit"
-                    className="orange_btn"
-                    loader={btnLoaders?.publish}
-                    disabled={btnLoaders?.publish || btnLoaders?.draft}
-                    icon={publishIcon}
-                  />
-                  <CommonButton
-                    text="Draft"
-                    name="draft"
-                    type="submit"
-                    className="orange_btn"
-                    icon={draftIcon}
-                    loader={btnLoaders?.draft}
-                    disabled={btnLoaders?.publish || btnLoaders?.draft}
-                  />
-                </div>
-              )}
+              <div className="button-section flex justify-center">
+                <CommonButton
+                  text="Publish"
+                  name="publish"
+                  type="submit"
+                  className="orange_btn"
+                  loader={btnLoaders?.publish}
+                  disabled={
+                    btnLoaders?.publish || btnLoaders?.draft || isViewOnly
+                  }
+                  icon={publishIcon}
+                />
+                <CommonButton
+                  text="Draft"
+                  name="draft"
+                  type="submit"
+                  className="orange_btn"
+                  icon={draftIcon}
+                  loader={btnLoaders?.draft}
+                  disabled={
+                    btnLoaders?.publish || btnLoaders?.draft || isViewOnly
+                  }
+                />
+              </div>
             </div>
           </div>
         </FormWrapper>
