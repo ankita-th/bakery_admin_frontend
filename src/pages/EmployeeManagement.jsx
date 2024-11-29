@@ -25,7 +25,7 @@ import NoDataFound from "../Components/Common/NoDataFound";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import { successType, toastMessage } from "../utils/toastMessage";
 import AddEditEmployee from "../Components/AddEditEmployee";
-import { handleEdit } from "../utils/helpers";
+import { deleteItemBasedOnId, handleEdit } from "../utils/helpers";
 import Pagination from "../Components/Common/Pagination";
 const filterFields = [
   {
@@ -140,6 +140,7 @@ const EmployeeManagement = () => {
     })
       .then((res) => {
         toastMessage("Employee Deleted Successfully", successType);
+        deleteItemBasedOnId(employees,itemToDelete);
       })
       .catch((err) => {
         toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
