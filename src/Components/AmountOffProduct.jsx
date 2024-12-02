@@ -31,7 +31,6 @@ const AmountOffProduct = () => {
   const { watch, setValue } = formConfig;
 
   const onSubmit = (values) => {
-    console.log(values, "values");
     const {
       code,
       discount_value,
@@ -85,7 +84,6 @@ const AmountOffProduct = () => {
       .then((res) => {
         toastMessage("Discount created successfully", successType);
         navigate("/discounts");
-        console.log(res, "this is response");
       })
       .catch((err) => {
         console.log(err);

@@ -69,7 +69,6 @@ const CategorySection = ({
     }
 
     const data = Object.fromEntries(formData.entries()); // Convert to object
-    console.log(data, "recipe payload");
     makeApiRequest({
       endPoint: CATEGORIES_ENDPOINT,
       method: METHODS?.post,

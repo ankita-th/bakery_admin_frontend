@@ -46,7 +46,6 @@ const AddEditCategorySection = ({
         setFile({ preview: createPreview(item?.category_image), file: null });
       }
       const category = extractOption(categories, item?.parent?.id, "id");
-      console.log(category, "this is category extracted");
       if (category) {
         setValue("parent", { label: category?.name, value: category?.id });
       }

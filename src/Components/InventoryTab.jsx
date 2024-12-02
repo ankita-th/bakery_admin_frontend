@@ -8,7 +8,6 @@ import CommonFieldArray from "./Common/CommonFieldArray";
 import { SPECIAL_CHARACTERS_REGEX } from "../regex/regex";
 const InventoryTab = ({ formConfig, disabled }) => {
   const { watch } = formConfig;
-  console.log(watch("sale_price_dates_to"), "form");
   const BULKING_PRICE_ITEMS = [
     {
       fieldName: "quantity_from",
@@ -36,7 +35,6 @@ const InventoryTab = ({ formConfig, disabled }) => {
     quantity_to: null,
     price: "",
   };
-  console.log(watch("sale_price_dates_from"), "assadsa");
   return (
     <div>
       <div className="w-full space-y-4">

@@ -9,9 +9,7 @@ import AmountOffOrder from "./AmountOffOrder";
 const AddEditDiscount = () => {
   const location = useLocation();
   const type = location?.state?.type || "default";
-  console.log(type, "this is type");
   const onSubmit = (values) => {
-    console.log(values, "these are values");
   };
   //   this will render component according to the type
   const renderComponent = () => {

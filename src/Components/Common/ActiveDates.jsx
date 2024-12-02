@@ -14,9 +14,6 @@ const ActiveDates = ({ formConfig }) => {
     }
     setShowEndDate((prev) => !prev);
   };
-  console.log(end_date, "log end date");
-  console.log(start_time, "log start time");
-  console.log(start_date, "log start date");
 
   return (
     <div className="bg-white p-6 rounded-lg">

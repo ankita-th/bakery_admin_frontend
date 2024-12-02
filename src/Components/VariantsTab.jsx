@@ -62,8 +62,6 @@ const VariantsTab = ({ formConfig, disabled }) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  console.log(watch("variants"), "these are variants");
-  console.log(errors, "errors");
   return (
     <div className="font-[sans-serif] rounded-lg w-full">
       {fields.map((field, index) => (
