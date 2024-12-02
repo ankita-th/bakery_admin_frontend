@@ -231,6 +231,7 @@ const ZipConfiguration = () => {
             onPageChange={onPageChange}
             itemsPerPage={CONFIGURATION_ITEMS_PER_PAGE}
             totalData={totalData}
+            currentPage={page}
           />
           {showConfigurationSection && (
             <AddEditConfiguration

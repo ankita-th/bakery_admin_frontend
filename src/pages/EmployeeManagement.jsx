@@ -196,10 +196,11 @@ const EmployeeManagement = () => {
         );
         if (editInfo?.isEdit) {
           setEmployees(
-            handleEdit(employees, editInfo?.editItem?.id, res?.data)
+            handleEdit(employees, editInfo?.editItem?.id, res?.data?.user)
           );
         } else {
-          setEmployees((prev) => [...prev, res?.data]);
+          setEmployees((prev) => [...prev, res?.data?.user]);
+          // setEmployees((prev) => [...prev, res?.data]);
         }
         handleEmployeeCancel();
         setPage(1);

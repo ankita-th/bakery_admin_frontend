@@ -139,6 +139,7 @@ const Support = () => {
             onPageChange={onPageChange}
             itemsPerPage={ITEMS_PER_PAGE}
             totalData={totalData}
+            currentPage={page}
           />
           {showDeleteModal && (
             <DeleteConfirmationModal

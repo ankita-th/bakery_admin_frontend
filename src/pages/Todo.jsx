@@ -314,6 +314,7 @@ const Todo = () => {
             onPageChange={onPageChange}
             itemsPerPage={TODO_ITEMS_PER_PAGE}
             totalData={totalData}
+            currentPage={page}
           />
 
           {/* delete confirmation modal */}
