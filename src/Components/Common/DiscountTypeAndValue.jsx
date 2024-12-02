@@ -15,6 +15,7 @@ const DiscountTypeAndValue = ({ formConfig }) => {
         rules={createRequiredValidation("Discount type")}
         fieldName="discount_types"
         selectType="react-select"
+        className="px-4 py-2 mb-4 w-full rounded-lg bg-[#F5F5F5]"
         placeholder="Select type"
       />
 

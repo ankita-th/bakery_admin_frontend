@@ -9,6 +9,7 @@ import { BACKDOOR_OPTIONS, MEASURE_OPTIONS, today } from "../constant";
 import CommonButton from "./Common/CommonButton";
 import { plusIcon } from "../assets/Icons/Svg";
 import CommonDateField from "../Form Fields/CommonDateField";
+import { SPECIAL_CHARACTERS_REGEX } from "../regex/regex";
 const accordionData = [
   {
     title:
@@ -131,7 +132,13 @@ const VariantsTab = ({ formConfig, disabled }) => {
                       disabled={disabled}
                       fieldName={`variants.${index}.sku`}
                       formConfig={formConfig}
-                      rules={createRequiredValidation("SKU")}
+                      rules={{
+                        ...createRequiredValidation("SKU"),
+                        pattern: {
+                          value: SPECIAL_CHARACTERS_REGEX,
+                          message: "Special characters are not allowed",
+                        },
+                      }}
                       placeholder="Enter SKU"
                       customError={
                         errors?.["variants"]?.[index]?.["sku"]?.message
@@ -226,7 +233,17 @@ const VariantsTab = ({ formConfig, disabled }) => {
                       fieldName={`variants.${index}.quantity`}
                       disabled={disabled}
                       placeholder="Enter Stock Quantity"
-                      rules={createRequiredValidation("Stock quantity")}
+                      rules={{
+                        ...createRequiredValidation("Stock quantity"),
+                        maxLength: {
+                          value: 8,
+                          message: "Stock quantity cannot exceed 8 digits",
+                        },
+                        minLength: {
+                          value: 0,
+                          message: "Stock quantity must be greater than 0",
+                        },
+                      }}
                       isDecimal={true}
                       formConfig={formConfig}
                       customError={

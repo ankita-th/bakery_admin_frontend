@@ -231,9 +231,10 @@ const Todo = () => {
         setBtnLoaders({ unassigned: false, assigned: false });
       })
       .catch((err) => {
-        console.log(err?.response?.data?.task_id[0], "this is err");
-        toastMessage(err?.response?.data?.task_id[0] || DEFAULT_ERROR_MESSAGE);
-        if (!err?.response?.data?.task_id[0]) {
+        toastMessage(
+          err?.response?.data?.task_id?.[0] || DEFAULT_ERROR_MESSAGE
+        );
+        if (!err?.response?.data?.task_id?.[0]) {
           handleTodoSection({ action: "close" });
           setPage(1);
         }

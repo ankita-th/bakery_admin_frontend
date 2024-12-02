@@ -3,30 +3,62 @@ import CommonSelect from "../../Form Fields/CommonSelect";
 import { APPLIES_TO_OPTIONS } from "../../constant";
 import { makeApiRequest, METHODS } from "../../api/apiFunctions";
 import { PRODUCT_ENDPOINT } from "../../api/endpoints";
+import AsyncSelect from "react-select/async";
+import Select from "react-select";
+import CommonAsyncSelect from "../../Form Fields/CommonAsyncSelect";
+import { createRequiredValidation } from "../../utils/helpers";
 
 const AppliesTo = ({ formConfig }) => {
+  let timer;
   const { watch } = formConfig;
   const [productName, setProductName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [loader, setLoader] = useState(false);
   const [productOptions, setProductOptions] = useState([]);
-  const handleSearchProduct = () => {
-    setLoader((prev) => true);
-    const apiParams = {
-      name: productName,
-    };
-    makeApiRequest({
-      endPoint: PRODUCT_ENDPOINT    ,
-      method: METHODS.get,
-      params: apiParams,
-    })
-      .then((res) => {
-        setProductOptions(res?.data?.results);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(setLoader((prev) => false));
+
+  const NoOptionsMessage = (NoticeProps) => {
+    return (
+      <p style={{ textAlign: "center", marginTop: "4px", color: "#b2afaf" }}>
+        No Result Found
+      </p>
+    );
   };
+
+  const fetchProducts = (inputValue) => {
+    return new Promise((resolve, reject) => {
+      if (!inputValue) {
+        resolve([]);
+        return;
+      }
+
+      clearTimeout(timer);
+
+      timer = setTimeout(() => {
+        setIsLoading(true);
+        makeApiRequest({
+          endPoint: PRODUCT_ENDPOINT,
+          params: { name: inputValue },
+          method: METHODS.get,
+        })
+          .then((res) => {
+            const results = res?.data?.results;
+            const formattedOptions = results?.map((curElem) => ({
+              label: curElem?.name,
+              value: curElem?.id,
+            }));
+            resolve(formattedOptions);
+          })
+          .catch((err) => {
+            console.error(err);
+            reject(err);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      }, 500);
+    });
+  };
+
   return (
     <div>
       {" "}
@@ -42,21 +74,17 @@ const AppliesTo = ({ formConfig }) => {
         />
         {watch("applies_to")?.value === "specific_products" && (
           <div className="flex gap-4">
-            <input
-              type="text"
-              placeholder="Search Products"
-              className="px-4 py-2 w-4/5 rounded-lg bg-[#F5F5F5]"
-              onChange={(e) => {
-                setProductName(e.target.value);
-              }}
+            <CommonAsyncSelect
+              formConfig={formConfig}
+              label="Specify products "
+              isMulti={true}
+              loadOptions={fetchProducts}
+              placeholder="Search Product"
+              fieldName="products"
+              rules={createRequiredValidation()}
+              noOptionMessage={NoOptionsMessage}
+              className="x-4 py-2 mb-4 w-full rounded-lg bg-[#F5F5F5]"
             />
-            <button
-              type="button"
-              className="w-1/5 bg-[#FF6D2F] text-[#FFFFFF] rounded-lg"
-              onClick={handleSearchProduct}
-            >
-              Search Products
-            </button>
           </div>
         )}
       </div>

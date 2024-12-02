@@ -75,7 +75,7 @@ const ActiveDates = ({ formConfig }) => {
         type="time"
         fieldName="end_time"
         minDate={watch("end_time")}
-        rules={createRequiredValidation("end_time")}
+        rules={createRequiredValidation("End time")}
       />
     </div>
   );

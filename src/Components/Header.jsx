@@ -1,19 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
 import { BellIcon } from "../assets/Icons/Svg";
 import userImage from "../assets/images/Avatar.png";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { getHeadingTitleFromRoute } from "../utils/helpers";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  getHeadingTitleFromRoute,
+  getHeadingTitleFromState,
+} from "../utils/helpers";
 
 const Header = () => {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
   const params = useParams();
   const userName = localStorage.getItem("userName");
-  const { pathname } = useLocation();
+  const { pathname, state } = useLocation();
   const title = getHeadingTitleFromRoute(pathname);
   // State to track dropdown visibility
   const [isOpen, setIsOpen] = useState(false);
-
+  console.log(state, "this is state");
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -39,28 +42,34 @@ const Header = () => {
     localStorage.clear();
     navigate("/login");
   };
+
+  console.log(state, "ksjdkldsjfkldfjs");
   return (
     <>
       <header className="header flex py-4 px-4 sm:px-10 font-[sans-serif] min-h-[70px] tracking-wide relative z-50 sticky top-0">
         <div className="flex flex-wrap items-center justify-between gap-5 w-full">
-          <div class="main_head_title">
+          <div className="main_head_title">
             {pathname === "/dashboard" || pathname === "/" ? (
-              <h5 class="text-lg font-normal">
+              <h5 className="text-lg font-normal">
                 {/* Good Morning{" "} */}
                 Welcome
-                <span class="text-[#EC7F1A] font-bold text-xl ml-2">
+                <span className="text-[#EC7F1A] font-bold text-xl ml-2">
                   {userName}
                 </span>
               </h5>
             ) : (
-              <h2 class="text-lg ">
-                {params?.receipe_id ? "Edit Recipe" : title}
+              <h2 className="text-lg ">
+                {params?.receipe_id
+                  ? "Edit Recipe"
+                  : pathname === "/add-edit-discount"
+                  ? getHeadingTitleFromState(state?.type)
+                  : title}
               </h2>
             )}
           </div>
 
           <div className="flex max-lg:ml-auto space-x-3">
-            <button class="relative p-2 rounded-full rounded-full">
+            <button className="relative p-2 rounded-full rounded-full">
               {BellIcon}
             </button>
             <div className="relative inline-block text-left">
@@ -117,11 +126,7 @@ const Header = () => {
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path
-                  fill-rule="evenodd"
-                  d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                  clip-rule="evenodd"
-                ></path>
+                <path d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"></path>
               </svg>
             </button>
           </div>

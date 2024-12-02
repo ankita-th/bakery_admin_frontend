@@ -9,15 +9,14 @@ import AmountOffOrder from "./AmountOffOrder";
 const AddEditDiscount = () => {
   const location = useLocation();
   const type = location?.state?.type || "default";
-  const onSubmit = (values) => {
-  };
+  const onSubmit = (values) => {};
   //   this will render component according to the type
   const renderComponent = () => {
     switch (type) {
       case "amount_off_product":
         return <AmountOffProduct />;
       case "amount_off_order":
-       return <AmountOffOrder />;
+        return <AmountOffOrder />;
       case "buy_x_get_y":
         return <BuyXGetY />;
       case "free_shipping":

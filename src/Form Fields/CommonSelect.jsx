@@ -19,7 +19,7 @@ const CommonSelect = ({
   isSearchable = true,
   closeMenuOnSelect = true,
   defaultOption = "", // will be required for normal select only
-  selectType, // will contain these (createable:for creatable select), (normal:for react select) and (react-select:for react select)
+  selectType, // will contain these (creatable:for creatable select), (normal:for react select) and (react-select:for react select)
 }) => {
   const {
     control,
@@ -29,7 +29,7 @@ const CommonSelect = ({
 
   const renderFieldAccordingToType = () => {
     switch (selectType) {
-      case "creatable":
+      case "creatable": 
         return (
           <Controller
             name={fieldName}

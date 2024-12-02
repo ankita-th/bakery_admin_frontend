@@ -29,6 +29,10 @@ const MinimumPurchaseRequirement = ({ formConfig }) => {
       isNumberOnly={true} // update required add isDecimalOnly here
     />
   );
+  const shouldShowText = (value) => {
+    return value === "minimum_quantity" || value === "minimum_purchase";
+  };
+  console.log(watch("minimum_purchase_requirement"), "sadsad");
 
   return (
     <div className="bg-white p-6 rounded-lg">
@@ -51,7 +55,7 @@ const MinimumPurchaseRequirement = ({ formConfig }) => {
           "Minimum Quantity Of Items *",
           "minimum_quantity_value"
         )}
-      {watch("minimum_purchase_requirement") === "no_requirement" && (
+      {shouldShowText(watch("minimum_purchase_requirement")) && (
         <div>Applies only to selected collections.</div>
       )}
     </div>

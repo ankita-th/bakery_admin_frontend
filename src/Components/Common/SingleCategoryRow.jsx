@@ -31,7 +31,10 @@ const SingleCategoryRow = ({
         <td>
           {category_image ? (
             <div className="image-display">
-              <img src={createPreview(category_image)} className="w-[30px] h-[30px] object-cover rounded-2" />
+              <img
+                src={createPreview(category_image)}
+                className="w-[30px] h-[30px] object-cover rounded-2"
+              />
             </div>
           ) : (
             imageUploadIcon
@@ -80,7 +83,10 @@ const SingleCategoryRow = ({
                 <td>
                   {subCategory?.category_image ? (
                     <div className="image-display">
-                      <img src={createPreview(subCategory?.category_image)} className="w-[30px] h-[30px] object-cover rounded-2" />
+                      <img
+                        src={createPreview(subCategory?.category_image)}
+                        className="w-[30px] h-[30px] object-cover rounded-2"
+                      />
                     </div>
                   ) : (
                     imageUploadIcon

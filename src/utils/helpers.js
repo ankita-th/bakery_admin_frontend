@@ -1,4 +1,5 @@
 import moment from "moment";
+import { RECIPE_MEASURE_OPTIONS } from "../constant";
 const base_url = "http://192.168.1.86:8000";
 const routeTitles = {
   "/dashboard": "Welcome John Doe",
@@ -19,12 +20,13 @@ const routeTitles = {
   "/support": "Customers Support Management",
   "/notifications": "Notifications and Alerts",
   "/settings": "Notifications and Alerts",
-  "/add-edit-discount": "Buy X Get Y",
+  "/orders-management": "Order Management",
+  "/orders-history": "Order History",
 };
 
 export const getHeadingTitleFromRoute = (pathName) => {
-  if(localStorage?.getItem("isRecipeEdit")){
-    return "Edit Recipe"
+  if (localStorage?.getItem("isRecipeEdit")) {
+    return "Edit Recipe";
   }
   return routeTitles?.[pathName] || "";
 };
@@ -67,12 +69,14 @@ export const prefillFormValues = (data, prefillkeys, setValue) => {
 
 export const employeeListIntoOptions = (employeeList) => {
   let result = [];
-  if(employeeList?.length){
-    employeeList?.forEach(({ first_name, last_name, id,email }) => {
-      const option = { label: `${first_name} ${last_name} (${email})`, value: id };
+  if (employeeList?.length) {
+    employeeList?.forEach(({ first_name, last_name, id, email }) => {
+      const option = {
+        label: `${first_name} ${last_name} (${email})`,
+        value: id,
+      };
       result.push(option);
     });
-
   }
   return result;
 };
@@ -317,4 +321,45 @@ export const createSlugValidation = () => {
     //     value: /^[a-zA-Z0-9_-]+$/,
     //     message: "Only numbers, alphabets, underscores, and hyphens are allowed",
     // },
-  }}
+  };
+};
+export const createIngredientPayload = (ingredients) => {
+  if (ingredients?.length) {
+    const result = [];
+    ingredients.forEach((ingredient) => {
+      const item = {
+        ...ingredient,
+        unit_of_measure: ingredient?.unit_of_measure?.value,
+      };
+      result.push(item);
+    });
+    return result;
+  }
+};
+
+export const handleIngredients = (ingredients) => {
+  if (ingredients?.length) {
+    const result = [];
+    ingredients.forEach((ingredient) => {
+      const extractedOption = extractOption(
+        RECIPE_MEASURE_OPTIONS,
+        ingredient?.unit_of_measure,
+        "value"
+      );
+      const item = { ...ingredient, unit_of_measure: extractedOption };
+      result.push(item);
+    });
+    return result;
+  }
+};
+export const getHeadingTitleFromState = (state) => {
+  if (state === "amount_off_product") {
+    return "Amount Off Products";
+  } else if (state === "buy_x_get_y") {
+    return "Buy X Get Y";
+  } else if (state === "amount_off_order") {
+    return "Order Discount";
+  } else {
+    return "Free Shipping";
+  }
+};

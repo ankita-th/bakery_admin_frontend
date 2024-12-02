@@ -73,6 +73,18 @@ const AddEditTodo = ({
             onClick={fillForm}
           /> */}
 
+          {/* uncomment this */}
+          {/* {isEdit && (
+            <CommonTextField
+              disabled={true}
+              label="Task ID *"
+              fieldName="task_id"
+              rules={TodoValidations["task_id"]}
+              formConfig={formConfig}
+              placeholder="Enter Task ID"
+              isNumberOnly={true}
+            />
+          )} */}
           <CommonTextField
             label="Task ID *"
             fieldName="task_id"
@@ -142,14 +154,14 @@ const AddEditTodo = ({
             fieldName="start_date"
             minDate={today}
             rules={TodoValidations["start_date"]}
-            label="Start Date"
+            label="Start Date *"
           />
 
           <CommonDateField
             formConfig={formConfig}
             fieldName="end_date"
             minDate={watch("start_date")}
-            label="End Date"
+            label="End Date *"
             rules={{
               required: "End Date is required",
               validate: (value) => {
@@ -157,9 +169,9 @@ const AddEditTodo = ({
                 if (value < startDate) {
                   return "End date must be greater than or equal to the start date";
                 }
-                if (value === startDate) {
-                  return "Start date and end date must not be the same";
-                }
+                // if (value === startDate) {
+                //   return "Start date and end date must not be the same";
+                // }
                 return true;
               },
             }}

@@ -799,13 +799,13 @@ export const EMPLOYEE_SORT_BY_OPTIONS = [
 ];
 
 export const RECIPE_MEASURE_OPTIONS = [
-  { label: "Teaspoon", value: "tsp" },
-  { label: "Tablespoon", value: "tbsp" },
-  { label: "Cup", value: "cup" },
   { label: "Gram", value: "g" },
   { label: "Kilogram", value: "kg" },
+  { label: "Teaspoon", value: "tsp" },
+  { label: "Tablespoon", value: "tbsp" },
   { label: "Ounce", value: "oz" },
   { label: "Pound", value: "lb" },
+  { label: "Cup", value: "cup" },
   { label: "Milliliter", value: "ml" },
   { label: "Liter", value: "l" },
 ];

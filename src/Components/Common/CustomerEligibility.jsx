@@ -18,7 +18,7 @@ const CustomerEligibility = ({ formConfig }) => {
     <div className="bg-white p-6 rounded-lg">
       <RadioGroup
         className="flex gap-4"
-        label="Customer eligibility"
+        label="Customer Eligibility"
         fieldName="customer_eligibility"
         formConfig={formConfig}
         //   need to update these options , need to confirm from backend

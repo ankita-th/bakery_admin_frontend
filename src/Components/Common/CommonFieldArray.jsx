@@ -3,6 +3,8 @@ import { Controller, useFieldArray } from "react-hook-form";
 import CommonButton from "./CommonButton";
 import { crossIcon, plusIcon } from "../../assets/Icons/Svg";
 import CommonTextField from "../../Form Fields/CommonTextField";
+import CommonSelect from "../../Form Fields/CommonSelect";
+import { createRequiredValidation } from "../../utils/helpers";
 
 const CommonFieldArray = ({
   heading,
@@ -36,6 +38,7 @@ const CommonFieldArray = ({
                 placeholder,
                 isRequired,
                 field_type,
+                options,
                 isNumberOnly = false,
               },
               itemIndex
@@ -58,6 +61,17 @@ const CommonFieldArray = ({
                       )}
                     />
                   </div>
+                ) : field_type === "react-select" ? (
+                  <CommonSelect
+                    label={label}
+                    fieldName={`${fieldArrayName}.${index}.${fieldName}`} 
+                    placeholder={placeholder}
+                    options={options}
+                    selectType={field_type} // will contain react-select in this case
+                    rules={createRequiredValidation("Unit of measure")}
+                    formConfig={formConfig}
+                    className="bg-[#F5F5F5] w-full border border-gray-300 rounded-md focus:outline-none"
+                  />
                 ) : (
                   <CommonTextField
                     fieldName={`${fieldArrayName}.${index}.${fieldName}`}

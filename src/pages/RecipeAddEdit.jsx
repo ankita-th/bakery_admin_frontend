@@ -1,6 +1,6 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CommonTextField from "../Form Fields/CommonTextField";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { RecipeValidations } from "../Validations/validations";
 import FormWrapper from "../Wrappers/FormWrapper";
 import { draftIcon, publishIcon } from "../assets/Icons/Svg";
@@ -8,17 +8,19 @@ import CommonButton from "../Components/Common/CommonButton";
 import CommonSelect from "../Form Fields/CommonSelect";
 import CommonFieldArray from "../Components/Common/CommonFieldArray";
 import {
-  allowedImageTypes,
   DEFAULT_ERROR_MESSAGE,
   PNG_AND_JPG,
+  RECIPE_MEASURE_OPTIONS,
 } from "../constant";
 import CommonTextEditor from "../Form Fields/CommonTextEditor";
 import {
   appendStepCountInObject,
+  createIngredientPayload,
   createPreview,
   createRequiredValidation,
   extractOption,
   handleCategory,
+  handleIngredients,
   prefillFormValues,
 } from "../utils/helpers";
 import { INSTANCE, makeApiRequest, METHODS } from "../api/apiFunctions";
@@ -27,7 +29,6 @@ import { successType, toastMessage } from "../utils/toastMessage";
 import { useNavigate, useParams } from "react-router-dom";
 import useLoader from "../hooks/useLoader";
 import PageLoader from "../loaders/PageLoader";
-import MultipleImageUploadField from "../Form Fields/MultipleImageUploadField";
 import CategorySection from "../Components/CategorySection";
 import ImageUploadSection from "../Form Fields/ImageUploadSection";
 import { SPECIAL_CHARACTERS_REGEX } from "../regex/regex";
@@ -56,9 +57,11 @@ const INGREDIENTS_ITEMS = [
   },
   {
     fieldName: "unit_of_measure",
-    placeholder: "Quantity Unit",
+    placeholder: "Select Unit",
     label: "Unit of Measure *",
+    field_type: "react-select",
     isRequired: true,
+    options: RECIPE_MEASURE_OPTIONS,
   },
 ];
 const INSTRUCTION_ITEMS = [
@@ -159,7 +162,11 @@ const RecipeAddEdit = () => {
             setValue("instructions", DEFAULT_INSTRUCTION);
           }
           if (response?.ingredients?.length) {
-            setValue("ingredients", response?.ingredients);
+            const formattedIngredients = handleIngredients(
+              response?.ingredients
+            );
+            console.log(formattedIngredients, "formattedIngredients");
+            setValue("ingredients", formattedIngredients);
           } else {
             setValue("ingredients", DEFAULT_INGREDIENT);
           }
@@ -183,9 +190,9 @@ const RecipeAddEdit = () => {
   }, []);
 
   const onSubmit = (values, event) => {
-    if (file?.error) {
-      return;
-    }
+    // if (file?.error) {
+    //   return;
+    // }
     const buttonType = event.nativeEvent.submitter.name;
     setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
     // creating payload
@@ -195,6 +202,7 @@ const RecipeAddEdit = () => {
       serving_size: +values?.serving_size,
       cook_time: +values?.cook_time,
       instructions: appendStepCountInObject(values?.instructions),
+      ingredients: createIngredientPayload(values?.ingredients),
       difficulty_level: values?.difficulty_level?.value,
       dietary_plan: values?.dietary_plan?.value,
       allergen_information: values?.allergen_information?.value,
@@ -204,7 +212,7 @@ const RecipeAddEdit = () => {
       // Converting catgeory array elements to
       category: values?.category.map(Number),
     };
-
+    console.log("this is payload", payload);
     // converting payload into formdata
     const formData = new FormData();
     for (let key in payload) {
@@ -391,7 +399,7 @@ const RecipeAddEdit = () => {
                           <div className="flex-1">
                             <CommonSelect
                               label="Dietary Information *"
-                              selectType="react-select"
+                              selectType="creatable"
                               options={DIETRY_OPTIONS}
                               fieldName="dietary_plan"
                               formConfig={formConfig}
@@ -402,7 +410,7 @@ const RecipeAddEdit = () => {
                           <div className="flex-1">
                             <CommonSelect
                               label="Allergen Informations *"
-                              selectType="react-select"
+                              selectType="creatable"
                               options={ALLERGEN_OPTIONS}
                               fieldName="allergen_information"
                               formConfig={formConfig}

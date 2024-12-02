@@ -502,7 +502,13 @@ const AddEditProduct = () => {
                         fieldName="seo_title"
                         disabled={isViewOnly || !isSnippetEdit}
                         label="SEO Title *"
-                        rules={createRequiredValidation("SEO title")}
+                        rules={{
+                          ...createRequiredValidation("SEO title"),
+                          pattern: {
+                            value: SPECIAL_CHARACTERS_REGEX,
+                            message: "Special characters are not allowed",
+                          },
+                        }}
                         placeholder="Enter SEO Title"
                         formConfig={formConfig}
                         className="px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all my-2"
