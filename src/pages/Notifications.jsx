@@ -70,7 +70,6 @@ const Notifications = () => {
     toggleDeleteModal();
     setItemToDelete(delete_id);
   };
-  console.log(page, "page");
   return (
     <>
       {pageLoader ? (
@@ -90,6 +89,7 @@ const Notifications = () => {
           )}
           <Pagination
             onPageChange={onPageChange}
+            currentPage={page}
             itemsPerPage={ITEMS_PER_PAGE}
             totalData={totalData}
           />

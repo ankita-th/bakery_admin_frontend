@@ -135,6 +135,7 @@ const OrdersHistory = () => {
             onPageChange={onPageChange}
             itemsPerPage={ITEMS_PER_PAGE}
             totalData={totalData}
+            currentPage={page}
           />
           {showViewSection && (
             <ViewOrderHistory
