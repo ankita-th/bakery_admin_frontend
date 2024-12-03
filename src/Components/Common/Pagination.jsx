@@ -1,13 +1,10 @@
 import React from "react";
 import ReactPaginate from "react-paginate";
 import { login } from "../../api/apiFunctions";
-
-const Pagination = ({ onPageChange, totalData, itemsPerPage,currentPage}) => {
+const Pagination = ({ onPageChange, totalData, itemsPerPage, currentPage }) => {
   // if API returns total data then calculate page count by the following way otherwise page count (total Pages will be provided in the APi itself)
   const totalPages = Math.ceil(totalData / itemsPerPage);
-
   const shouldShowPagination = totalData > itemsPerPage;
-
   return (
     <>
       {shouldShowPagination && (
@@ -22,7 +19,7 @@ const Pagination = ({ onPageChange, totalData, itemsPerPage,currentPage}) => {
           disabledClassName={"pagination__link--disabled"}
           activeClassName={"bg-[#FF6363] text-white"}
           pageClassName={"border px-2 bg-[#F5F5F5] rounded-md"}
-          // forcePage={currentPage - 1}
+          forcePage={currentPage - 1}
         />
       )}
     </>

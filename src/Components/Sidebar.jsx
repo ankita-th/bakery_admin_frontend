@@ -18,76 +18,77 @@ import {
   leftCaret,
 } from "../assets/Icons/Svg";
 import userImage from "../assets/images/Avatar.png";
+import { T } from "../utils/languageTranslator";
 
 const SIDEBAR_LINKS_TOP = [
   {
-    label: "Dashboard",
+    label: T["dashboard"],
     icon: DashboardIcon,
     href: "/dashboard",
     activeRoutes: ["/dashboard"],
   },
   {
-    label: "Products",
+    label: T["products"],
     icon: ProductsIcon,
     href: "/products",
     activeRoutes: ["/products", "/add-edit-product"],
   },
   {
-    label: "Raw Materials",
+    label: T["raw_materials"],
     icon: RawMaterialsIcon,
     href: "/raw-materials",
     activeRoutes: ["/raw-materials"],
   },
   {
-    label: "Orders",
+    label: T["orders"],
     icon: OrdersIcon,
     href: "/orders-management",
     activeRoutes: ["/orders-management"],
   },
   {
-    label: "Inventory",
+    label: T["inventory"],
     icon: InventoryIcon,
     href: "/inventory",
     activeRoutes: ["/inventory"],
   },
   {
-    label: "Discounts & Promotions",
+    label: T["discounts_promotions"],
     icon: DiscountIcon,
     href: "/discounts",
     activeRoutes: ["/discounts", "/add-edit-discount"],
   },
   {
-    label: "Employee",
+    label: T["employee"],
     icon: EmployeeIcon,
     href: "/employee",
     activeRoutes: ["/employee"],
   },
   {
-    label: "Customers",
+    label: T["customers"],
     icon: DashboardIcon,
     href: "/customers",
     activeRoutes: ["/customers"],
   },
   {
-    label: "Todo",
+    label: T["todo"],
     icon: TodoIcon,
     href: "/to-do",
     activeRoutes: ["/to-do"],
   },
   {
-    label: "Configuration",
+    label: T["configuration"],
     icon: ConfigurationIcon,
     href: "/configuration",
     activeRoutes: ["/configuration"],
   },
   {
-    label: "Recipe's",
+    label: T["recipe_s"],
     icon: RecipeIcon,
     href: "/recipe",
     activeRoutes: ["/recipe", "/add-edit-recipe"],
   },
   {
-    label: "Payment History",
+    label: T["payment_history"],
     icon: PaymentIcon,
     href: "/payment-history",
     activeRoutes: ["/payment-history"],
@@ -95,17 +96,17 @@ const SIDEBAR_LINKS_TOP = [
 ];
 const SIDEBAR_LINKS_BOTTOM = [
   {
-    label: "Support",
+    label: T["support"],
     icon: SupportIcon,
     href: "/support",
   },
   {
-    label: "Notifications",
+    label: T["notifications"],
     icon: NotificationIcon,
     href: "/notifications",
   },
   {
-    label: "Settings",
+    label: T["settings"],
     icon: SettingsIcon,
     href: "/settings",
   },
@@ -208,13 +209,13 @@ const Sidebar = () => {
                   }}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                 >
-                  Settings
+                  {T["settings"]}
                 </span>
                 <button
                   onClick={handleLogout}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
-                  Logout
+                  {T["logout"]}
                 </button>
               </div>
             )}

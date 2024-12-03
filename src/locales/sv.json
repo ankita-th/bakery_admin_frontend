@@ -1,4 +1,34 @@
 {
-    "add_raw_product": "Lägg till Rå Produkt"
-  }
-  
+  "add_raw_product": "Lägg till råprodukt",
+  "delete_message": "Är du säker på att du vill ta bort detta råmaterial?",
+  "dashboard": "Instrumentpanel",
+  "products": "Produkter",
+  "raw_materials": "Råmaterial",
+  "orders": "Beställningar",
+  "inventory": "Lager",
+  "discounts_promotions": "Rabatter och kampanjer",
+  "employee": "Anställd",
+  "customers": "Kunder",
+  "todo": "Att göra",
+  "configuration": "Konfiguration",
+  "recipe_s": "Recept",
+  "payment_history": "Betalningshistorik",
+  "support": "Stöd",
+  "notifications": "Aviseringar",
+  "settings": "Inställningar",
+  "logout": "Logga ut",
+  "new_product": "Ny produkt",
+  "categories": "Kategorier",
+  "zip_code_configuration": "Postnummerkonfiguration",
+  "recipe": "Recept",
+  "new_recip": "Nytt recept",
+  "inventory_management": "Lagerhantering",
+  "employee_management": "Personalhantering",
+  "to_do_list": "Att göra-lista",
+  "discounts_promotions_management": "Hantera rabatter och kampanjer",
+  "customers_management": "Kundhantering",
+  "customers_support_management": "Kundsupporthantering",
+  "notifications_and_alerts": "Aviseringar och varningar",
+  "order_management": "Orderhantering",
+  "order_history": "Orderhistorik"
+}
