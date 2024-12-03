@@ -22,7 +22,7 @@ const Pagination = ({ onPageChange, totalData, itemsPerPage,currentPage}) => {
           disabledClassName={"pagination__link--disabled"}
           activeClassName={"bg-[#FF6363] text-white"}
           pageClassName={"border px-2 bg-[#F5F5F5] rounded-md"}
-          forcePage={currentPage - 1}
+          // forcePage={currentPage - 1}
         />
       )}
     </>

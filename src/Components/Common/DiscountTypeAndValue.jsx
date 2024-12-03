@@ -22,7 +22,17 @@ const DiscountTypeAndValue = ({ formConfig }) => {
       <CommonTextField
         label="Discount Value *"
         fieldName="discount_value"
-        rules={createRequiredValidation("Discount value")}
+        rules={{
+          ...createRequiredValidation("Discount value"),
+          min: {
+            value: 0,
+            message: "Discount value must be greater 0",
+          },
+          maxLength: {
+            value: 8,
+            message: "Discount value must not exceed 8 digits",
+          },
+        }}
         formConfig={formConfig}
         className="px-4 py-2 w-full rounded-lg bg-[#F5F5F5]"
         icon={watch("discount_types")?.value === "percentage" && "%"}

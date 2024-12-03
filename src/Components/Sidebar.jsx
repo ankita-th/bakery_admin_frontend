@@ -54,7 +54,7 @@ const SIDEBAR_LINKS_TOP = [
     label: "Discounts & Promotions",
     icon: DiscountIcon,
     href: "/discounts",
-    activeRoutes: ["/discounts"],
+    activeRoutes: ["/discounts", "/add-edit-discount"],
   },
   {
     label: "Employee",

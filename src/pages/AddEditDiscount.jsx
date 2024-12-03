@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import AmountOffProduct from "../Components/AmountOffProduct";
 import { useForm } from "react-hook-form";
@@ -8,22 +8,60 @@ import AmountOffOrder from "./AmountOffOrder";
 
 const AddEditDiscount = () => {
   const location = useLocation();
+  const [btnLoaders, setBtnLoaders] = useState({
+    draft: false,
+    saveDiscount: false,
+  });
   const type = location?.state?.type || "default";
-  const onSubmit = (values) => {};
   //   this will render component according to the type
   const renderComponent = () => {
     switch (type) {
       case "amount_off_product":
-        return <AmountOffProduct />;
+        return (
+          <AmountOffProduct
+            btnLoaders={btnLoaders}
+            setBtnLoaders={setBtnLoaders}
+            handleButtonLoaders={handleButtonLoaders}
+          />
+        );
       case "amount_off_order":
-        return <AmountOffOrder />;
+        return (
+          <AmountOffOrder
+            btnLoaders={btnLoaders}
+            setBtnLoaders={setBtnLoaders}
+            handleButtonLoaders={handleButtonLoaders}
+          />
+        );
       case "buy_x_get_y":
-        return <BuyXGetY />;
+        return (
+          <BuyXGetY
+            btnLoaders={btnLoaders}
+            setBtnLoaders={setBtnLoaders}
+            handleButtonLoaders={handleButtonLoaders}
+          />
+        );
       case "free_shipping":
-        return <FreeShipping />;
+        return (
+          <FreeShipping
+            btnLoaders={btnLoaders}
+            setBtnLoaders={setBtnLoaders}
+            handleButtonLoaders={handleButtonLoaders}
+          />
+        );
       default:
-        return <AmountOffProduct />;
+        return (
+          <AmountOffProduct
+            btnLoaders={btnLoaders}
+            setBtnLoaders={setBtnLoaders}
+            handleButtonLoaders={handleButtonLoaders}
+          />
+        );
     }
+  };
+  const handleButtonLoaders = (type) => {
+    setBtnLoaders((prev) => {
+      return { ...btnLoaders, [type]: !btnLoaders[type] };
+    });
   };
   return <div>{renderComponent()}</div>;
 };

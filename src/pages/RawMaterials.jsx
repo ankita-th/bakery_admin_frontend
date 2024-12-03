@@ -208,7 +208,9 @@ const RawMaterials = () => {
           setPage(1);
         }
       })
-      .finally(setbtnLoaders({ publish: false, draft: false }));
+      .finally(() => {
+        setbtnLoaders({ publish: false, draft: false });
+      });
   };
   // for managing loaders for  publish and draft buttons
   const handleButtonLoaders = (type) => {

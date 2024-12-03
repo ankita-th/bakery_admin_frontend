@@ -358,7 +358,7 @@ export const getHeadingTitleFromState = (state) => {
   } else if (state === "buy_x_get_y") {
     return "Buy X Get Y";
   } else if (state === "amount_off_order") {
-    return "Order Discount";
+    return "Amount Off Order";
   } else {
     return "Free Shipping";
   }
