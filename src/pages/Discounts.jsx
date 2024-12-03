@@ -20,6 +20,7 @@ import { deleteItemBasedOnId } from "../utils/helpers";
 import { successType, toastMessage } from "../utils/toastMessage";
 import CommonButton from "../Components/Common/CommonButton";
 import DiscountTypeSection from "../Components/DiscountTypeSection";
+import { useNavigate } from "react-router-dom";
 const filterFields = [
   {
     type: "select",
@@ -44,6 +45,7 @@ const DISCOUNTS_COLUMNS = [
 ];
 
 const Discounts = () => {
+  const navigate = useNavigate();
   const { page, onPageChange } = usePagination();
   const { toggleLoader, pageLoader } = useLoader();
   const [filters, setFilters] = useState({
@@ -89,10 +91,18 @@ const Discounts = () => {
     setFilters(temp);
   };
 
-  const handleActions = ({ action, delete_id }) => {
+  const handleActions = ({ action, delete_id, editItem }) => {
     if (action === "delete") {
       toggleDeleteModal();
       setItemToDelete(delete_id);
+    }
+    if (action === "edit") {
+      const state = {
+        type: editItem?.coupon_type,
+        isEdit: true,
+        editId: editItem?.id,
+      };
+      navigate("/add-edit-discount", { state: state });
     }
   };
   const deleteDiscount = () => {
