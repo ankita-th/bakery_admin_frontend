@@ -1,27 +1,28 @@
 import moment from "moment";
 import { RECIPE_MEASURE_OPTIONS } from "../constant";
+import { T } from "./languageTranslator";
 const base_url = "http://192.168.1.86:8000";
 const routeTitles = {
   "/dashboard": "Welcome John Doe",
-  "/products": "Products",
-  "/add-new-product": "New Product",
-  "/categories": "Categories",
-  "/raw-materials": "Raw Materials",
-  "/configuration": "ZIP Code Configuration",
-  "/recipe": "Recipe",
-  "/add-edit-recipe": "New Recipe",
-  "/inventory": "Inventory Management",
-  "/employee": "Employee Management",
-  "/payment-history": "Payment History",
-  "/to-do": "To-Do List",
-  "/add-edit-product": "New Product",
-  "/discounts": "Discounts & Promotions Management",
-  "/customers": "Customers Management",
-  "/support": "Customers Support Management",
-  "/notifications": "Notifications and Alerts",
-  "/settings": "Notifications and Alerts",
-  "/orders-management": "Order Management",
-  "/orders-history": "Order History",
+  "/products": T["products"],
+  "/add-new-product": T["new_product"],
+  "/categories": T["categories"],
+  "/raw-materials": T["raw_materials"],
+  "/configuration": T["zip_code_configuration"],
+  "/recipe": T["recipe"],
+  "/add-edit-recipe": T["new_recip"],
+  "/inventory": T["inventory_management"],
+  "/employee": T["employee_management"],
+  "/payment-history": T["payment_history"],
+  "/to-do": T["to_do_list"],
+  "/add-edit-product": T["new_product"],
+  "/discounts": T["discounts_promotions_management"],
+  "/customers": T["customers_management"],
+  "/support": T["customers_support_management"],
+  "/notifications": T["notifications_and_alerts"],
+  "/settings": T["settings"],
+  "/orders-management": T["order_management"],
+  "/orders-history": T["order_history"],
 };
 
 export const getHeadingTitleFromRoute = (pathName) => {
