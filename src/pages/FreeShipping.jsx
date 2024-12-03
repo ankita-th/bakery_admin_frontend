@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import FormWrapper from "../Wrappers/FormWrapper";
 import DiscountCodeSection from "../Components/Common/DiscountCodeSection";
@@ -7,11 +7,108 @@ import CustomerEligibility from "../Components/Common/CustomerEligibility";
 import DiscountUses from "../Components/Common/DiscountUses";
 import Combinations from "../Components/Common/Combinations";
 import ActiveDates from "../Components/Common/ActiveDates";
+import DiscountSideSection from "../Components/DiscountSideSection";
+import SummarySection from "../Components/Common/SummarySection";
+import { makeApiRequest, METHODS } from "../api/apiFunctions";
+import { DISCOUNT_ENDPOINT } from "../api/endpoints";
+import { successType, toastMessage } from "../utils/toastMessage";
+import {
+  CUSTOMER_SPECIFIC_OPTIONS,
+  DEFAULT_ERROR_MESSAGE,
+  INVALID_ID,
+} from "../constant";
+import { useNavigate } from "react-router-dom";
+import { extractOption, prefillFormValues } from "../utils/helpers";
+import Countries from "../Components/Countries";
 
-const FreeShipping = () => {
+const FreeShipping = ({ location }) => {
+  const navigate = useNavigate();
   const formConfig = useForm();
-  const onSubmit = (values) => {
-    console.log(values);
+  const { setValue } = formConfig;
+  const [btnLoaders, setBtnLoaders] = useState({
+    draft: false,
+    saveDiscount: false,
+  });
+
+  const isEdit = location?.state?.isEdit;
+
+  const editId = location?.state?.editId;
+
+  useEffect(() => {
+    if (isEdit) {
+      makeApiRequest({
+        endPoint: `${DISCOUNT_ENDPOINT}${editId}`,
+        method: METHODS.get,
+      })
+        .then((res) => {
+          const fields = [
+            "code",
+            "combination",
+            "customer_eligibility",
+            "customer_specification",
+            "all_customer",
+            "end_date",
+            "end_time",
+            "maximum_discount_usage",
+            "maximum_usage_value",
+            "minimum_purchase_requirement",
+            "minimum_purchase_value",
+            "minimum_quantity_value",
+            "start_date",
+            "start_time",
+            "countries",
+            "country_select",
+            "shipping_check",
+            "shipping_rate"
+          ];
+          console.log(res.data, "skdfjkslfjklsadfj");
+          prefillFormValues(res.data, fields, setValue);
+          // formConfig.reset(res.data);
+          // for customer specification
+          const extractedOption = extractOption(
+            CUSTOMER_SPECIFIC_OPTIONS,
+            res?.data?.customer_specification,
+            "value"
+          );
+          setValue("customer_specification", extractedOption);
+        })
+        .catch((err) => {
+          console.log(err);
+          toastMessage(err?.response?.data?.name?.[0] || INVALID_ID);
+          navigate("/discounts");
+        });
+    }
+  }, []);
+
+  const onSubmit = (values, event) => {
+    const buttonType = event.nativeEvent.submitter.name;
+    console.log(values, "freeshipping");
+    const payload = {
+      ...values,
+      coupon_type: "free_shipping",
+      customer_specification: values?.customer_specification?.value,
+      minimum_purchase_value: +values?.minimum_purchase_value,
+    };
+
+    setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
+    makeApiRequest({
+      endPoint: DISCOUNT_ENDPOINT,
+      // method: METHODS.post,
+      method: isEdit ? METHODS?.patch : METHODS?.post,
+      update_id: isEdit && values?.id,
+      payload: payload,
+    })
+      .then((res) => {
+        toastMessage("Discount created successfully", successType);
+        navigate("/discounts");
+      })
+      .catch((err) => {
+        console.log(err);
+        toastMessage(err?.response?.data?.name?.[0] || DEFAULT_ERROR_MESSAGE);
+      })
+      .finally(() => {
+        setBtnLoaders({ ...btnLoaders, [buttonType]: false });
+      });
   };
   return (
     <div>
@@ -24,13 +121,17 @@ const FreeShipping = () => {
           <div className="flex flex-col gap-8 w-3/4">
             <DiscountCodeSection formConfig={formConfig} />
             {/* add countries section here */}
-
+            <Countries formConfig={formConfig} />
             <MinimumPurchaseRequirement formConfig={formConfig} />
             <CustomerEligibility formConfig={formConfig} />
             <DiscountUses formConfig={formConfig} />
             <Combinations formConfig={formConfig} isShipping={true} />
             <ActiveDates formConfig={formConfig} />
           </div>
+          {/* sidebar */}
+          <DiscountSideSection btnLoaders={btnLoaders}>
+            <SummarySection formConfig={formConfig} />
+          </DiscountSideSection>
         </div>
       </FormWrapper>
     </div>

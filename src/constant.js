@@ -184,6 +184,7 @@ export const DUMMY_PRODUCT_DATA = [
 ];
 
 export const DEFAULT_ERROR_MESSAGE = "Something went wrong! please try again";
+export const INVALID_ID = "Invalid ID";
 
 export const allowedImageTypes = [
   "image/png",
@@ -627,6 +628,11 @@ export const CUSTOMER_ELIGIBILITY_OPTIONS = [
     value: "specific_customer",
   },
 ];
+
+export const COUNTRY_OPTIONS = [
+  {label: "All countries", value: "all_countries"},
+  {label: "Selected countries", value: "selected_countries"},
+]
 
 export const CUSTOMER_SPECIFIC_OPTIONS = [
   {

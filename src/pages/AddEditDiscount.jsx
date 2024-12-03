@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import AmountOffProduct from "../Components/AmountOffProduct";
 import { useForm } from "react-hook-form";
@@ -14,6 +14,7 @@ const AddEditDiscount = () => {
   });
   const type = location?.state?.type || "default";
   //   this will render component according to the type
+
   const renderComponent = () => {
     switch (type) {
       case "amount_off_product":
@@ -46,6 +47,7 @@ const AddEditDiscount = () => {
             btnLoaders={btnLoaders}
             setBtnLoaders={setBtnLoaders}
             handleButtonLoaders={handleButtonLoaders}
+            location={location}
           />
         );
       default:
