@@ -36,6 +36,11 @@ const CommonAsyncSelect = ({
             isLoading={isLoading}
             placeholder={placeholder}
             className={className}
+            // onKeyDown={(e) => {
+            //   if (e.key === "Enter") {
+            //     e.preventDefault();
+            //   }
+            // }}
           />
         )}
       />

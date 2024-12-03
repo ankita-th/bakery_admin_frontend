@@ -680,7 +680,7 @@ export const DISCOUNTED_VALUE_OPTIONS = [
 export const DISCOUNTED_USAGE_OPTIONS = [
   {
     label: "Limit to one use per customer",
-    value: "per_customer",
+    value: "one_use_per_customer",
   },
   {
     label: "Limit number of times this discount can be used in total",
@@ -808,4 +808,9 @@ export const RECIPE_MEASURE_OPTIONS = [
   { label: "Cup", value: "cup" },
   { label: "Milliliter", value: "ml" },
   { label: "Liter", value: "l" },
+];
+
+export const CUSTOMER_BUYS_OPTIONS = [
+  { label: "Minimum quantity of items", value: "minimum_items_quantity" },
+  { label: "Minimum purchase amount", value: "minimum_purchase_amount" },
 ];

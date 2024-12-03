@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CommonTextField from "../Form Fields/CommonTextField";
 import {
   convertSelectOptionToValue,
@@ -24,14 +24,10 @@ import { useNavigate } from "react-router-dom";
 import DiscountSideSection from "./DiscountSideSection";
 import DiscountCodeSection from "./Common/DiscountCodeSection";
 import DiscountTypeAndValue from "./Common/DiscountTypeAndValue";
+import DiscountUses from "./Common/DiscountUses";
 
-const AmountOffProduct = (
-  {
-    // btnLoaders,
-    // setBtnLoaders,
-    // handleButtonLoaders,
-  }
-) => {
+const AmountOffProduct = () => {
+  useEffect(() => {}, []);
   const navigate = useNavigate();
   const formConfig = useForm();
   const { watch, setValue } = formConfig;
@@ -43,19 +39,7 @@ const AmountOffProduct = (
 
   const onSubmit = (values, event) => {
     const buttonType = event.nativeEvent.submitter.name;
-    setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
-    const {
-      code,
-      discount_value,
-      minimum_purchase_requirement,
-      customer_eligibility,
-      combination,
-      start_date,
-      end_date,
-      start_time,
-      minimum_purchase_value,
-      minimum_quantity_value,
-    } = values;
+    // setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
     const fields = [
       "code",
       "discount_value",
@@ -68,6 +52,8 @@ const AmountOffProduct = (
       "minimum_purchase_value",
       "minimum_quantity_value",
       "end_time",
+      "maximum_usage_value",
+      // "maximum_discount_usage",
     ];
     const coupon_type = "amount_off_product";
     let payload = {
@@ -79,6 +65,13 @@ const AmountOffProduct = (
       if (values?.[key]) {
         if (key === "combination") {
           payload[key] = values[key][0];
+        } else if (
+          key === "discount_value" ||
+          key === "maximum_usage_value" ||
+          key === "minimum_quantity_value" ||
+          key === "minimum_purchase_value"
+        ) {
+          payload[key] = +values[key];
         } else {
           payload[key] = values[key];
         }
@@ -86,8 +79,9 @@ const AmountOffProduct = (
     });
     payload = {
       ...payload,
-      product: values?.products?.[0]?.label,
+      product: values?.products?.[0]?.value && values?.products?.[0]?.value,
     };
+    console.log(payload, "this is payload");
     makeApiRequest({
       endPoint: DISCOUNT_ENDPOINT,
       method: METHODS.post,
@@ -105,7 +99,7 @@ const AmountOffProduct = (
         setBtnLoaders({ ...btnLoaders, [buttonType]: false });
       });
   };
-  console.log(btnLoaders, "btnLoaders");
+  console.log(watch("maximum_discount_usage"), "form value");
   return (
     <FormWrapper
       formConfig={formConfig}
@@ -126,6 +120,7 @@ const AmountOffProduct = (
 
           <MinimumPurchaseRequirement formConfig={formConfig} />
           <CustomerEligibility formConfig={formConfig} />
+          <DiscountUses formConfig={formConfig} />
           <Combinations formConfig={formConfig} />
           <ActiveDates formConfig={formConfig} />
         </div>

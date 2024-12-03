@@ -3,9 +3,12 @@ import RadioGroup from "../../Form Fields/RadioGroup";
 import { PURCHASE_REQUIREMENT_OPTIONS } from "../../constant";
 import { createRequiredValidation } from "../../utils/helpers";
 import CommonTextField from "../../Form Fields/CommonTextField";
+import { useLocation } from "react-router-dom";
 
 const MinimumPurchaseRequirement = ({ formConfig }) => {
-  const { watch, setValue } = formConfig;
+  const location = useLocation();
+  console.log(location, "this is location");
+  const { watch, setValue, clearErrors } = formConfig;
   const {
     minimum_purchase_requirement,
     minimum_purchase_value,
@@ -14,25 +17,37 @@ const MinimumPurchaseRequirement = ({ formConfig }) => {
   useEffect(() => {
     if (minimum_purchase_requirement === "minimum_quantity") {
       setValue("minimum_purchase_value", "");
+      clearErrors("minimum_purchase_value");
     } else if (minimum_purchase_requirement === "minimum_purchase") {
       setValue("minimum_quantity_value", "");
+      clearErrors("minimum_quantity_value");
     }
   }, [minimum_purchase_requirement]);
   // for minimum purchase value or minimum quantity value
   const renderCommonTextField = (label, fieldName) => (
     <CommonTextField
-      label={label}
+      label={`${label} *`}
       fieldName={fieldName}
       formConfig={formConfig}
       className="px-4 py-2 w-full rounded-lg bg-[#F5F5F5]"
       placeholder="0.00"
+      rules={{
+        ...createRequiredValidation(label),
+        min: {
+          value: 0,
+          message: `${label} value must be greater than 0`,
+        },
+        maxLength: {
+          value: 8,
+          message: `${label} value must not exceed 8 digits`,
+        },
+      }}
       isNumberOnly={true} // update required add isDecimalOnly here
     />
   );
   const shouldShowText = (value) => {
     return value === "minimum_quantity" || value === "minimum_purchase";
   };
-  console.log(watch("minimum_purchase_requirement"), "sadsad");
 
   return (
     <div className="bg-white p-6 rounded-lg">
@@ -47,16 +62,20 @@ const MinimumPurchaseRequirement = ({ formConfig }) => {
       />
       {watch("minimum_purchase_requirement") === "minimum_purchase" &&
         renderCommonTextField(
-          "Minimum Purchase Value *",
+          "Minimum Purchase Value",
           "minimum_purchase_value"
         )}
       {watch("minimum_purchase_requirement") === "minimum_quantity" &&
         renderCommonTextField(
-          "Minimum Quantity Of Items *",
+          "Minimum Quantity Of Items",
           "minimum_quantity_value"
         )}
       {shouldShowText(watch("minimum_purchase_requirement")) && (
-        <div>Applies only to selected collections.</div>
+        <div>
+          {location?.state?.type === "amount_off_order"
+            ? "Applies To all product"
+            : "Applies only to selected collections."}
+        </div>
       )}
     </div>
   );

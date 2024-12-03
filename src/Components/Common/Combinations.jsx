@@ -21,9 +21,6 @@ const Combinations = ({ formConfig, isShipping = false }) => {
           rules={createRequiredValidation("Combination")}
           className="flex gap-10"
         />
-        <div className="text-[#969696]">
-          This product discount can be combined with:
-        </div>
       </div>
     </div>
   );

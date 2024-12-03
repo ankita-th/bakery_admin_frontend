@@ -5,13 +5,16 @@ import CommonTextField from "../Form Fields/CommonTextField";
 import { createRequiredValidation } from "../utils/helpers";
 
 const DiscountedValue = ({ formConfig }) => {
-  const { watch, setValue } = formConfig;
+  const { watch, setValue, clearErrors } = formConfig;
   const { discount_types } = watch();
 
   useEffect(() => {
-    if (discount_types === "free") {
-      setValue("discount_value", "");
-    }
+    // commented for future use
+    // if (discount_types === "free") {
+    //   setValue("discount_value", "");
+    // }
+    clearErrors("discount_value");
+    setValue("discount_value", "");
   }, [discount_types]);
 
   const showValueField = () => {
