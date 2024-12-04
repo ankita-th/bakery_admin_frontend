@@ -10,6 +10,7 @@ import {
   convertValuesIntoLabelAndValue,
   createAdvancedPayload,
   createInventoryPayload,
+  createPreview,
   createProductSeo,
   createRequiredValidation,
   createVariantPayload,
@@ -113,6 +114,13 @@ const AddEditProduct = () => {
   });
   const [isSnippetEdit, setIsSnippetEdit] = useState(false);
 
+  console.log(
+    "featuredImage===========>>>>>>>>>>>>",
+    featuredImage,
+    "productImages==============>>>>>>>>>>>",
+    productImages
+  );
+
   useEffect(() => {
     if (editId) {
       toggleLoader("pageLoader");
@@ -198,20 +206,23 @@ const AddEditProduct = () => {
           // for variants
 
           // for filling images
-          // if (data?.featured_image) {
-          //   preview = createPreview(data?.featured_image);
-          //   setFile(createPreview);
-          // }
-          // if (data?.product_images?.length) {
-          //   let result = [];
-          //   const product_images = data.product_images;
+          if (data?.feature_image) {
+            let preview = createPreview(data?.feature_image?.image);
+            const result =  {file:null,preview:preview,error:null}
+            setFeaturedImage(result);
+          }
+          if (data?.images?.length) {
+            let result = [];
+            const product_images = data.images;
 
-          //   data.product_images?.forEach((img) => {
-          //     const item = { preview: img, error: null, file: null };
-          //     result.push(item);
-          //   });
-          //   setProductImages(result);
-          // }
+            product_images?.forEach((img) => {
+              const preview = createPreview(img?.image)
+              
+              const item = { preview: preview, error: null, file: null };
+              result.push(item);
+            });
+            setProductImages(result);
+          }
           // for filling images
         })
         .catch((err) => {
@@ -225,7 +236,7 @@ const AddEditProduct = () => {
     }
   }, [editId]);
   const onSubmit = (values, event) => {
-    console.log("inside on submit");
+    console.log(values, "inside on submit");
     const buttonType = event.nativeEvent.submitter.name;
     setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
     const payload = {
@@ -262,12 +273,12 @@ const AddEditProduct = () => {
 
     // appending files
     if (featuredImage?.file) {
-      formData.append("featured_image", featuredImage?.file);
+      formData.append("feature_image", featuredImage?.file);
     }
 
     productImages?.forEach((productImage) => {
       if (productImage?.file) {
-        formData.append("product_images[]", productImage.file);
+        formData.append("images", productImage.file);
       }
     });
 
