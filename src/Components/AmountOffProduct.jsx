@@ -3,12 +3,14 @@ import CommonTextField from "../Form Fields/CommonTextField";
 import {
   convertSelectOptionToValue,
   createRequiredValidation,
+  extractOption,
+  prefillFormValues,
 } from "../utils/helpers";
 import FormWrapper from "../Wrappers/FormWrapper";
 import CommonButton from "./Common/CommonButton";
 import { draftIcon, publishIcon } from "../assets/Icons/Svg";
 import CommonSelect from "../Form Fields/CommonSelect";
-import { DEFAULT_ERROR_MESSAGE, DISCOUNT_TYPE_OPTIONS } from "../constant";
+import { DEFAULT_ERROR_MESSAGE, DISCOUNT_TYPE_OPTIONS, INVALID_ID } from "../constant";
 import GenrateRandomCode from "./Common/GenrateRandomCode";
 import CustomerEligibility from "./Common/CustomerEligibility";
 import Combinations from "./Common/Combinations";
@@ -26,7 +28,7 @@ import DiscountCodeSection from "./Common/DiscountCodeSection";
 import DiscountTypeAndValue from "./Common/DiscountTypeAndValue";
 import DiscountUses from "./Common/DiscountUses";
 
-const AmountOffProduct = () => {
+const AmountOffProduct = ({location}) => {
   useEffect(() => {}, []);
   const navigate = useNavigate();
   const formConfig = useForm();
@@ -36,6 +38,45 @@ const AmountOffProduct = () => {
     draft: false,
     saveDiscount: false,
   });
+
+  const isEdit = location?.state?.isEdit;
+
+  const editId = location?.state?.editId;
+
+  useEffect(() => {
+    if (isEdit) {
+      makeApiRequest({
+        endPoint: `${DISCOUNT_ENDPOINT}${editId}`,
+        method: METHODS.get,
+      })
+        .then((res) => {
+          const fields = [
+            "code",
+            "discount_value",
+            "minimum_purchase_requirement",
+            "customer_eligibility",
+            "combination",
+            "start_date",
+            "end_date",
+            "start_time",
+            "minimum_purchase_value",
+            "minimum_quantity_value",
+            "end_time",
+            "maximum_usage_value",
+            // "maximum_discount_usage",
+          ];
+          console.log(res.data, "skdfjkslfjklsadfj");
+          prefillFormValues(res.data, fields, setValue);
+          setValue("applies_to",res?.data?.applies_to);
+          setValue("discount_types",res?.data?.discount_types)
+        })
+        .catch((err) => {
+          console.log(err);
+          toastMessage(err?.response?.data?.name?.[0] || INVALID_ID);
+          navigate("/discounts");
+        });
+    }
+  }, []);
 
   const onSubmit = (values, event) => {
     const buttonType = event.nativeEvent.submitter.name;
@@ -64,7 +105,7 @@ const AmountOffProduct = () => {
     fields.forEach((key) => {
       if (values?.[key]) {
         if (key === "combination") {
-          payload[key] = values[key][0];
+          payload[key] = values[key];
         } else if (
           key === "discount_value" ||
           key === "maximum_usage_value" ||

@@ -46,7 +46,6 @@ const FreeShipping = ({ location }) => {
             "combination",
             "customer_eligibility",
             "customer_specification",
-            "all_customer",
             "end_date",
             "end_time",
             "maximum_discount_usage",
@@ -58,7 +57,8 @@ const FreeShipping = ({ location }) => {
             "start_time",
             "countries",
             "country_select",
-            "shipping_check",
+            // "shipping_check",
+            "exclude_shipping_rate",
             "shipping_rate"
           ];
           console.log(res.data, "skdfjkslfjklsadfj");

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import useLoader from "../hooks/useLoader";
 import usePagination from "../hooks/usePagination";
 import { makeApiRequest, METHODS } from "../api/apiFunctions";
-import { CONFIGURATION_ENDPOINT } from "../api/endpoints";
+import { CONFIGURATION_ENDPOINT, CONFIGURATION_PATCH_ENDPOINT } from "../api/endpoints";
 import Pagination from "../Components/Common/Pagination";
 import {
   CONFIGURATION_ITEMS_PER_PAGE,
@@ -39,7 +39,7 @@ const CONFIGURATION_COLUMNS = [
   "Area/Location Name",
   "Min. Order Quantity",
   "Availability",
-  "Delivery Threshold",
+  // "Delivery Threshold",
   "Action",
 ];
 const ZipConfiguration = () => {
@@ -130,7 +130,7 @@ const ZipConfiguration = () => {
     };
 
     makeApiRequest({
-      endPoint: CONFIGURATION_ENDPOINT,
+      endPoint: isEdit ? CONFIGURATION_PATCH_ENDPOINT : CONFIGURATION_ENDPOINT,
       method: isEdit ? METHODS?.patch : METHODS?.post,
       payload: payload,
       update_id: isEdit && editItem?.id,

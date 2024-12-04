@@ -119,7 +119,7 @@ export const ConfigurationValidations = {
     },
   },
   min_order_quantity: {
-    required: "Min order quantity is required",
+    required: "Minimum order quantity is required",
     min: {
       value: 1,
       message: "Minimum order quantity must be between 1 and 9999",

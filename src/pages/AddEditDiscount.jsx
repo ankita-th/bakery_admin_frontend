@@ -23,6 +23,7 @@ const AddEditDiscount = () => {
             btnLoaders={btnLoaders}
             setBtnLoaders={setBtnLoaders}
             handleButtonLoaders={handleButtonLoaders}
+            location={location}
           />
         );
       case "amount_off_order":
@@ -31,6 +32,7 @@ const AddEditDiscount = () => {
             btnLoaders={btnLoaders}
             setBtnLoaders={setBtnLoaders}
             handleButtonLoaders={handleButtonLoaders}
+            location={location}
           />
         );
       case "buy_x_get_y":
@@ -39,6 +41,7 @@ const AddEditDiscount = () => {
             btnLoaders={btnLoaders}
             setBtnLoaders={setBtnLoaders}
             handleButtonLoaders={handleButtonLoaders}
+            location={location}
           />
         );
       case "free_shipping":

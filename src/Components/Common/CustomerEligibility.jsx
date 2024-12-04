@@ -6,9 +6,11 @@ import {
 import { createRequiredValidation } from "../../utils/helpers";
 import RadioGroup from "../../Form Fields/RadioGroup";
 import CommonSelect from "../../Form Fields/CommonSelect";
+import { useLocation } from "react-router-dom";
 
 const CustomerEligibility = ({ formConfig }) => {
   const { watch, setValue } = formConfig;
+  const location = useLocation();
   const { customer_eligibility } = watch();
   useEffect(() => {
     if (customer_eligibility === "all_customer")
@@ -36,7 +38,12 @@ const CustomerEligibility = ({ formConfig }) => {
             placeholder="Select Customer Specification"
             className="px-4 py-2 w-full rounded-lg bg-[#F5F5F5]"
           />
-          <div>Applies only to selected collections.</div>
+
+          <div>
+          {location?.state?.type === "buy_x_get_y"
+            ? "Applies only to selected collections."
+            : "Applies To all product"}
+        </div>
         </>
       )}
     </div>

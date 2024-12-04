@@ -35,6 +35,7 @@ const DiscountedValue = ({ formConfig }) => {
         rules={createRequiredValidation("Discount type")}
       />{" "}
       {showValueField() && (
+        <>
         <CommonTextField
           formConfig={formConfig}
           label="Discount Value"
@@ -44,6 +45,8 @@ const DiscountedValue = ({ formConfig }) => {
           isNumberOnly={true}
           icon={watch("discount_types") === "percentage" && "%"}
         />
+        <p className="mt-2 text-gray-500">For multiple quantities, the discount amount will be taken off each Y item.</p>
+        </>
       )}
     </div>
   );

@@ -14,8 +14,9 @@ import SummarySection from "../Components/Common/SummarySection";
 import { DISCOUNT_ENDPOINT } from "../api/endpoints";
 import { makeApiRequest, METHODS } from "../api/apiFunctions";
 import { successType, toastMessage } from "../utils/toastMessage";
-import { DEFAULT_ERROR_MESSAGE } from "../constant";
+import { CUSTOMER_SPECIFIC_OPTIONS, DEFAULT_ERROR_MESSAGE, INVALID_ID } from "../constant";
 import { useNavigate } from "react-router-dom";
+import { extractOption, prefillFormValues } from "../utils/helpers";
 
 const AmountOffOrder = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const AmountOffOrder = () => {
     saveDiscount: false,
   });
   const formConfig = useForm();
-  const { watch } = formConfig;
+  const { watch,setValue } = formConfig;
   const isEdit = location?.state?.isEdit;
   const editId = location?.state?.editId;
 
@@ -37,19 +38,29 @@ const AmountOffOrder = () => {
         .then((res) => {
           const fields = [
             "code",
-            "combination",
-            "customer_eligibility",
-            "customer_specification",
-            "end_date",
-            "end_time",
-            "maximum_discount_usage",
-            "maximum_usage_value",
+            "discount_types",
+            "discount_value",
             "minimum_purchase_requirement",
             "minimum_purchase_value",
             "minimum_quantity_value",
+            "customer_eligibility",
+            "customer_specification",
+            "maximum_discount_usage",
+            "minimum_quantity_value",
+            "combination",
+            "end_date",
+            "end_time",
             "start_date",
             "start_time",
+            "maximum_usage_value",
           ];
+          prefillFormValues(res.data, fields, setValue);
+          const extractedOption = extractOption(
+            CUSTOMER_SPECIFIC_OPTIONS,
+            res?.data?.customer_specification,
+            "value"
+          );
+          setValue("customer_specification", extractedOption);
         })
         .catch((err) => {
           console.log(err);
