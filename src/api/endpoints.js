@@ -5,6 +5,7 @@ export const TODO_ENDPOINT = "/todos/tasks/";
 export const REFRESH_TOKEN = "/token/refresh";
 export const EMPLOYEE_ENDPOINT = "/employees/";
 export const CONFIGURATION_ENDPOINT = "/zip/configuration/";
+export const CONFIGURATION_PATCH_ENDPOINT = "/zip/configurations/";
 export const RECIPE_ENDPOINT = "/recipe/";
 export const GET_INVENTORY_ENDPOINT = "/inventory-list";
 export const EMPLOYEE_MANAGEMENT_ENDPOINT = "/employees/";

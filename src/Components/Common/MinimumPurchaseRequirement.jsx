@@ -72,7 +72,7 @@ const MinimumPurchaseRequirement = ({ formConfig }) => {
         )}
       {shouldShowText(watch("minimum_purchase_requirement")) && (
         <div>
-          {location?.state?.type === "amount_off_order"
+          {location?.state?.type === "amount_off_order" || location?.state?.type === "free_shipping"
             ? "Applies To all product"
             : "Applies only to selected collections."}
         </div>

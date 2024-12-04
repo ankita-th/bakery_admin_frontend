@@ -37,7 +37,7 @@ const SingleConfigurationRow = ({
       >
         {delivery_availability}
       </td>
-      <td className="py-2 px-4 border">${delivery_threshold}</td>
+      {/* <td className="py-2 px-4 border">${delivery_threshold}</td> */}
       <td className="py-2 px-4 border space-x-2">
         {/* <button
           className="text-blue-500 hover:text-blue-700"
