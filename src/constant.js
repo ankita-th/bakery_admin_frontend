@@ -630,9 +630,9 @@ export const CUSTOMER_ELIGIBILITY_OPTIONS = [
 ];
 
 export const COUNTRY_OPTIONS = [
-  {label: "All countries", value: "all_countries"},
-  {label: "Selected countries", value: "selected_countries"},
-]
+  { label: "All countries", value: "all_countries" },
+  { label: "Selected countries", value: "selected_countries" },
+];
 
 export const CUSTOMER_SPECIFIC_OPTIONS = [
   {
@@ -819,4 +819,8 @@ export const RECIPE_MEASURE_OPTIONS = [
 export const CUSTOMER_BUYS_OPTIONS = [
   { label: "Minimum quantity of items", value: "minimum_items_quantity" },
   { label: "Minimum purchase amount", value: "minimum_purchase_amount" },
+];
+export const ITEMS_FROM_OPTIONS = [
+  { label: "All products", value: "all_product" },
+  { label: "Specify product", value: "specific_product" },
 ];

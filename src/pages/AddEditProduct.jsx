@@ -136,7 +136,6 @@ const AddEditProduct = () => {
           const prefillKeys = ["name", "description"];
           prefillFormValues(data, prefillKeys, setValue);
           // for name and desription
-
           // for seo section
           const seoKeys = [
             "meta_description",
@@ -207,7 +206,7 @@ const AddEditProduct = () => {
           //   let result = [];
           //   const product_images = data.product_images;
 
-          //   productImages?.forEach((img) => {
+          //   data.product_images?.forEach((img) => {
           //     const item = { preview: img, error: null, file: null };
           //     result.push(item);
           //   });
@@ -291,14 +290,11 @@ const AddEditProduct = () => {
         navigate("/products");
       })
       .catch((err) => {
-        console.log(err);
         // const error =
         //   err?.response?.data?.name?.[0] || err?.response?.data?.sku?.[0];
         // toastMessage(error || DEFAULT_ERROR_MESSAGE);
-
         const fieldError = err?.response?.data?.error;
         setBtnLoaders({ publish: false, draft: false });
-
         toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
       });
   };

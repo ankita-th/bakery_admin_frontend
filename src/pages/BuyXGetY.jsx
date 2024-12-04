@@ -11,6 +11,7 @@ import MinimumPurchaseRequirement from "../Components/Common/MinimumPurchaseRequ
 import DiscountedValue from "../Components/DiscountedValue";
 import SummarySection from "../Components/Common/SummarySection";
 import CustomerBuys from "../Components/CustomerBuys";
+import CustomerGets from "../Components/CustomerGets";
 
 const BuyXGetY = () => {
   const [btnLoaders, setBtnLoaders] = useState({
@@ -38,6 +39,7 @@ const BuyXGetY = () => {
             <DiscountCodeSection formConfig={formConfig} />
             {/* add components for customer buys and customer gets here */}
             <CustomerBuys formConfig={formConfig} />
+            <CustomerGets formConfig={formConfig}/>
             <DiscountedValue formConfig={formConfig} />
             <CustomerEligibility formConfig={formConfig} />
             <DiscountUses formConfig={formConfig} />
