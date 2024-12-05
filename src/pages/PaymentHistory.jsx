@@ -15,35 +15,36 @@ import NoDataFound from "../Components/Common/NoDataFound";
 import SinglePaymentRow from "../Components/SinglePaymentRow";
 import Pagination from "../Components/Common/Pagination";
 import PageLoader from "../loaders/PageLoader";
+import { T } from "../utils/languageTranslator";
 const filterFields = [
   {
     type: "select",
     filterName: "paymentType",
-    defaultOption: "Select Payment Type",
+    defaultOption: T["select_payment_type"],
     options: PAYMENT_TYPE_OPTIONS,
   },
   {
     type: "select",
     filterName: "date",
-    defaultOption: "Date",
+    defaultOption: T["date"],
     options: SORT_BY_OPTIONS,
   },
   {
     type: "search",
     filterName: "name",
-    placeholder: "Search Payment",
+    placeholder: T["search_payment"],
   },
 ];
 const PAYMENT_COLUMNS = [
-  "Id",
-  "Customer Name",
-  "Date",
-  "Order Id",
-  "Payment Method",
-  "Amount",
-  "Status",
-  "Transaction ID",
-  "Actions",
+  T["id"],
+  T["customer_name"],
+  T["date"],
+  T["order_id"],
+  T["payment_method"],
+  T["amount"],
+  T["status"],
+  T["transaction_id"],
+  T["action"],
 ];
 const PaymentHistory = () => {
   const { page, onPageChange } = usePagination();

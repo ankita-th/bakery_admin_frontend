@@ -18,20 +18,21 @@ import useModalToggle from "../hooks/useModalToggle";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import { successType, toastMessage } from "../utils/toastMessage";
 import { deleteItemBasedOnId } from "../utils/helpers";
+import { T } from "../utils/languageTranslator";
 const SUPPORT_COLUMNS = [
-  "ID",
-  "Name",
-  "Email",
-  "Issue Description",
-  "Status",
-  "Date Created",
-  "Assigned To",
-  "Action",
+  T["id"],
+  T["name"],
+  T["email"],
+  T["issue_description"],
+  T["status"],
+  T["date_created"],
+  T["assigned_to"],
+  T["action"],
 ];
 const filterFields = [
   {
     type: "search",
-    placeholder: "Search Customers",
+    placeholder: T["search_customers"],
     filterName: "name",
   },
 ];
@@ -109,7 +110,7 @@ const Support = () => {
       toggleDeleteModal();
       setItemToDelete(deleteId);
     } else {
-    //  UpDate Required: For edit
+      //  UpDate Required: For edit
     }
   };
   return (

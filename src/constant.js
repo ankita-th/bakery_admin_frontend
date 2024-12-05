@@ -1,3 +1,5 @@
+import { T } from "./utils/languageTranslator";
+
 export const RAW_MATERIALS_ITEMS_PER_PAGE = 10;
 export const TODO_ITEMS_PER_PAGE = 10;
 export const CONFIGURATION_ITEMS_PER_PAGE = 10;
@@ -199,21 +201,21 @@ export const DEFAULT_CLASS =
   "px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-sm transition-all";
 
 export const OPTIONS = [
-  { value: "Option1", label: "Option1" },
-  { value: "Option2", label: "Option2" },
-  { value: "Option3", label: "Option3" },
+  { value: "Option1", label: T["option1"] },
+  { value: "Option2", label: T["option2"] },
+  { value: "Option3", label: T["option3"] },
 ];
 
 export const SORT_BY_OPTIONS = [
-  { value: "newest", label: "Newest" },
-  { value: "oldest", label: "Oldest" },
+  { value: "newest", label: T["newest"] },
+  { value: "oldest", label: T["oldest"] },
 ];
-export const PAYMENT_TYPE_OPTIONS = [{ value: "card", label: "Card" }];
+export const PAYMENT_TYPE_OPTIONS = [{ value: "card", label: T["card"] }];
 
 export const ORDERS_TYPE_OPTIONS = [
-  { value: "declined", label: "Declined" },
-  { value: "accepted", label: "Accepted" },
-  { value: "pending", label: "Pending" },
+  { value: "declined",label: T["declined"] },
+  { value: "accepted",label: T["accepted"] },
+  { value: "pending", label: T["pending"] },
 ];
 
 export const DUMMY_TODO_DATA = [
@@ -383,13 +385,13 @@ export const MEASURE_OPTIONS = [
 ];
 
 export const INVENTORY_PAGE_COLUMNS = [
-  "#Name",
-  "Current Stock",
-  "Reorder Level",
-  "Barcode No.",
-  "SKU",
-  "Status",
-  "Action",
+  T["character_name"],
+  T["current_stock"],
+  T["reorder_level"],
+  T["barcode_no"],
+  T["sku"],
+  T["status"],
+  T["action"],
 ];
 export const DUMMY_CUSTOMER_DATA = [
   // Update required: update according to the api parameters /////////
@@ -732,15 +734,15 @@ export const ROLE_OPTIONS = [
   { value: "admin", label: "Admin" },
 ];
 export const TYPE_OPTIONS = [
-  { label: "Published", value: "published" },
-  { label: "Drafts", value: "drafts" },
-  { label: "All", value: "all" },
+  { label: T["published"], value: "published" },
+  { label: T["draft"], value: "draft" },
+  { label: T["all"], value: "all" },
 ];
 
 export const ACTIONS = [
-  { label: "Duplicate", value: "duplicate" },
-  { label: "Delete", value: "delete" },
-  { label: "Draft", value: "draft" },
+  { label: T["duplicate"], value: "duplicate" },
+  { label: T["delete"], value: "delete" },
+  { label: T["draft"], value: "draft" },
 ];
 
 export const DUMMY_EMPLOYEE = {
@@ -800,8 +802,8 @@ export const SAME_PRODUCT_NAME_ERROR = `duplicate key value violates unique cons
 DETAIL:  Key (name)=(Wheat) already exists.
  fieldError`;
 export const EMPLOYEE_SORT_BY_OPTIONS = [
-  { label: "Active", value: "active" },
-  { label: "In Active", value: "inactive" },
+  { label: T["active"], value: "active" },
+  { label: T["in_active"], value: "inactive" },
 ];
 
 export const RECIPE_MEASURE_OPTIONS = [

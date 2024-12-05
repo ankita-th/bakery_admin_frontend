@@ -21,10 +21,11 @@ import { successType, toastMessage } from "../utils/toastMessage";
 import CommonButton from "../Components/Common/CommonButton";
 import DiscountTypeSection from "../Components/DiscountTypeSection";
 import { useNavigate } from "react-router-dom";
+import { T } from "../utils/languageTranslator";
 const filterFields = [
   {
     type: "select",
-    defaultOption: "Sort by",
+    defaultOption: T["sort_by"],
     options: SORT_BY_OPTIONS,
     filterName: "sort_by",
   },
@@ -32,16 +33,16 @@ const filterFields = [
   {
     type: "search",
     filterName: "name",
-    placeholder: "Search Coupon",
+    placeholder: T["search_coupon"],
   },
 ];
 const DISCOUNTS_COLUMNS = [
   "checkbox",
-  "Title",
-  "Method",
-  "Type",
-  "Combinations",
-  "Status",
+  T["title"],
+  T["method"],
+  T["type"],
+  T["combinations"],
+  T["status"],
 ];
 
 const Discounts = () => {

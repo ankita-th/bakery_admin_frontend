@@ -26,29 +26,30 @@ import {
 } from "../utils/helpers";
 import AddEditTodo from "../Components/AddEditTodo";
 import PageLoader from "../loaders/PageLoader";
+import { T } from "../utils/languageTranslator";
 const filterFields = [
   {
     type: "select",
-    defaultOption: "Sort by",
+    defaultOption: T["sort_by"],
     options: SORT_BY_OPTIONS,
     filterName: "sort_by",
   },
   {
     type: "search",
     filterName: "name",
-    placeholder: "Search To Do",
+    placeholder: T["search_to_do"],
   },
 ];
 export const TODO_COLUMNS = [
-  "ID",
-  "Task Name",
-  "Description",
-  "Assigned To",
-  "Priority",
-  "Due Date",
-  "Status",
-  "Notes",
-  "", // for edit and delete actions
+  T["id"],
+  T["task_name"],
+  T["description"],
+  T["assigned_to"],
+  T["priority"],
+  T["due_date"],
+  T["status"],
+  T["notes"],
+  T["action"]
 ];
 const Todo = () => {
   const { page, onPageChange, setPage } = usePagination();
