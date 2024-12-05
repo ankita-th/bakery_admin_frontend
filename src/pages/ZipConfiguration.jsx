@@ -25,14 +25,14 @@ import SingleConfigurationRow from "../Components/SingleConfigurationRow";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import { trashIcon } from "../assets/Icons/Svg";
 import PageLoader from "../loaders/PageLoader";
+import { T } from "../utils/languageTranslator";
 const filterFields = [
   {
     type: "search",
     filterName: "name",
-    placeholder: "Search Configuration",
+    placeholder: T["search_configuration"],
   },
 ];
-
 const CONFIGURATION_COLUMNS = [
   "S.No",
   "ZIP Code",

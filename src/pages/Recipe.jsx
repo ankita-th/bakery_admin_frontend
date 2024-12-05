@@ -22,34 +22,35 @@ import SingleRecipeRow from "../Components/SingleRecipeRow";
 import { successType, toastMessage } from "../utils/toastMessage";
 import { deleteItemBasedOnId } from "../utils/helpers";
 import PageLoader from "../loaders/PageLoader";
+import { T } from "../utils/languageTranslator";
 const filterFields = [
   {
     type: "select",
-    defaultOption: "Select type",
-    options: TYPE_OPTIONS,
+    defaultOption: T["select_type"],
+    options: TYPE_OPTIONS,  
     filterName: "type",
   },
   {
     type: "select",
-    defaultOption: "Select Action",
+    defaultOption: T["select_action"],
     options: ACTIONS,
     filterName: "action",
   },
   {
     type: "search",
     filterName: "name",
-    placeholder: "Search recipe",
+    placeholder: T["search_recipe"],
   },
 ];
 const RECIPE_COLUMNS = [
   "checkbox",
-  "Recipe Name",
-  "Categories",
-  "Prep Time",
-  "Cook Time",
-  "Serving Size",
-  "Status",
-  "Actions",
+  T["recipe_name"],
+  T["categories"],
+  T["prep_time"],
+  T["cook_time"],
+  T["serving_size"],
+  T["status"],
+  T["action"]
 ];
 
 const Recipe = () => {

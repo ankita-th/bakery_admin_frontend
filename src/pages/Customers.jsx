@@ -20,28 +20,29 @@ import PageLoader from "../loaders/PageLoader";
 import Pagination from "../Components/Common/Pagination";
 import { deleteItemBasedOnId } from "../utils/helpers";
 import { successType, toastMessage } from "../utils/toastMessage";
+import { T } from "../utils/languageTranslator";
 const filterFields = [
   {
     type: "select",
     filterName: "sort_by",
-    defaultOption: "Sort by",
+    defaultOption: T["sort_by"],
     options: SORT_BY_OPTIONS,
   },
   {
     type: "search",
     filterName: "name",
-    placeholder: "Search Customers",
+    placeholder: T["search_customers"],
   },
 ];
 const CUSTOMER_COLUMNS = [
-  "ID",
-  "Customer Type",
-  "Name",
-  "Contact Person",
-  "Contact Details",
-  "Address",
-  "Order History",
-  "Action",
+  T["id"],
+  T["customer_type"],
+  T["name"],
+  T["contact_person"],
+  T["contact_details"],
+  T["address"],
+  T["order_history"],
+  T["action"],
 ];
 const Customers = () => {
   const { toggleLoader, pageLoader } = useLoader();

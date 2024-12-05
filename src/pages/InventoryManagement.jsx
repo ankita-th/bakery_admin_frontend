@@ -23,18 +23,19 @@ import AddEditInventory from "../Components/Common/AddEditInventory";
 import { formatDate, handleEdit,combineBarcode,deleteItemBasedOnId } from "../utils/helpers";
 import { successType, toastMessage } from "../utils/toastMessage";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
+import { T } from "../utils/languageTranslator";
 // For now this is static so follow comments when API will be created for this
 const filterFields = [
   {
     type: "select",
-    defaultOption: "Sort by",
+    defaultOption: T["sort_by"],
     options: SORT_BY_OPTIONS,
     filterName: "action",
   },
   {
     type: "search",
     filterName: "name",
-    placeholder: "Search Inventory",
+    placeholder: T["search_inventory"],
   },
 ];
 

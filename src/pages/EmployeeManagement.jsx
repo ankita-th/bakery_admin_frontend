@@ -28,28 +28,29 @@ import AddEditEmployee from "../Components/AddEditEmployee";
 import { deleteItemBasedOnId, handleEdit } from "../utils/helpers";
 import Pagination from "../Components/Common/Pagination";
 import PageLoader from "../loaders/PageLoader";
+import { T } from "../utils/languageTranslator";
 const filterFields = [
   {
     type: "select",
-    defaultOption: "Sort by",
+    defaultOption: T["sort_by"],
     options: EMPLOYEE_SORT_BY_OPTIONS,
     filterName: "sort_by",
   },
   {
     type: "search",
     filterName: "name",
-    placeholder: "Search Employee",
+    placeholder: T["search_employee"],
   },
 ];
 const EMPLOYEE_COLUMNS = [
-  "ID",
-  "Name",
-  "Role",
-  "Email",
-  "Phone Number",
-  "Shift",
-  "Status",
-  "Action",
+  T["id"],
+  T["name"],
+  T["role"],
+  T["email"],
+  T["phone_number"],
+  T["shift"],
+  T["status"],
+  T["action"],
 ];
 
 const EmployeeManagement = () => {

@@ -29,32 +29,32 @@ import ViewRawMaterials from "../Components/ViewRawMaterials";
 import { T } from "../utils/languageTranslator";
 const RAW_MATERIAL_COLUMNS = [
   "checkbox",
-  "ID",
-  "Name",
-  "Qty in Stock",
-  "Reorder Level",
-  "Expiration Date",
-  "Last Updated",
-  "Notes",
-  "Action",
+  T["id"],
+  T["name"],
+  T["qty_in_stock"],
+  T["reorder_level"],
+  T["expiration_date"],
+  T["last_updated"],
+  T["notes"],
+  T["action"],
 ];
 const filterFields = [
   {
     type: "select",
-    defaultOption: "Select type",
+    defaultOption: T["select_type"],
     options: TYPE_OPTIONS,
     filterName: "type",
   },
   {
     type: "select",
-    defaultOption: "Select Action",
+    defaultOption: T["select_action"],
     options: ACTIONS,
     filterName: "action",
   },
   {
     type: "search",
     filterName: "name",
-    placeholder: "Search Materials",
+    placeholder: T["search_materials"],
   },
 ];
 

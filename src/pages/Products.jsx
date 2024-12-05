@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import TableWrapper from "../Wrappers/TableWrapper";
 import { deleteItemBasedOnId } from "../utils/helpers";
 import SingleProductTableRow from "../Components/SingleProductTableRow";
+import { T } from "../utils/languageTranslator";
 
 const OPTIONS = [
   { value: "Option1", label: "Option1" },
@@ -42,21 +43,21 @@ const OPTIONS = [
 
 const PRODUCT_PAGE_COLUMNS = [
   "checkbox",
-  "S.no",
-  "Name",
-  "SKU",
-  "Stock",
-  "Price",
-  "Category",
-  "Date",
-  "Action",
+  T["s_no"],
+  T["name"],
+  T["sku"],
+  T["stock"],
+  T["price"],
+  T["category"],
+  T["date"],
+  T["action"],
   // this extra space is for view ,edit  and delete actions button they do not have any column headings
   "",
 ];
 const filterFields = [
   {
     type: "select",
-    defaultOption: "Select type",
+    defaultOption: T["select_type"],
     options: TYPE_OPTIONS,
     filterName: "type",
   },
@@ -68,14 +69,14 @@ const filterFields = [
   // },
   {
     type: "select",
-    defaultOption: "Select Action",
+    defaultOption: T["select_action"],
     options: ACTIONS,
     filterName: "action",
   },
   {
     type: "search",
     filterName: "name",
-    placeholder: "Search Product",
+    placeholder: T["search_product"],
   },
 ];
 const Products = () => {
