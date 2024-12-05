@@ -16,6 +16,7 @@ const CustomerEligibility = ({ formConfig }) => {
     if (customer_eligibility === "all_customer")
       setValue("customer_specification", "");
   }, [customer_eligibility]);
+  console.log(watch("customer_eligibility"));
   return (
     <div className="bg-white p-6 rounded-lg">
       <RadioGroup
@@ -40,10 +41,10 @@ const CustomerEligibility = ({ formConfig }) => {
           />
 
           <div>
-          {location?.state?.type === "buy_x_get_y"
-            ? "Applies only to selected collections."
-            : "Applies To all product"}
-        </div>
+            {location?.state?.type === "buy_x_get_y"
+              ? "Applies only to selected collections."
+              : "Applies To all product"}
+          </div>
         </>
       )}
     </div>

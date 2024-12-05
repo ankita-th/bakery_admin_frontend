@@ -213,8 +213,8 @@ export const SORT_BY_OPTIONS = [
 export const PAYMENT_TYPE_OPTIONS = [{ value: "card", label: T["card"] }];
 
 export const ORDERS_TYPE_OPTIONS = [
-  { value: "declined",label: T["declined"] },
-  { value: "accepted",label: T["accepted"] },
+  { value: "declined", label: T["declined"] },
+  { value: "accepted", label: T["accepted"] },
   { value: "pending", label: T["pending"] },
 ];
 
@@ -600,7 +600,7 @@ export const DUMMY_SUPPORT_DATA = [
 ];
 
 export const DISCOUNT_TYPE_OPTIONS = [
-  { label: "Fixed", value: "fixed" },
+  { label: "amount", value: "amount" },
   { label: "Percentage", value: "percentage" },
 ];
 
@@ -616,7 +616,7 @@ export const PURCHASE_REQUIREMENT_OPTIONS = [
   },
   {
     label: "Minimum quantity of items",
-    value: "minimum_quantity",
+    value: "minimum_items",
   },
 ];
 
@@ -638,20 +638,20 @@ export const COUNTRY_OPTIONS = [
 
 export const CUSTOMER_SPECIFIC_OPTIONS = [
   {
-    label: "Customers who haven't purchased",
+    label: "Haven't Purchased",
     value: "havent_purchased",
   },
   {
-    label: "Customers who have purchased more than once",
+    label: "Recent Purchased",
+    value: "recent_purchased",
+  },
+  {
+    label: "Purchased Once",
+    value: "purchased_once",
+  },
+  {
+    label: "Purchased More Than Once",
     value: "purchased_more_than_once",
-  },
-  {
-    label: "Abandoned checkouts in the last 30 days",
-    value: "abandoned_checkouts",
-  },
-  {
-    label: "Email subscribers",
-    value: "email_subscribers",
   },
   {
     label: "Customers who have purchased at least once",
@@ -665,8 +665,8 @@ export const COMBINATION_OPTIONS = [
     value: "product_discounts",
   },
   {
-    label: "Other discounts",
-    value: "other_discounts",
+    label: "Order discounts",
+    value: "order_discounts",
   },
   {
     label: "Shipping discounts",
@@ -688,11 +688,11 @@ export const DISCOUNTED_VALUE_OPTIONS = [
 export const DISCOUNTED_USAGE_OPTIONS = [
   {
     label: "Limit to one use per customer",
-    value: "one_use_per_customer",
+    value: "per_customer",
   },
   {
     label: "Limit number of times this discount can be used in total",
-    value: "limit_number_of_times",
+    value: "limit_discount_usage_time",
   },
 ];
 export const COMBINATION_OPTIONS_SHIPPING = [

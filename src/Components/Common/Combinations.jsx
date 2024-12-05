@@ -7,6 +7,7 @@ import {
 import { createRequiredValidation } from "../../utils/helpers";
 
 const Combinations = ({ formConfig, isShipping = false }) => {
+  const {watch} = formConfig;
   return (
     <div className="bg-white p-6 rounded-lg">
       <div className="mb-4">
