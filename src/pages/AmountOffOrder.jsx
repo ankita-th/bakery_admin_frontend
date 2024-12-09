@@ -14,7 +14,11 @@ import SummarySection from "../Components/Common/SummarySection";
 import { DISCOUNT_ENDPOINT } from "../api/endpoints";
 import { makeApiRequest, METHODS } from "../api/apiFunctions";
 import { successType, toastMessage } from "../utils/toastMessage";
-import { CUSTOMER_SPECIFIC_OPTIONS, DEFAULT_ERROR_MESSAGE, INVALID_ID } from "../constant";
+import {
+  CUSTOMER_SPECIFIC_OPTIONS,
+  DEFAULT_ERROR_MESSAGE,
+  INVALID_ID,
+} from "../constant";
 import { useNavigate } from "react-router-dom";
 import { extractOption, prefillFormValues } from "../utils/helpers";
 
@@ -25,7 +29,7 @@ const AmountOffOrder = () => {
     saveDiscount: false,
   });
   const formConfig = useForm();
-  const { watch,setValue } = formConfig;
+  const { watch, setValue } = formConfig;
   const isEdit = location?.state?.isEdit;
   const editId = location?.state?.editId;
 

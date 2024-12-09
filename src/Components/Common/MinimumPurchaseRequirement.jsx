@@ -48,6 +48,7 @@ const MinimumPurchaseRequirement = ({ formConfig }) => {
   const shouldShowText = (value) => {
     return value === "minimum_quantity" || value === "minimum_purchase";
   };
+  console.log(watch("minimum_purchase_requirement"))
 
   return (
     <div className="bg-white p-6 rounded-lg">

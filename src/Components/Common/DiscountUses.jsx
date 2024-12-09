@@ -15,6 +15,7 @@ const DiscountUses = ({ formConfig }) => {
   const showValueField = () => {
     return watch("maximum_discount_usage") == "limit_number_of_times";
   };
+  console.log(watch("maximum_discount_usage"))
   return (
     <div className="bg-white p-6 rounded-lg">
       <RadioGroup
