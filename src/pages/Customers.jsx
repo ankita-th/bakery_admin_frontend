@@ -160,8 +160,8 @@ const Customers = () => {
           />
           {showDeleteModal && (
             <DeleteConfirmationModal
-              title="Are you sure you want to remove this customer?"
-              description="This action cannot be redo."
+              title={T["remove_this_customer"]}
+              description={T["this_action_cannot_be_redo"]}
               onCancel={() => {
                 setItemToDelete(null);
                 toggleDeleteModal();

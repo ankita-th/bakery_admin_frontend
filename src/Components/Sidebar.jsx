@@ -25,7 +25,7 @@ const SIDEBAR_LINKS_TOP = [
     label: T["dashboard"],
     icon: DashboardIcon,
     href: "/dashboard",
-    activeRoutes: ["/dashboard"],
+    activeRoutes: ["/dashboard", "/"],
   },
   {
     label: T["products"],

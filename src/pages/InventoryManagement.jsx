@@ -87,7 +87,6 @@ const InventoryManagement = () => {
     //   });
   }, [page, filters]);
 
-  console.log(inventories,'skdfjklsjfksdjfskldafj');
 
   const handleFilterChange = (filterName, value) => {
     const temp = { ...filters };

@@ -144,8 +144,8 @@ const Support = () => {
           />
           {showDeleteModal && (
             <DeleteConfirmationModal
-              title="Are you sure you want to remove this Support?"
-              description="This action cannot be redo."
+              title={T["remove_this_support"]}
+              description={T["this_action_cannot_be_redo"]}
               onCancel={() => {
                 setItemToDelete(null);
                 toggleDeleteModal();
