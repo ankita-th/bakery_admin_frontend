@@ -17,6 +17,7 @@ import {
   Legend,
   Tooltip,
 } from "chart.js";
+import { T } from "../utils/languageTranslator";
 
 // Register the necessary Chart.js components
 ChartJS.register(
@@ -130,7 +131,7 @@ const Dashboard = () => {
               <div className="w-full md:w-2/3">
                 <div className="text-left">
                   <span className="text-lg font-semibold text-gray-700">
-                    Total Revenue
+                   {T["total_revenue"]}
                   </span>
                   <h2 className="text-4xl font-bold text-gray-900">
                     $10,40,000
@@ -140,7 +141,7 @@ const Dashboard = () => {
                   {/* Total Order Placed Card */}
                   <div className="bg-[#FAF2D5] p-4 rounded-lg flex flex-col items-start">
                     <h5 className="text-sm font-medium text-gray-600">
-                      Total Order Placed
+                      {T["total_order_placed"]}
                     </h5>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mt-3">
                       <h3 className="text-2xl font-bold text-gray-800">05</h3>
@@ -153,7 +154,7 @@ const Dashboard = () => {
                   {/* Total Customers Card */}
                   <div className="bg-[#FAF2D5] p-4 rounded-lg flex flex-col items-start">
                     <h5 className="text-sm font-medium text-gray-600">
-                      Total Customers
+                    {T["total_customers"]}
                     </h5>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mt-3">
                       <h3 className="text-2xl font-bold text-gray-800">200</h3>
@@ -181,13 +182,13 @@ const Dashboard = () => {
             <div className="bg-[#FFEFE7] rounded-lg p-6 flex flex-col justify-between relative">
               <div>
                 <h2 className="text-black font-semibold text-lg">
-                  Total Products
+              {T["total_products"]}
                 </h2>
                 <p className="text-4xl font-bold text-black">50</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mt-3">
-                  <p className="text-red-500 mt-2">10 Today’s Products added</p>
+                  <p className="text-red-500 mt-2">{T["products_added"]}</p>
                   <div className="mt-4 flex items-center text-red-500">
-                    <span className="text-sm">+2% Past month</span>
+                    <span className="text-sm">{T["past_month"]}</span>
                     <svg
                       className="w-6 h-6 ml-2"
                       fill="none"
@@ -208,12 +209,11 @@ const Dashboard = () => {
                 {ProductDocIcon}
               </div>
             </div>
-
             {/* Categories and Total Users Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Categories Card */}
               <div className="bg-[#E8F0FB] rounded-lg p-6 relative">
-                <h2 className="text-black font-semibold text-lg">Categories</h2>
+                <h2 className="text-black font-semibold text-lg">{T["categories"]}</h2>
                 <p className="text-4xl font-bold text-black">10</p>
                 <div className="flex justify-end mt-4 dashcat_icons">
                   {CubesCategoryIcon}
@@ -222,7 +222,7 @@ const Dashboard = () => {
               {/* Total Users Card */}
               <div className="bg-[#FDEBF9] rounded-lg p-6 relative">
                 <h2 className="text-black font-semibold text-lg">
-                  Total Users
+                 {T["total_users"]}
                 </h2>
                 <p className="text-4xl font-bold text-black">20</p>
                 <div className="flex justify-end mt-4 dashcat_icons">
@@ -239,28 +239,28 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full mt-3">
           <div className="bg-[#FFEFE7] p-4 rounded-lg flex flex-col items-start gap-4">
             <h5 className="text-sm font-medium text-gray-600">
-              Total Running Orders
+             {T["total_running_orders"]}
             </h5>
             <h3 className="text-2xl font-bold text-gray-800 mt-3">250</h3>
           </div>
 
           <div className="bg-[#FFEFE7] p-4 rounded-lg flex flex-col items-start gap-4">
             <h5 className="text-sm font-medium text-gray-600">
-              Low Stock Items
+             {T["low_stock_items"]}
             </h5>
             <h3 className="text-2xl font-bold text-gray-800 mt-3">120</h3>
           </div>
 
           <div className="bg-[#FFEFE7] p-4 rounded-lg flex flex-col items-start gap-4">
             <h5 className="text-sm font-medium text-gray-600">
-              In Progress Orders
+             {T["in_progress_orders"]}
             </h5>
             <h3 className="text-2xl font-bold text-gray-800 mt-3">120</h3>
           </div>
 
           <div className="bg-[#FFEFE7] p-4 rounded-lg flex flex-col items-start gap-4">
             <h5 className="text-sm font-medium text-gray-600">
-              Today’s Order Value
+            {T["today_order_value"]}
             </h5>
             <h3 className="text-2xl font-bold text-gray-800 mt-3">$140k</h3>
           </div>
@@ -271,7 +271,7 @@ const Dashboard = () => {
         <div className="flex gap-4">
           {/* Sales Summary Card */}
           <div className="bg-white rounded-lg p-6 shadow-md w-1/2">
-            <h2 className="text-gray-600 font-semibold">Sales Summary</h2>
+            <h2 className="text-gray-600 font-semibold">{T["sales_summary"]}</h2>
             <p className="text-3xl font-bold text-gray-900">
               6,345{" "}
               <span className="text-gray-500 text-sm font-normal">
@@ -285,7 +285,7 @@ const Dashboard = () => {
 
           {/* Users Summary Card */}
           <div className="bg-white rounded-lg p-6 shadow-md w-1/2">
-            <h2 className="text-gray-600 font-semibold">Users Summary</h2>
+            <h2 className="text-gray-600 font-semibold">{T["users_summary"]}</h2>
             <p className="text-3xl font-bold text-gray-900">
               9,845{" "}
               <span className="text-gray-500 text-sm font-normal">

@@ -26,7 +26,7 @@ export const routes = [
   {
     path: "/",
     element: <Dashboard />,
-    private: true,
+    private: true,                                                                               
   },
   {
     path: "/dashboard",

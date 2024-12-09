@@ -7,30 +7,31 @@ import {
   shippingDiscountIcon,
 } from "../assets/Icons/Svg";
 import { useNavigate } from "react-router-dom";
+import { T } from "../utils/languageTranslator";
 const discountOptions = [
   {
-    title: "Amount Off Products",
-    description: "Discount specific products or collections of products.",
-    buttonText: "Product Discount",
+    title: T["amounta_off_products"],
+    description: T["discount_specific_products"],
+    buttonText: T["product_discount"],
     icon: productDiscountIcon,
   },
   {
-    title: "Buy X Get Y",
-    description: "Discount products based on a customer's purchase.",
-    buttonText: "Buy X Get Y", // update required:Need to update this
+    title: T["buy_x_get_y"],
+    description: T["discount_products"],
+    buttonText: T["buy_x_get_y"], // update required:Need to update this
     icon: productDiscountIcon, // update required:Need to update this icon
   },
   {
     // update required: confirm title for this
-    title: "Order Discount",
-    description: "Discount the total order amount.",
-    buttonText: "Order Discount",
+    title: T["order_discount"],
+    description: T["discount_the_total_order_amount"],
+    buttonText: T["order_discount"],
     icon: orderDiscountIcon,
   },
   {
-    title: "Free Shipping",
-    description: "Offer free shipping on an order.",
-    buttonText: "Shipping Discount",
+    title: T["free_shipping"],
+    description: T["offer_free_shipping"],
+    buttonText: T["shipping_discount"],
     icon: shippingDiscountIcon,
   },
 ];
@@ -62,7 +63,7 @@ const DiscountTypeSection = ({ onClose }) => {
         {crossIcon}
       </div>
       <div className=" w-4/5 bg-white border p-5 rounded-xl">
-        <h2 className="text-xl font-semibold mb-6">Select discount type</h2>
+        <h2 className="text-xl font-semibold mb-6">{T["select_discount_type"]}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {discountOptions.map((opt, idx) => (
             <DiscountOptionCard
