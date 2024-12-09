@@ -16,6 +16,7 @@ import {
   CUSTOMER_SPECIFIC_OPTIONS,
   DEFAULT_ERROR_MESSAGE,
   INVALID_ID,
+  SWEDEN_COUNTY_OPTIONS
 } from "../constant";
 import { useNavigate } from "react-router-dom";
 import { extractOption, prefillFormValues } from "../utils/helpers";
@@ -35,6 +36,27 @@ const FreeShipping = ({ location }) => {
   const editId = location?.state?.editId;
 
   useEffect(() => {
+    
+    // const dummyData = {
+    //   "code": "SHIPDISCOUNT2024",
+    //   "select_states": "selected_states",
+    //   "states": "Kalmar",
+    //   "exclude_shipping_rate": true,
+    //   "shipping_rate": 10,
+    //   "minimum_purchase_requirement": "minimum_purchase",
+    //   "minimum_purchase_value": 50,
+    //   "minimum_quantity_value": 3,
+    //   "customer_eligibility": "specific_customer",
+    //   "customer_specification": "purchased_more_than_once",
+    //   "maximum_discount_usage": "per_customer",
+    //   "maximum_usage_value": 3,
+    //   "combination": ["product_discounts", "other_discounts"],
+    //   "start_date": "2024-12-12",
+    //   "start_time": "15:40",
+    //   "end_date": "2024-12-16",
+    //   "end_time": "18:42"
+    // }
+    
     if (isEdit) {
       makeApiRequest({
         endPoint: `${DISCOUNT_ENDPOINT}${editId}`,
@@ -55,8 +77,8 @@ const FreeShipping = ({ location }) => {
             "minimum_quantity_value",
             "start_date",
             "start_time",
-            "countries",
-            "country_select",
+            "select_states",
+            "states",
             // "shipping_check",
             "exclude_shipping_rate",
             "shipping_rate"
@@ -71,6 +93,8 @@ const FreeShipping = ({ location }) => {
             "value"
           );
           setValue("customer_specification", extractedOption);
+          const statesExtractedOption = extractOption(SWEDEN_COUNTY_OPTIONS,res?.data?.states,"value")
+          setValue("states", statesExtractedOption);
         })
         .catch((err) => {
           console.log(err);
@@ -78,6 +102,15 @@ const FreeShipping = ({ location }) => {
           navigate("/discounts");
         });
     }
+    // prefillFormValues(dummyData, fields, setValue);
+    // const extractedOption = extractOption(
+    //   CUSTOMER_SPECIFIC_OPTIONS,
+    //   dummyData?.customer_specification,
+    //   "value"
+    // );
+    // setValue("customer_specification", extractedOption);
+    // const statesExtractedOption = extractOption(SWEDEN_COUNTY_OPTIONS,dummyData.states,"value")
+    // setValue("states", statesExtractedOption);
   }, []);
 
   const onSubmit = (values, event) => {
@@ -88,6 +121,7 @@ const FreeShipping = ({ location }) => {
       coupon_type: "free_shipping",
       customer_specification: values?.customer_specification?.value,
       minimum_purchase_value: +values?.minimum_purchase_value,
+      states: values.states.map((ele)=> ele.value)
     };
 
     setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });

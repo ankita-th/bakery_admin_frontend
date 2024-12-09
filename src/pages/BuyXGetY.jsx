@@ -15,7 +15,7 @@ import CustomerGets from "../Components/CustomerGets";
 import { makeApiRequest, METHODS } from "../api/apiFunctions";
 import { DISCOUNT_ENDPOINT } from "../api/endpoints";
 import { successType, toastMessage } from "../utils/toastMessage";
-import { CUSTOMER_SPECIFIC_OPTIONS, DEFAULT_ERROR_MESSAGE, INVALID_ID } from "../constant";
+import { CUSTOMER_SPECIFIC_OPTIONS, DEFAULT_ERROR_MESSAGE, INVALID_ID, ITEMS_FROM_OPTIONS } from "../constant";
 import { useNavigate } from "react-router-dom";
 import { extractOption, prefillFormValues } from "../utils/helpers";
 
@@ -70,6 +70,29 @@ const BuyXGetY = ({location}) => {
   const { watch, setValue } = formConfig;
 
   useEffect(() => {
+    
+    // const dummyData={
+    //   "code": "BUYGET2024",
+    //   "customer_buy_types":  "minimum_purchase_amount",
+    //   "items_from": "all_product",
+    //   "buy_products_quantity": 3,
+    //   "buy_products_amount": 150,
+    //   "buy_products": [12, 57, 23],
+    //   "customer_gets_quantity": 2,
+    //   "customer_gets_amount": 50,
+    //   "discount_types": "free",
+    //   "discount_value": 30,
+    //   "customer_eligibility": "specific_customer",
+    //   "customer_specification": "purchased_more_than_once",
+    //   "maximum_discount_usage": "per_customer",
+    //   "maximum_usage_value": 5,
+    //   "combination": ["product_discounts", "order_discounts", "shipping_discounts"],
+    //   "start_date": "2024-12-12",
+    //   "start_time": "15:40",
+    //   "end_date": "2024-12-16",
+    //   "end_time": "18:42"
+    // }
+
     if (isEdit) {
       makeApiRequest({
         endPoint: `${DISCOUNT_ENDPOINT}${editId}`,
@@ -97,6 +120,7 @@ const BuyXGetY = ({location}) => {
             "maximum_usage_value",
             "start_date",
             "start_time",
+            
           ];
           console.log(res.data, "skdfjkslfjklsadfj");
           prefillFormValues(res.data, fields, setValue);
@@ -108,6 +132,8 @@ const BuyXGetY = ({location}) => {
             "value"
           );
           setValue("customer_specification", extractedOption);
+          const itemsFromExtractedOption = extractOption(ITEMS_FROM_OPTIONS,res?.data?.items_from,"value")
+          setValue("items_from", itemsFromExtractedOption);
         })
         .catch((err) => {
           console.log(err);
@@ -115,6 +141,15 @@ const BuyXGetY = ({location}) => {
           navigate("/discounts");
         });
     }
+    // prefillFormValues(dummyData, fields, setValue);
+    // const extractedOption = extractOption(
+    //   CUSTOMER_SPECIFIC_OPTIONS,
+    //  dummyData?.customer_specification,
+    //   "value"
+    // );
+    // setValue("customer_specification", extractedOption);
+    // const itemsFromExtractedOption = extractOption(ITEMS_FROM_OPTIONS,dummyData?.items_from,"value")
+    // setValue("items_from", itemsFromExtractedOption);
   }, []);
 
 
