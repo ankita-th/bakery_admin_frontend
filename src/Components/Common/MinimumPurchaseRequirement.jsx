@@ -66,7 +66,7 @@ const MinimumPurchaseRequirement = ({ formConfig }) => {
           "Minimum Purchase Value",
           "minimum_purchase_value"
         )}
-      {watch("minimum_purchase_requirement") === "minimum_quantity" &&
+      {watch("minimum_purchase_requirement") === "minimum_items" &&
         renderCommonTextField(
           "Minimum Quantity Of Items",
           "minimum_quantity_value"

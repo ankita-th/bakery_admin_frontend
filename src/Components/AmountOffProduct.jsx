@@ -10,7 +10,7 @@ import FormWrapper from "../Wrappers/FormWrapper";
 import CommonButton from "./Common/CommonButton";
 import { draftIcon, publishIcon } from "../assets/Icons/Svg";
 import CommonSelect from "../Form Fields/CommonSelect";
-import { DEFAULT_ERROR_MESSAGE, DISCOUNT_TYPE_OPTIONS, INVALID_ID } from "../constant";
+import { APPLIES_TO_OPTIONS, CUSTOMER_SPECIFIC_OPTIONS, DEFAULT_ERROR_MESSAGE, DISCOUNT_TYPE_OPTIONS, INVALID_ID } from "../constant";
 import GenrateRandomCode from "./Common/GenrateRandomCode";
 import CustomerEligibility from "./Common/CustomerEligibility";
 import Combinations from "./Common/Combinations";
@@ -44,6 +44,27 @@ const AmountOffProduct = ({location}) => {
   const editId = location?.state?.editId;
 
   useEffect(() => {
+    // const dummy_data = {
+    //   "applies_to": "specific_products",
+    //   "code": "sdafs",
+    //   "combination": ["product_discounts", "other_discounts"],
+    //   "coupon_type": "amount_off_product",
+    //   "customer_eligibility": "specific_customer",
+    //   "discount_types": "amount",
+    //   "discount_value": 43,
+    //   "end_date": "2024-12-16",
+    //   "end_time": "18:42",
+    //   "maximum_usage_value": 87,
+    //   "minimum_purchase_requirement": "minimum_purchase",
+    //   "minimum_purchase_value": 98,
+    //   "product": [1, 2, 3],
+    //   "start_date": "2024-12-12",
+    //   "start_time": "15:40",
+    //   "minimum_quantity_value": 67,
+    //   "customer_specification": "havent_purchased",
+    //   "maximum_discount_usage": "per_customer"
+    // }
+    
     if (isEdit) {
       makeApiRequest({
         endPoint: `${DISCOUNT_ENDPOINT}${editId}`,
@@ -63,18 +84,29 @@ const AmountOffProduct = ({location}) => {
             "minimum_quantity_value",
             "end_time",
             "maximum_usage_value",
-            // "maximum_discount_usage",
+            "maximum_discount_usage",
           ];
           console.log(res.data, "skdfjkslfjklsadfj");
           prefillFormValues(res.data, fields, setValue);
-          setValue("applies_to",res?.data?.applies_to);
-          setValue("discount_types",res?.data?.discount_types)
+          const discountTypesExtractedOption = extractOption(DISCOUNT_TYPE_OPTIONS,res?.data?.discount_types,"value");
+          setValue("discount_types",discountTypesExtractedOption)
+          const appliesToExtractedOption = extractOption(APPLIES_TO_OPTIONS,res?.data?.applies_to,"value");
+          setValue("applies_to",appliesToExtractedOption);
+          const customerSpecificationExtractedOption = extractOption(CUSTOMER_SPECIFIC_OPTIONS,res?.data?.customer_specification,"value");
+          setValue("customer_specification", customerSpecificationExtractedOption);       
         })
         .catch((err) => {
           console.log(err);
           toastMessage(err?.response?.data?.name?.[0] || INVALID_ID);
           navigate("/discounts");
         });
+        // prefillFormValues(dummy_data, fields, setValue);
+          // const discountTypesExtractedOption = extractOption(DISCOUNT_TYPE_OPTIONS,dummy_data?.discount_types,"value");
+          // setValue("discount_types",discountTypesExtractedOption);
+          // const appliesToExtractedOption = extractOption(APPLIES_TO_OPTIONS,dummy_data?.applies_to,"value");
+          // setValue("applies_to",appliesToExtractedOption);
+          // const customerSpecificationExtractedOption = extractOption(CUSTOMER_SPECIFIC_OPTIONS,dummy_data?.customer_specification,"value");
+          // setValue("customer_specification", customerSpecificationExtractedOption);
     }
   }, []);
 
@@ -120,7 +152,8 @@ const AmountOffProduct = ({location}) => {
     });
     payload = {
       ...payload,
-      product: values?.products?.[0]?.value && values?.products?.[0]?.value,
+      // product: values?.products?.[0]?.value && values?.products?.[0]?.value,
+      product: values?.products?.map(item => item?.value).filter(value => value !== undefined),
     };
     console.log(payload, "this is payload");
     makeApiRequest({

@@ -17,6 +17,7 @@ import { successType, toastMessage } from "../utils/toastMessage";
 import {
   CUSTOMER_SPECIFIC_OPTIONS,
   DEFAULT_ERROR_MESSAGE,
+  DISCOUNT_TYPE_OPTIONS,
   INVALID_ID,
 } from "../constant";
 import { useNavigate } from "react-router-dom";
@@ -34,6 +35,25 @@ const AmountOffOrder = () => {
   const editId = location?.state?.editId;
 
   useEffect(() => {
+    // const dummy_data = {
+    //   code: "DISCOUNT2024",
+    //   discount_types: "percentage",
+    //   discount_value: 20,
+    //   coupon_type: "amount_off_product",
+    //   minimum_purchase_requirement: "minimum_purchase",
+    //   minimum_purchase_value: 100,
+    //   minimum_quantity_value: 2,
+    //   customer_eligibility: "specific_customer",
+    //   customer_specification: "purchased_once",
+    //   maximum_discount_usage: "per_customer",
+    //   maximum_usage_value: 5,
+    //   combination: ["shipping_discounts", "other_discounts"],
+    //   start_date: "2024-12-12",
+    //   start_time: "15:40",
+    //   end_date: "2024-12-16",
+    //   end_time: "18:42",
+    // };
+
     if (isEdit) {
       makeApiRequest({
         endPoint: `${DISCOUNT_ENDPOINT}${editId}`,
@@ -59,12 +79,21 @@ const AmountOffOrder = () => {
             "maximum_usage_value",
           ];
           prefillFormValues(res.data, fields, setValue);
-          const extractedOption = extractOption(
+          const discountTypesExtractedOption = extractOption(
+            DISCOUNT_TYPE_OPTIONS,
+            res?.data?.discount_types,
+            "value"
+          );
+          setValue("discount_types", discountTypesExtractedOption);
+          const customerSpecificationExtractedOption = extractOption(
             CUSTOMER_SPECIFIC_OPTIONS,
             res?.data?.customer_specification,
             "value"
           );
-          setValue("customer_specification", extractedOption);
+          setValue(
+            "customer_specification",
+            customerSpecificationExtractedOption
+          );
         })
         .catch((err) => {
           console.log(err);
@@ -72,6 +101,11 @@ const AmountOffOrder = () => {
           navigate("/discounts");
         });
     }
+    // prefillFormValues(dummy_data, fields, setValue);
+    //       const discountTypesExtractedOption = extractOption(DISCOUNT_TYPE_OPTIONS,dummy_data?.discount_types,"value");
+    //       setValue("discount_types",discountTypesExtractedOption);
+    //       const customerSpecificationExtractedOption = extractOption(CUSTOMER_SPECIFIC_OPTIONS,dummy_data?.customer_specification,"value");
+    //       setValue("customer_specification", customerSpecificationExtractedOption);
   }, []);
 
   const onSubmit = (values, event) => {

@@ -636,6 +636,11 @@ export const COUNTRY_OPTIONS = [
   { label: "Selected countries", value: "selected_countries" },
 ];
 
+export const STATES_OPTIONS = [
+  { label: "All states", value: "all_states" },
+  { label: "Selected states", value: "selected_states" },
+];
+
 export const CUSTOMER_SPECIFIC_OPTIONS = [
   {
     label: "Haven't Purchased",
