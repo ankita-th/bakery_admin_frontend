@@ -58,7 +58,7 @@ const CustomerGets = ({ formConfig }) => {
       <div className="title">Customer Gets</div>
       <div className="items-section">
         <CommonSelect
-          label="Any Items From"
+          label="Any Items From *"
           selectType="react-select"
           formConfig={formConfig}
           fieldName="items_from"
@@ -70,7 +70,7 @@ const CustomerGets = ({ formConfig }) => {
         <div className="quantity">
           {customer_buy_types === "minimum_items_quantity" ? (
             <CommonTextField
-              label="Quantity"
+              label="Quantity *"
               placeholder="Enter Quantity"
               isNumberOnly={true}
               fieldName="customer_gets_quantity"
@@ -79,7 +79,7 @@ const CustomerGets = ({ formConfig }) => {
             />
           ) : customer_buy_types === "minimum_purchase_amount" ? (
             <CommonTextField
-              label="Purchase Amount"
+              label="Purchase Amount *"
               placeholder="Enter amount"
               isNumberOnly={true}
               fieldName="customer_gets_amount"

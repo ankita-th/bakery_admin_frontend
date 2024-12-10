@@ -11,7 +11,7 @@ const Combinations = ({ formConfig, isShipping = false }) => {
   return (
     <div className="bg-white p-6 rounded-lg">
       <div className="mb-4">
-        <div className="text-[#3E3232] mb-1">Combinations</div>
+        <div className="text-[#3E3232] mb-1">Combinations *</div>
         <CheckboxGroup
           formConfig={formConfig}
           label="This product discount can be combined with:"

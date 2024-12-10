@@ -68,7 +68,7 @@ const CustomerBuys = ({ formConfig }) => {
     <div className="bg-white p-6 rounded-lg">
       <RadioGroup
         className="flex gap-4"
-        label="Customer Buys"
+        label="Customer Buys *"
         fieldName="customer_buy_types"
         formConfig={formConfig}
         options={CUSTOMER_BUYS_OPTIONS}
@@ -76,7 +76,7 @@ const CustomerBuys = ({ formConfig }) => {
       />
       <div className="items-section">
         <CommonSelect
-          label="Any Items From"
+          label="Any Items From *"
           selectType="react-select"
           formConfig={formConfig}
           fieldName="items_from"
@@ -88,7 +88,7 @@ const CustomerBuys = ({ formConfig }) => {
         <div className="quantity">
           {customer_buy_types === "minimum_items_quantity" ? (
             <CommonTextField
-              label="Quantity"
+              label="Quantity *"
               placeholder="Enter Quantity"
               isNumberOnly={true}
               fieldName="buy_products_quantity"
@@ -97,8 +97,8 @@ const CustomerBuys = ({ formConfig }) => {
             />
           ) : customer_buy_types === "minimum_purchase_amount" ? (
             <CommonTextField
-              label="Purchase Amount"
-              placeholder="Enter amount"
+              label="Purchase Amount *"
+              placeholder="Enter Amount"
               isNumberOnly={true}
               fieldName="buy_products_amount"
               rules={createRequiredValidation("Amount")}

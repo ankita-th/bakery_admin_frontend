@@ -64,7 +64,7 @@ const AppliesTo = ({ formConfig }) => {
       {" "}
       <div>
         <CommonSelect
-          label="Applies to"
+          label="Applies To *"
           fieldName="applies_to"
           options={APPLIES_TO_OPTIONS}
           selectType="react-select"
@@ -76,7 +76,7 @@ const AppliesTo = ({ formConfig }) => {
           <div className="flex gap-4">
             <CommonAsyncSelect
               formConfig={formConfig}
-              label="Specify products "
+              label="Specify Products "
               isMulti={true}
               loadOptions={fetchProducts}
               placeholder="Search Product"
