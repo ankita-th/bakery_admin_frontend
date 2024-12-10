@@ -24,7 +24,7 @@ const ActiveDates = ({ formConfig }) => {
           className="px-4 py-2 w-full rounded-lg bg-[#F5F5F5]"
           minDate={today}
           fieldName="start_date"
-          rules={createRequiredValidation("Start Date")}
+          rules={createRequiredValidation("Start date")}
           formConfig={formConfig}
         />
         <CommonDateField

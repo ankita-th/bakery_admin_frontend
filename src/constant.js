@@ -658,10 +658,10 @@ export const CUSTOMER_SPECIFIC_OPTIONS = [
     label: "Purchased More Than Once",
     value: "purchased_more_than_once",
   },
-  {
-    label: "Customers who have purchased at least once",
-    value: "purchased_at_least_once",
-  },
+  // {
+  //   label: "Customers who have purchased at least once",
+  //   value: "purchased_at_least_once",
+  // },
 ];
 
 export const COMBINATION_OPTIONS = [

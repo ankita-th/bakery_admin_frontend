@@ -18,7 +18,7 @@ const Countries = ({ formConfig }) => {
 
   useEffect(() => {
     if (watch("select_states") === "all_states") {
-      setValue("selected_states", "");
+      setValue("states", "");
       clearErrors("states");
     }
   }, [watch("select_states")]);
@@ -35,7 +35,7 @@ const Countries = ({ formConfig }) => {
     <div className="bg-white p-6 rounded-lg space-y-4">
       <RadioGroup
         className="flex gap-4"
-        label="States"
+        label="States *"
         fieldName="select_states"
         formConfig={formConfig}
         //   need to update these options , need to confirm from backend
@@ -51,7 +51,7 @@ const Countries = ({ formConfig }) => {
             options={SWEDEN_COUNTY_OPTIONS}
             isMulti={true}
             rules={createRequiredValidation("States")}
-            placeholder="Select Countries"
+            placeholder="Select States"
             className="px-4 py-2 w-full rounded-lg bg-[#F5F5F5]"
           />
           {/* <LocationField
@@ -81,7 +81,7 @@ const Countries = ({ formConfig }) => {
             fieldName="shipping_rate"
             placeholder="0.00"
             isNumberOnly={true}
-            rules={createRequiredValidation("Shipping Rates")}
+            rules={createRequiredValidation("Shipping rates")}
           />
         )}
       </div>

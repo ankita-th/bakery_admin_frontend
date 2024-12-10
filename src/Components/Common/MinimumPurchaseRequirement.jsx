@@ -54,7 +54,7 @@ const MinimumPurchaseRequirement = ({ formConfig }) => {
     <div className="bg-white p-6 rounded-lg">
       <RadioGroup
         className="flex gap-4"
-        label="Minimum Purchase Requirements"
+        label="Minimum Purchase Requirements *"
         fieldName="minimum_purchase_requirement"
         formConfig={formConfig}
         //   need to update these options , need to confirm from backend
@@ -74,8 +74,8 @@ const MinimumPurchaseRequirement = ({ formConfig }) => {
       {shouldShowText(watch("minimum_purchase_requirement")) && (
         <div>
           {location?.state?.type === "amount_off_order" || location?.state?.type === "free_shipping"
-            ? "Applies To all product"
-            : "Applies only to selected collections."}
+            ? "Applies To All Product"
+            : "Applies Only To Selected Collections."}
         </div>
       )}
     </div>

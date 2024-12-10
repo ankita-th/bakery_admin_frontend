@@ -21,7 +21,7 @@ const CustomerEligibility = ({ formConfig }) => {
     <div className="bg-white p-6 rounded-lg">
       <RadioGroup
         className="flex gap-4"
-        label="Customer Eligibility"
+        label="Customer Eligibility *"
         fieldName="customer_eligibility"
         formConfig={formConfig}
         //   need to update these options , need to confirm from backend
@@ -32,7 +32,7 @@ const CustomerEligibility = ({ formConfig }) => {
         <>
           <CommonSelect
             formConfig={formConfig}
-            label="Customer Specification"
+            label="Customer Specification *"
             fieldName="customer_specification"
             options={CUSTOMER_SPECIFIC_OPTIONS}
             rules={createRequiredValidation("Customer specification")}
@@ -42,8 +42,8 @@ const CustomerEligibility = ({ formConfig }) => {
 
           <div>
             {location?.state?.type === "buy_x_get_y"
-              ? "Applies only to selected collections."
-              : "Applies To all product"}
+              ? "Applies Only To Selected Collections."
+              : "Applies To All Product"}
           </div>
         </>
       )}

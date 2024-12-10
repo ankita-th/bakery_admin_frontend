@@ -20,7 +20,7 @@ const DiscountUses = ({ formConfig }) => {
     <div className="bg-white p-6 rounded-lg">
       <RadioGroup
         className="flex gap-4"
-        label="Maximum Discount Uses"
+        label="Maximum Discount Uses *"
         fieldName="maximum_discount_usage"
         formConfig={formConfig}
         options={DISCOUNTED_USAGE_OPTIONS}
@@ -31,9 +31,9 @@ const DiscountUses = ({ formConfig }) => {
           formConfig={formConfig}
           isNumberOnly={true}
           label=""
-          placeholder="Enter Number Of times"
+          placeholder="Enter Number Of Times"
           fieldName="maximum_usage_value"
-          rules={createRequiredValidation("Number Of times")}
+          rules={createRequiredValidation("Number of times")}
         />
       )}
     </div>
