@@ -109,7 +109,7 @@ const AmountOffOrder = () => {
   }, []);
 
   const onSubmit = (values, event) => {
-    const buttonType = event.nativeEvent.submitter.name;
+    const buttonType = event.nativeEvent.submitter.name;  
     setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
 
     const fields = [
@@ -130,7 +130,9 @@ const AmountOffOrder = () => {
       "start_time",
       "maximum_usage_value",
     ];
-    const payload = {};
+    const payload = {
+      coupon_type: "amount_off_order",
+    };
     fields.forEach((key) => {
       if (values?.[key]) {
         if (key === "customer_specification" || key === "discount_types") {
