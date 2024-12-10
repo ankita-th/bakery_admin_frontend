@@ -128,9 +128,8 @@ const AmountOffProduct = ({location}) => {
       "maximum_usage_value",
       // "maximum_discount_usage",
     ];
-    const coupon_type = "amount_off_product";
     let payload = {
-      coupon_type: coupon_type,
+      coupon_type: "amount_off_product",
       applies_to: convertSelectOptionToValue(values?.applies_to), //for onverting {label:"vssd",value:"sdf"} into sdf
       discount_types: convertSelectOptionToValue(values?.discount_types),
     };
