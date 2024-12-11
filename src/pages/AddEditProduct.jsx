@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import FormWrapper from "../Wrappers/FormWrapper";
 import CommonTextEditor from "../Form Fields/CommonTextEditor";
 import RadioGroup from "../Form Fields/RadioGroup";
 import CommonSelect from "../Form Fields/CommonSelect";
 import CommonTextField from "../Form Fields/CommonTextField";
 import {
-  convertSelectOptionToValue,
   convertValuesIntoLabelAndValue,
   createAdvancedPayload,
   createInventoryPayload,
@@ -29,7 +27,6 @@ import {
   DEFAULT_ERROR_MESSAGE,
   MEASURE_OPTIONS,
   PNG_AND_JPG,
-  SAME_PRODUCT_NAME_ERROR,
 } from "../constant";
 import { INSTANCE, makeApiRequest, METHODS } from "../api/apiFunctions";
 import { PRODUCT_ENDPOINT } from "../api/endpoints";
@@ -85,20 +82,12 @@ const AddEditProduct = () => {
     defaultValues: {
       bulking_price_rules: DEFAULT_BULKING_PRICE,
       preview_as: "desktop",
-      // variants: DEFAULT_VARIANTS_DATA, update
+      variants: DEFAULT_VARIANTS_DATA,
     },
-    mode: "onChange", // Trigger validation on every change
-
+    mode: "onChange",
     shouldUnregister: false,
   });
-  const {
-    watch,
-    register,
-    getValues,
-    trigger,
-    setValue,
-    formState: { errors },
-  } = formConfig;
+  const { watch, trigger, setValue, handleSubmit } = formConfig;
   const [activeTab, setActiveTab] = useState("inventory");
   const [featuredImage, setFeaturedImage] = useState(null);
   const [productImages, setProductImages] = useState([]);
@@ -113,14 +102,6 @@ const AddEditProduct = () => {
     draft: false,
   });
   const [isSnippetEdit, setIsSnippetEdit] = useState(false);
-
-  console.log(
-    "featuredImage===========>>>>>>>>>>>>",
-    featuredImage,
-    "productImages==============>>>>>>>>>>>",
-    productImages
-  );
-
   useEffect(() => {
     if (editId) {
       toggleLoader("pageLoader");
@@ -202,13 +183,17 @@ const AddEditProduct = () => {
             convertValuesIntoLabelAndValue(data?.product_tag)
           );
           // for variants
-          setValue("variants", data?.product_detail?.variants);
+          if (data?.product_detail?.variants?.length) {
+            setValue("variants", data?.product_detail?.variants);
+          } else {
+            setValue("variants", DEFAULT_VARIANTS_DATA);
+          }
           // for variants
 
           // for filling images
           if (data?.feature_image) {
             let preview = createPreview(data?.feature_image?.image);
-            const result =  {file:null,preview:preview,error:null}
+            const result = { file: null, preview: preview, error: null };
             setFeaturedImage(result);
           }
           if (data?.images?.length) {
@@ -216,8 +201,7 @@ const AddEditProduct = () => {
             const product_images = data.images;
 
             product_images?.forEach((img) => {
-              const preview = createPreview(img?.image)
-              
+              const preview = createPreview(img?.image);
               const item = { preview: preview, error: null, file: null };
               result.push(item);
             });
@@ -244,7 +228,9 @@ const AddEditProduct = () => {
       status: buttonType === "publish",
       description: values?.description,
       product_tag: extractSelectOptions(values?.product_tag, "value"),
-      category: values?.category.map(Number),
+      category: Array.isArray(values?.category)
+        ? values?.category?.map(Number)
+        : [values?.category],
       product_seo: createProductSeo(values),
       product_detail: {
         inventory: createInventoryPayload(values),
@@ -255,7 +241,6 @@ const AddEditProduct = () => {
 
     // converting payload in form data
 
-    console.log(payload, " product payload");
     const formData = new FormData();
     for (let key in payload) {
       if (
@@ -301,76 +286,47 @@ const AddEditProduct = () => {
         navigate("/products");
       })
       .catch((err) => {
-        // const error =
-        //   err?.response?.data?.name?.[0] || err?.response?.data?.sku?.[0];
-        // toastMessage(error || DEFAULT_ERROR_MESSAGE);
-        const fieldError = err?.response?.data?.error;
+        const error = err?.response?.data?.name || err?.response?.data?.sku;
+        toastMessage(error || DEFAULT_ERROR_MESSAGE);
+        console.log(err?.response?.data, "errpr");
         setBtnLoaders({ publish: false, draft: false });
-        toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
       });
   };
   const handleActiveTab = async (tabName) => {
-    const shouldChange = await shouldChangeTab(activeTab);
-    console.log(shouldChange, "shouldChange");
-    if (shouldChange) {
-      setActiveTab(tabName);
-    }
-  };
-  const shouldChangeTab = async (activeTab) => {
-    if (activeTab === "inventory") {
-      const inventoryFields = [
-        "sale_price_dates_from",
-        "sale_price_dates_to",
-        "weight",
-        "unit",
-        "sku",
-        "sale_price",
-        "regular_price",
-        "bulking_price_rules",
-      ];
-
-      // Use map to create an array of promises
-      const validations = await Promise.all(
-        inventoryFields.map((field) => trigger(field))
-      );
-
-      console.log(validations, "validations");
-
-      // Check if all validations are true
-      const shouldChangeTab = validations.every((it) => it === true);
-      return shouldChangeTab;
-    } else if (activeTab === "variations") {
-      const variantResult = await trigger("variants");
-      return variantResult;
-    } else {
-      return true;
-    }
+    setActiveTab(tabName);
   };
 
-  // const fillForm = () => {
-  //   setValue("name", "Dummy Product Name");
-  //   setValue("product_tag", { label: "Hot Deals", value: "hot-deals" });
-  //   setValue("focused_keyword", { label: "keyword1", value: "keyword" });
-  //   setValue("seo_title", "Dummy Seo title");
-  //   setValue("slug", "Dummy slug");
-  //   setValue("meta_description", "Dummy meta description");
-  //   setValue("sku", "qweert1");
-  //   setValue("regular_price", "1234");
-  //   setValue("sale_price", "123213");
-  //   setValue("sale_price_dates_from", "2024-11-28");
-  //   setValue("sale_price_dates_to", "2024-11-29");
-  //   setValue("unit", { label: "Kilogram", value: "kg" });
-  //   setValue("weight", "123");
-  //   setValue("preview_as", "desktop");
-  //   setValue("bulking_price_rules", [
-  //     { quantity_from: 12, quantity_to: 20, price: "1213" },
-  //   ]);
-  //   setSnippetInfo({
-  //     seo_title: "",
-  //     slug: "",
-  //     meta_description: "",
-  //   });
-  // };
+  const beforeSubmit = async (e) => {
+    e.preventDefault();
+    const inventoryFields = [
+      "sale_price_dates_from",
+      "sale_price_dates_to",
+      "weight",
+      "unit",
+      "sku",
+      "sale_price",
+      "regular_price",
+      "bulking_price_rules",
+    ];
+    // Use map to create an array of promises
+    const validations = await Promise.all(
+      inventoryFields.map((field) => trigger(field))
+    );
+
+    const isInventoryTabComplete = validations.every((it) => it === true);
+    const isVariantTabComplete = await trigger("variants");
+    if (!isInventoryTabComplete && activeTab !== "inventory") {
+      setActiveTab("inventory");
+    } else if (!isVariantTabComplete && activeTab !== "") {
+      setActiveTab("variations");
+    }
+    const isValid = await trigger();
+    if (isValid) {
+      handleSubmit((values, event) => {
+        onSubmit(values, event);
+      })(e);
+    }
+  };
   return (
     <>
       {pageLoader ? (
@@ -378,17 +334,7 @@ const AddEditProduct = () => {
       ) : (
         <>
           <div className="flex">
-            <FormWrapper
-              formConfig={formConfig}
-              onSubmit={onSubmit}
-              isCustomButtons={true}
-            >
-              {/* <CommonButton
-          text="Fill form"
-          type="button"
-          className="orange_button"
-          onClick={fillForm}
-        /> */}
+            <form onSubmit={beforeSubmit}>
               <div className="flex gap-4">
                 <div className="flex-1">
                   <div className="product-info-section mb-4">
@@ -589,7 +535,7 @@ const AddEditProduct = () => {
                   </div>
                 </div>
               </div>
-            </FormWrapper>
+            </form>
             <div className="flex flex-col gap-4 mt-4 -ms-[252px] mt-[70px]">
               <div className="flex gap-4 flex-col">
                 <CategorySection

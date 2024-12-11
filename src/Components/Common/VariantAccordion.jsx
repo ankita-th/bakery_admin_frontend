@@ -9,6 +9,8 @@ const VariantAccordion = ({
   openIndex,
   handleToggle,
 }) => {
+  const weight = watch(`variants.${index}.weight`);
+  const unit = watch(`variants.${index}.unit`)?.value;
   return (
     <div role="accordion">
       <button
@@ -28,12 +30,18 @@ const VariantAccordion = ({
         <div className="flex items-center justify-between mb-4 w-full">
           <div className="flex gap-4 items-center">
             <div className="variation-count text-bold-500">#${index + 1}</div>
-            <select
-              className="border border-gray-300 text-sm text-gray-700 rounded-lg p-2"
-              disabled={true}
-            >
-              <option value="1">100 gm</option>
-            </select>
+            {(weight || unit) && (
+              <select
+                className="border border-gray-300 text-sm text-gray-700 rounded-lg p-2"
+                disabled={true}
+              >
+                <option value="1">
+                  {`${watch(`variants.${index}.weight`)} ${
+                    watch(`variants.${index}.unit`)?.label
+                  }`}
+                </option>
+              </select>
+            )}
           </div>
           {!isViewOnly && (
             <div className="flex gap-2">

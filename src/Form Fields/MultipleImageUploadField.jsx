@@ -75,7 +75,7 @@ const MultipleImageUploadField = ({
         <div className="image-preview-section">
           {files?.map(
             ({ preview, file }, index) =>
-              file && (
+              (file || preview) && (
                 <div key={index} className="image-preview-wrapper">
                   <img
                     className="image-preview"

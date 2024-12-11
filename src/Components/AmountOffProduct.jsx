@@ -10,7 +10,13 @@ import FormWrapper from "../Wrappers/FormWrapper";
 import CommonButton from "./Common/CommonButton";
 import { draftIcon, publishIcon } from "../assets/Icons/Svg";
 import CommonSelect from "../Form Fields/CommonSelect";
-import { APPLIES_TO_OPTIONS, CUSTOMER_SPECIFIC_OPTIONS, DEFAULT_ERROR_MESSAGE, DISCOUNT_TYPE_OPTIONS, INVALID_ID } from "../constant";
+import {
+  APPLIES_TO_OPTIONS,
+  CUSTOMER_SPECIFIC_OPTIONS,
+  DEFAULT_ERROR_MESSAGE,
+  DISCOUNT_TYPE_OPTIONS,
+  INVALID_ID,
+} from "../constant";
 import GenrateRandomCode from "./Common/GenrateRandomCode";
 import CustomerEligibility from "./Common/CustomerEligibility";
 import Combinations from "./Common/Combinations";
@@ -28,7 +34,7 @@ import DiscountCodeSection from "./Common/DiscountCodeSection";
 import DiscountTypeAndValue from "./Common/DiscountTypeAndValue";
 import DiscountUses from "./Common/DiscountUses";
 
-const AmountOffProduct = ({location}) => {
+const AmountOffProduct = ({ location }) => {
   useEffect(() => {}, []);
   const navigate = useNavigate();
   const formConfig = useForm();
@@ -64,7 +70,7 @@ const AmountOffProduct = ({location}) => {
     //   "customer_specification": "havent_purchased",
     //   "maximum_discount_usage": "per_customer"
     // }
-    
+
     if (isEdit) {
       makeApiRequest({
         endPoint: `${DISCOUNT_ENDPOINT}${editId}`,
@@ -88,25 +94,40 @@ const AmountOffProduct = ({location}) => {
           ];
           console.log(res.data, "skdfjkslfjklsadfj");
           prefillFormValues(res.data, fields, setValue);
-          const discountTypesExtractedOption = extractOption(DISCOUNT_TYPE_OPTIONS,res?.data?.discount_types,"value");
-          setValue("discount_types",discountTypesExtractedOption)
-          const appliesToExtractedOption = extractOption(APPLIES_TO_OPTIONS,res?.data?.applies_to,"value");
-          setValue("applies_to",appliesToExtractedOption);
-          const customerSpecificationExtractedOption = extractOption(CUSTOMER_SPECIFIC_OPTIONS,res?.data?.customer_specification,"value");
-          setValue("customer_specification", customerSpecificationExtractedOption);       
+          const discountTypesExtractedOption = extractOption(
+            DISCOUNT_TYPE_OPTIONS,
+            res?.data?.discount_types,
+            "value"
+          );
+          setValue("discount_types", discountTypesExtractedOption);
+          const appliesToExtractedOption = extractOption(
+            APPLIES_TO_OPTIONS,
+            res?.data?.applies_to,
+            "value"
+          );
+          setValue("applies_to", appliesToExtractedOption);
+          const customerSpecificationExtractedOption = extractOption(
+            CUSTOMER_SPECIFIC_OPTIONS,
+            res?.data?.customer_specification,
+            "value"
+          );
+          setValue(
+            "customer_specification",
+            customerSpecificationExtractedOption
+          );
         })
         .catch((err) => {
           console.log(err);
           toastMessage(err?.response?.data?.name?.[0] || INVALID_ID);
           navigate("/discounts");
         });
-        // prefillFormValues(dummy_data, fields, setValue);
-          // const discountTypesExtractedOption = extractOption(DISCOUNT_TYPE_OPTIONS,dummy_data?.discount_types,"value");
-          // setValue("discount_types",discountTypesExtractedOption);
-          // const appliesToExtractedOption = extractOption(APPLIES_TO_OPTIONS,dummy_data?.applies_to,"value");
-          // setValue("applies_to",appliesToExtractedOption);
-          // const customerSpecificationExtractedOption = extractOption(CUSTOMER_SPECIFIC_OPTIONS,dummy_data?.customer_specification,"value");
-          // setValue("customer_specification", customerSpecificationExtractedOption);
+      // prefillFormValues(dummy_data, fields, setValue);
+      // const discountTypesExtractedOption = extractOption(DISCOUNT_TYPE_OPTIONS,dummy_data?.discount_types,"value");
+      // setValue("discount_types",discountTypesExtractedOption);
+      // const appliesToExtractedOption = extractOption(APPLIES_TO_OPTIONS,dummy_data?.applies_to,"value");
+      // setValue("applies_to",appliesToExtractedOption);
+      // const customerSpecificationExtractedOption = extractOption(CUSTOMER_SPECIFIC_OPTIONS,dummy_data?.customer_specification,"value");
+      // setValue("customer_specification", customerSpecificationExtractedOption);
     }
   }, []);
 
@@ -130,7 +151,7 @@ const AmountOffProduct = ({location}) => {
     ];
     let payload = {
       coupon_type: "amount_off_product",
-      applies_to: convertSelectOptionToValue(values?.applies_to), //for onverting {label:"vssd",value:"sdf"} into sdf
+      applies_to: convertSelectOptionToValue(values?.applies_to), //for converting {label:"vssd",value:"sdf"} into sdf
       discount_types: convertSelectOptionToValue(values?.discount_types),
     };
     fields.forEach((key) => {
@@ -152,7 +173,9 @@ const AmountOffProduct = ({location}) => {
     payload = {
       ...payload,
       // product: values?.products?.[0]?.value && values?.products?.[0]?.value,
-      product: values?.products?.map(item => item?.value).filter(value => value !== undefined),
+      product: values?.products
+        ?.map((item) => item?.value)
+        .filter((value) => value !== undefined),
     };
     console.log(payload, "this is payload");
     makeApiRequest({
@@ -172,7 +195,6 @@ const AmountOffProduct = ({location}) => {
         setBtnLoaders({ ...btnLoaders, [buttonType]: false });
       });
   };
-  console.log(watch("maximum_discount_usage"), "form value");
   return (
     <FormWrapper
       formConfig={formConfig}

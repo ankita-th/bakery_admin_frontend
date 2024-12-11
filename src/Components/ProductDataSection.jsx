@@ -16,17 +16,16 @@ const ProductDataSection = ({
   handleActiveTab,
   disabled = false,
 }) => {
-  const renderActiveTab = () => {
-    switch (activeTab) {
-      case "inventory":
-        return <InventoryTab formConfig={formConfig} disabled={disabled} />;
-      case "variations":
-        return <VariantsTab formConfig={formConfig}  disabled={disabled}/>;
-      case "advanced":
-        return <AdvancedTab formConfig={formConfig}  disabled={disabled}/>;
-    }
-  };
-
+  // const renderActiveTab = () => {
+  //   switch (activeTab) {
+  //     case "inventory":
+  //       return <InventoryTab formConfig={formConfig} disabled={disabled} />;
+  //     case "variations":
+  //       return <VariantsTab formConfig={formConfig} disabled={disabled} />;
+  //     case "advanced":
+  //       return <AdvancedTab formConfig={formConfig} disabled={disabled} />;
+  //   }
+  // };
   return (
     <div className="product-data-section border">
       <div className="w-full mx-auto p-4 bg-white rounded-lg">
@@ -40,7 +39,24 @@ const ProductDataSection = ({
             handleActiveTab={handleActiveTab}
             activeTab={activeTab}
           />
-          {renderActiveTab()}
+          {/* {renderActiveTab()} */}
+          <div
+            className={`inventory ${activeTab == "inventory" ? "" : "hidden"}`}
+          >
+            <InventoryTab formConfig={formConfig} disabled={disabled} />
+          </div>
+          <div
+            className={`variations ${
+              activeTab === "variations" ? "" : "hidden"
+            }`}
+          >
+            <VariantsTab formConfig={formConfig} disabled={disabled} />
+          </div>
+          <div
+            className={`advanced ${activeTab === "advanced" ? "" : "hidden"}`}
+          >
+            <AdvancedTab formConfig={formConfig} disabled={disabled} />
+          </div>
         </div>
       </div>
     </div>

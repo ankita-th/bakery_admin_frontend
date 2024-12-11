@@ -1,9 +1,10 @@
 import moment from "moment";
 import { RECIPE_MEASURE_OPTIONS } from "../constant";
 import { T } from "./languageTranslator";
-const base_url = "http://192.168.1.86:8000";
+const base_url = import.meta.env.VITE_APP_BASE_URL;
+const userName = localStorage?.getItem("userName");
 const routeTitles = {
-  "/dashboard": "Welcome John Doe",
+  "/dashboard": `Welcome ${userName}`,
   "/products": T["products"],
   "/add-new-product": T["new_product"],
   "/categories": T["categories"],
@@ -266,7 +267,8 @@ export const convertIntoSelectOptions = (options, labelKey, valueKey) => {
 };
 
 export const createPreview = (imagePreview) => {
-  return `${base_url}${imagePreview}`;
+  const newPreview = imagePreview.substring(1)
+  return `${base_url}${newPreview}`;
 };
 
 export const listCategories = (categories) => {
