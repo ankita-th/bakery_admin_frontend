@@ -16,7 +16,7 @@ const DiscountCodeSection = ({ formConfig }) => {
         className="px-4 py-2 w-full rounded-lg"
         placeholder="Enter Code"
       />
-      <div className="div">Customers must enter this code at checkout.</div>
+      <div className="div">Customers Must Enter This Code At Checkout.</div>
     </div>
   );
 };

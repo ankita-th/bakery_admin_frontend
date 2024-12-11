@@ -27,7 +27,7 @@ const DiscountedValue = ({ formConfig }) => {
     <div className="bg-white p-6 rounded-lg">
       <RadioGroup
         className="flex gap-4"
-        label="At A Discounted value"
+        label="At A Discounted value *"
         fieldName="discount_types"
         formConfig={formConfig}
         //   need to update these options , need to confirm from backend
@@ -38,7 +38,7 @@ const DiscountedValue = ({ formConfig }) => {
         <>
         <CommonTextField
           formConfig={formConfig}
-          label="Discount Value"
+          label="Discount Value *"
           fieldName="discount_value"
           rules={createRequiredValidation("Discount value")}
           placeholder="0.00"
