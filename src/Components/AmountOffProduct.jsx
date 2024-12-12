@@ -147,7 +147,7 @@ const AmountOffProduct = ({ location }) => {
       "minimum_quantity_value",
       "end_time",
       "maximum_usage_value",
-      // "maximum_discount_usage",
+      "maximum_discount_usage",
     ];
     let payload = {
       coupon_type: "amount_off_product",
@@ -170,30 +170,34 @@ const AmountOffProduct = ({ location }) => {
         }
       }
     });
-    payload = {
-      ...payload,
-      // product: values?.products?.[0]?.value && values?.products?.[0]?.value,
-      product: values?.products
-        ?.map((item) => item?.value)
-        .filter((value) => value !== undefined),
-    };
+    if (values?.products?.length) {
+      payload = {
+        ...payload,
+        product: values?.products
+          ?.map((item) => item?.value)
+          .filter((value) => value !== undefined),
+      };
+    }
     console.log(payload, "this is payload");
-    makeApiRequest({
-      endPoint: DISCOUNT_ENDPOINT,
-      method: METHODS.post,
-      payload: payload,
-    })
-      .then((res) => {
-        toastMessage("Discount created successfully", successType);
-        navigate("/discounts");
-      })
-      .catch((err) => {
-        console.log(err);
-        toastMessage(err?.response?.data?.name?.[0] || DEFAULT_ERROR_MESSAGE);
-      })
-      .finally(() => {
-        setBtnLoaders({ ...btnLoaders, [buttonType]: false });
-      });
+    // makeApiRequest({
+    //   endPoint: DISCOUNT_ENDPOINT,
+    //   method: isEdit ? METHODS?.patch : METHODS.post,
+    //   payload: payload,
+    //   update_id:editId
+    // })
+    //   .then((res) => {
+    //     toastMessage("Discount created successfully", successType);
+    //     navigate("/discounts");
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     const fieldError =
+    //       err?.response?.data?.code?.[0] || err?.response?.data?.name?.[0];
+    //     toastMessage(fieldError || DEFAULT_ERROR_MESSAGE);
+    //   })
+    //   .finally(() => {
+    //     setBtnLoaders({ ...btnLoaders, [buttonType]: false });
+    //   });
   };
   return (
     <FormWrapper

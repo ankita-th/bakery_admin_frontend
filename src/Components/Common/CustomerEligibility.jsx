@@ -39,14 +39,14 @@ const CustomerEligibility = ({ formConfig }) => {
             placeholder="Select Customer Specification"
             className="px-4 py-2 w-full rounded-lg bg-[#F5F5F5]"
           />
-
-          <div>
-            {location?.state?.type === "buy_x_get_y"
-              ? "Applies Only To Selected Collections."
-              : "Applies To All Product"}
-          </div>
         </>
       )}
+      <div>
+        {location?.state?.type === "buy_x_get_y" ||
+        location?.state?.type === "amount_off_product"
+          ? "Applies Only To Selected Collections."
+          : "Applies To All Product"}
+      </div>
     </div>
   );
 };

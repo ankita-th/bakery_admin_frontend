@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import basketImg from "../assets/images/cookie_img.png";
 import {
   CubesCategoryIcon,
@@ -18,6 +18,8 @@ import {
   Tooltip,
 } from "chart.js";
 import { T } from "../utils/languageTranslator";
+import { makeApiRequest, METHODS } from "../api/apiFunctions";
+import { DASHBOARD_ENDPOINT } from "../api/endpoints";
 
 // Register the necessary Chart.js components
 ChartJS.register(
@@ -30,6 +32,25 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
+  const [dashboardData, setDashboardData] = useState(null);
+  const weeklySalesData = dashboardData?.weekly_sales_data;
+
+  useEffect(() => {
+    makeApiRequest({
+      endPoint: DASHBOARD_ENDPOINT,
+      method: METHODS.get,
+    })
+      .then((res) => {
+        console.log(res.data, "f");
+        setDashboardData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {});
+   
+  }, []);
+
   // Data for Sales Summary chart
   const salesData = {
     labels: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5"],

@@ -204,7 +204,7 @@ const BuyXGetY = ({location}) => {
           </div>
           {/* sidebar */}
           <DiscountSideSection btnLoaders={btnLoaders}>
-            <SummarySection />
+            <SummarySection formConfig={formConfig}/>
             {/* need to add sidebar section */}
           </DiscountSideSection>
         </div>

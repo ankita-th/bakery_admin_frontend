@@ -11,7 +11,7 @@ import {
   INVENTORY_PAGE_COLUMNS,
   ITEMS_PER_PAGE,
   SORT_BY_OPTIONS,
-  YYYY_MM_DD
+  YYYY_MM_DD,
 } from "../constant";
 import NoDataFound from "../Components/Common/NoDataFound";
 import TableWrapper from "../Wrappers/TableWrapper";
@@ -20,7 +20,12 @@ import SingleInventoryRow from "../Components/SingleInventoryRow";
 import useModalToggle from "../hooks/useModalToggle";
 import { useForm } from "react-hook-form";
 import AddEditInventory from "../Components/Common/AddEditInventory";
-import { formatDate, handleEdit,combineBarcode,deleteItemBasedOnId } from "../utils/helpers";
+import {
+  formatDate,
+  handleEdit,
+  combineBarcode,
+  deleteItemBasedOnId,
+} from "../utils/helpers";
 import { successType, toastMessage } from "../utils/toastMessage";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import { T } from "../utils/languageTranslator";
@@ -46,7 +51,7 @@ const InventoryManagement = () => {
   const { loader, toggleLoader } = useLoader();
   const { showModal: showInventorySection, toggleModal: toggleInventory } =
     useModalToggle();
-    const { showModal: showDeleteModal, toggleModal: toggleDeleteModal } =
+  const { showModal: showDeleteModal, toggleModal: toggleDeleteModal } =
     useModalToggle();
   const [inventories, setInventories] = useState([]);
   const [totalData, setTotalData] = useState(null);
@@ -72,7 +77,6 @@ const InventoryManagement = () => {
     };
     setInventories(DUMMY_INVENTORY_DATA);
     // makeApiRequest({
-    //   // update required: Update with the actual endpoint
     //   endPoint: GET_INVENTORY_ENDPOINT,
     //   params: apiParams,
     //   method: METHODS.get,
@@ -86,7 +90,7 @@ const InventoryManagement = () => {
     //     toggleLoader("pageLoader");
     //   });
   }, [page, filters]);
-
+  // console.log(inventories, "inventories");
 
   const handleFilterChange = (filterName, value) => {
     const temp = { ...filters };
@@ -108,7 +112,6 @@ const InventoryManagement = () => {
     }
   };
 
-
   const handleInventorySection = ({ action }) => {
     if (action === "open") {
       toggleInventory();
@@ -125,8 +128,8 @@ const InventoryManagement = () => {
     reset(); // for resetting form values
   };
 
-  const onSubmit = (values,event) => {
-    console.log(values,'valeussdsf')
+  const onSubmit = (values, event) => {
+    console.log(values, "valeussdsf");
     const buttonType = event.nativeEvent.submitter.name; //contains publish and draft
     handleButtonLoaders(buttonType);
     const payload = {
@@ -173,9 +176,7 @@ const InventoryManagement = () => {
       successType
     );
     if (editInfo?.isEdit) {
-      setInventories(
-        handleEdit(inventories, editInfo?.item?.id, payload)
-      );
+      setInventories(handleEdit(inventories, editInfo?.item?.id, payload));
     } else {
       setInventories((prev) => [...prev, payload]);
     }
@@ -260,17 +261,17 @@ const InventoryManagement = () => {
         />
       )}
       {showDeleteModal && (
-            <DeleteConfirmationModal
-              title="Are you sure you want to delete this inventory?"
-              description="This action cannot be redo."
-              onCancel={() => {
-                setItemToDelete(null);
-                toggleDeleteModal();
-              }}
-              loader={deleteLoader}
-              onDelete={deleteInventory}
-            />
-          )}
+        <DeleteConfirmationModal
+          title="Are you sure you want to delete this inventory?"
+          description="This action cannot be redo."
+          onCancel={() => {
+            setItemToDelete(null);
+            toggleDeleteModal();
+          }}
+          loader={deleteLoader}
+          onDelete={deleteInventory}
+        />
+      )}
     </div>
   );
 };

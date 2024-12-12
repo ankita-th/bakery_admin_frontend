@@ -600,7 +600,7 @@ export const DUMMY_SUPPORT_DATA = [
 ];
 
 export const DISCOUNT_TYPE_OPTIONS = [
-  { label: "amount", value: "amount" },
+  { label: "Amount", value: "amount" },
   { label: "Percentage", value: "percentage" },
 ];
 
@@ -638,24 +638,24 @@ export const COUNTRY_OPTIONS = [
 
 export const STATES_OPTIONS = [
   { label: "All states", value: "all_states" },
-  { label: "Selected states", value: "selected_states" },
+  { label: "Selected states", value: "specific_states" },
 ];
 
 export const CUSTOMER_SPECIFIC_OPTIONS = [
   {
-    label: "Haven't Purchased",
+    label: "Customers who have not purchased ",
     value: "havent_purchased",
   },
   {
-    label: "Recent Purchased",
+    label: "Customers who have purchased recently",
     value: "recent_purchased",
   },
   {
-    label: "Purchased Once",
+    label: "Customers who have purchased at least once  ",
     value: "purchased_once",
   },
   {
-    label: "Purchased More Than Once",
+    label: "Customers who have purchased more than once",
     value: "purchased_more_than_once",
   },
   // {
@@ -706,8 +706,8 @@ export const COMBINATION_OPTIONS_SHIPPING = [
     value: "product_discounts",
   },
   {
-    label: "Other discounts",
-    value: "other_discounts",
+    label: "Order discounts",
+    value: "order_discounts",
   },
 ];
 export const BACKDOOR_OPTIONS = [

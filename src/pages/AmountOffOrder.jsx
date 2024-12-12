@@ -36,22 +36,26 @@ const AmountOffOrder = () => {
 
   useEffect(() => {
     // const dummy_data = {
-    //   code: "DISCOUNT2024",
-    //   discount_types: "percentage",
-    //   discount_value: 20,
-    //   coupon_type: "amount_off_product",
-    //   minimum_purchase_requirement: "minimum_purchase",
-    //   minimum_purchase_value: 100,
-    //   minimum_quantity_value: 2,
+    //   coupon_type: "amount_off_order",
+    //   code: "SE6N9",
+    //   discount_types: "amount",
+    //   discount_value: 12,
+    //   minimum_purchase_requirement: "minimum_items",
+    //   // minimum_purchase_value:21,
+    //   minimum_quantity_value: 23,
     //   customer_eligibility: "specific_customer",
-    //   customer_specification: "purchased_once",
-    //   maximum_discount_usage: "per_customer",
-    //   maximum_usage_value: 5,
-    //   combination: ["shipping_discounts", "other_discounts"],
-    //   start_date: "2024-12-12",
-    //   start_time: "15:40",
-    //   end_date: "2024-12-16",
-    //   end_time: "18:42",
+    //   maximum_discount_usage: "limit_discount_usage_time",
+    //   maximum_usage_value: 23,
+    //   customer_specification: "havent_purchased",
+    //   combination: [
+    //     "product_discounts",
+    //     "order_discounts",
+    //     "shipping_discounts",
+    //   ],
+    //   end_date: "2024-12-14",
+    //   end_time: "00:27",
+    //   start_date: "2024-12-13",
+    //   start_time: "00:27",
     // };
 
     if (isEdit) {
@@ -60,40 +64,36 @@ const AmountOffOrder = () => {
         method: METHODS.get,
       })
         .then((res) => {
-          const fields = [
+          const data = res?.data;
+          const directKeys = [
             "code",
-            "discount_types",
             "discount_value",
             "minimum_purchase_requirement",
             "minimum_purchase_value",
             "minimum_quantity_value",
             "customer_eligibility",
-            "customer_specification",
             "maximum_discount_usage",
+            "maximum_usage_value",
             "minimum_quantity_value",
             "combination",
             "end_date",
             "end_time",
             "start_date",
             "start_time",
-            "maximum_usage_value",
           ];
-          prefillFormValues(res.data, fields, setValue);
-          const discountTypesExtractedOption = extractOption(
+          prefillFormValues(data, directKeys, setValue);
+          const discountTypeOption = extractOption(
             DISCOUNT_TYPE_OPTIONS,
-            res?.data?.discount_types,
+            data?.discount_types,
             "value"
           );
-          setValue("discount_types", discountTypesExtractedOption);
-          const customerSpecificationExtractedOption = extractOption(
+          setValue("discount_types", discountTypeOption);
+          const customerSpecificOption = extractOption(
             CUSTOMER_SPECIFIC_OPTIONS,
-            res?.data?.customer_specification,
+            data?.customer_specification,
             "value"
           );
-          setValue(
-            "customer_specification",
-            customerSpecificationExtractedOption
-          );
+          setValue("customer_specification", customerSpecificOption);
         })
         .catch((err) => {
           console.log(err);
@@ -101,15 +101,10 @@ const AmountOffOrder = () => {
           navigate("/discounts");
         });
     }
-    // prefillFormValues(dummy_data, fields, setValue);
-    //       const discountTypesExtractedOption = extractOption(DISCOUNT_TYPE_OPTIONS,dummy_data?.discount_types,"value");
-    //       setValue("discount_types",discountTypesExtractedOption);
-    //       const customerSpecificationExtractedOption = extractOption(CUSTOMER_SPECIFIC_OPTIONS,dummy_data?.customer_specification,"value");
-    //       setValue("customer_specification", customerSpecificationExtractedOption);
   }, []);
 
   const onSubmit = (values, event) => {
-    const buttonType = event.nativeEvent.submitter.name;  
+    const buttonType = event.nativeEvent.submitter.name;
     setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
 
     const fields = [
@@ -149,11 +144,11 @@ const AmountOffOrder = () => {
         }
       }
     });
-    console.log(payload, "these are values");
     makeApiRequest({
       endPoint: DISCOUNT_ENDPOINT,
-      method: METHODS.post,
+      method: isEdit ? METHODS?.patch : METHODS.post,
       payload: payload,
+      update_id: editId && editId,
     })
       .then((res) => {
         toastMessage("Discount created successfully", successType);
@@ -167,7 +162,6 @@ const AmountOffOrder = () => {
         setBtnLoaders({ ...btnLoaders, [buttonType]: false });
       });
   };
-  console.log(watch(""), "inside");
   return (
     <div>
       <FormWrapper
@@ -182,7 +176,6 @@ const AmountOffOrder = () => {
             <MinimumPurchaseRequirement formConfig={formConfig} />
             <CustomerEligibility formConfig={formConfig} />
             <DiscountUses formConfig={formConfig} />
-            {/* <DiscountedValue formConfig={formConfig} /> */}
             <Combinations formConfig={formConfig} />
             <ActiveDates formConfig={formConfig} />
           </div>

@@ -79,23 +79,7 @@ const InventoryTab = ({ formConfig, disabled }) => {
         />
 
         <div className="grid grid-cols-2 gap-4">
-          {/* <CommonTextField
-            label="Regular Price ($) *"
-            fieldName="regular_price"
-            className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
-            rules={{
-              ...createRequiredValidation("Regular Price"),
-              maxLength: {
-                value: 8,
-                message:
-                  "Regular price must not be more than 8 digits in total",
-              },
-            }}
-            formConfig={formConfig}
-            placeholder="Enter Price of Product"
-            disabled={disabled}
-            isNumberOnly={true}
-          /> */}
+
           <div>
             <label>Regular Price ($) *</label>
             <input

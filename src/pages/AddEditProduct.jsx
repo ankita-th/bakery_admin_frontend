@@ -12,6 +12,7 @@ import {
   createProductSeo,
   createRequiredValidation,
   createVariantPayload,
+  createVariantsData,
   extractOption,
   extractSelectOptions,
   handleCategory,
@@ -111,7 +112,6 @@ const AddEditProduct = () => {
       })
         .then((res) => {
           const data = res?.data;
-          console.log(res?.data, "this is response");
           // Setting seo snippet section
           const seoSnippetData = {
             seo_title: data?.product_seo?.seo_title,
@@ -184,12 +184,14 @@ const AddEditProduct = () => {
           );
           // for variants
           if (data?.product_detail?.variants?.length) {
-            setValue("variants", data?.product_detail?.variants);
+            const variantsData = createVariantsData(
+              data?.product_detail?.variants
+            );
+            setValue("variants", variantsData);
           } else {
             setValue("variants", DEFAULT_VARIANTS_DATA);
           }
           // for variants
-
           // for filling images
           if (data?.feature_image) {
             let preview = createPreview(data?.feature_image?.image);
@@ -199,7 +201,6 @@ const AddEditProduct = () => {
           if (data?.images?.length) {
             let result = [];
             const product_images = data.images;
-
             product_images?.forEach((img) => {
               const preview = createPreview(img?.image);
               const item = { preview: preview, error: null, file: null };
@@ -220,7 +221,6 @@ const AddEditProduct = () => {
     }
   }, [editId]);
   const onSubmit = (values, event) => {
-    console.log(values, "inside on submit");
     const buttonType = event.nativeEvent.submitter.name;
     setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
     const payload = {
@@ -268,7 +268,6 @@ const AddEditProduct = () => {
     });
 
     const data = Object.fromEntries(formData.entries()); // Convert to object
-    console.log(data, "formData payload");
     // api call
     makeApiRequest({
       endPoint: PRODUCT_ENDPOINT,
@@ -288,7 +287,6 @@ const AddEditProduct = () => {
       .catch((err) => {
         const error = err?.response?.data?.name || err?.response?.data?.sku;
         toastMessage(error || DEFAULT_ERROR_MESSAGE);
-        console.log(err?.response?.data, "errpr");
         setBtnLoaders({ publish: false, draft: false });
       });
   };

@@ -16,7 +16,7 @@ import {
   CUSTOMER_SPECIFIC_OPTIONS,
   DEFAULT_ERROR_MESSAGE,
   INVALID_ID,
-  SWEDEN_COUNTY_OPTIONS
+  SWEDEN_COUNTY_OPTIONS,
 } from "../constant";
 import { useNavigate } from "react-router-dom";
 import { extractOption, prefillFormValues } from "../utils/helpers";
@@ -25,7 +25,7 @@ import Countries from "../Components/Countries";
 const FreeShipping = ({ location }) => {
   const navigate = useNavigate();
   const formConfig = useForm();
-  const { setValue } = formConfig;
+  const { setValue, watch } = formConfig;
   const [btnLoaders, setBtnLoaders] = useState({
     draft: false,
     saveDiscount: false,
@@ -36,65 +36,39 @@ const FreeShipping = ({ location }) => {
   const editId = location?.state?.editId;
 
   useEffect(() => {
-    
-    // const dummyData = {
-    //   "code": "SHIPDISCOUNT2024",
-    //   "select_states": "selected_states",
-    //   "states": "Kalmar",
-    //   "exclude_shipping_rate": true,
-    //   "shipping_rate": 10,
-    //   "minimum_purchase_requirement": "minimum_purchase",
-    //   "minimum_purchase_value": 50,
-    //   "minimum_quantity_value": 3,
-    //   "customer_eligibility": "specific_customer",
-    //   "customer_specification": "purchased_more_than_once",
-    //   "maximum_discount_usage": "per_customer",
-    //   "maximum_usage_value": 3,
-    //   "combination": ["product_discounts", "other_discounts"],
-    //   "start_date": "2024-12-12",
-    //   "start_time": "15:40",
-    //   "end_date": "2024-12-16",
-    //   "end_time": "18:42"
-    // }
-    
+    const dummyData = {
+      code: "DIUSU",
+      combination: ["product_discounts", "order_discounts"],
+      exclude_shipping_rate: true,
+      start_date: "2024-12-14",
+      end_date: "2024-12-14",
+      start_time: "03:33",
+      end_time: "03:33",
+      customer_eligibility: "specific_customer",
+      minimum_quantity_value: 123,
+      minimum_purchase_requirement: "minimum_purchase",
+      shipping_rate: 12,
+      customer_specification: "recent_purchased",
+      shipping_scope: "specific_states",
+      states: ["Stockholm", "Västernorrland"],
+      maximum_usage_value: 213,
+      maximum_discount_usage: "limit_discount_usage_time",
+      coupon_type: "free_shipping",
+    };
+
     if (isEdit) {
       makeApiRequest({
         endPoint: `${DISCOUNT_ENDPOINT}${editId}`,
         method: METHODS.get,
       })
         .then((res) => {
-          const fields = [
-            "code",
-            "combination",
-            "customer_eligibility",
-            "customer_specification",
-            "end_date",
-            "end_time",
-            "maximum_discount_usage",
-            "maximum_usage_value",
-            "minimum_purchase_requirement",
-            "minimum_purchase_value",
-            "minimum_quantity_value",
-            "start_date",
-            "start_time",
-            "select_states",
-            "states",
-            // "shipping_check",
-            "exclude_shipping_rate",
-            "shipping_rate"
-          ];
-          console.log(res.data, "skdfjkslfjklsadfj");
-          prefillFormValues(res.data, fields, setValue);
-          // formConfig.reset(res.data);
-          // for customer specification
-          const extractedOption = extractOption(
-            CUSTOMER_SPECIFIC_OPTIONS,
-            res?.data?.customer_specification,
-            "value"
-          );
-          setValue("customer_specification", extractedOption);
-          const statesExtractedOption = extractOption(SWEDEN_COUNTY_OPTIONS,res?.data?.states,"value")
-          setValue("states", statesExtractedOption);
+          const data = res?.data;
+          const directKeys = ["code","combination","start_date","end_date","end_time","start_time","maximum_usage_value","maximum_discount_usage","customer_eligibility","shipping_scope","exclude_shipping_rate","shipping_rate","minimum_purchase_requirement","minimum_purchase_value","minimum_quantity_value"];
+          prefillFormValues(data, directKeys, setValue);
+          const specificCustomerOption=extractOption(CUSTOMER_SPECIFIC_OPTIONS,data?.customer_specification,"value")
+          setValue("customer_specification",specificCustomerOption);
+          const statesOptions = data?.states?.map((ele)=>(extractOption(SWEDEN_COUNTY_OPTIONS,ele,"value")));
+          setValue("states",statesOptions);
         })
         .catch((err) => {
           console.log(err);
@@ -102,32 +76,52 @@ const FreeShipping = ({ location }) => {
           navigate("/discounts");
         });
     }
-    // prefillFormValues(dummyData, fields, setValue);
-    // const extractedOption = extractOption(
-    //   CUSTOMER_SPECIFIC_OPTIONS,
-    //   dummyData?.customer_specification,
-    //   "value"
-    // );
-    // setValue("customer_specification", extractedOption);
-    // const statesExtractedOption = extractOption(SWEDEN_COUNTY_OPTIONS,dummyData.states,"value")
-    // setValue("states", statesExtractedOption);
   }, []);
 
   const onSubmit = (values, event) => {
     const buttonType = event.nativeEvent.submitter.name;
-    console.log(values, "freeshipping");
-    const payload = {
-      ...values,
-      coupon_type: "free_shipping",
-      customer_specification: values?.customer_specification?.value,
-      minimum_purchase_value: +values?.minimum_purchase_value,
-      states: values.states.map((ele)=> ele.value)
-    };
-
+    const payloadKeys = [
+      "code",
+      "combination",
+      "exclude_shipping_rate",
+      "start_date",
+      "end_date",
+      "start_time",
+      "end_time",
+      "customer_eligibility",
+      "minimum_purchase_value",
+      "minimum_purchase_requirement",
+      "shipping_rate",
+      "states",
+      "customer_specification",
+      "shipping_scope",
+      "maximum_usage_value",
+      "maximum_discount_usage",
+      "minimum_quantity_value",
+    ];
+    let payload = {};
+    payloadKeys.forEach((key) => {
+      if (values?.[key]) {
+        if (
+          key === "minimum_purchase_value" ||
+          key === "shipping_rate" ||
+          key === "minimum_quantity_value" ||
+          key === "maximum_usage_value"
+        ) {
+          payload[key] = +values[key];
+        } else if (key === "states" && values?.states?.length) {
+          payload[key] = values?.states?.map((ele) => ele.value);
+        } else if (key === "customer_specification") {
+          payload[key] = values?.[key]?.value;
+        } else {
+          payload[key] = values[key];
+        }
+      }
+    });
+    payload = { ...payload, coupon_type: "free_shipping" };
     setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
     makeApiRequest({
       endPoint: DISCOUNT_ENDPOINT,
-      // method: METHODS.post,
       method: isEdit ? METHODS?.patch : METHODS?.post,
       update_id: isEdit && values?.id,
       payload: payload,
