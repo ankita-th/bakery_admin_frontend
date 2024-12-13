@@ -148,6 +148,7 @@ const AmountOffProduct = ({ location }) => {
       "end_time",
       "maximum_usage_value",
       "maximum_discount_usage",
+      "customer_specification",
     ];
     let payload = {
       coupon_type: "amount_off_product",
@@ -156,8 +157,8 @@ const AmountOffProduct = ({ location }) => {
     };
     fields.forEach((key) => {
       if (values?.[key]) {
-        if (key === "combination") {
-          payload[key] = values[key];
+        if (key === "customer_specification") {
+          payload[key] = values?.[key]?.value;
         } else if (
           key === "discount_value" ||
           key === "maximum_usage_value" ||
@@ -179,25 +180,25 @@ const AmountOffProduct = ({ location }) => {
       };
     }
     console.log(payload, "this is payload");
-    // makeApiRequest({
-    //   endPoint: DISCOUNT_ENDPOINT,
-    //   method: isEdit ? METHODS?.patch : METHODS.post,
-    //   payload: payload,
-    //   update_id:editId
-    // })
-    //   .then((res) => {
-    //     toastMessage("Discount created successfully", successType);
-    //     navigate("/discounts");
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     const fieldError =
-    //       err?.response?.data?.code?.[0] || err?.response?.data?.name?.[0];
-    //     toastMessage(fieldError || DEFAULT_ERROR_MESSAGE);
-    //   })
-    //   .finally(() => {
-    //     setBtnLoaders({ ...btnLoaders, [buttonType]: false });
-    //   });
+    makeApiRequest({
+      endPoint: DISCOUNT_ENDPOINT,
+      method: isEdit ? METHODS?.patch : METHODS.post,
+      payload: payload,
+      update_id: editId,
+    })
+      .then((res) => {
+        toastMessage("Discount created successfully", successType);
+        navigate("/discounts");
+      })
+      .catch((err) => {
+        console.log(err);
+        const fieldError =
+          err?.response?.data?.code?.[0] || err?.response?.data?.name?.[0];
+        toastMessage(fieldError || DEFAULT_ERROR_MESSAGE);
+      })
+      .finally(() => {
+        setBtnLoaders({ ...btnLoaders, [buttonType]: false });
+      });
   };
   return (
     <FormWrapper

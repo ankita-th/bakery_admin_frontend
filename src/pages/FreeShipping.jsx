@@ -63,12 +63,34 @@ const FreeShipping = ({ location }) => {
       })
         .then((res) => {
           const data = res?.data;
-          const directKeys = ["code","combination","start_date","end_date","end_time","start_time","maximum_usage_value","maximum_discount_usage","customer_eligibility","shipping_scope","exclude_shipping_rate","shipping_rate","minimum_purchase_requirement","minimum_purchase_value","minimum_quantity_value"];
+          const directKeys = [
+            "code",
+            "combination",
+            "start_date",
+            "end_date",
+            "end_time",
+            "start_time",
+            "maximum_usage_value",
+            "maximum_discount_usage",
+            "customer_eligibility",
+            "shipping_scope",
+            "exclude_shipping_rate",
+            "shipping_rate",
+            "minimum_purchase_requirement",
+            "minimum_purchase_value",
+            "minimum_quantity_value",
+          ];
           prefillFormValues(data, directKeys, setValue);
-          const specificCustomerOption=extractOption(CUSTOMER_SPECIFIC_OPTIONS,data?.customer_specification,"value")
-          setValue("customer_specification",specificCustomerOption);
-          const statesOptions = data?.states?.map((ele)=>(extractOption(SWEDEN_COUNTY_OPTIONS,ele,"value")));
-          setValue("states",statesOptions);
+          const specificCustomerOption = extractOption(
+            CUSTOMER_SPECIFIC_OPTIONS,
+            data?.customer_specification,
+            "value"
+          );
+          setValue("customer_specification", specificCustomerOption);
+          const statesOptions = data?.states?.map((ele) =>
+            extractOption(SWEDEN_COUNTY_OPTIONS, ele, "value")
+          );
+          setValue("states", statesOptions);
         })
         .catch((err) => {
           console.log(err);

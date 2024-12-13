@@ -144,6 +144,7 @@ const AmountOffOrder = () => {
         }
       }
     });
+    console.log(payload,"amount off order payload")
     makeApiRequest({
       endPoint: DISCOUNT_ENDPOINT,
       method: isEdit ? METHODS?.patch : METHODS.post,

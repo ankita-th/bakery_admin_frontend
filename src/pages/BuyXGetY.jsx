@@ -15,54 +15,59 @@ import CustomerGets from "../Components/CustomerGets";
 import { makeApiRequest, METHODS } from "../api/apiFunctions";
 import { DISCOUNT_ENDPOINT } from "../api/endpoints";
 import { successType, toastMessage } from "../utils/toastMessage";
-import { CUSTOMER_SPECIFIC_OPTIONS, DEFAULT_ERROR_MESSAGE, INVALID_ID, ITEMS_FROM_OPTIONS } from "../constant";
+import {
+  CUSTOMER_SPECIFIC_OPTIONS,
+  DEFAULT_ERROR_MESSAGE,
+  INVALID_ID,
+  ITEMS_FROM_OPTIONS,
+} from "../constant";
 import { useNavigate } from "react-router-dom";
 import { extractOption, prefillFormValues } from "../utils/helpers";
 
-const BuyXGetY = ({location}) => {
+const BuyXGetY = ({ location }) => {
   const [btnLoaders, setBtnLoaders] = useState({
     draft: false,
     saveDiscount: false,
   });
   const navigate = useNavigate();
 
-//   const dummy = {
-//     "code": "WPE5A",
-//     "customer_buy_types": "minimum_purchase_amount",
-//     "items_from": {
-//         "label": "Specify product",
-//         "value": "specific_product"
-//     },
-//     "discount_types": "amount_off_each",
-//     "customer_eligibility": "specific_customer",
-//     "maximum_discount_usage": "limit_number_of_times",
-//     "combination": [
-//         "product_discounts",
-//         "other_discounts"
-//     ],
-//     "start_date": "2024-12-18",
-//     "start_time": "20:15",
-//     "end_date": "2024-12-26",
-//     "end_time": "22:17",
-//     "buy_products_quantity": "",
-//     "discount_value": "78",
-//     "": "",
-//     "buy_products_amount": "67",
-//     "customer_gets_amount": "98",
-//     "buy_products": [
-//         {
-//             "label": "BIscuit",
-//             "value": 227
-//         }
-//     ],
-//     "customer_specification": {
-//         "label": "Abandoned checkouts in the last 30 days",
-//         "value": "abandoned_checkouts"
-//     },
-//     "maximum_usage_value": "654",
-//     "coupon_type": "buy_x_get_y"
-// }
-  
+  //   const dummy = {
+  //     "code": "WPE5A",
+  //     "customer_buy_types": "minimum_purchase_amount",
+  //     "items_from": {
+  //         "label": "Specify product",
+  //         "value": "specific_product"
+  //     },
+  //     "discount_types": "amount_off_each",
+  //     "customer_eligibility": "specific_customer",
+  //     "maximum_discount_usage": "limit_number_of_times",
+  //     "combination": [
+  //         "product_discounts",
+  //         "other_discounts"
+  //     ],
+  //     "start_date": "2024-12-18",
+  //     "start_time": "20:15",
+  //     "end_date": "2024-12-26",
+  //     "end_time": "22:17",
+  //     "buy_products_quantity": "",
+  //     "discount_value": "78",
+  //     "": "",
+  //     "buy_products_amount": "67",
+  //     "customer_gets_amount": "98",
+  //     "buy_products": [
+  //         {
+  //             "label": "BIscuit",
+  //             "value": 227
+  //         }
+  //     ],
+  //     "customer_specification": {
+  //         "label": "Abandoned checkouts in the last 30 days",
+  //         "value": "abandoned_checkouts"
+  //     },
+  //     "maximum_usage_value": "654",
+  //     "coupon_type": "buy_x_get_y"
+  // }
+
   const formConfig = useForm();
   const isEdit = location?.state?.isEdit;
   const editId = location?.state?.editId;
@@ -70,7 +75,6 @@ const BuyXGetY = ({location}) => {
   const { watch, setValue } = formConfig;
 
   useEffect(() => {
-    
     // const dummyData={
     //   "code": "BUYGET2024",
     //   "customer_buy_types":  "minimum_purchase_amount",
@@ -120,7 +124,6 @@ const BuyXGetY = ({location}) => {
             "maximum_usage_value",
             "start_date",
             "start_time",
-            
           ];
           console.log(res.data, "skdfjkslfjklsadfj");
           prefillFormValues(res.data, fields, setValue);
@@ -132,7 +135,11 @@ const BuyXGetY = ({location}) => {
             "value"
           );
           setValue("customer_specification", extractedOption);
-          const itemsFromExtractedOption = extractOption(ITEMS_FROM_OPTIONS,res?.data?.items_from,"value")
+          const itemsFromExtractedOption = extractOption(
+            ITEMS_FROM_OPTIONS,
+            res?.data?.items_from,
+            "value"
+          );
           setValue("items_from", itemsFromExtractedOption);
         })
         .catch((err) => {
@@ -152,8 +159,7 @@ const BuyXGetY = ({location}) => {
     // setValue("items_from", itemsFromExtractedOption);
   }, []);
 
-
-  const onSubmit = (values,event) => {
+  const onSubmit = (values, event) => {
     const buttonType = event.nativeEvent.submitter.name;
     const payload = {
       ...values,
@@ -161,26 +167,26 @@ const BuyXGetY = ({location}) => {
       // customer_specification: values?.customer_specification?.value,
       // minimum_purchase_value: +values?.minimum_purchase_value,
     };
-    console.log(payload, "this is payload");
-    setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
-    makeApiRequest({
-      endPoint: DISCOUNT_ENDPOINT,
-      // method: METHODS.post,
-      method: isEdit ? METHODS?.patch : METHODS?.post,
-      update_id: isEdit && values?.id,
-      payload: payload,
-    })
-      .then((res) => {
-        toastMessage("Discount created successfully", successType);
-        navigate("/discounts");
-      })
-      .catch((err) => {
-        console.log(err);
-        toastMessage(err?.response?.data?.name?.[0] || DEFAULT_ERROR_MESSAGE);
-      })
-      .finally(() => {
-        setBtnLoaders({ ...btnLoaders, [buttonType]: false });
-      });
+    console.log(payload, "buy_x_get_y payload");
+    // setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
+    // makeApiRequest({
+    //   endPoint: DISCOUNT_ENDPOINT,
+    //   // method: METHODS.post,
+    //   method: isEdit ? METHODS?.patch : METHODS?.post,
+    //   update_id: isEdit && values?.id,
+    //   payload: payload,
+    // })
+    //   .then((res) => {
+    //     toastMessage("Discount created successfully", successType);
+    //     navigate("/discounts");
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     toastMessage(err?.response?.data?.name?.[0] || DEFAULT_ERROR_MESSAGE);
+    //   })
+    //   .finally(() => {
+    //     setBtnLoaders({ ...btnLoaders, [buttonType]: false });
+    //   });
   };
   return (
     <div>
@@ -194,7 +200,7 @@ const BuyXGetY = ({location}) => {
             <DiscountCodeSection formConfig={formConfig} />
             {/* add components for customer buys and customer gets here */}
             <CustomerBuys formConfig={formConfig} />
-            <CustomerGets formConfig={formConfig}/>
+            <CustomerGets formConfig={formConfig} />
             <DiscountedValue formConfig={formConfig} />
             <CustomerEligibility formConfig={formConfig} />
             <DiscountUses formConfig={formConfig} />
@@ -204,7 +210,7 @@ const BuyXGetY = ({location}) => {
           </div>
           {/* sidebar */}
           <DiscountSideSection btnLoaders={btnLoaders}>
-            <SummarySection formConfig={formConfig}/>
+            <SummarySection formConfig={formConfig} />
             {/* need to add sidebar section */}
           </DiscountSideSection>
         </div>
