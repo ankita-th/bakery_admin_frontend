@@ -17,10 +17,14 @@ const CustomerBuys = ({ formConfig }) => {
   useEffect(() => {
     if (customer_buy_types === "minimum_items_quantity") {
       setValue("buy_products_amount", "");
+      setValue("customer_gets_amount", "");
       clearErrors("buy_products_amount");
+      clearErrors("customer_gets_amount");
     } else {
       setValue("buy_products_quantity", "");
-      clearErrors("buy_products_quantity");
+      clearErrors("customer_gets_quantity");
+      setValue("customer_gets_quantity", "");
+      clearErrors("buy_products_amount");
     }
   }, [customer_buy_types]);
   useEffect(() => {

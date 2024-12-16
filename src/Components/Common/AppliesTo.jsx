@@ -35,7 +35,7 @@ const AppliesTo = ({ formConfig }) => {
         setIsLoading(true);
         makeApiRequest({
           endPoint: PRODUCT_ENDPOINT,
-          params: { name: inputValue },
+          params: { search: inputValue },
           method: METHODS.get,
         })
           .then((res) => {

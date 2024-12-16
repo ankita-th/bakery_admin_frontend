@@ -79,7 +79,7 @@ const Customers = () => {
       });
   }, [page, filters]);
 
-  const handleFilterChange = (filterName, value) => { 
+  const handleFilterChange = (filterName, value) => {
     const temp = { ...filters };
     temp[filterName] = value;
     setFilters(temp);
@@ -100,8 +100,8 @@ const Customers = () => {
     // makeApiRequest({
     //   endPoint: CUSTOMER_ENDPOINT,
     //   method: METHODS.delete,
-      //   delete_id: itemToDelete,
-      // })
+    //   delete_id: itemToDelete,
+    // })
     //   .then((res) => {
     //     // update required:Add a proper message here
     //     toastMessage("Deleted Successfully", successType);
@@ -126,6 +126,7 @@ const Customers = () => {
           <FilterSection
             filterFields={filterFields}
             handleFilterChange={handleFilterChange}
+            filters={filters}
           >
             <CommonButton
               text="Add New Customer"
@@ -164,7 +165,7 @@ const Customers = () => {
               onCancel={() => {
                 setItemToDelete(null);
                 toggleDeleteModal();
-                toggleLoader(); 
+                toggleLoader();
               }}
               onDelete={deleteCustomer}
               loader={deleteLoader}

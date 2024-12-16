@@ -45,7 +45,7 @@ const DEFAULT_CATEGORY_VALUES = {
 const filterFields = [
   {
     type: "select",
-    defaultOption: "select_type",
+    defaultOption: "Select type",
     options: TYPE_OPTIONS,
     filterName: "type",
   },
@@ -306,6 +306,7 @@ const Categories = () => {
           <FilterSection
             filterFields={filterFields}
             handleFilterChange={handleFilterChange}
+            filters={filters}
           >
             <CommonButton
               text="Add Category/SubCategory"

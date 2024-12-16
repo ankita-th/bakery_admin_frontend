@@ -19,8 +19,8 @@ import {
   SWEDEN_COUNTY_OPTIONS,
 } from "../constant";
 import { useNavigate } from "react-router-dom";
-import { extractOption, prefillFormValues } from "../utils/helpers";                                                                                              
-import Countries from "../Components/Countries"; 
+import { extractOption, prefillFormValues } from "../utils/helpers";
+import Countries from "../Components/Countries";
 
 const FreeShipping = ({ location }) => {
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ const FreeShipping = ({ location }) => {
   const isEdit = location?.state?.isEdit;
 
   const editId = location?.state?.editId;
-console.log(isEdit,"isedit off freeshiping")
+  console.log(isEdit, "isedit off freeshiping");
   useEffect(() => {
     const dummyData = {
       code: "DIUSU",
@@ -141,7 +141,7 @@ console.log(isEdit,"isedit off freeshiping")
       }
     });
     payload = { ...payload, coupon_type: "free_shipping" };
-    console.log(payload,'paylode')
+    console.log(payload, "paylod");
     setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
     makeApiRequest({
       endPoint: DISCOUNT_ENDPOINT,

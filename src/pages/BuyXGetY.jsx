@@ -19,10 +19,15 @@ import {
   CUSTOMER_SPECIFIC_OPTIONS,
   DEFAULT_ERROR_MESSAGE,
   INVALID_ID,
-  ITEMS_FROM_OPTIONS, 
+  ITEMS_FROM_OPTIONS,
 } from "../constant";
 import { useNavigate } from "react-router-dom";
-import { extractOption, prefillFormValues } from "../utils/helpers";
+import {
+  convertPairFromProducts,
+  convertProductsIntoPairs,
+  extractOption,
+  prefillFormValues,
+} from "../utils/helpers";
 
 const BuyXGetY = ({ location }) => {
   const [btnLoaders, setBtnLoaders] = useState({
@@ -117,7 +122,7 @@ const BuyXGetY = ({ location }) => {
             "customer_specification",
             "discount_types",
             "discount_value",
-            "end_date", 
+            "end_date",
             "end_time",
             "maximum_discount_usage",
             "maximum_usage_value",
@@ -141,6 +146,18 @@ const BuyXGetY = ({ location }) => {
           );
           console.log(itemsFromExtractedOption, "itemsFromExtractedOption");
           setValue("items_from", itemsFromExtractedOption);
+
+          // for customer buys and customer gets products
+          if (res?.data?.buy_products?.length) {
+            //  const formattedProducts = convertPairFromProducts(res?.data?.buy_products);
+            //  setValue("buy_products",formattedProducts,)
+          }
+          if (res?.data?.customer_get_products) {
+            // const formattedProducts = convertPairFromProducts(
+            //   res?.data?.customer_get_products
+            // );
+            // setValue("customer_get_products", formattedProducts);
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -195,17 +212,17 @@ const BuyXGetY = ({ location }) => {
           key === "buy_products_quantity" ||
           key === "discount_value" ||
           key === "buy_products_amount" ||
-          key === "customer_gets_amount " ||
+          key === "customer_gets_amount" ||
           key === "customer_gets_quantity"
         ) {
           payload[key] = +values[key];
         } else if (key === "items_from" || key === "customer_specification") {
           payload[key] = values[key]?.value;
-        } else if (
-          (key === "buy_products" || key === "customer_get_products") &&
-          values[key]?.length
-        ) {
-          payload[key] = values[key]?.map((el) => el.value || el);
+        } else if (key === "buy_products" || key === "customer_get_products") {
+          if (values[key]?.length) {
+            payload[key] = values[key]?.map((el) => el.value || el);
+            // payload[key] = convertProductsIntoPairs(values?.[key]);
+          }
         } else {
           payload[key] = values[key];
         }
@@ -219,7 +236,6 @@ const BuyXGetY = ({ location }) => {
     setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
     makeApiRequest({
       endPoint: DISCOUNT_ENDPOINT,
-      // method: METHODS.post,
       method: isEdit ? METHODS?.put : METHODS?.post,
       update_id: isEdit && editId,
       payload: payload,

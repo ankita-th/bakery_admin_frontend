@@ -458,3 +458,22 @@ export const showCombination = (combination) => {
   });
   return convertArrayToString(formattedCombinations);
 };
+
+//  for payload
+export const convertProductsIntoPairs = (products) => {
+  const result = [];
+  products?.forEach((el) => {
+    const item = { name: el?.label, id: el?.value };
+    result?.push(item);
+  });
+  return result;
+};
+// for useEffect
+export const convertPairFromProducts = (products) => {
+  const result = [];
+  products?.forEach((el) => {
+    const item = { label: el?.name, value: el?.id };
+    result?.push(item);
+  });
+  return result;
+};

@@ -233,6 +233,7 @@ const RawMaterials = () => {
           <FilterSection
             filterFields={filterFields}
             handleFilterChange={handleFilterChange}
+            filters={filters}
           >
             <CommonButton
               text="Add Raw Material"
@@ -240,7 +241,8 @@ const RawMaterials = () => {
               onClick={toggleRawMaterialSection}
             />
           </FilterSection>
-          <TableWrapper columns={RAW_MATERIAL_COLUMNS}
+          <TableWrapper
+            columns={RAW_MATERIAL_COLUMNS}
             onCheckboxChange={(e) => {
               selectAllItems(e, rawMaterials);
             }}
@@ -261,7 +263,6 @@ const RawMaterials = () => {
             ) : (
               <NoDataFound />
             )}
-          
           </TableWrapper>
 
           <Pagination

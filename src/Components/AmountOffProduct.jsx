@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import CommonTextField from "../Form Fields/CommonTextField";
 import {
+  convertPairFromProducts,
+  convertProductsIntoPairs,
   convertSelectOptionToValue,
   createRequiredValidation,
   extractOption,
@@ -115,6 +117,10 @@ const AmountOffProduct = ({ location }) => {
             "customer_specification",
             customerSpecificationExtractedOption
           );
+          if (res?.data?.product?.length) {
+            // const formattedProducts = convertPairFromProducts(res?.data?.product);
+            // setValue("product", formattedProducts);
+          }
           if (res?.data?.minimum_purchase_value) {
             setValue(
               "minimum_purchase_value",
@@ -136,11 +142,10 @@ const AmountOffProduct = ({ location }) => {
       // setValue("customer_specification", customerSpecificationExtractedOption);
     }
   }, []);
-  console.log(watch("minimum_purchase_value"),"minimum_purchase_value")
 
   const onSubmit = (values, event) => {
     const buttonType = event.nativeEvent.submitter.name;
-    // setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
+    setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
     const fields = [
       "code",
       "discount_value",
@@ -184,6 +189,7 @@ const AmountOffProduct = ({ location }) => {
         product: values?.products
           ?.map((item) => item?.value)
           .filter((value) => value !== undefined),
+        // product: convertProductsIntoPairs(values?.products),
       };
     }
     console.log(payload, "this is payload");
@@ -194,7 +200,10 @@ const AmountOffProduct = ({ location }) => {
       update_id: editId,
     })
       .then((res) => {
-        toastMessage(`Discount  ${isEdit ? "Updated" :"Created"} successfully`, successType);
+        toastMessage(
+          `Discount  ${isEdit ? "Updated" : "Created"} successfully`,
+          successType
+        );
         navigate("/discounts");
       })
       .catch((err) => {

@@ -12,7 +12,6 @@ const SingleProductTableRow = ({
   selectedProducts,
   handleSelectProduct,
 }) => {
-  console.log(selectedProducts, "selectedProducts");
   // updates required: price published status in date,date are not given and also category is in number
   const { id, name, product_detail, category, status } = data;
 
@@ -20,10 +19,10 @@ const SingleProductTableRow = ({
     <tr className=" border border-gray-400 ">
       <td className="text-center rounded-tl-[10px] rounded-bl-[10px] bg-white ">
         <Checkbox
-        // selection
+          // selection
           checked={selectedProducts?.includes(id)}
           onClick={() => {
-            handleSelectProduct(id)
+            handleSelectProduct(id);
           }}
         />
       </td>

@@ -106,6 +106,7 @@ const Products = () => {
     action: "",
     search: "",
   });
+  // const [pageLoader, setPageLoader] = useState(false);
 
   // const [selectedProducts, setSelectedProducts] = useState([]);
 
@@ -116,8 +117,6 @@ const Products = () => {
     };
     fetchProducts(apiFilters);
   }, [page, filters]);
-  // commented for future use
-  // }, [filters, page]);
   const fetchProducts = async (apiFilters) => {
     toggleLoader("pageLoader");
     getProducts(apiFilters)
@@ -126,10 +125,11 @@ const Products = () => {
         setTotalData(res?.data?.count);
       })
       .catch((err) => console.log(err))
-      .finally(() => toggleLoader("pageLoader"));
+      .finally(() => {
+        toggleLoader("pageLoader");
+      });
   };
   const handleFilterChange = (filterName, value) => {
-    console.log(filterName, "filterName");
     // logic for bulk actions
     if (filterName === "action") {
       const payload = {
@@ -138,6 +138,7 @@ const Products = () => {
       };
       if (selectedProducts?.length) {
         toggleLoader("pageLoader");
+        // setPageLoader((prev) => true);
         bulkActionProduct(payload)
           .then((res) => {
             fetchProducts({ page: 1 });
@@ -157,6 +158,7 @@ const Products = () => {
             toggleLoader("pageLoader");
             setPage(1);
             setSelectedProducts([]);
+            // setFilters({ ...filters, ["action"]: "" });
           });
       } else {
         toastMessage(
@@ -211,66 +213,66 @@ const Products = () => {
   //   });
   // };
 
-  console.log(selectedProducts, "selectedProducts");
+  console.log(filters, "filters");
   return (
     <>
-      {pageLoader ? (
+      {/* {pageLoader ? (
         <PageLoader />
       ) : (
-        <div>
-          <FilterSection
-            filterFields={filterFields}
-            handleFilterChange={handleFilterChange}
-          >
-            <CommonButton
-              text="Categories"
-              onClick={() => navigate("/categories")}
-              type="button"
-              className="grey_btn"
-            />
-            <CommonButton
-              text="Add New Product"
-              onClick={() => navigate("/add-edit-product")}
-              type="button"
-              className="orange_btn"
-            />
-          </FilterSection>
-          {/* product listing */}
-          <TableWrapper
-            columns={PRODUCT_PAGE_COLUMNS}
-            // selection
-            onCheckboxChange={(e) => {
-              selectAllItems(e, products);
-            }}
-            checked={products?.length === selectedProducts?.length}
-          >
-            {products?.length ? (
-              products?.map((dt, idx) => (
-                <SingleProductTableRow
-                  key={idx}
-                  data={dt}
-                  currentPage={page}
-                  index={idx}
-                  handleActions={handleActions}
-                  // selection
-                  selectedProducts={selectedProducts}
-                  handleSelectProduct={handleSelectProduct}
-                />
-              ))
-            ) : (
-              // updates required:Create a better no data found component
-              <NoDataFound />
-            )}
-          </TableWrapper>
-
-          <Pagination
-            onPageChange={onPageChange}
-            itemsPerPage={ITEMS_PER_PAGE}
-            totalData={totalData}
-            currentPage={page}
+      )} */}
+      {pageLoader && <PageLoader />}
+      <div>
+        <FilterSection
+          filterFields={filterFields}
+          handleFilterChange={handleFilterChange}
+          filters={filters}
+        >
+          <CommonButton
+            text="Categories"
+            onClick={() => navigate("/categories")}
+            type="button"
+            className="grey_btn"
           />
-        </div>
-      )}
+          <CommonButton
+            text="Add New Product"
+            onClick={() => navigate("/add-edit-product")}
+            type="button"
+            className="orange_btn"
+          />
+        </FilterSection>
+        {/* product listing */}
+        <TableWrapper
+          columns={PRODUCT_PAGE_COLUMNS}
+          onCheckboxChange={(e) => {
+            selectAllItems(e, products);
+          }}
+          checked={products?.length === selectedProducts?.length}
+        >
+          {products?.length ? (
+            products?.map((dt, idx) => (
+              <SingleProductTableRow
+                key={idx}
+                data={dt}
+                currentPage={page}
+                index={idx}
+                handleActions={handleActions}
+                selectedProducts={selectedProducts}
+                handleSelectProduct={handleSelectProduct}
+              />
+            ))
+          ) : (
+            // updates required:Create a better no data found component
+            <NoDataFound />
+          )}
+        </TableWrapper>
+
+        <Pagination
+          onPageChange={onPageChange}
+          itemsPerPage={ITEMS_PER_PAGE}
+          totalData={totalData}
+          currentPage={page}
+        />
+      </div>
       {showModal && (
         <DeleteConfirmationModal
           icon={trashIcon}

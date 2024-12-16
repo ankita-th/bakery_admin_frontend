@@ -6,6 +6,7 @@ const FilterSection = ({
   handleFilterChange,
   className = "filterInput",
   children,
+  filters,
 }) => {
   const [searchInput, setSearchInput] = useState("");
 
@@ -22,6 +23,7 @@ const FilterSection = ({
                     onChange={(e) =>
                       handleFilterChange(filterName, e.target.value)
                     }
+                    value={filters[filterName]}
                   >
                     <option value="" selected hidden disabled>
                       {defaultOption}

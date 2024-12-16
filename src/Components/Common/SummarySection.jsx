@@ -39,6 +39,7 @@ const SummarySection = ({ formConfig }) => {
     buy_products,
     customer_gets_amount,
     customer_gets_quantity,
+    products,
   } = watch();
   const SPECIFIC_CUSTOMER_TO_VALUE = {
     havent_purchased: "- For Customers who have not purchased",
@@ -79,10 +80,10 @@ const SummarySection = ({ formConfig }) => {
       return formattedStats;
     }
   };
-  const listProducts = () => {
-    console.log(buy_products, "buy_products");
-    if (buy_products?.length) {
-      const formattedProducts = buy_products
+  const listProducts = (products) => {
+    console.log(products, "inside list products");
+    if (products?.length) {
+      const formattedProducts = products
         ?.map((product) => product?.label)
         .join(", ");
 
@@ -117,7 +118,6 @@ const SummarySection = ({ formConfig }) => {
     }
     return false;
   };
-  console.log(items_from, "items_from");
   return (
     <div>
       {" "}
@@ -140,7 +140,12 @@ const SummarySection = ({ formConfig }) => {
             </div>
             {discount_value ? (
               <div className="text-nowrap text-[#969696]">
-                -Value : {discount_value}
+                -Value :{" "}
+                {discount_types?.value === "percentage"
+                  ? `${discount_value} % `
+                  : discount_types?.value === "amount"
+                  ? `$ ${discount_value}`
+                  : ""}
               </div>
             ) : (
               ""
@@ -161,7 +166,9 @@ const SummarySection = ({ formConfig }) => {
           {/* for applies to  */}
           {applies_to?.label && (
             <div className="text-nowrap text-[#969696]">
-              - Applies to {applies_to?.label}
+              -Applies to {applies_to?.label}{" "}
+              {applies_to?.value === "specific_products" &&
+                listProducts(products)}
             </div>
           )}
           {/* for applies to  */}
@@ -172,8 +179,8 @@ const SummarySection = ({ formConfig }) => {
           {/* combinations */}
           <div className="text-nowrap text-[#969696]">
             {combination?.length
-              ? `- Can Combine with ${showCombination(combination)}`
-              : "- Cant Combine with other"}
+              ? `-Can Combine with ${showCombination(combination)}`
+              : "-Can't Combine with others"}
           </div>
           {/* combinations */}
 
@@ -181,15 +188,15 @@ const SummarySection = ({ formConfig }) => {
           {shipping_scope && (
             <div className="text-nowrap text-[#969696]">
               {shipping_scope === "all_states"
-                ? "- Applies for all states"
+                ? "-Applies for all states"
                 : shipping_scope === "specific_states" && states?.length
-                ? `- Applies for ${listStates(states)}`
+                ? `-Applies for ${listStates(states)}`
                 : ""}
             </div>
           )}
           {exclude_shipping_rate && shipping_rate ? (
             <div className="text-nowrap text-[#969696]">
-              - Exclude shipping rates over ${shipping_rate}
+              -Exclude shipping rates over ${shipping_rate}
             </div>
           ) : (
             ""
@@ -204,20 +211,19 @@ const SummarySection = ({ formConfig }) => {
             <>
               {minimum_purchase_requirement === "no_requirement" && (
                 <div className="text-nowrap text-[#969696]">
-                  - This product has no minimum purchase or quantity
-                  requirements
+                  -This product has no minimum purchase or quantity requirements
                 </div>
               )}
               {minimum_purchase_requirement === "minimum_purchase" &&
                 minimum_purchase_value && (
                   <div className="text-nowrap text-[#969696]">
-                    {`- This product Requires a minimum purchase of $ ${minimum_purchase_value}`}
+                    {`-This product requires a minimum purchase of $ ${minimum_purchase_value}`}
                   </div>
                 )}
               {minimum_purchase_requirement === "minimum_items" &&
                 minimum_quantity_value && (
                   <div className="text-nowrap text-[#969696]">
-                    {`- This product Requires a minimum of ${minimum_quantity_value} items to be purchased`}
+                    {`-This product Requires a minimum of ${minimum_quantity_value} items to be purchased`}
                   </div>
                 )}
             </>
@@ -228,13 +234,11 @@ const SummarySection = ({ formConfig }) => {
           {shouldShowBuySection() && (
             <div className="text-nowrap text-[#969696] flex flex-col gap-2">
               {" "}
-              - If customer buys{" "}
-              {buy_products_quantity || buy_products_amount
-                ? `${buy_products_quantity} items`
-                : `$${buy_products_amount}`}{" "}
-              of{" "}
+              -If customer buys{" "}
+              {buy_products_quantity && `${buy_products_quantity} items`}
+              {buy_products_amount && ` $${buy_products_amount}`} of{"   "}
               {items_from?.value === "specific_product"
-                ? listProducts()
+                ? listProducts(buy_products)
                 : // : "Any product"}
                   ""}
             </div>
@@ -244,32 +248,31 @@ const SummarySection = ({ formConfig }) => {
           {shouldShowGetSection() && (
             <div className="text-nowrap text-[#969696] flex flex-col gap-2">
               {" "}
-              Customer gets{" "}
-              {customer_gets_quantity || customer_gets_amount
-                ? `${customer_gets_quantity} items`
-                : `$${customer_gets_amount}`}{" "}
-              of{" "}
+              -Customer gets{" "}
+              {customer_gets_quantity && `${customer_gets_quantity} items`}
+              {customer_gets_amount && ` $${customer_gets_amount}`} of{" "}
               {items_from === "specific_product"
-                ? listProducts()
+                ? listProducts(buy_products)
                 : "Any product"}
             </div>
           )}
           {/* customer buys and customer gets  */}
 
           {/* discounted value */}
-          {discount_types && (
+          {/* {discount_types?.label && (
             <div className="text-nowrap text-[#969696]">
               {" "}
-              - Discounted value : {DISCOUNT_TYPE_TO_TEXT[discount_types]}
+              - Discounted value :{" "}
+              {DISCOUNT_TYPE_TO_TEXT[discount_types?.value]}
             </div>
-          )}
+          )} */}
           {discount_value && (
             <div className="text-nowrap text-[#969696]">
-              - Discounted type : {discount_value}{" "}
+              -Discounted value :{" "}
               {discount_types === "percentage"
-                ? "%"
+                ? `${discount_value}%`
                 : discount_types === "amount_off_each"
-                ? "$"
+                ? `$ ${discount_value}`
                 : ""}
             </div>
           )}
@@ -280,10 +283,10 @@ const SummarySection = ({ formConfig }) => {
           <div className="mb-2">Performance</div>
           <div className="text-nowrap text-[#969696] flex flex-col gap-2">
             {/* - Discount is not active yet */}
-            {start_date && <div>- Start Date : {start_date}</div>}{" "}
-            {end_date && <div>- End Date : {end_date}</div>}
-            {start_time && <div>- Start Time : {formatTime(start_time)}</div>}
-            {end_time && <div>- End Time : {formatTime(end_time)}</div>}
+            {start_date && <div>-Start Date : {start_date}</div>}{" "}
+            {end_date && <div>-End Date : {end_date}</div>}
+            {start_time && <div>-Start Time : {formatTime(start_time)}</div>}
+            {end_time && <div>-End Time : {formatTime(end_time)}</div>}
           </div>
         </div>
       </div>
