@@ -23,6 +23,7 @@ const DiscountedValue = ({ formConfig }) => {
       watch("discount_types") === "percentage"
     );
   };
+  console.log(discount_types,'dtypes')
   return (
     <div className="bg-white p-6 rounded-lg">
       <RadioGroup

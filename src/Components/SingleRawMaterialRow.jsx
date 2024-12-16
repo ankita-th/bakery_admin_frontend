@@ -4,7 +4,8 @@ import { formatDate, renderSerialNumber } from "../utils/helpers";
 import { RAW_MATERIALS_ITEMS_PER_PAGE, YYYY_MM_DD } from "../constant";
 import Checkbox from "./Common/Checkbox";
 
-const SingleRawMaterialRow = ({ item, handleActions, onCheckboxChange ,checked}) => {
+const SingleRawMaterialRow = ({ item, handleActions, selectedMaterials,
+  handleSelectMaterials,}) => {
   // values in the figma name, id, quantity, reorder level, expiration date, last updated, notes:
   const {
     id,
@@ -20,7 +21,10 @@ const SingleRawMaterialRow = ({ item, handleActions, onCheckboxChange ,checked})
   return (
     <tr className=" border border-gray-400 ">
       <td className="text-center rounded-tl-[10px] rounded-bl-[10px] bg-white ">
-        <Checkbox onClick={onCheckboxChange} checked={checked} />
+        <Checkbox checked={selectedMaterials?.includes(id)}
+          onClick={() => {
+            handleSelectMaterials(id)
+          }} />
       </td>
       {/* <td className="py-2 px-4">
         {renderSerialNumber(currentPage, RAW_MATERIALS_ITEMS_PER_PAGE, index)}

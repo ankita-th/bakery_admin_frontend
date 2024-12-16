@@ -33,7 +33,6 @@ const AmountOffOrder = ({ location }) => {
   const { watch, setValue } = formConfig;
   const isEdit = location?.state?.isEdit;
   const editId = location?.state?.editId;
-
   useEffect(() => {
     // const dummy_data = {
     //   coupon_type: "amount_off_order",
@@ -101,7 +100,7 @@ const AmountOffOrder = ({ location }) => {
           navigate("/discounts");
         });
     }
-  }, []);
+  }, [location,isEdit]);
 
   const onSubmit = (values, event) => {
     const buttonType = event.nativeEvent.submitter.name;

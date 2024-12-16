@@ -115,6 +115,12 @@ const AmountOffProduct = ({ location }) => {
             "customer_specification",
             customerSpecificationExtractedOption
           );
+          if (res?.data?.minimum_purchase_value) {
+            setValue(
+              "minimum_purchase_value",
+              +res?.data?.minimum_purchase_value
+            );
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -130,6 +136,7 @@ const AmountOffProduct = ({ location }) => {
       // setValue("customer_specification", customerSpecificationExtractedOption);
     }
   }, []);
+  console.log(watch("minimum_purchase_value"),"minimum_purchase_value")
 
   const onSubmit = (values, event) => {
     const buttonType = event.nativeEvent.submitter.name;
@@ -187,7 +194,7 @@ const AmountOffProduct = ({ location }) => {
       update_id: editId,
     })
       .then((res) => {
-        toastMessage("Discount created successfully", successType);
+        toastMessage(`Discount  ${isEdit ? "Updated" :"Created"} successfully`, successType);
         navigate("/discounts");
       })
       .catch((err) => {

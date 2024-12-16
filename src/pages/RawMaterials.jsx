@@ -70,8 +70,8 @@ const RawMaterials = () => {
     toggleModal: toggleRawMaterialSection,
   } = useModalToggle();
   const {
-    selectedItems: selectedRawMaterials,
-    setSelectedItems: setSelectedRawMaterials,
+    selectedItems: selectedMaterials,
+    setSelectedItems: setSelectedMaterials,
     handleSelectItems: handleSelectMaterials,
     selectAllItems,
   } = useSelectedItems();
@@ -223,7 +223,7 @@ const RawMaterials = () => {
   const handleButtonLoaders = (type) => {
     setbtnLoaders({ ...btnLoaders, [type]: !btnLoaders[type] });
   };
-  console.log(selectedRawMaterials, "selectedRawMaterials");
+  console.log(selectedMaterials, "selectedMaterials");
   return (
     <>
       {pageLoader ? (
@@ -240,7 +240,12 @@ const RawMaterials = () => {
               onClick={toggleRawMaterialSection}
             />
           </FilterSection>
-          <TableWrapper columns={RAW_MATERIAL_COLUMNS}>
+          <TableWrapper columns={RAW_MATERIAL_COLUMNS}
+            onCheckboxChange={(e) => {
+              selectAllItems(e, rawMaterials);
+            }}
+            checked={rawMaterials?.length === selectedMaterials?.length}
+          >
             {rawMaterials?.length ? (
               rawMaterials?.map((it, idx) => (
                 <SingleRawMaterialRow
@@ -249,11 +254,14 @@ const RawMaterials = () => {
                   index={idx}
                   currentPage={page}
                   handleActions={handleActions}
+                  selectedMaterials={selectedMaterials}
+                  handleSelectMaterials={handleSelectMaterials}
                 />
               ))
             ) : (
               <NoDataFound />
             )}
+          
           </TableWrapper>
 
           <Pagination
