@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import FilterSection from "../Components/Common/FilterSection";
-import { deleteProduct, getProducts } from "../api/apiFunctions";
+import {
+  bulkActionProduct,
+  deleteProduct,
+  getProducts,
+} from "../api/apiFunctions";
 import usePagination from "../hooks/usePagination";
 import Pagination from "../Components/Common/Pagination";
 import {
@@ -23,6 +27,7 @@ import TableWrapper from "../Wrappers/TableWrapper";
 import { deleteItemBasedOnId } from "../utils/helpers";
 import SingleProductTableRow from "../Components/SingleProductTableRow";
 import { T } from "../utils/languageTranslator";
+import useSelectedItems from "../hooks/useSelectedItems";
 
 const OPTIONS = [
   { value: "Option1", label: "Option1" },
@@ -59,7 +64,7 @@ const filterFields = [
     type: "select",
     defaultOption: T["select_type"],
     options: TYPE_OPTIONS,
-    filterName: "type",
+    filterName: "status",
   },
   // {
   //   type: "select",
@@ -75,31 +80,44 @@ const filterFields = [
   },
   {
     type: "search",
-    filterName: "name",
+    filterName: "search",
     placeholder: T["search_product"],
   },
 ];
 const Products = () => {
   const navigate = useNavigate();
-  const { page, onPageChange } = usePagination();
+  const { page, onPageChange, setPage } = usePagination();
   const { showModal, toggleModal } = useModalToggle();
   const { pageLoader, buttonLoader, toggleLoader } = useLoader();
+  const {
+    selectedItems: selectedProducts,
+    setSelectedItems: setSelectedProducts,
+    handleSelectItems: handleSelectProduct,
+    selectAllItems,
+  } = useSelectedItems();
   const [products, setProducts] = useState([]);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [totalData, setTotalData] = useState();
   const [deleteLoader, setDeleteLoader] = useState(false);
   const [filters, setFilters] = useState({
-    type: "",
+    status: "",
     category: "",
     action: "",
-    name: "",
+    search: "",
   });
+
+  // const [selectedProducts, setSelectedProducts] = useState([]);
 
   useEffect(() => {
     const apiFilters = {
       ...filters,
       page: page,
     };
+    fetchProducts(apiFilters);
+  }, [page, filters]);
+  // commented for future use
+  // }, [filters, page]);
+  const fetchProducts = async (apiFilters) => {
     toggleLoader("pageLoader");
     getProducts(apiFilters)
       .then((res) => {
@@ -108,14 +126,47 @@ const Products = () => {
       })
       .catch((err) => console.log(err))
       .finally(() => toggleLoader("pageLoader"));
-  }, [page]);
-  // commented for future use
-  // }, [filters, page]);
-
+  };
   const handleFilterChange = (filterName, value) => {
-    const temp = { ...filters };
-    temp[filterName] = value;
-    setFilters(temp);
+    console.log(filterName, "filterName");
+    // logic for bulk actions
+    if (filterName === "action") {
+      const payload = {
+        products: selectedProducts,
+        status: value,
+      };
+      if (selectedProducts?.length) {
+        toggleLoader("pageLoader");
+        bulkActionProduct(payload)
+          .then((res) => {
+            fetchProducts({ page: 1 });
+            toastMessage(
+              res?.data?.message ||
+                `Products ${
+                  value === "Deleted" ? "deleted" : "Drafted"
+                } successfully`,
+              successType
+            );
+          })
+          .catch((err) => {
+            console.log(err, "this is err");
+            toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+          })
+          .finally(() => {
+            toggleLoader("pageLoader");
+            setPage(1);
+            setSelectedProducts([]);
+          });
+      } else {
+        toastMessage(
+          "Please select at least one product to perform any action"
+        );
+      }
+    } else {
+      const temp = { ...filters };
+      temp[filterName] = value;
+      setFilters(temp);
+    }
   };
   const handleCategoryClick = () => {
     navigate("/categories");
@@ -149,7 +200,17 @@ const Products = () => {
       setItemToDelete(id);
     }
   };
+  // const handleSelectProduct = (_,id) => {
+  //   // if the id is already in the array then remove it else add it
+  //   setSelectedProducts((prev) => {
+  //     if (prev.includes(id)) {
+  //       return prev.filter((el) => el !== id);
+  //     }
+  //     return [...prev, id];
+  //   });
+  // };
 
+  console.log(selectedProducts, "selectedProducts");
   return (
     <>
       {pageLoader ? (
@@ -174,7 +235,13 @@ const Products = () => {
             />
           </FilterSection>
           {/* product listing */}
-          <TableWrapper columns={PRODUCT_PAGE_COLUMNS}>
+          <TableWrapper
+            columns={PRODUCT_PAGE_COLUMNS}
+            onCheckboxChange={(e) => {
+              selectAllItems(e, products);
+            }}
+            checked={products?.length === selectedProducts?.length}
+          >
             {products?.length ? (
               products?.map((dt, idx) => (
                 <SingleProductTableRow
@@ -183,6 +250,8 @@ const Products = () => {
                   currentPage={page}
                   index={idx}
                   handleActions={handleActions}
+                  selectedProducts={selectedProducts}
+                  handleSelectProduct={handleSelectProduct}
                 />
               ))
             ) : (

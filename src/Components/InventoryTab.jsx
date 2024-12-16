@@ -148,7 +148,7 @@ const InventoryTab = ({ formConfig, disabled }) => {
             disabled={disabled}
           />
           <CommonDateField
-            label= {`${["sale_price_date_to"]} *`}
+            label= {`${T["sale_price_date_to"]} *`}
             fieldName="sale_price_dates_to"
             minDate={watch("sale_price_dates_from")}
             disabled={disabled}

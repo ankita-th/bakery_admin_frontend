@@ -739,7 +739,7 @@ export const ROLE_OPTIONS = [
   { value: "admin", label: "Admin" },
 ];
 export const TYPE_OPTIONS = [
-  { label: T["published"], value: "published" },
+  { label: T["published"], value: "publish" },
   { label: T["draft"], value: "draft" },
   { label: T["all"], value: "all" },
 ];

@@ -23,7 +23,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { extractOption, prefillFormValues } from "../utils/helpers";
 
-const AmountOffOrder = () => {
+const AmountOffOrder = ({ location }) => {
   const navigate = useNavigate();
   const [btnLoaders, setBtnLoaders] = useState({
     draft: false,
@@ -144,7 +144,7 @@ const AmountOffOrder = () => {
         }
       }
     });
-    console.log(payload,"amount off order payload")
+    console.log(payload, "amount off order payload");
     makeApiRequest({
       endPoint: DISCOUNT_ENDPOINT,
       method: isEdit ? METHODS?.put : METHODS.post,

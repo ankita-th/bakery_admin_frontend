@@ -5,6 +5,8 @@ const ListHeadings = ({
   columns,
   rowClassName = "bg-orange-50",
   columnClassName = "py-2 px-4 bg-[#FFEFE7]",
+  onCheckboxChange,
+  checked,
 }) => {
   return (
     <thead>
@@ -13,7 +15,7 @@ const ListHeadings = ({
           <Fragment>
             {hd === "checkbox" ? (
               <th className={columnClassName}>
-                <Checkbox />
+                <Checkbox onClick={onCheckboxChange} checked={checked} />
               </th>
             ) : (
               <th className={columnClassName}>{hd}</th>

@@ -41,7 +41,8 @@ export const getHeadingTitleFromRoute = (pathName) => {
 export const cleanFilters = (filters) => {
   return Object.keys(filters).reduce((acc, key) => {
     if (filters[key]) {
-      acc[key] = encodeURIComponent(filters[key]); // Encode the value
+      // acc[key] = encodeURIComponent(filters[key]); // Encode the value
+      acc[key] = filters[key];
     }
     return acc;
   }, {});

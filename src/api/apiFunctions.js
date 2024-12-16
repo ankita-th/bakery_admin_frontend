@@ -107,3 +107,13 @@ export const changePassword = (payload) => {
   console.log("change password payload: ", payload);
   return authAxios.post("/password/reset/", payload);
 };
+
+// bulk API actions
+export const bulkActionProduct = (payload) => {
+  const { status } = payload;
+  if (status === "delete") {
+    return authorizeAxios.delete("/bulk-product-update/", { data: payload });
+  } else if (status === "draft" || status === "duplicate") {
+    return authorizeAxios.patch("/bulk-product-update/", payload);
+  }
+};

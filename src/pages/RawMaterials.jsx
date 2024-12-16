@@ -27,6 +27,7 @@ import CommonButton from "../Components/Common/CommonButton";
 import PageLoader from "../loaders/PageLoader";
 import ViewRawMaterials from "../Components/ViewRawMaterials";
 import { T } from "../utils/languageTranslator";
+import useSelectedItems from "../hooks/useSelectedItems";
 const RAW_MATERIAL_COLUMNS = [
   "checkbox",
   T["id"],
@@ -68,6 +69,12 @@ const RawMaterials = () => {
     showModal: showRawMaterialSection,
     toggleModal: toggleRawMaterialSection,
   } = useModalToggle();
+  const {
+    selectedItems: selectedRawMaterials,
+    setSelectedItems: setSelectedRawMaterials,
+    handleSelectItems: handleSelectMaterials,
+    selectAllItems,
+  } = useSelectedItems();
 
   const { pageLoader, toggleLoader } = useLoader();
   const { page, onPageChange, setPage } = usePagination();
@@ -114,7 +121,7 @@ const RawMaterials = () => {
       .finally(() => {
         toggleLoader("pageLoader");
       });
-  }, [page]);
+  }, [page, filters]);
   // commented for future use
   // }, [filters, page]);
 
@@ -216,6 +223,7 @@ const RawMaterials = () => {
   const handleButtonLoaders = (type) => {
     setbtnLoaders({ ...btnLoaders, [type]: !btnLoaders[type] });
   };
+  console.log(selectedRawMaterials, "selectedRawMaterials");
   return (
     <>
       {pageLoader ? (
