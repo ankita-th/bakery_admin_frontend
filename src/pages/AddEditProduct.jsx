@@ -37,6 +37,7 @@ import { SPECIAL_CHARACTERS_REGEX } from "../regex/regex";
 import MultipleImageUploadField from "../Form Fields/MultipleImageUploadField";
 import useLoader from "../hooks/useLoader";
 import PageLoader from "../loaders/PageLoader";
+import { T } from "../utils/languageTranslator";
 const options = [
   { label: "option1", value: "options1" },
   { label: "option2", value: "options2" },
@@ -70,8 +71,8 @@ const DEFAULT_VARIANTS_DATA = [
 ];
 
 const PREVIEW_AS_OPTIONS = [
-  { value: "desktop", label: "Desktop Result" },
-  { value: "mobile", label: "Mobile Result" },
+  { value: "desktop", label: T["desktop_result"] },
+  { value: "mobile", label: T["mobile_result"]},
 ];
 const AddEditProduct = () => {
   const location = useLocation();
@@ -340,7 +341,7 @@ const AddEditProduct = () => {
                       <div className="flex-1">
                         <CommonTextField
                           fieldName="name"
-                          label="Product Name *"
+                          label={`${T["product_name"]} *`}
                           rules={{
                             ...createRequiredValidation("Product name"),
                             pattern: {
@@ -348,7 +349,7 @@ const AddEditProduct = () => {
                               message: "Special characters are not allowed",
                             },
                           }}
-                          placeholder="Product Name"
+                          placeholder={T["product_names"]}
                           formConfig={formConfig}
                           disabled={isViewOnly}
                           className="px-4 py-2 bg-white focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all mt-2"
@@ -366,8 +367,8 @@ const AddEditProduct = () => {
                           options={PRODUCT_TAG_OPTIONS}
                           isMulti={true}
                           formConfig={formConfig}
-                          label="Product Tags *"
-                          placeholder="Select Tags"
+                          label={T["product_tags"]}
+                          placeholder={T["select_tags"]}
                           className="mt-2 border-1 border-solid border-black-500 rounded"
                         />
                       </div>
@@ -377,9 +378,9 @@ const AddEditProduct = () => {
                     <CommonTextEditor
                       formConfig={formConfig}
                       disabled={isViewOnly}
-                      label="Description *"
+                      label={`${T["description"]} *`}
                       fieldName="description"
-                      placeholder="Type..."
+                      placeholder={`${T["type"]}...`}
                       // rules={} // for this required validation cannot be passed through rules because it has some different way to handle required validation
                       requiredMessage={"Description is required"} // if this prop is not passed required validation is not applied
                     />
@@ -402,12 +403,12 @@ const AddEditProduct = () => {
                         isMulti={true}
                         rules={createRequiredValidation()}
                         formConfig={formConfig}
-                        label="Focus Keyphrase"
-                        placeholder="Enter Keywords You Need To Focus"
+                        label={T["focus_keyphrase"]}
+                        placeholder={T["enter_focus"]}
                         className="mt-2 border-2 border-solid border-black-500 rounded"
                       />{" "}
                       <div className="flex gap-8 mt-4">
-                        <div>Preview as:</div>
+                        <div>{`${T["preview_as"]}:`}</div>
                         <RadioGroup
                           fieldName="preview_as"
                           disabled={isViewOnly}
@@ -426,19 +427,19 @@ const AddEditProduct = () => {
                         {/* update required: need to integrate this section */}
                         <div className="border p-4 space-y-2 rounded-lg mt-4 shadow-md">
                           <div className="text-black">
-                            {snippetInfo?.seo_title || "Title"}
+                            {snippetInfo?.seo_title || T["title"]}
                           </div>
                           <div className="text-[#FF6D2F]">
-                            {snippetInfo?.slug || "Slug"}
+                            {snippetInfo?.slug || T["slug"]}
                           </div>
                           <div className="text-[#666666]">
                             {snippetInfo?.meta_description ||
-                              "Meta Description"}
+                              T["meta_description"]}
                           </div>
                         </div>
                         {!isSnippetEdit && !isViewOnly && (
                           <CommonButton
-                            text="Edit Snippet"
+                            text={T["edit_snippet"]}
                             onClick={() => {
                               setIsSnippetEdit(true);
                             }}
@@ -452,7 +453,7 @@ const AddEditProduct = () => {
                       <CommonTextField
                         fieldName="seo_title"
                         disabled={isViewOnly || !isSnippetEdit}
-                        label="SEO Title *"
+                        label={`${T["seo_title"]} *`}
                         rules={{
                           ...createRequiredValidation("SEO title"),
                           pattern: {
@@ -460,16 +461,16 @@ const AddEditProduct = () => {
                             message: "Special characters are not allowed",
                           },
                         }}
-                        placeholder="Enter SEO Title"
+                        placeholder={T["enter_seo_title"]}
                         formConfig={formConfig}
                         className="px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all my-2"
                       />
                       <CommonTextField
                         fieldName="slug"
-                        label="Slug *"
+                        label={`${T["slug"]} *`}
                         disabled={isViewOnly || !isSnippetEdit}
                         rules={createRequiredValidation("Slug")}
-                        placeholder="Enter Page Slug"
+                        placeholder={T["enter_page_slug"]}
                         formConfig={formConfig}
                         className="px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all my-2"
                       />
@@ -477,16 +478,16 @@ const AddEditProduct = () => {
                       <CommonTextField
                         fieldName="meta_description"
                         disabled={isViewOnly || !isSnippetEdit}
-                        label="Meta Description"
+                        label={T["meta_description"]}
                         // rules={createRequiredValidation("Meta Description")}
-                        placeholder="Enter Meta Description"
+                        placeholder={T["enter_meta_description"]}
                         formConfig={formConfig}
                         type="textarea"
                         rows={4}
                         maxlength={250}
                         className="px-4 py-3 bg-gray-100 focus:bg-transparent w-full text-sm outline-[#333] rounded-lg transition-all my-2"
                       />
-                      <div className="max-limit">Max.250 characters</div>
+                      <div className="max-limit">{T["max_characters"]}</div>
                       {isSnippetEdit && !isViewOnly && (
                         <CommonButton
                           text="Update Snippet"
@@ -509,7 +510,7 @@ const AddEditProduct = () => {
                 <div className="flex flex-col">
                   <div className="button-section flex justify-center">
                     <CommonButton
-                      text="Publish"
+                      text={T["publish"]}
                       name="publish"
                       type="submit"
                       className="orange_btn"
@@ -520,7 +521,7 @@ const AddEditProduct = () => {
                       icon={publishIcon}
                     />
                     <CommonButton
-                      text="Draft"
+                      text={T["draft"]}
                       name="draft"
                       type="submit"
                       className="orange_btn"
@@ -545,7 +546,7 @@ const AddEditProduct = () => {
                 <ImageUploadSection
                   file={featuredImage}
                   setFile={setFeaturedImage}
-                  label="Featured Image"
+                  label={T["featured_image"]}
                   uniqueId={`featured-image`}
                   accept={PNG_AND_JPG}
                   disabled={isViewOnly}
@@ -553,14 +554,14 @@ const AddEditProduct = () => {
                 <MultipleImageUploadField
                   files={productImages}
                   setFiles={setProductImages}
-                  label="Product Images"
+                  label= {T["product_images"]}    
                   allowedTypes={allowedImageTypes}
                   imageError={productImageError}
                   setImageError={setProductImageError}
                   uniqueId={`product-image`}
                   accept={PNG_AND_JPG}
                   uploadButton={{
-                    text: "Upload Product Image",
+                    text:T["upload_product_image"],
                     class: "image-upload-icon cursor-pointer",
                   }}
                   disabled={isViewOnly}

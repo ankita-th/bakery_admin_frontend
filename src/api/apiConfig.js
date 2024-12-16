@@ -19,7 +19,7 @@ const createAuthorizedInstance = (type) => {
 
   APIAxios.interceptors.request.use((config) => {
     const token = localStorage.getItem("token")
-      ? `Bearer ${localStorage.getItem("token")}`
+      ? `Bearer ${localStorage.getItem("token")}` 
       : "Token";
     config.headers["content-type"] =
       type === MULTIPART ? "multipart/form-data" : "application/json";
@@ -62,7 +62,6 @@ const createAuthorizedInstance = (type) => {
       return Promise.reject(error);
     }
   );
-
   return APIAxios;
 };
 

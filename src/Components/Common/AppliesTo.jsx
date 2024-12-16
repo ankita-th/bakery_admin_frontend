@@ -30,9 +30,7 @@ const AppliesTo = ({ formConfig }) => {
         resolve([]);
         return;
       }
-
       clearTimeout(timer);
-
       timer = setTimeout(() => {
         setIsLoading(true);
         makeApiRequest({

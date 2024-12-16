@@ -7,7 +7,7 @@ const PrivateLayout = () => {
   const isToken = localStorage.getItem("token");
   return (
     <div>
-      {" "}
+      {""}
       {isToken && <Sidebar />}
       {isToken && <Header />}
       <div className="outlet">
