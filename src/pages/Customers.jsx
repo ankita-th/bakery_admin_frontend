@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import FilterSection from "../Components/Common/FilterSection";
 import {
-  DEFAULT_ERROR_MESSAGE,
   DUMMY_CUSTOMER_DATA,
   ITEMS_PER_PAGE,
   SORT_BY_OPTIONS,
@@ -80,7 +79,7 @@ const Customers = () => {
       });
   }, [page, filters]);
 
-  const handleFilterChange = (filterName, value) => {
+  const handleFilterChange = (filterName, value) => { 
     const temp = { ...filters };
     temp[filterName] = value;
     setFilters(temp);
@@ -101,8 +100,8 @@ const Customers = () => {
     // makeApiRequest({
     //   endPoint: CUSTOMER_ENDPOINT,
     //   method: METHODS.delete,
-    //   delete_id: itemToDelete,
-    // })
+      //   delete_id: itemToDelete,
+      // })
     //   .then((res) => {
     //     // update required:Add a proper message here
     //     toastMessage("Deleted Successfully", successType);
@@ -165,7 +164,7 @@ const Customers = () => {
               onCancel={() => {
                 setItemToDelete(null);
                 toggleDeleteModal();
-                toggleLoader();
+                toggleLoader(); 
               }}
               onDelete={deleteCustomer}
               loader={deleteLoader}

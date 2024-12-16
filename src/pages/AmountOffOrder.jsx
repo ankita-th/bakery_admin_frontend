@@ -147,7 +147,7 @@ const AmountOffOrder = () => {
     console.log(payload,"amount off order payload")
     makeApiRequest({
       endPoint: DISCOUNT_ENDPOINT,
-      method: isEdit ? METHODS?.patch : METHODS.post,
+      method: isEdit ? METHODS?.put : METHODS.post,
       payload: payload,
       update_id: editId && editId,
     })

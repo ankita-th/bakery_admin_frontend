@@ -182,7 +182,7 @@ const AmountOffProduct = ({ location }) => {
     console.log(payload, "this is payload");
     makeApiRequest({
       endPoint: DISCOUNT_ENDPOINT,
-      method: isEdit ? METHODS?.patch : METHODS.post,
+      method: isEdit ? METHODS?.put : METHODS.post,
       payload: payload,
       update_id: editId,
     })
@@ -217,7 +217,6 @@ const AmountOffProduct = ({ location }) => {
             <DiscountTypeAndValue formConfig={formConfig} />
             <AppliesTo formConfig={formConfig} />
           </div>
-
           <MinimumPurchaseRequirement formConfig={formConfig} />
           <CustomerEligibility formConfig={formConfig} />
           <DiscountUses formConfig={formConfig} />
