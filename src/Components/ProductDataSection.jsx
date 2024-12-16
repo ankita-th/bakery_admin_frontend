@@ -3,6 +3,7 @@ import TabListing from "./TabListing";
 import InventoryTab from "./InventoryTab";
 import AdvancedTab from "./AdvancedTab";
 import VariantsTab from "./VariantsTab";
+import { T } from "../utils/languageTranslator";
 
 const TABS = [
   { label: "Inventory", value: "inventory" },
@@ -30,7 +31,7 @@ const ProductDataSection = ({
     <div className="product-data-section border">
       <div className="w-full mx-auto p-4 bg-white rounded-lg">
         <h2 className="text-lg font-semibold text-gray-700 mb-4">
-          Product Data
+          {T["product_data"]}
         </h2>
 
         <div className="flex space-x-4">

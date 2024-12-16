@@ -30,7 +30,6 @@ const BuyXGetY = ({ location }) => {
     saveDiscount: false,
   });
   const navigate = useNavigate();
-
   //   const dummy = {
   //     "code": "WPE5A",
   //     "customer_buy_types": "minimum_purchase_amount",
@@ -117,7 +116,7 @@ const BuyXGetY = ({ location }) => {
             "customer_specification",
             "discount_types",
             "discount_value",
-            "end_date",
+            "end_date", 
             "end_time",
             "items_from",
             "maximum_discount_usage",
