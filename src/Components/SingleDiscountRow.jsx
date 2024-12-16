@@ -8,7 +8,7 @@ const SingleDiscountRow = ({ item, handleActions, index, currentPage }) => {
   // update required : keys for title, method and status are required
   const { id, combination, coupon_type, code } = item;
   const COUPON_TYPE = {
-    buy_x_get_y: "buy_x_get_y",
+    buy_x_get_y: "Buy X Get Y",
     amount_off_order: "Amount Off Order",
     free_shipping: "Free Shipping",
     amount_off_product: "Amount off Discount",

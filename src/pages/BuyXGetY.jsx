@@ -114,12 +114,12 @@ const BuyXGetY = ({ location }) => {
             "customer_buy_types",
             "customer_eligibility",
             "customer_gets_amount",
+            "customer_gets_quantity",
             "customer_specification",
             "discount_types",
             "discount_value",
             "end_date",
             "end_time",
-            "items_from",
             "maximum_discount_usage",
             "maximum_usage_value",
             "start_date",
@@ -140,6 +140,7 @@ const BuyXGetY = ({ location }) => {
             res?.data?.items_from,
             "value"
           );
+          console.log(itemsFromExtractedOption, "itemsFromExtractedOption");
           setValue("items_from", itemsFromExtractedOption);
         })
         .catch((err) => {
@@ -161,32 +162,80 @@ const BuyXGetY = ({ location }) => {
 
   const onSubmit = (values, event) => {
     const buttonType = event.nativeEvent.submitter.name;
-    const payload = {
-      ...values,
+    const payloadKeys = [
+      "code",
+      "combination",
+      "start_date",
+      "end_date",
+      "start_time",
+      "end_time",
+      "customer_eligibility",
+      "customer_specification",
+      "maximum_discount_usage",
+      "maximum_usage_value",
+      // customer buys
+      "customer_buy_types",
+      "items_from",
+      "buy_products_quantity",
+      "buy_products_amount",
+      "buy_products",
+      // customer gets
+      "customer_gets_quantity",
+      "customer_gets_amount",
+      "customer_get_products",
+      // discounted value
+      "discount_types",
+      "discount_value",
+    ];
+    let payload = {};
+    console.log(values?.buy_products, "buy_products");
+    payloadKeys.forEach((key) => {
+      if (values?.[key]) {
+        if (
+          key === "maximum_usage_value" ||
+          key === "buy_products_quantity" ||
+          key === "discount_value" ||
+          key === "buy_products_amount" ||
+          key === "customer_gets_amount " ||
+          key === "customer_gets_quantity"
+        ) {
+          payload[key] = +values[key];
+        } else if (key === "items_from" || key === "customer_specification") {
+          payload[key] = values[key]?.value;
+        } else if (
+          (key === "buy_products" || key === "customer_get_products") &&
+          values[key]?.length
+        ) {
+          payload[key] = values[key]?.map((el) => el.value || el);
+        } else {
+          payload[key] = values[key];
+        }
+      }
+    });
+    payload = {
+      ...payload,
       coupon_type: "buy_x_get_y",
-      // customer_specification: values?.customer_specification?.value,
-      // minimum_purchase_value: +values?.minimum_purchase_value,
     };
     console.log(payload, "buy_x_get_y payload");
-    // setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
-    // makeApiRequest({
-    //   endPoint: DISCOUNT_ENDPOINT,
-    //   // method: METHODS.post,
-    //   method: isEdit ? METHODS?.patch : METHODS?.post,
-    //   update_id: isEdit && values?.id,
-    //   payload: payload,
-    // })
-    //   .then((res) => {
-    //     toastMessage("Discount created successfully", successType);
-    //     navigate("/discounts");
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     toastMessage(err?.response?.data?.name?.[0] || DEFAULT_ERROR_MESSAGE);
-    //   })
-    //   .finally(() => {
-    //     setBtnLoaders({ ...btnLoaders, [buttonType]: false });
-    //   });
+    setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
+    makeApiRequest({
+      endPoint: DISCOUNT_ENDPOINT,
+      // method: METHODS.post,
+      method: isEdit ? METHODS?.put : METHODS?.post,
+      update_id: isEdit && editId,
+      payload: payload,
+    })
+      .then((res) => {
+        toastMessage("Discount created successfully", successType);
+        navigate("/discounts");
+      })
+      .catch((err) => {
+        console.log(err);
+        toastMessage(err?.response?.data?.name?.[0] || DEFAULT_ERROR_MESSAGE);
+      })
+      .finally(() => {
+        setBtnLoaders({ ...btnLoaders, [buttonType]: false });
+      });
   };
   return (
     <div>

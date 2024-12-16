@@ -1,31 +1,45 @@
 import React from "react";
-import { copyToClipboardIcon, dateIcon } from "../../assets/Icons/Svg";
+import {
+  checkedIcon,
+  copyToClipboardIcon,
+  dateIcon,
+} from "../../assets/Icons/Svg";
 import useCopyToClipboard from "../../hooks/useCopyToClipboard";
-import { convertArrayToString, formatTime, showCombination } from "../../utils/helpers";
-
+import { formatTime, showCombination } from "../../utils/helpers";
+import { DISCOUNTED_VALUE_OPTIONS } from "../../constant";
 
 const SummarySection = ({ formConfig }) => {
-  const { handleCopyToClipboard, isCopied } = useCopyToClipboard();
+  const { handleCopy, isCopied } = useCopyToClipboard();
   const { watch } = formConfig;
   const {
     code,
     discount_types,
     discount_value,
+    shipping_scope,
     combination,
     customer_specification,
     maximum_discount_usage,
     maximum_usage_value,
     start_date,
+    states,
     end_date,
     minimum_quantity_value,
     end_time,
     start_time,
     customer_eligibility,
+    applies_to,
     minimum_purchase_requirement,
     minimum_purchase_value,
+    shipping_rate,
+    exclude_shipping_rate,
+    customer_buy_types,
+    items_from,
+    buy_products_quantity,
+    buy_products_amount,
+    buy_products,
+    customer_gets_amount,
+    customer_gets_quantity,
   } = watch();
-  console.log(end_date, "enddate");
-  console.log(start_date, "startdate");
   const SPECIFIC_CUSTOMER_TO_VALUE = {
     havent_purchased: "- For Customers who have not purchased",
     recent_purchased: "- For Customers who have purchased recently",
@@ -33,8 +47,12 @@ const SummarySection = ({ formConfig }) => {
     purchased_more_than_once:
       "- For Customers who have purchased more than once",
   };
+  const DISCOUNT_TYPE_TO_TEXT = {
+    percentage: "Percentage",
+    amount_off_each: "Amount off each",
+    free: "Free",
+  };
 
-  
   const showCustomerEligibility = () => {
     if (customer_eligibility === "all_customer") {
       return "- For All customers";
@@ -45,7 +63,6 @@ const SummarySection = ({ formConfig }) => {
       return SPECIFIC_CUSTOMER_TO_VALUE[customer_specification?.value];
     }
   };
-  console.log(customer_eligibility, "customer_eligibility");
   const showDiscountUsage = () => {
     if (maximum_discount_usage === "per_customer") {
       return "-Limited to one use per user";
@@ -53,11 +70,54 @@ const SummarySection = ({ formConfig }) => {
       maximum_discount_usage === "limit_discount_usage_time" &&
       maximum_usage_value
     ) {
-      return `-This discount can be used a maximum of ${maximum_usage_value} times in total`;
+      return `-Can be used a maximum of ${maximum_usage_value} times in total`;
     }
   };
-  console.log(maximum_discount_usage, "maximum_discount_usage");
+  const listStates = (states) => {
+    if (states?.length) {
+      const formattedStats = states?.map((state) => state?.label).join(", ");
+      return formattedStats;
+    }
+  };
+  const listProducts = () => {
+    console.log(buy_products, "buy_products");
+    if (buy_products?.length) {
+      const formattedProducts = buy_products
+        ?.map((product) => product?.label)
+        .join(", ");
 
+      return formattedProducts;
+    }
+  };
+  const shouldShowBuySection = () => {
+    if (
+      customer_buy_types &&
+      (buy_products_quantity || buy_products_amount) &&
+      (items_from?.value === "specific_product"
+        ? buy_products?.length
+        : items_from?.value === "all_product"
+        ? true
+        : false)
+    ) {
+      return true;
+    }
+    return false;
+  };
+  const shouldShowGetSection = () => {
+    if (
+      customer_buy_types &&
+      (customer_gets_quantity || customer_gets_amount) &&
+      (items_from?.value === "specific_product"
+        ? buy_products?.length
+        : items_from?.value === "all_product"
+        ? true
+        : false)
+    ) {
+      return true;
+    }
+    return false;
+  };
+  console.log(items_from, "items_from");
   return (
     <div>
       {" "}
@@ -67,8 +127,8 @@ const SummarySection = ({ formConfig }) => {
           <div className="mb-6 font-semibold flex items-center space-x-4">
             <div className="text">Discount Code : </div>
             <div className="text">{code}</div>
-            <div className="icon" onClick={() => handleCopyToClipboard(code)}>
-              {isCopied ? <CheckedIcon /> : copyToClipboardIcon}
+            <div className="icon" onClick={() => handleCopy(code)}>
+              {isCopied ? checkedIcon : copyToClipboardIcon}
             </div>
           </div>
         )}
@@ -91,27 +151,59 @@ const SummarySection = ({ formConfig }) => {
         )}
         <div className="mb-4">
           <div className="mb-2">Details</div>
+          {/* customer eligibility */}
           {customer_eligibility && (
             <div className="text-nowrap text-[#969696]">
               {showCustomerEligibility()}
             </div>
           )}
-          <div className="text-nowrap text-[#969696]">- For Online Store</div>
+          {/* customer eligibility */}
+          {/* for applies to  */}
+          {applies_to?.label && (
+            <div className="text-nowrap text-[#969696]">
+              - Applies to {applies_to?.label}
+            </div>
+          )}
+          {/* for applies to  */}
+
           <div className="text-nowrap text-[#969696]">
             {showDiscountUsage()}
           </div>
+          {/* combinations */}
           <div className="text-nowrap text-[#969696]">
             {combination?.length
               ? `- Can Combine with ${showCombination(combination)}`
               : "- Cant Combine with other"}
           </div>
-          <div className="text-nowrap text-[#969696]">- Discounts</div>
+          {/* combinations */}
 
-          <div className="text-nowrap text-[#969696]">- Active today</div>
+          {/* shiping scope */}
+          {shipping_scope && (
+            <div className="text-nowrap text-[#969696]">
+              {shipping_scope === "all_states"
+                ? "- Applies for all states"
+                : shipping_scope === "specific_states" && states?.length
+                ? `- Applies for ${listStates(states)}`
+                : ""}
+            </div>
+          )}
+          {exclude_shipping_rate && shipping_rate ? (
+            <div className="text-nowrap text-[#969696]">
+              - Exclude shipping rates over ${shipping_rate}
+            </div>
+          ) : (
+            ""
+          )}
+          {/* shiping scope */}
+
+          {/* <div className="text-nowrap text-[#969696]">- Discounts</div> */}
+
+          {/* <div className="text-nowrap text-[#969696]">- Active today</div> */}
+          {/* minimum purchase requirement */}
           {minimum_purchase_requirement && (
             <>
               {minimum_purchase_requirement === "no_requirement" && (
-                <div>
+                <div className="text-nowrap text-[#969696]">
                   - This product has no minimum purchase or quantity
                   requirements
                 </div>
@@ -130,6 +222,58 @@ const SummarySection = ({ formConfig }) => {
                 )}
             </>
           )}
+          {/* minimum purchase requirement */}
+
+          {/* customer buys and customer gets  */}
+          {shouldShowBuySection() && (
+            <div className="text-nowrap text-[#969696] flex flex-col gap-2">
+              {" "}
+              - If customer buys{" "}
+              {buy_products_quantity || buy_products_amount
+                ? `${buy_products_quantity} items`
+                : `$${buy_products_amount}`}{" "}
+              of{" "}
+              {items_from?.value === "specific_product"
+                ? listProducts()
+                : // : "Any product"}
+                  ""}
+            </div>
+          )}
+          {/* customer buys and customer gets  */}
+
+          {shouldShowGetSection() && (
+            <div className="text-nowrap text-[#969696] flex flex-col gap-2">
+              {" "}
+              Customer gets{" "}
+              {customer_gets_quantity || customer_gets_amount
+                ? `${customer_gets_quantity} items`
+                : `$${customer_gets_amount}`}{" "}
+              of{" "}
+              {items_from === "specific_product"
+                ? listProducts()
+                : "Any product"}
+            </div>
+          )}
+          {/* customer buys and customer gets  */}
+
+          {/* discounted value */}
+          {discount_types && (
+            <div className="text-nowrap text-[#969696]">
+              {" "}
+              - Discounted value : {DISCOUNT_TYPE_TO_TEXT[discount_types]}
+            </div>
+          )}
+          {discount_value && (
+            <div className="text-nowrap text-[#969696]">
+              - Discounted type : {discount_value}{" "}
+              {discount_types === "percentage"
+                ? "%"
+                : discount_types === "amount_off_each"
+                ? "$"
+                : ""}
+            </div>
+          )}
+          {/* discounted value */}
         </div>
 
         <div className="mb-4">

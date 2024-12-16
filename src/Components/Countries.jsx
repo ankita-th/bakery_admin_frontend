@@ -74,7 +74,7 @@ const Countries = ({ formConfig }) => {
         <div className="text-black">Shipping Rates</div>
         <Checkbox
           formConfig={formConfig}
-          fieldName={"exclude_shipping_rate"}
+          fieldName={"  "}
           label={"Exclude shipping rates over a certain amount"}
         />
         {watch("exclude_shipping_rate") === true && (
