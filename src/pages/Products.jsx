@@ -89,6 +89,7 @@ const Products = () => {
   const { page, onPageChange, setPage } = usePagination();
   const { showModal, toggleModal } = useModalToggle();
   const { pageLoader, buttonLoader, toggleLoader } = useLoader();
+  // selection
   const {
     selectedItems: selectedProducts,
     setSelectedItems: setSelectedProducts,
@@ -237,6 +238,7 @@ const Products = () => {
           {/* product listing */}
           <TableWrapper
             columns={PRODUCT_PAGE_COLUMNS}
+            // selection
             onCheckboxChange={(e) => {
               selectAllItems(e, products);
             }}
@@ -250,6 +252,7 @@ const Products = () => {
                   currentPage={page}
                   index={idx}
                   handleActions={handleActions}
+                  // selection
                   selectedProducts={selectedProducts}
                   handleSelectProduct={handleSelectProduct}
                 />

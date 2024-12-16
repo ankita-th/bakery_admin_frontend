@@ -13,13 +13,31 @@ const SingleDiscountRow = ({ item, handleActions, index, currentPage }) => {
     free_shipping: "Free Shipping",
     amount_off_product: "Amount off Discount",
   };
+  console.log(item, "item");
+  const returnTitleBasedOnType = (type) => {
+    if (type === "buy_x_get_y") {
+      return `Buy ${item?.buy_products_quantity} items | get ${
+        item.customer_gets_quantity
+      } items at ${item.discount_value} ${item.discount_value  ? "%" : "$"} off`;
+    }
+  };
   return (
     <tr className="text-center">
       <td className="py-2 px-4 border">
         <Checkbox />
       </td>
 
-      <td className="py-2 px-4 border">{code}</td>
+      <td className="py-2 px-4 border">
+        <div
+          className="flex-col
+           flex items-center "
+        >
+          <div className="heading">{code}</div>
+          <div className="description">
+            {returnTitleBasedOnType(item?.coupon_type)}
+          </div>
+        </div>
+      </td>
       <td className="py-2 px-4 border">Code</td>
       <td className="py-2 px-4 border"> {COUPON_TYPE?.[coupon_type]}</td>
       {/* update required:this field could be an array so populate accordingly */}

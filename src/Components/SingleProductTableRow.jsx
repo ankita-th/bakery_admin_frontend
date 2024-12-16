@@ -20,6 +20,7 @@ const SingleProductTableRow = ({
     <tr className=" border border-gray-400 ">
       <td className="text-center rounded-tl-[10px] rounded-bl-[10px] bg-white ">
         <Checkbox
+        // selection
           checked={selectedProducts?.includes(id)}
           onClick={() => {
             handleSelectProduct(id)

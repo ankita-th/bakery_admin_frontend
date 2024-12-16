@@ -34,7 +34,7 @@ const FreeShipping = ({ location }) => {
   const isEdit = location?.state?.isEdit;
 
   const editId = location?.state?.editId;
-
+console.log(isEdit,"isedit off freeshiping")
   useEffect(() => {
     const dummyData = {
       code: "DIUSU",

@@ -7,7 +7,6 @@ import { useLocation } from "react-router-dom";
 
 const MinimumPurchaseRequirement = ({ formConfig }) => {
   const location = useLocation();
-  console.log(location, "this is location");
   const { watch, setValue, clearErrors } = formConfig;
   const {
     minimum_purchase_requirement,
