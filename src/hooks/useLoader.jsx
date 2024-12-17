@@ -20,7 +20,7 @@ const useLoader = () => {
       setPageLoader((prev) => !prev);
     }
   };
-  return { pageLoader, toggleLoader, buttonLoader, deleteLoader };
+  return { pageLoader, toggleLoader, buttonLoader, deleteLoader, setPageLoader };
 };
 
 export default useLoader;

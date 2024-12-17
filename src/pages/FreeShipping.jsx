@@ -21,11 +21,15 @@ import {
 import { useNavigate } from "react-router-dom";
 import { extractOption, prefillFormValues } from "../utils/helpers";
 import Countries from "../Components/Countries";
+import useLoader from "../hooks/useLoader";
+import PageLoader from "../loaders/PageLoader";
 
 const FreeShipping = ({ location }) => {
   const navigate = useNavigate();
   const formConfig = useForm();
   const { setValue, watch } = formConfig;
+  const { pageLoader, toggleLoader } = useLoader();
+
   const [btnLoaders, setBtnLoaders] = useState({
     draft: false,
     saveDiscount: false,
@@ -34,29 +38,29 @@ const FreeShipping = ({ location }) => {
   const isEdit = location?.state?.isEdit;
 
   const editId = location?.state?.editId;
-  console.log(isEdit, "isedit off freeshiping");
   useEffect(() => {
-    const dummyData = {
-      code: "DIUSU",
-      combination: ["product_discounts", "order_discounts"],
-      exclude_shipping_rate: true,
-      start_date: "2024-12-14",
-      end_date: "2024-12-14",
-      start_time: "03:33",
-      end_time: "03:33",
-      customer_eligibility: "specific_customer",
-      minimum_quantity_value: 123,
-      minimum_purchase_requirement: "minimum_purchase",
-      shipping_rate: 12,
-      customer_specification: "recent_purchased",
-      shipping_scope: "specific_states",
-      states: ["Stockholm", "Västernorrland"],
-      maximum_usage_value: 213,
-      maximum_discount_usage: "limit_discount_usage_time",
-      coupon_type: "free_shipping",
-    };
+    // const dummyData = {
+    //   code: "DIUSU",
+    //   combination: ["product_discounts", "order_discounts"],
+    //   exclude_shipping_rate: true,
+    //   start_date: "2024-12-14",
+    //   end_date: "2024-12-14",
+    //   start_time: "03:33",
+    //   end_time: "03:33",
+    //   customer_eligibility: "specific_customer",
+    //   minimum_quantity_value: 123,
+    //   minimum_purchase_requirement: "minimum_purchase",
+    //   shipping_rate: 12,
+    //   customer_specification: "recent_purchased",
+    //   shipping_scope: "specific_states",
+    //   states: ["Stockholm", "Västernorrland"],
+    //   maximum_usage_value: 213,
+    //   maximum_discount_usage: "limit_discount_usage_time",
+    //   coupon_type: "free_shipping",
+    // };
 
     if (isEdit) {
+      toggleLoader("pageLoader");
       makeApiRequest({
         endPoint: `${DISCOUNT_ENDPOINT}${editId}`,
         method: METHODS.get,
@@ -96,6 +100,9 @@ const FreeShipping = ({ location }) => {
           console.log(err);
           toastMessage(err?.response?.data?.name?.[0] || INVALID_ID);
           navigate("/discounts");
+        })
+        .finally(() => {
+          toggleLoader("pageLoader");
         });
     }
   }, []);
@@ -141,7 +148,6 @@ const FreeShipping = ({ location }) => {
       }
     });
     payload = { ...payload, coupon_type: "free_shipping" };
-    console.log(payload, "paylod");
     setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
     makeApiRequest({
       endPoint: DISCOUNT_ENDPOINT,
@@ -163,28 +169,32 @@ const FreeShipping = ({ location }) => {
   };
   return (
     <div>
-      <FormWrapper
-        formConfig={formConfig}
-        onSubmit={onSubmit}
-        isCustomButtons={true}
-      >
-        <div className="flex gap-6">
-          <div className="flex flex-col gap-8 w-3/4">
-            <DiscountCodeSection formConfig={formConfig} />
-            {/* add countries section here */}
-            <Countries formConfig={formConfig} />
-            <MinimumPurchaseRequirement formConfig={formConfig} />
-            <CustomerEligibility formConfig={formConfig} />
-            <DiscountUses formConfig={formConfig} />
-            <Combinations formConfig={formConfig} isShipping={true} />
-            <ActiveDates formConfig={formConfig} />
+      {pageLoader ? (
+        <PageLoader />
+      ) : (
+        <FormWrapper
+          formConfig={formConfig}
+          onSubmit={onSubmit}
+          isCustomButtons={true}
+        >
+          <div className="flex gap-6">
+            <div className="flex flex-col gap-8 w-3/4">
+              <DiscountCodeSection formConfig={formConfig} />
+              {/* add countries section here */}
+              <Countries formConfig={formConfig} />
+              <MinimumPurchaseRequirement formConfig={formConfig} />
+              <CustomerEligibility formConfig={formConfig} />
+              <DiscountUses formConfig={formConfig} />
+              <Combinations formConfig={formConfig} isShipping={true} />
+              <ActiveDates formConfig={formConfig} />
+            </div>
+            {/* sidebar */}
+            <DiscountSideSection btnLoaders={btnLoaders}>
+              <SummarySection formConfig={formConfig} />
+            </DiscountSideSection>
           </div>
-          {/* sidebar */}
-          <DiscountSideSection btnLoaders={btnLoaders}>
-            <SummarySection formConfig={formConfig} />
-          </DiscountSideSection>
-        </div>
-      </FormWrapper>
+        </FormWrapper>
+      )}
     </div>
   );
 };

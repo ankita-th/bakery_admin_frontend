@@ -28,12 +28,16 @@ import {
   extractOption,
   prefillFormValues,
 } from "../utils/helpers";
+import useLoader from "../hooks/useLoader";
+import PageLoader from "../loaders/PageLoader";
 
 const BuyXGetY = ({ location }) => {
   const [btnLoaders, setBtnLoaders] = useState({
     draft: false,
     saveDiscount: false,
   });
+  const { pageLoader, toggleLoader } = useLoader();
+
   const navigate = useNavigate();
   //   const dummy = {
   //     "code": "WPE5A",
@@ -102,6 +106,7 @@ const BuyXGetY = ({ location }) => {
     // }
 
     if (isEdit) {
+      toggleLoader("pageLoader");
       makeApiRequest({
         endPoint: `${DISCOUNT_ENDPOINT}${editId}`,
         method: METHODS.get,
@@ -129,7 +134,6 @@ const BuyXGetY = ({ location }) => {
             "start_date",
             "start_time",
           ];
-          console.log(res.data, "skdfjkslfjklsadfj");
           prefillFormValues(res.data, fields, setValue);
           // formConfig.reset(res.data);
           // for customer specification
@@ -144,7 +148,6 @@ const BuyXGetY = ({ location }) => {
             res?.data?.items_from,
             "value"
           );
-          console.log(itemsFromExtractedOption, "itemsFromExtractedOption");
           setValue("items_from", itemsFromExtractedOption);
 
           // for customer buys and customer gets products
@@ -163,17 +166,11 @@ const BuyXGetY = ({ location }) => {
           console.log(err);
           toastMessage(err?.response?.data?.name?.[0] || INVALID_ID);
           navigate("/discounts");
+        })
+        .finally(() => {
+          toggleLoader("pageLoader");
         });
     }
-    // prefillFormValues(dummyData, fields, setValue);
-    // const extractedOption = extractOption(
-    //   CUSTOMER_SPECIFIC_OPTIONS,
-    //  dummyData?.customer_specification,
-    //   "value"
-    // );
-    // setValue("customer_specification", extractedOption);
-    // const itemsFromExtractedOption = extractOption(ITEMS_FROM_OPTIONS,dummyData?.items_from,"value")
-    // setValue("items_from", itemsFromExtractedOption);
   }, []);
 
   const onSubmit = (values, event) => {
@@ -204,7 +201,6 @@ const BuyXGetY = ({ location }) => {
       "discount_value",
     ];
     let payload = {};
-    console.log(values?.buy_products, "buy_products");
     payloadKeys.forEach((key) => {
       if (values?.[key]) {
         if (
@@ -232,7 +228,6 @@ const BuyXGetY = ({ location }) => {
       ...payload,
       coupon_type: "buy_x_get_y",
     };
-    console.log(payload, "buy_x_get_y payload");
     setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
     makeApiRequest({
       endPoint: DISCOUNT_ENDPOINT,
@@ -254,31 +249,35 @@ const BuyXGetY = ({ location }) => {
   };
   return (
     <div>
-      <FormWrapper
-        formConfig={formConfig}
-        onSubmit={onSubmit}
-        isCustomButtons={true}
-      >
-        <div className="flex gap-6">
-          <div className="flex flex-col gap-8 w-3/4">
-            <DiscountCodeSection formConfig={formConfig} />
-            {/* add components for customer buys and customer gets here */}
-            <CustomerBuys formConfig={formConfig} />
-            <CustomerGets formConfig={formConfig} />
-            <DiscountedValue formConfig={formConfig} />
-            <CustomerEligibility formConfig={formConfig} />
-            <DiscountUses formConfig={formConfig} />
-            <Combinations formConfig={formConfig} />
-            {/* <MinimumPurchaseRequirement formConfig={formConfig} /> */}
-            <ActiveDates formConfig={formConfig} />
+      {pageLoader ? (
+        <PageLoader />
+      ) : (
+        <FormWrapper
+          formConfig={formConfig}
+          onSubmit={onSubmit}
+          isCustomButtons={true}
+        >
+          <div className="flex gap-6">
+            <div className="flex flex-col gap-8 w-3/4">
+              <DiscountCodeSection formConfig={formConfig} />
+              {/* add components for customer buys and customer gets here */}
+              <CustomerBuys formConfig={formConfig} />
+              <CustomerGets formConfig={formConfig} />
+              <DiscountedValue formConfig={formConfig} />
+              <CustomerEligibility formConfig={formConfig} />
+              <DiscountUses formConfig={formConfig} />
+              <Combinations formConfig={formConfig} />
+              {/* <MinimumPurchaseRequirement formConfig={formConfig} /> */}
+              <ActiveDates formConfig={formConfig} />
+            </div>
+            {/* sidebar */}
+            <DiscountSideSection btnLoaders={btnLoaders}>
+              <SummarySection formConfig={formConfig} />
+              {/* need to add sidebar section */}
+            </DiscountSideSection>
           </div>
-          {/* sidebar */}
-          <DiscountSideSection btnLoaders={btnLoaders}>
-            <SummarySection formConfig={formConfig} />
-            {/* need to add sidebar section */}
-          </DiscountSideSection>
-        </div>
-      </FormWrapper>
+        </FormWrapper>
+      )}
     </div>
   );
 };

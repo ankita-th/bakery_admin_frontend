@@ -52,7 +52,7 @@ const Discounts = () => {
   const { toggleLoader, pageLoader } = useLoader();
   const [filters, setFilters] = useState({
     sort_by: "",
-    name: "",
+    search: "",
   });
   const [discounts, setDiscounts] = useState([]);
   const [totalData, setTotalData] = useState([]);
@@ -77,6 +77,9 @@ const Discounts = () => {
       ...filters,
       page: page,
     };
+    fetchDiscounts(apiParams);
+  }, [filters, page]);
+  const fetchDiscounts = (apiParams) => {
     makeApiRequest({
       endPoint: DISCOUNT_ENDPOINT,
       method: METHODS.get,
@@ -90,7 +93,7 @@ const Discounts = () => {
       .finally(() => {
         toggleLoader("pageLoader");
       });
-  }, [filters, page]);
+  };
 
   const handleFilterChange = (filterName, value) => {
     const temp = { ...filters };
@@ -137,43 +140,41 @@ const Discounts = () => {
   const handleAddNewCoupon = () => {};
   return (
     <div>
-      {pageLoader ? (
-        <PageLoader />
-      ) : (
-        <>
-          <FilterSection
-            filterFields={filterFields}
-            handleFilterChange={handleFilterChange}
-            filters={filters}
-          >
-            <CommonButton
-              text="Add New Coupon"
-              onClick={toggleDiscountTypeSection}
-              className="orange_btn"
-            />
-          </FilterSection>
-          <TableWrapper columns={DISCOUNTS_COLUMNS}
-           onCheckboxChange={(e) => {
+      {pageLoader && <PageLoader />}
+      <>
+        <FilterSection
+          filterFields={filterFields}
+          handleFilterChange={handleFilterChange}
+          filters={filters}
+        >
+          <CommonButton
+            text="Add New Coupon"
+            onClick={toggleDiscountTypeSection}
+            className="orange_btn"
+          />
+        </FilterSection>
+        <TableWrapper
+          columns={DISCOUNTS_COLUMNS}
+          onCheckboxChange={(e) => {
             selectAllItems(e, discounts);
           }}
           checked={discounts?.length === selectedDiscount?.length}
-          >
-            {discounts?.length ? (
-              discounts?.map((it, idx) => (
-                <SingleDiscountRow
-                  item={it}
-                  key={idx}
-                  handleActions={handleActions}
-                  selectedDiscount={selectedDiscount}
-                  handleSelectedDiscount={handleSelectedDiscount}
-                />
-              ))
-            ) : (
-              <NoDataFound />
-            )}
-          </TableWrapper>
-        </>
-      )}
+        >
+          {discounts?.length ? (
+            discounts?.map((it, idx) => (
+              <SingleDiscountRow
+                item={it}
+                key={idx}
+                handleActions={handleActions}
+                selectedDiscount={selectedDiscount}
+                handleSelectedDiscount={handleSelectedDiscount}
+              />
+            ))
+          ) : (
+            <NoDataFound />
+          )}
+        </TableWrapper>
+      </>
 
       <Pagination
         onPageChange={onPageChange}

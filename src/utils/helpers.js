@@ -477,3 +477,12 @@ export const convertPairFromProducts = (products) => {
   });
   return result;
 };
+
+export const actionToText = {
+  draft: "drafted",
+  duplicate: "duplicated",
+  delete: "deleted",
+};
+export const handleBulkMessage = (field) => {
+  return `Please select at least one ${field} before performing any action`;
+};

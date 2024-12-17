@@ -35,12 +35,15 @@ import DiscountSideSection from "./DiscountSideSection";
 import DiscountCodeSection from "./Common/DiscountCodeSection";
 import DiscountTypeAndValue from "./Common/DiscountTypeAndValue";
 import DiscountUses from "./Common/DiscountUses";
+import useLoader from "../hooks/useLoader";
+import PageLoader from "../loaders/PageLoader";
 
 const AmountOffProduct = ({ location }) => {
   useEffect(() => {}, []);
   const navigate = useNavigate();
   const formConfig = useForm();
   const { watch, setValue } = formConfig;
+  const { pageLoader, toggleLoader } = useLoader();
 
   const [btnLoaders, setBtnLoaders] = useState({
     draft: false,
@@ -74,6 +77,7 @@ const AmountOffProduct = ({ location }) => {
     // }
 
     if (isEdit) {
+      toggleLoader("pageLoader");
       makeApiRequest({
         endPoint: `${DISCOUNT_ENDPOINT}${editId}`,
         method: METHODS.get,
@@ -131,6 +135,9 @@ const AmountOffProduct = ({ location }) => {
           console.log(err);
           toastMessage(err?.response?.data?.name?.[0] || INVALID_ID);
           navigate("/discounts");
+        })
+        .finally(() => {
+          toggleLoader("pageLoader");
         });
       // prefillFormValues(dummy_data, fields, setValue);
       // const discountTypesExtractedOption = extractOption(DISCOUNT_TYPE_OPTIONS,dummy_data?.discount_types,"value");
@@ -215,34 +222,40 @@ const AmountOffProduct = ({ location }) => {
       });
   };
   return (
-    <FormWrapper
-      formConfig={formConfig}
-      onSubmit={onSubmit}
-      isCustomButtons={true}
-    >
-      <div className="flex gap-6">
-        <div className="flex flex-col gap-8 w-3/4">
-          {/* first */}
-          <DiscountCodeSection formConfig={formConfig} />
+    <div>
+      {pageLoader ? (
+        <PageLoader />
+      ) : (
+        <FormWrapper
+          formConfig={formConfig}
+          onSubmit={onSubmit}
+          isCustomButtons={true}
+        >
+          <div className="flex gap-6">
+            <div className="flex flex-col gap-8 w-3/4">
+              {/* first */}
+              <DiscountCodeSection formConfig={formConfig} />
 
-          {/* second */}
+              {/* second */}
 
-          <div className="bg-white p-6 rounded-lg">
-            <DiscountTypeAndValue formConfig={formConfig} />
-            <AppliesTo formConfig={formConfig} />
+              <div className="bg-white p-6 rounded-lg">
+                <DiscountTypeAndValue formConfig={formConfig} />
+                <AppliesTo formConfig={formConfig} />
+              </div>
+              <MinimumPurchaseRequirement formConfig={formConfig} />
+              <CustomerEligibility formConfig={formConfig} />
+              <DiscountUses formConfig={formConfig} />
+              <Combinations formConfig={formConfig} />
+              <ActiveDates formConfig={formConfig} />
+            </div>
+            {/* sidebar */}
+            <DiscountSideSection btnLoaders={btnLoaders}>
+              <SummarySection formConfig={formConfig} />
+            </DiscountSideSection>
           </div>
-          <MinimumPurchaseRequirement formConfig={formConfig} />
-          <CustomerEligibility formConfig={formConfig} />
-          <DiscountUses formConfig={formConfig} />
-          <Combinations formConfig={formConfig} />
-          <ActiveDates formConfig={formConfig} />
-        </div>
-        {/* sidebar */}
-        <DiscountSideSection btnLoaders={btnLoaders}>
-          <SummarySection formConfig={formConfig} />
-        </DiscountSideSection>
-      </div>
-    </FormWrapper>
+        </FormWrapper>
+      )}
+    </div>
   );
 };
 

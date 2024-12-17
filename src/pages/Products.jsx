@@ -136,16 +136,21 @@ const Products = () => {
         products: selectedProducts,
         status: value,
       };
+      console.log(value, "this is value");
+
       if (selectedProducts?.length) {
         toggleLoader("pageLoader");
-        // setPageLoader((prev) => true);
         bulkActionProduct(payload)
           .then((res) => {
             fetchProducts({ page: 1 });
             toastMessage(
               res?.data?.message ||
                 `Products ${
-                  value === "Deleted" ? "deleted" : "Drafted"
+                  value === "delete"
+                    ? "Deleted"
+                    : value === "draft"
+                    ? "Drafted"
+                    : value === "duplicate" && "Duplicated"
                 } successfully`,
               successType
             );
@@ -162,7 +167,7 @@ const Products = () => {
           });
       } else {
         toastMessage(
-          "Please select at least one product to perform any action"
+          "Please select at least one product before performing any action"
         );
       }
     } else {

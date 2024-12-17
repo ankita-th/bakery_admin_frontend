@@ -22,6 +22,8 @@ import {
 } from "../constant";
 import { useNavigate } from "react-router-dom";
 import { extractOption, prefillFormValues } from "../utils/helpers";
+import useLoader from "../hooks/useLoader";
+import PageLoader from "../loaders/PageLoader";
 
 const AmountOffOrder = ({ location }) => {
   const navigate = useNavigate();
@@ -29,6 +31,7 @@ const AmountOffOrder = ({ location }) => {
     draft: false,
     saveDiscount: false,
   });
+  const { pageLoader, toggleLoader } = useLoader();
   const formConfig = useForm();
   const { watch, setValue } = formConfig;
   const isEdit = location?.state?.isEdit;
@@ -58,6 +61,7 @@ const AmountOffOrder = ({ location }) => {
     // };
 
     if (isEdit) {
+      toggleLoader("pageLoader");
       makeApiRequest({
         endPoint: `${DISCOUNT_ENDPOINT}${editId}`,
         method: METHODS.get,
@@ -98,9 +102,12 @@ const AmountOffOrder = ({ location }) => {
           console.log(err);
           toastMessage(err?.response?.data?.name?.[0] || INVALID_ID);
           navigate("/discounts");
+        })
+        .finally(() => {
+          toggleLoader("pageLoader");
         });
     }
-  }, [location,isEdit]);
+  }, [location, isEdit]);
 
   const onSubmit = (values, event) => {
     const buttonType = event.nativeEvent.submitter.name;
@@ -143,7 +150,6 @@ const AmountOffOrder = ({ location }) => {
         }
       }
     });
-    console.log(payload, "amount off order payload");
     makeApiRequest({
       endPoint: DISCOUNT_ENDPOINT,
       method: isEdit ? METHODS?.put : METHODS.post,
@@ -151,7 +157,10 @@ const AmountOffOrder = ({ location }) => {
       update_id: editId && editId,
     })
       .then((res) => {
-        toastMessage("Discount created successfully", successType);
+        toastMessage(
+          `Discount ${isEdit ? "Created" : "Updated"} successfully`,
+          successType
+        );
         navigate("/discounts");
       })
       .catch((err) => {
@@ -164,27 +173,31 @@ const AmountOffOrder = ({ location }) => {
   };
   return (
     <div>
-      <FormWrapper
-        formConfig={formConfig}
-        onSubmit={onSubmit}
-        isCustomButtons={true}
-      >
-        <div className="flex gap-6">
-          <div className="flex flex-col gap-8 w-3/4">
-            <DiscountCodeSection formConfig={formConfig} />
-            <DiscountTypeAndValue formConfig={formConfig} />
-            <MinimumPurchaseRequirement formConfig={formConfig} />
-            <CustomerEligibility formConfig={formConfig} />
-            <DiscountUses formConfig={formConfig} />
-            <Combinations formConfig={formConfig} />
-            <ActiveDates formConfig={formConfig} />
+      {pageLoader ? (
+        <PageLoader />
+      ) : (
+        <FormWrapper
+          formConfig={formConfig}
+          onSubmit={onSubmit}
+          isCustomButtons={true}
+        >
+          <div className="flex gap-6">
+            <div className="flex flex-col gap-8 w-3/4">
+              <DiscountCodeSection formConfig={formConfig} />
+              <DiscountTypeAndValue formConfig={formConfig} />
+              <MinimumPurchaseRequirement formConfig={formConfig} />
+              <CustomerEligibility formConfig={formConfig} />
+              <DiscountUses formConfig={formConfig} />
+              <Combinations formConfig={formConfig} />
+              <ActiveDates formConfig={formConfig} />
+            </div>
+            {/* sidebar */}
+            <DiscountSideSection btnLoaders={btnLoaders}>
+              <SummarySection formConfig={formConfig} />
+            </DiscountSideSection>
           </div>
-          {/* sidebar */}
-          <DiscountSideSection btnLoaders={btnLoaders}>
-            <SummarySection formConfig={formConfig} />
-          </DiscountSideSection>
-        </div>
-      </FormWrapper>
+        </FormWrapper>
+      )}
     </div>
   );
 };
