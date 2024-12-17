@@ -3,6 +3,7 @@ import CommonButton from "./Common/CommonButton";
 import { editIcon, trashIcon } from "../assets/Icons/Svg";
 import Checkbox from "./Common/Checkbox";
 import { showCombination } from "../utils/helpers";
+import { LOGOUT_ENDPOINT } from "../api/endpoints";
 
 const SingleDiscountRow = ({ item, handleActions, index, currentPage }) => {
   // update required : keys for title, method and status are required
@@ -13,13 +14,94 @@ const SingleDiscountRow = ({ item, handleActions, index, currentPage }) => {
     free_shipping: "Free Shipping",
     amount_off_product: "Amount off Discount",
   };
-  console.log(item, "item");
-  const returnTitleBasedOnType = (type) => {
-    if (type === "buy_x_get_y") {
-      return `Buy ${item?.buy_products_quantity} items | get ${
-        item.customer_gets_quantity
-      } items at ${item.discount_value} ${item.discount_value  ? "%" : "$"} off`;
+  const returnTitleBasedOnType = (item) => {
+    const coupon_type = item?.coupon_type;
+    if (coupon_type === "buy_x_get_y") {
+      const title = handleBuy_x_get_y(item);
+      return title;
+    } else if (
+      coupon_type === "amount_off_product" ||
+      coupon_type === "amount_off_order"
+    ) {
+      const title = handleAmountoffProduct(item);
+      return title;
+    } else if (coupon_type === "free_shipping") {
+      const title = handleFreeShipping(item);
+      return title;
     }
+  };
+  const handleBuy_x_get_y = (item) => {
+    const {
+      buy_products_quantity,
+      customer_gets_quantity,
+      discount_value,
+      discount_types,
+      customer_gets_amount,
+      customer_buy_types,
+      buy_products_amount,
+    } = item;
+    // creating buy and get section
+    const buy_get_section =
+      customer_buy_types === "minimum_items_quantity"
+        ? `Buy ${buy_products_quantity} items | get ${customer_gets_quantity} items`
+        : customer_buy_types === "minimum_purchase_amount"
+        ? `Buy upto ${buy_products_amount} | get upto $ ${customer_gets_amount}`
+        : "";
+    // creating % or $ or free section
+    const discount_type_section =
+      discount_types === "percentage"
+        ? `at ${discount_value}% off`
+        : discount_types === "amount_off_each"
+        ? `at $ ${discount_value} off`
+        : discount_types === "free" && "";
+    // combining the above two
+    if (customer_buy_types === "minimum_items_quantity") {
+      return `${buy_get_section}  ${discount_type_section} `;
+    } else if (customer_buy_types === "minimum_purchase_amount") {
+      return `${buy_get_section}  ${discount_type_section} `;
+    }
+  };
+  const handleAmountoffProduct = (item) => {
+    const {
+      discount_value,
+      discount_types,
+      minimum_purchase_requirement,
+      minimum_purchase_value,
+      minimum_quantity_value,
+    } = item;
+    const discount_part = `${
+      discount_types === "amount" ? "$" : ""
+    } ${discount_value} ${discount_types === "percentage" ? "%" : ""} off`;
+    const minimum_purchase_part =
+      minimum_purchase_requirement === "no_requirement"
+        ? "No minimum purchase requirement"
+        : minimum_purchase_requirement === "minimum_purchase"
+        ? `Minimum Purchase of $ ${minimum_purchase_value}`
+        : minimum_purchase_requirement === "minimum_items"
+        ? `Minimum Purchase of ${minimum_quantity_value}`
+        : "";
+    return `${discount_part} | ${minimum_purchase_part}`;
+  };
+  const handleFreeShipping = (item) => {
+    const {
+      minimum_purchase_requirement,
+      minimum_purchase_value,
+      minimum_quantity_value,
+      shipping_rate,
+      exclude_shipping_rate,
+    } = item;
+    const shippingPart = exclude_shipping_rate
+      ? `Excludes shipping rate up to $ ${shipping_rate}`
+      : `Shipping rate is included`;
+    const minimum_purchase_part =
+      minimum_purchase_requirement === "no_requirement"
+        ? "No minimum purchase requirement"
+        : minimum_purchase_requirement === "minimum_purchase"
+        ? `Minimum Purchase of $ ${minimum_purchase_value}`
+        : minimum_purchase_requirement === "minimum_items"
+        ? `Minimum Purchase of ${minimum_quantity_value}`
+        : "";
+    return `${shippingPart} | ${minimum_purchase_part}`;
   };
   return (
     <tr className="text-center">
@@ -30,12 +112,10 @@ const SingleDiscountRow = ({ item, handleActions, index, currentPage }) => {
       <td className="py-2 px-4 border">
         <div
           className="flex-col
-           flex items-center "
+           flex items-center"
         >
           <div className="heading">{code}</div>
-          <div className="description">
-            {returnTitleBasedOnType(item?.coupon_type)}
-          </div>
+          <div className="description">{returnTitleBasedOnType(item)}</div>
         </div>
       </td>
       <td className="py-2 px-4 border">Code</td>

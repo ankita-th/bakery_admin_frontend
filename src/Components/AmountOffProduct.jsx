@@ -94,7 +94,6 @@ const AmountOffProduct = ({ location }) => {
             "maximum_usage_value",
             "maximum_discount_usage",
           ];
-          console.log(res.data, "skdfjkslfjklsadfj");
           prefillFormValues(res.data, fields, setValue);
           const discountTypesExtractedOption = extractOption(
             DISCOUNT_TYPE_OPTIONS,
@@ -192,7 +191,6 @@ const AmountOffProduct = ({ location }) => {
         // product: convertProductsIntoPairs(values?.products),
       };
     }
-    console.log(payload, "this is payload");
     makeApiRequest({
       endPoint: DISCOUNT_ENDPOINT,
       method: isEdit ? METHODS?.put : METHODS.post,

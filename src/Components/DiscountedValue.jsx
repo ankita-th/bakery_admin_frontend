@@ -23,7 +23,6 @@ const DiscountedValue = ({ formConfig }) => {
       watch("discount_types") === "percentage"
     );
   };
-  console.log(discount_types,'dtypes')
   return (
     <div className="bg-white p-6 rounded-lg">
       <RadioGroup
@@ -37,16 +36,19 @@ const DiscountedValue = ({ formConfig }) => {
       />{" "}
       {showValueField() && (
         <>
-        <CommonTextField
-          formConfig={formConfig}
-          label="Discount Value *"
-          fieldName="discount_value"
-          rules={createRequiredValidation("Discount value")}
-          placeholder="0.00"
-          isNumberOnly={true}
-          icon={watch("discount_types") === "percentage" && "%"}
-        />
-        <p className="mt-2 text-gray-500">For multiple quantities, the discount amount will be taken off each Y item.</p>
+          <CommonTextField
+            formConfig={formConfig}
+            label="Discount Value *"
+            fieldName="discount_value"
+            rules={createRequiredValidation("Discount value")}
+            placeholder="0.00"
+            isNumberOnly={true}
+            icon={watch("discount_types") === "percentage" && "%"}
+          />
+          <p className="mt-2 text-gray-500">
+            For multiple quantities, the discount amount will be taken off each
+            Y item.
+          </p>
         </>
       )}
     </div>
