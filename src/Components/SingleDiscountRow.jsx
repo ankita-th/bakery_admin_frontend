@@ -5,7 +5,7 @@ import Checkbox from "./Common/Checkbox";
 import { showCombination } from "../utils/helpers";
 import { LOGOUT_ENDPOINT } from "../api/endpoints";
 
-const SingleDiscountRow = ({ item, handleActions, index, currentPage }) => {
+const SingleDiscountRow = ({ item, handleActions, selectedDiscount, handleSelectedDiscount }) => {
   // update required : keys for title, method and status are required
   const { id, combination, coupon_type, code } = item;
   const COUPON_TYPE = {
@@ -106,7 +106,10 @@ const SingleDiscountRow = ({ item, handleActions, index, currentPage }) => {
   return (
     <tr className="text-center">
       <td className="py-2 px-4 border">
-        <Checkbox />
+      <Checkbox checked={selectedDiscount?.includes(id)}
+          onClick={() => {
+            handleSelectedDiscount(id)
+          }} />
       </td>
 
       <td className="py-2 px-4 border">
