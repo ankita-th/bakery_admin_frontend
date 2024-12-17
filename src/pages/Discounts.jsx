@@ -22,6 +22,7 @@ import CommonButton from "../Components/Common/CommonButton";
 import DiscountTypeSection from "../Components/DiscountTypeSection";
 import { useNavigate } from "react-router-dom";
 import { T } from "../utils/languageTranslator";
+import useSelectedItems from "../hooks/useSelectedItems";
 const filterFields = [
   {
     type: "select",
@@ -64,7 +65,12 @@ const Discounts = () => {
     showModal: showDiscountTypeSection,
     toggleModal: toggleDiscountTypeSection,
   } = useModalToggle();
-
+  const {
+    selectedItems: selectedDiscount,
+    setSelectedItems: setSelectedDiscount,
+    handleSelectItems: handleSelectedDiscount,
+    selectAllItems,
+  } = useSelectedItems();
   useEffect(() => {
     toggleLoader("pageLoader");
     const apiParams = {
@@ -146,13 +152,20 @@ const Discounts = () => {
               className="orange_btn"
             />
           </FilterSection>
-          <TableWrapper columns={DISCOUNTS_COLUMNS}>
+          <TableWrapper columns={DISCOUNTS_COLUMNS}
+           onCheckboxChange={(e) => {
+            selectAllItems(e, discounts);
+          }}
+          checked={discounts?.length === selectedDiscount?.length}
+          >
             {discounts?.length ? (
               discounts?.map((it, idx) => (
                 <SingleDiscountRow
                   item={it}
                   key={idx}
                   handleActions={handleActions}
+                  selectedDiscount={selectedDiscount}
+                  handleSelectedDiscount={handleSelectedDiscount}
                 />
               ))
             ) : (

@@ -75,20 +75,20 @@ const InventoryManagement = () => {
       ...filters,
       page: page,
     };
-    setInventories(DUMMY_INVENTORY_DATA);
-    // makeApiRequest({
-    //   endPoint: GET_INVENTORY_ENDPOINT,
-    //   params: apiParams,
-    //   method: METHODS.get,
-    // })
-    //   .then((res) => {
-    //     setInventories(res?.data?.results);
-    //     setTotalData(res?.data?.count);
-    //   })
-    //   .catch((err) => console.log(err))
-    //   .finally(() => {
-    //     toggleLoader("pageLoader");
-    //   });
+    // setInventories(DUMMY_INVENTORY_DATA);
+    makeApiRequest({
+      endPoint: GET_INVENTORY_ENDPOINT,
+      params: apiParams,
+      method: METHODS.get,
+    })
+      .then((res) => {
+        setInventories(res?.data?.results);
+        setTotalData(res?.data?.count);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        toggleLoader("pageLoader");
+      });
   }, [page, filters]);
   // console.log(inventories, "inventories");
 
