@@ -44,7 +44,7 @@ const ImageUploadSection = ({
     }
     e.target.value = "";
   };
-
+  console.log(disabled, "disable");
   return (
     <div>
       <div className="label">{label}</div>
@@ -65,9 +65,14 @@ const ImageUploadSection = ({
           />
         </>
       )} */}
-      <label htmlFor={inputId} className="image-upload-icon cursor-pointer">
-        {!file?.preview && imageUploadIcon}
-      </label>
+
+      {!disabled ? (
+        <label htmlFor={inputId} className="image-upload-icon cursor-pointer">
+          {!file?.preview && imageUploadIcon}
+        </label>
+      ) : (
+        ""
+      )}
       <input
         onChange={(e) => {
           handleImageUpload(e);
@@ -82,14 +87,18 @@ const ImageUploadSection = ({
       {file?.preview && (
         <div className="image-preview-section">
           <img className="image-preview" src={file.preview} />
-          <div
-            className="remove-image"
-            onClick={() => {
-              setFile({ preview: null, error: "", file: null });
-            }}
-          >
-            {closeIcon}
-          </div>
+          {!disabled ? (
+            <div
+              className="remove-image"
+              onClick={() => {
+                setFile({ preview: null, error: "", file: null });
+              }}
+            >
+              {closeIcon}
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       )}
       <ErrorMessage customError={file?.error} />

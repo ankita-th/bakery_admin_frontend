@@ -32,7 +32,8 @@ import PageLoader from "../loaders/PageLoader";
 import CategorySection from "../Components/CategorySection";
 import ImageUploadSection from "../Form Fields/ImageUploadSection";
 import { SPECIAL_CHARACTERS_REGEX } from "../regex/regex";
-const ALLERGEN_OPTIONS = [{ value: "CN", label: "Contain Nuts" }];
+import { T } from "../utils/languageTranslator";
+const ALLERGEN_OPTIONS = [{ value: "CN", label: T["contain_nuts"] }];
 const DIETRY_OPTIONS = [{ value: "GF", label: "Gluten-free" }];
 const DIFFICULTY_OPTIONS = [
   { label: "Easy", value: "E" },
@@ -44,21 +45,21 @@ const INSTRUCTION_TO_APPEND = { step_count: null, instructions: "", notes: "" };
 const INGREDIENTS_ITEMS = [
   {
     fieldName: "name",
-    placeholder: "Enter name",
-    label: "Ingredient Name *",
+    placeholder: T["enter_name"],
+    label: `${T["ingredient_name"]} *`,
     isRequired: true,
   },
   {
     fieldName: "quantity",
-    placeholder: "Enter Quantity",
-    label: "Ingredient Quantity *",
+    placeholder: T["enter_quantity"],
+    label:`${T["ingredient_quantity"]} *`,
     isRequired: true,
     isNumberOnly: true,
   },
   {
     fieldName: "unit_of_measure",
-    placeholder: "Select Unit",
-    label: "Unit of Measure *",
+    placeholder: T["select_unit"],
+    label: `${T["unit_of_measure"]} *`,
     field_type: "react-select",
     isRequired: true,
     options: RECIPE_MEASURE_OPTIONS,
@@ -67,22 +68,22 @@ const INGREDIENTS_ITEMS = [
 const INSTRUCTION_ITEMS = [
   {
     fieldName: "step_count",
-    placeholder: "Enter name",
-    label: "Step Count",
+    placeholder: T["enter_name"],
+    label: T["step_count"],
     isNumberOnly: true,
     isStepCount: true,
     field_type: "stepCount",
   },
   {
     fieldName: "instructions",
-    placeholder: "Enter Instructions",
-    label: "Instructions *",
+    placeholder: T["enter_instructions"],
+    label: `${T["instructions"]} *`,
     isRequired: true,
   },
   {
     fieldName: "notes",
-    placeholder: "Enter Notes",
-    label: "Notes",
+    placeholder: T["enter_notes"],
+    label: T["notes"],
     isRequired: false,
   },
 ];
@@ -287,9 +288,9 @@ const RecipeAddEdit = () => {
                   <div>
                     <CommonTextField
                       formConfig={formConfig}
-                      label="Recipe Title *"
+                      label={`${T["recipe_title"]} *`}
                       fieldName="recipe_title"
-                      placeholder="Enter Recipe Title"
+                      placeholder={T["enter_recipe_title"]}
                       className="px-4 py-2 w-full rounded-lg"
                       labelClassName=""
                       rules={{
@@ -302,10 +303,10 @@ const RecipeAddEdit = () => {
                     />
                     <div className="description mt-4 p-4 rounded-lg bg-white mt-4">
                       <CommonTextEditor
-                        label="Description *"
+                        label={T["description"]}
                         fieldName="description"
                         formConfig={formConfig}
-                        placeholder="Type..."
+                        placeholder={`${T["type"]}...`}
                         requiredMessage="Description field is required" //validations works a bit different in text editor that's why
                       />
                     </div>
@@ -316,9 +317,9 @@ const RecipeAddEdit = () => {
                           <div className="flex-1">
                             <CommonTextField
                               formConfig={formConfig}
-                              label="Preparation Time (in minutes) *"
+                              label={`${T["preparation_time"]} *`}
                               fieldName="preparation_time"
-                              placeholder="Enter the prep time in minutes or hours"
+                              placeholder={T["enter_the_prep"]}
                               labelClassName=""
                               className="recipe-input"
                               rules={{
@@ -331,9 +332,9 @@ const RecipeAddEdit = () => {
                           <div className="flex-1">
                             <CommonTextField
                               formConfig={formConfig}
-                              label="Cook Time (in minutes) *"
+                              label={`${T["cook_time_minut"]} *`}
                               fieldName="cook_time"
-                              placeholder="Enter the cook time"
+                              placeholder={T["enter_the_cook_time"]}
                               className="recipe-input"
                               rules={{
                                 ...createRequiredValidation("Cook time"),
@@ -348,9 +349,9 @@ const RecipeAddEdit = () => {
                           <div className="flex-1">
                             <CommonTextField
                               formConfig={formConfig}
-                              label="Serving Size *"
+                              label={`${T["serving_size"]} *`}
                               fieldName="serving_size"
-                              placeholder="Number of servings the recipe make."
+                              placeholder={T["number_of_servings"]}
                               className="recipe-input"
                               rules={{
                                 ...createRequiredValidation("Serving size"),
@@ -362,9 +363,9 @@ const RecipeAddEdit = () => {
                           <div className="flex-1">
                             <CommonSelect
                               formConfig={formConfig}
-                              label="Difficulty Level *"
+                              label={`${T["difficulty_level"]} *`}
                               fieldName="difficulty_level"
-                              placeholder="Select difficulty level"
+                              placeholder={T["select_difficulty_level"]}
                               className="bg-[#F5F5F5] w-full border border-gray-300 rounded-md focus:outline-none"
                               selectType="react-select"
                               options={DIFFICULTY_OPTIONS}
@@ -377,7 +378,7 @@ const RecipeAddEdit = () => {
 
                         <div className="ingredients-section mt-4">
                           <CommonFieldArray
-                            heading="Ingredients"
+                            heading={T["ingredients"]}
                             fieldArrayName="ingredients"
                             formConfig={formConfig}
                             itemToAppend={INGREDIENT_TO_APPEND}
@@ -386,7 +387,7 @@ const RecipeAddEdit = () => {
                         </div>
                         <div className="instructions-section mt-4">
                           <CommonFieldArray
-                            heading="Instructions/Steps"
+                            heading={T["instructions_steps"]}
                             fieldArrayName="instructions"
                             formConfig={formConfig}
                             itemToAppend={INSTRUCTION_TO_APPEND}
@@ -398,23 +399,23 @@ const RecipeAddEdit = () => {
                           {/* may be need to update this field into text field further */}
                           <div className="flex-1">
                             <CommonSelect
-                              label="Dietary Information *"
+                              label={`${T["dietary_information"]} *`}
                               selectType="creatable"
                               options={DIETRY_OPTIONS}
                               fieldName="dietary_plan"
                               formConfig={formConfig}
-                              placeholder="Select"
+                              placeholder= {T["select"]}
                               rules={RecipeValidations["dietary_plan"]}
                             />
                           </div>
                           <div className="flex-1">
                             <CommonSelect
-                              label="Allergen Informations *"
+                              label={`${T["allergen_informations"]} *`}
                               selectType="creatable"
                               options={ALLERGEN_OPTIONS}
                               fieldName="allergen_information"
                               formConfig={formConfig}
-                              placeholder="Select"
+                              placeholder= {T["select"]}
                               rules={RecipeValidations["allergen_informations"]}
                             />
                           </div>
@@ -422,9 +423,9 @@ const RecipeAddEdit = () => {
                         <div className="notes mt-4">
                           <CommonTextField
                             formConfig={formConfig}
-                            label="Notes/Additional Information"
+                            label={T["notes_information"]}
                             fieldName="notes"
-                            placeholder="Any additional notes or tips"
+                            placeholder={T["any_additional_notes"]}
                             className="recipe-input"
                             rules={RecipeValidations["notes"]}
                             type="textarea"
@@ -439,7 +440,7 @@ const RecipeAddEdit = () => {
                   <div className="flex justify-center gap-4 mb-4">
                     <CommonButton
                       type="submit"
-                      text="Publish"
+                      text={T["publish"]}
                       icon={publishIcon}
                       className="orange_btn"
                       name="publish"
@@ -448,7 +449,7 @@ const RecipeAddEdit = () => {
                     />
                     <CommonButton
                       type="submit"
-                      text="Draft"
+                      text={T["draft"]}
                       icon={draftIcon}
                       className="orange_btn"
                       name="draft"
@@ -471,7 +472,7 @@ const RecipeAddEdit = () => {
               <ImageUploadSection
                 file={file}
                 setFile={setFile}
-                label="Recipe Image"
+                label={T["recipe_image"]}
                 accept={PNG_AND_JPG}
               />
             </div>

@@ -6,7 +6,8 @@ import { useForm } from "react-hook-form";
 import ErrorMessage from "./Common/ErrorMessage";
 import { successType, toastMessage } from "../utils/toastMessage";
 import { DEFAULT_ERROR_MESSAGE } from "../constant";
-
+import { T } from "../utils/languageTranslator";
+      
 const CategorySection = ({
   formConfig,
   fieldName,
@@ -103,7 +104,7 @@ const CategorySection = ({
     <div>
       <div className="category-container p-4">
         <div className="category-heading">
-          <h5>Categories</h5>
+          <h5>{T["categories"]}</h5>
           {!isViewOnly && (
             <span
               onClick={() => {
@@ -111,7 +112,7 @@ const CategorySection = ({
               }}
               className="text-[#FF6D2F]"
             >
-              +Add
+             {`+${T["add"]}`} 
             </span>
           )}
         </div>

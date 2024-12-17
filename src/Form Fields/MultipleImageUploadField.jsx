@@ -13,6 +13,7 @@ const MultipleImageUploadField = ({
   setImageError,
   uploadButton,
   accept = "image/*",
+  disabled = false,
 }) => {
   const inputId = `image-upload-${label}`;
 
@@ -55,14 +56,18 @@ const MultipleImageUploadField = ({
     setFiles((prev) => prev.filter((curElem, idx) => idx !== index));
   };
   console.log(imageError, "imageError");
-
+console.log(disabled,'diskejdked')
   return (
     <div>
       <div className="label">{label}</div>
-      <label htmlFor={inputId} className={uploadButton?.class}>
-        {uploadButton?.text}
-        {imageUploadIcon}
-      </label>
+      {!disabled ? (
+        <label htmlFor={inputId} className={uploadButton?.class}>
+          {uploadButton?.text}
+          {imageUploadIcon}
+        </label>
+      ) : (
+        ""
+      )}
       <input
         onChange={(e) => handleImageUpload(e)}
         type="file"
@@ -82,12 +87,16 @@ const MultipleImageUploadField = ({
                     src={preview}
                     //   alt={`preview-${index}`}
                   />
-                  <div
-                    className="remove-image"
-                    onClick={() => removeImage(index)}
-                  >
-                    {closeIcon}
-                  </div>
+                  {!disabled ? (
+                    <div
+                      className="remove-image"
+                      onClick={() => removeImage(index)}
+                    >
+                      {closeIcon}
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
               )
           )}
