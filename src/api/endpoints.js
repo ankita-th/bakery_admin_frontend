@@ -20,3 +20,4 @@ export const NOTIFICATION_DELETE_ENDPOINT = "/notification/update/";
 export const SUPPORT_ENDPOINT = "/support";
 export const ORDERS_ENDPOINT = "/orders-history/";
 export const DASHBOARD_ENDPOINT = "/products-stats/";
+export const UPDATE_STOCK_ENDPOINT = "/update-stock/";
