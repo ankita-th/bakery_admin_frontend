@@ -95,6 +95,7 @@ const InventoryTab = ({ formConfig, disabled }) => {
               type="text"
               placeholder={T["enter_regular_price"]}
               className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
+              disabled={disabled}
             />
             <ErrorMessage fieldName="regular_price" errors={errors} />
           </div>
@@ -133,6 +134,7 @@ const InventoryTab = ({ formConfig, disabled }) => {
               type="text"
               placeholder={T["enter_sale_price"]}
               className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
+              disabled={disabled}
             />
             <ErrorMessage fieldName="sale_price" errors={errors} />
           </div>

@@ -28,6 +28,7 @@ const routeTitles = {
   "/settings": T["settings"],
   "/orders-management": T["order_management"],
   "/orders-history": T["order_history"],
+  "/view-product": T["view_product"]
 };
 
 export const getHeadingTitleFromRoute = (pathName) => {
