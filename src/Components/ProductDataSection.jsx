@@ -42,19 +42,19 @@ const ProductDataSection = ({
           />
           {/* {renderActiveTab()} */}
           <div
-            className={`inventory ${activeTab == "inventory" ? "" : "hidden"}`}
+            className={`inventory w-[calc(100%-200px)] ${activeTab == "inventory" ? "" : "hidden"}`}
           >
             <InventoryTab formConfig={formConfig} disabled={disabled} />
           </div>
           <div
-            className={`variations ${
+            className={`variations w-[calc(100%-200px)] ${
               activeTab === "variations" ? "" : "hidden"
             }`}
           >
             <VariantsTab formConfig={formConfig} disabled={disabled} />
           </div>
           <div
-            className={`advanced ${activeTab === "advanced" ? "" : "hidden"}`}
+            className={`advanced w-[calc(100%-200px)] ${activeTab === "advanced" ? "" : "hidden"}`}
           >
             <AdvancedTab formConfig={formConfig} disabled={disabled} />
           </div>

@@ -332,8 +332,8 @@ const AddEditProduct = () => {
         <PageLoader />
       ) : (
         <>
-          <div className="flex">
-            <form onSubmit={beforeSubmit}>
+          <div className="flex w-full">
+            <form onSubmit={beforeSubmit} className="w-[calc(100%-420px)]">
               <div className="flex gap-4">
                 <div className="flex-1">
                   <div className="product-info-section mb-4">
@@ -429,7 +429,7 @@ const AddEditProduct = () => {
                           <div className="text-black">
                             {snippetInfo?.seo_title || T["title"]}
                           </div>
-                          <div className="text-[#FF6D2F]">
+                          <div className="text-[#FF6D2F] !mt-0">
                             {snippetInfo?.slug || T["slug"]}
                           </div>
                           <div className="text-[#666666]">
@@ -506,66 +506,69 @@ const AddEditProduct = () => {
                     </div>
                   </div>
                 </div>
-                {/* side section */}
-                <div className="flex flex-col">
-                  <div className="button-section flex justify-center">
-                    <CommonButton
-                      text={T["publish"]}
-                      name="publish"
-                      type="submit"
-                      className="orange_btn"
-                      loader={btnLoaders?.publish}
-                      disabled={
-                        btnLoaders?.publish || btnLoaders?.draft || isViewOnly
-                      }
-                      icon={publishIcon}
-                    />
-                    <CommonButton
-                      text={T["draft"]}
-                      name="draft"
-                      type="submit"
-                      className="orange_btn"
-                      icon={draftIcon}
-                      loader={btnLoaders?.draft}
-                      disabled={
-                        btnLoaders?.publish || btnLoaders?.draft || isViewOnly
-                      }
-                    />
-                  </div>
-                </div>
               </div>
             </form>
-            <div className="flex flex-col gap-4 mt-4 -ms-[252px] mt-[70px]">
-              <div className="flex gap-4 flex-col">
-                <CategorySection
-                  isViewOnly={isViewOnly}
-                  formConfig={formConfig}
-                  fieldName="category"
-                  rules={createRequiredValidation("Category")}
-                />
-                <ImageUploadSection
-                  file={featuredImage}
-                  setFile={setFeaturedImage}
-                  label={T["featured_image"]}
-                  uniqueId={`featured-image`}
-                  accept={PNG_AND_JPG}
-                  disabled={isViewOnly}
-                />{" "}
-                <MultipleImageUploadField
-                  files={productImages}
-                  setFiles={setProductImages}
-                  label= {T["product_images"]}    
-                  allowedTypes={allowedImageTypes}
-                  imageError={productImageError}
-                  setImageError={setProductImageError}
-                  uniqueId={`product-image`}
-                  accept={PNG_AND_JPG}
-                  uploadButton={{
-                    text:T["upload_product_image"],
-                    class: "image-upload-icon cursor-pointer",
-                  }}
-                  disabled={isViewOnly}
-                />
+            <div className="flex flex-col gap-4 mt-3 w-[400px] ms-[20px]">
+              <div className="sticky top-[0px] flex flex-col gap-3">
+              {/* side section */}
+                <div className="flex flex-col w-full">
+                    <div className="button-section flex justify-center w-full">
+                      <CommonButton
+                        text={T["publish"]}
+                        name="publish"
+                        type="submit"
+                        className="orange_btn w-full justify-center"
+                        loader={btnLoaders?.publish}
+                        disabled={
+                          btnLoaders?.publish || btnLoaders?.draft || isViewOnly
+                        }
+                        icon={publishIcon}
+                      />
+                      <CommonButton
+                        text={T["draft"]}
+                        name="draft"
+                        type="submit"
+                        className="orange_btn w-full justify-center"
+                        icon={draftIcon}
+                        loader={btnLoaders?.draft}
+                        disabled={
+                          btnLoaders?.publish || btnLoaders?.draft || isViewOnly
+                        }
+                      />
+                    </div>
+                </div>
+                <div className="flex gap-4 flex-col">
+                  <CategorySection
+                    isViewOnly={isViewOnly}
+                    formConfig={formConfig}
+                    fieldName="category"
+                    rules={createRequiredValidation("Category")}
+                    className="w-full"
+                  />
+                  <ImageUploadSection
+                    file={featuredImage}
+                    setFile={setFeaturedImage}
+                    label={T["featured_image"]}
+                    uniqueId={`featured-image`}
+                    accept={PNG_AND_JPG}
+                    disabled={isViewOnly}
+                  />{" "}
+                  <MultipleImageUploadField
+                    files={productImages}
+                    setFiles={setProductImages}
+                    label= {T["product_images"]}    
+                    allowedTypes={allowedImageTypes}
+                    imageError={productImageError}
+                    setImageError={setProductImageError}
+                    uniqueId={`product-image`}
+                    accept={PNG_AND_JPG}
+                    uploadButton={{
+                      text:T["upload_product_image"],
+                      class: "image-upload-icon cursor-pointer",
+                    }}
+                    disabled={isViewOnly}
+                  />
+                </div>
               </div>
             </div>
           </div>

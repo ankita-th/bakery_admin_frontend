@@ -127,20 +127,39 @@ const Sidebar = () => {
   };
   return (
     <>
-      <nav className="sidebar w-20 bg-white shadow-lg h-screen fixed top-0 left-0 min-w-[280px] py-3 px-3 font-[sans-serif] overflow-auto">
-        <Link href="/dashboard" className="nav-item">
-          LOGO
-        </Link>
-        <ul className="custom_nagivation">
-          {SIDEBAR_LINKS_TOP?.map(
-            ({ label, href, icon, activeRoutes }, idx) => (
+      <nav className="sidebar w-20 bg-white shadow-lg h-screen fixed top-0 left-0 min-w-[280px] py-3 px-3 font-[sans-serif] overflow-auto flex flex-col justify-between">
+        <div className="flex flex-col">
+          <Link href="/dashboard" className="nav-item brand_logo p-5 text-2xl font-semibold">
+            LOGO
+          </Link>
+          <ul className="custom_nagivation max-h-[70vh] overflow-auto">
+            {SIDEBAR_LINKS_TOP?.map(
+              ({ label, href, icon, activeRoutes }, idx) => (
+                <li>
+                  <NavLink
+                    key={idx}
+                    to={href}
+                    className={`nav-item ${
+                      activeRoutes.includes(pathname) && "active-link"
+                    }`}
+                  >
+                    <div className="nav-item">
+                      <div className="icon">{icon}</div>
+                      {label}
+                    </div>
+                  </NavLink>
+                </li>
+              )
+            )}
+            <div className="horizontal-line w-full h-px bg-gray-300 my-4"></div>
+            {SIDEBAR_LINKS_BOTTOM?.map(({ label, href, icon }, idx) => (
               <li>
                 <NavLink
                   key={idx}
                   to={href}
-                  className={`nav-item ${
-                    activeRoutes.includes(pathname) && "active-link"
-                  }`}
+                  className={({ isActive }) =>
+                    `nav-item ${isActive ? "active-link" : ""}`
+                  }
                 >
                   <div className="nav-item">
                     <div className="icon">{icon}</div>
@@ -148,79 +167,62 @@ const Sidebar = () => {
                   </div>
                 </NavLink>
               </li>
-            )
-          )}
-          <div className="horizontal-line w-full h-px bg-gray-300 my-4"></div>
-          {SIDEBAR_LINKS_BOTTOM?.map(({ label, href, icon }, idx) => (
-            <li>
-              <NavLink
-                key={idx}
-                to={href}
-                className={({ isActive }) =>
-                  `nav-item ${isActive ? "active-link" : ""}`
-                }
-              >
-                <div className="nav-item">
-                  <div className="icon">{icon}</div>
-                  {label}
-                </div>
-              </NavLink>
-            </li>
-          ))}
-          <div className="relative block text-left">
-            {/* Profile Button with Image and Name */}
-            <button
-              className="flex items-center w-full space-x-2 justify-between p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              onClick={toggleDropdown}
-            >
-              <div className="flex items-center space-x-2">
-                <div className="w-10 h-10 rounded-full overflow-hidden">
-                  <img src={userImage} />
-                </div>
-                {/* <span></span> */}
-                <div className="text-left">
-                  <h4 className="text-[12px] text-[#64748B]">
-                    Welcome back 👋
-                  </h4>
-                  <span className="font-semibold text-gray-700">
-                    {userName}
-                  </span>
-                </div>
+            ))}
+          </ul>
+        </div>
+        <div className="relative block text-left">
+          {/* Profile Button with Image and Name */}
+          <button
+            className="flex items-center w-full space-x-2 justify-between p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            onClick={toggleDropdown}
+          >
+            <div className="flex items-center space-x-2">
+              <div className="w-10 h-10 rounded-full overflow-hidden">
+                <img src={userImage} />
               </div>
-              <span>{leftCaret}</span>
-            </button>
-
-            {isOpen && (
-              <div
-                id="dropdownMenu"
-                ref={dropdownRef}
-                className="absolute left-0 bottom-[70px] mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5"
-              >
-                {/* <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  My Profile
-                </a> */}
-                <span
-                  onClick={() => {
-                    navigate("/settings");
-                    setIsOpen(false);
-                  }}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                >
-                  {T["settings"]}
+              {/* <span></span> */}
+              <div className="text-left">
+                <h4 className="text-[12px] text-[#64748B]">
+                  Welcome back 👋
+                </h4>
+                <span className="font-semibold text-gray-700">
+                  {userName}
                 </span>
-                <button
-                  onClick={handleLogout}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  {T["logout"]}
-                </button>
               </div>
-            )}
-          </div>
-        </ul>
+            </div>
+            <span>{leftCaret}</span>
+          </button>
+
+          {isOpen && (
+            <div
+              id="dropdownMenu"
+              ref={dropdownRef}
+              className="absolute left-0 bottom-[70px] mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5"
+            >
+              {/* <a
+                href="#"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                My Profile
+              </a> */}
+              <span
+                onClick={() => {
+                  navigate("/settings");
+                  setIsOpen(false);
+                }}
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                {T["settings"]}
+              </span>
+              <button
+                onClick={handleLogout}
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                {T["logout"]}
+              </button>
+            </div>
+          )}
+        </div>
       </nav>
     </>
   );

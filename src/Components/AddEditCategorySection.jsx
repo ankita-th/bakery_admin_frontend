@@ -136,7 +136,7 @@ const AddEditCategorySection = ({
             accept={PNG_AND_JPG}
           />
           {!fromRecipe ? (
-            <div className="button-section">
+            <div className="button-section mt-3">
               <CommonButton
                 type="submit"
                 text="Publish"

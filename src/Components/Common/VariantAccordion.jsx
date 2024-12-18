@@ -29,7 +29,7 @@ const VariantAccordion = ({
         {/* <span className="mr-4"> */}
         <div className="flex items-center justify-between mb-4 w-full">
           <div className="flex gap-4 items-center">
-            <div className="variation-count text-bold-500">#${index + 1}</div>
+            <div className="variation-count text-bold-500 text-black">#{index + 1}</div>
             {(weight || unit) && (
               <select
                 className="border border-gray-300 text-sm text-gray-700 rounded-lg p-2"
@@ -47,14 +47,14 @@ const VariantAccordion = ({
             <div className="flex gap-2">
               <button
                 type="button"
-                className="text-blue-600 text-sm font-medium"
+                className="text-[#097AFF] text-sm font-medium"
                 onClick={() => handleToggle(index)}
               >
                 Edit
               </button>
               {watch("variants").length > 1 && (
                 <button
-                  className="text-red-600 text-sm font-medium"
+                  className="text-[#FF4B4B] text-sm font-medium"
                   onClick={() => remove(index)}
                 >
                   Remove

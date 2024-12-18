@@ -102,7 +102,7 @@ const CategorySection = ({
 
   return (
     <div>
-      <div className="category-container p-4">
+      <div className="category-container p-4 w-full product-data-section">
         <div className="category-heading">
           <h5>{T["categories"]}</h5>
           {!isViewOnly && (
@@ -120,7 +120,7 @@ const CategorySection = ({
           {categories?.length > 0 ? (
             categories.map(({ id, name }, index) => {
               return (
-                <div key={index}>
+                <div key={index} className="flex items-center gap-2 capitalize">
                   <input
                     {...register(fieldName, rules)}
                     type="checkbox"

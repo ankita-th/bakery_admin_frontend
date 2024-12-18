@@ -115,38 +115,40 @@ const SingleDiscountRow = ({ item, handleActions, selectedDiscount, handleSelect
       <td className="py-2 px-4 border">
         <div
           className="flex-col
-           flex items-center"
+           flex items-start justify-start"
         >
-          <div className="heading">{code}</div>
-          <div className="description">{returnTitleBasedOnType(item)}</div>
+          <div className="heading text-[16px]">{code}</div>
+          <div className="text-[12px] text-[#808080] text-start">{returnTitleBasedOnType(item)}</div>
         </div>
       </td>
-      <td className="py-2 px-4 border">Code</td>
-      <td className="py-2 px-4 border"> {COUPON_TYPE?.[coupon_type]}</td>
+      <td className="py-2 px-4 border text-[16px]">Code</td>
+      <td className="py-2 px-4 border text-[16px]"> {COUPON_TYPE?.[coupon_type]}</td>
       {/* update required:this field could be an array so populate accordingly */}
-      <td className="py-2 px-4 border">
+      <td className="py-2 px-4 border text-[16px]">
         {combination?.length
           ? showCombination(combination)
           : "Not set to combine"}
       </td>
       <td className="py-2 px-4 border space-x-2">
-        <button
-          onClick={() => {
-            // need to confirm about id or task id
-            handleActions({ action: "edit", editItem: item });
-          }}
-          className="text-blue-500 hover:text-blue-700"
-        >
-          {editIcon}
-        </button>
-        <button
-          onClick={() => {
-            handleActions({ action: "delete", delete_id: id });
-          }}
-          className="text-red-500 hover:text-red-700"
-        >
-          {trashIcon}
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => {
+              // need to confirm about id or task id
+              handleActions({ action: "edit", editItem: item });
+            }}
+            className="text-blue-500 hover:text-blue-700"
+          >
+            {editIcon}
+          </button>
+          <button
+            onClick={() => {
+              handleActions({ action: "delete", delete_id: id });
+            }}
+            className="text-red-500 hover:text-red-700"
+          >
+            {trashIcon}
+          </button>
+        </div>
       </td>
     </tr>
   );

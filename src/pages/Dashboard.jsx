@@ -163,8 +163,8 @@ const Dashboard = () => {
       <section className="top_cat">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4 w-full">
           <div className="md:col-span-3 bg-gradient-to-r from-yellow-200 to-orange-300 p-6 rounded-lg shadow-md">
-            <div className="flex flex-col md:flex-row justify-between items-center relative">
-              <div className="w-full md:w-2/3">
+            <div className="flex flex-col md:flex-row justify-between items-center relative h-full">
+              <div className="w-full md:w-2/3 h-full flex flex-col justify-between">
                 <div className="text-left">
                   <span className="text-lg font-semibold text-gray-700">
                    {T["total_revenue"]}
@@ -223,7 +223,7 @@ const Dashboard = () => {
                 <p className="text-4xl font-bold text-black">{dashboardData?.total_products_in_period}</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mt-3">
                   <p className="text-red-500 mt-2">{T["products_added"]}</p>
-                  <div className="mt-4 flex items-center text-red-500">
+                  <div className="mt-0 flex items-center text-red-500">
                     <span className="text-sm">{T["past_month"]}</span>
                     <svg
                       className="w-6 h-6 ml-2"  

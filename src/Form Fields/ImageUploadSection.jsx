@@ -46,8 +46,8 @@ const ImageUploadSection = ({
   };
   console.log(disabled, "disable");
   return (
-    <div>
-      <div className="label">{label}</div>
+    <div className="product-data-section p-3 bg-white">
+      <div className="label mb-4">{label}</div>
       {/* {!disabled && (
         <>
           <label htmlFor={inputId} className="image-upload-icon cursor-pointer">
@@ -67,9 +67,11 @@ const ImageUploadSection = ({
       )} */}
 
       {!disabled ? (
-        <label htmlFor={inputId} className="image-upload-icon cursor-pointer">
-          {!file?.preview && imageUploadIcon}
-        </label>
+        <div className="upload_div border border-dashed border-[#c1c1c1] rounded-[7px] text-center min-h-[100px] flex items-center justify-center">
+          <label htmlFor={inputId} className="image-upload-icon cursor-pointer">
+            {!file?.preview && imageUploadIcon}
+          </label>
+        </div>
       ) : (
         ""
       )}
@@ -85,7 +87,7 @@ const ImageUploadSection = ({
       />
 
       {file?.preview && (
-        <div className="image-preview-section">
+        <div className="image-preview-section w-full featured_img">
           <img className="image-preview" src={file.preview} />
           {!disabled ? (
             <div
