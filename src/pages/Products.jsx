@@ -136,21 +136,16 @@ const Products = () => {
         products: selectedProducts,
         status: value,
       };
-      console.log(value, "this is value");
-
       if (selectedProducts?.length) {
         toggleLoader("pageLoader");
+        // setPageLoader((prev) => true);
         bulkActionProduct(payload)
           .then((res) => {
             fetchProducts({ page: 1 });
             toastMessage(
               res?.data?.message ||
                 `Products ${
-                  value === "delete"
-                    ? "Deleted"
-                    : value === "draft"
-                    ? "Drafted"
-                    : value === "duplicate" && "Duplicated"
+                  value === "Deleted" ? "deleted" : "Drafted"
                 } successfully`,
               successType
             );
@@ -167,7 +162,7 @@ const Products = () => {
           });
       } else {
         toastMessage(
-          "Please select at least one product before performing any action"
+          "Please select at least one product to perform any action"
         );
       }
     } else {
@@ -179,7 +174,6 @@ const Products = () => {
   const handleCategoryClick = () => {
     navigate("/categories");
   };
-
   const handleDeleteProduct = () => {
     setDeleteLoader((prev) => true);
     deleteProduct(itemToDelete)
@@ -278,7 +272,7 @@ const Products = () => {
           currentPage={page}
         />
       </div>
-      {showModal && (
+      {showModal && ( 
         <DeleteConfirmationModal
           icon={trashIcon}
           title="Are you sure you want to delete this product?"

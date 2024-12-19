@@ -156,3 +156,16 @@ export const bulkActionRecipe = (payload) => {
     return authorizeAxios.patch("/recipe/bulk-recipe-update/", payload);
   }
 };
+export const bulkActionDiscount = (payload) => {
+  const { status, discounts } = payload;
+  if (status === "duplicate") {
+    delete payload?.status;
+    return authorizeAxios.post("/discount/discount-duplicate/", payload);
+  } else if (status === "delete") {
+    return authorizeAxios.delete("/discount/bulk-discount-update/", {
+      data: payload,
+    });
+  } else if (status === "draft") {
+    return authorizeAxios.patch("/discount/bulk-discount-update/", payload);
+  }
+};

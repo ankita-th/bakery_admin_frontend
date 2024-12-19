@@ -14,6 +14,7 @@ import {
 } from "../constant";
 import { prefillFormValues } from "../utils/helpers";
 import LocationField from "../Form Fields/LocationField";
+import { T } from "../utils/languageTranslator";
 const AddEditEmployee = ({
   onClose,
   onSubmit,
@@ -53,7 +54,7 @@ const AddEditEmployee = ({
       <div className="category-section overflow-auto">
         <AddEditSectionHeading
           onClose={onClose}
-          text={` ${isEdit ? "Update" : "Add"} Employee`}
+          text={` ${isEdit ? T["update"]:T["add"] } ${T["employee"]}`}
         />
         <FormWrapper
           onSubmit={onSubmit}
@@ -64,31 +65,31 @@ const AddEditEmployee = ({
           {/* update required:need to update field name and after that name inside validations as well */}
 
           <CommonTextField
-            label="Employee ID *"
+            label={`${T["employee_id"]} *`}
             fieldName="employee_id"
-            placeholder="Enter Employee ID"
+            placeholder={T["enter_employee_id"]}
             rules={EmployeeValidations["employee_id"]}
             formConfig={formConfig}
           />
 
           <CommonTextField
-            label="First Name *"
+            label={`${T["first_name"]} *`}
             fieldName="first_name"
-            placeholder="First Name of Employee"
+            placeholder={T["first_name_of_employee"]}
             rules={EmployeeValidations["first_name"]}
             formConfig={formConfig}
           />
           <CommonTextField
-            label="Last Name *"
+            label={`${T["last_name"]} *`}
             fieldName="last_name"
-            placeholder="Last Name of Employee"
+            placeholder={T["last_name_of_employee"]}
             rules={EmployeeValidations["last_name"]}
             formConfig={formConfig}
           />
 
           <CommonSelect
             formConfig={formConfig}
-            label="Role *"
+            label={`${T["role"]} *`}
             selectType="normal"
             options={ROLE_OPTIONS}
             defaultOption="Select Role"
@@ -98,17 +99,17 @@ const AddEditEmployee = ({
           />
 
           <CommonTextField
-            label="Email *"
-            placeholder="Enter Email"
+            label={`${T["email"]} *`}
+            placeholder={T["enter_email"]}
             rules={EmployeeValidations["email"]}
             fieldName="email"
             formConfig={formConfig}
           />
 
           <CommonTextField
-            label="Phone Number *"
+            label={`${T["phone_number"]} *`}
             fieldName="contact_no"
-            placeholder="Eg. 46 123 456 789 or 012 345 6789"
+            placeholder={T["eg"]}
             rules={EmployeeValidations["contact_no"]}
             formConfig={formConfig}
             isNumberOnly={true}
@@ -117,7 +118,7 @@ const AddEditEmployee = ({
 
           <CommonSelect
             formConfig={formConfig}
-            label="Shift *"
+            label={`${T["shift"]} *`}
             selectType="normal"
             options={SHIFT_OPTIONS}
             defaultOption="Select Shift"
@@ -131,14 +132,14 @@ const AddEditEmployee = ({
             fieldName="hiring_date"
             // minDate={today}
             rules={EmployeeValidations["hiring_date"]}
-            label="Hiring Date *"
+            label={`${T["hiring_date"]} *`}
           />
 
           <LocationField
             fieldName="address"
             formConfig={formConfig}
-            placeholder="Enter Employee Address"
-            label="Address *"
+            placeholder={T["enter_employee_address"]}
+            label={`${T["address"]} *`}
             rules={EmployeeValidations["address"]}
             options={{
               types: ["address"],
@@ -148,8 +149,8 @@ const AddEditEmployee = ({
           <LocationField
             fieldName="city"
             formConfig={formConfig}
-            placeholder="Enter City"
-            label="City *"
+            placeholder={T["enter_city"]}
+            label={`${T["city"]} *`}
             rules={EmployeeValidations["city"]}
             options={{
               types: ["(cities)"],
@@ -159,7 +160,7 @@ const AddEditEmployee = ({
 
           <CommonSelect
             formConfig={formConfig}
-            label="State *"
+            label={`${T["state"]} *`}
             selectType="normal"
             options={SWEDEN_COUNTY_OPTIONS}
             defaultOption="State"
@@ -169,8 +170,8 @@ const AddEditEmployee = ({
           />
 
           <CommonTextField
-            label="ZIP Code *"
-            placeholder="ZIP Code"
+            label={`${T["zip_code"]} *`}
+            placeholder={T["zip_code"]}
             rules={EmployeeValidations["zip_code"]}
             fieldName="zip_code"
             formConfig={formConfig}
@@ -180,7 +181,7 @@ const AddEditEmployee = ({
           <div className="button-section">
             <CommonButton
               type="submit"
-              text={`${isEdit ? "Update" : "Add"} Employee`}
+              text={`${isEdit ? T["update"]:T["add"]} ${T["employee"]}`}
               className="orange_btn"
               name="addEmployee"
               loader={loader}
@@ -189,7 +190,7 @@ const AddEditEmployee = ({
             {/* need to confirm functionality for this */}
             <CommonButton
               type="button"
-              text="Cancel"
+              text={T["cancel"]}
               className="orange_btn"
               onClick={onClose}
             />
