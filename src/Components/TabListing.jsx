@@ -2,7 +2,7 @@ import React from "react";
 
 const TabListing = ({ tabs, activeTab, handleActiveTab }) => {
   return (
-    <div className="w-1/5 bg-gray-100 rounded-md p-4">
+    <div className="bg-gray-100 rounded-md p-4 w-[200px]">
       <ul className="space-y-2">
         {tabs?.map(({ label, value }, index) => (
           <li

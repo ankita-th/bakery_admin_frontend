@@ -7,6 +7,24 @@
 @tailwind components;
 @tailwind utilities;
 
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height:5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #ff6d2f; 
+  border-radius: 10px;
+}
+
 .nav-item {
   color: black;
   font-size: 15px;
@@ -28,7 +46,7 @@
 }
 
 header.header {
-  background: #f8f8f8;
+  background: #fff;
   width: calc(100% - 280px);
   margin-left: auto;
 }
@@ -244,9 +262,11 @@ header.header {
   border-radius: 12px;
   padding: 5px;
   margin-top: 5px;
-  width: 25%;
   justify-content: center;
   text-wrap: nowrap;
+  width: auto;
+  padding: 10px 40px;
+
 }
 
 /* Header CSS */
@@ -296,12 +316,6 @@ div#dropdownMenu a:last-child {
   position: absolute;
   right: 10px;
   bottom: 10px;
-}
-.image_total_revenue {
-  position: absolute;
-  right: 0;
-  width: 100%;
-  max-width: 300px;
 }
 .dashcat_icons {
   position: absolute;
@@ -485,8 +499,7 @@ div#dropdownMenu a:last-child {
 .category-container {
   background-color: #ffffff;
   border-radius: 10px;
-  width: 252px;
-  height: 210px;
+  width: 100%;
 }
 .category-heading {
   color: "#FF6D2F";
@@ -591,4 +604,39 @@ div#dropdownMenu a:last-child {
   100% {
     box-shadow: 20px 0 0 -2px, 44px 0 0 2px, -20px 0 0 -2px, -44px 0 0 -2px;
   }
+}
+
+
+.image-preview-section.featured_img {
+  width: 100%;
+  max-width: 100%;
+  border: 1px dashed #cbcbcb;
+  padding: 10px;
+}
+
+.image-preview-section.featured_img img.image-preview {
+  width: 100%;
+  object-fit: cover;
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  max-height: 200px;
+}
+
+.upload_img_div {
+  width: 100%;
+  max-width: 100%;
+  border: 1px dashed #cbcbcb;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.upload_img_div svg {
+  margin: 0 auto;
+  width: 70px;
+  height: 70px;
+  margin-bottom: 20px;
 }

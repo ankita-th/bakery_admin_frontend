@@ -128,7 +128,7 @@ const VariantsTab = ({ formConfig, disabled }) => {
                 <div className="mb-6 flex-1 w-4/5 space-y-4">
                   <div className="w-full">
                     <CommonTextField
-                      label="SKU"
+                      label="SKU *"
                       disabled={disabled}
                       fieldName={`variants.${index}.sku`}
                       formConfig={formConfig}
@@ -149,7 +149,7 @@ const VariantsTab = ({ formConfig, disabled }) => {
                   <div className="flex gap-4">
                     <div className="w-1/2">
                       <CommonTextField
-                        label="Regular Price ($)"
+                        label="Regular Price ($) *"
                         fieldName={`variants.${index}.regular_price`}
                         placeholder="Enter Regular Price"
                         formConfig={formConfig}
@@ -165,7 +165,7 @@ const VariantsTab = ({ formConfig, disabled }) => {
                     </div>
                     <div className="w-1/2">
                       <CommonTextField
-                        label="Sale Price ($)"
+                        label="Sale Price ($) *"
                         fieldName={`variants.${index}.sale_price`}
                         placeholder="Enter Sale Price"
                         formConfig={formConfig}
@@ -183,7 +183,7 @@ const VariantsTab = ({ formConfig, disabled }) => {
                     <div className="flex-1">
                       <CommonDateField
                         formConfig={formConfig}
-                        label="Sale Price Dates From"
+                        label="Sale Price Dates From *"
                         fieldName={`variants.${index}.sale_price_dates_from`}
                         rules={createRequiredValidation()}
                         customError={
@@ -199,7 +199,7 @@ const VariantsTab = ({ formConfig, disabled }) => {
                     <div className="flex-1">
                       <CommonDateField
                         formConfig={formConfig}
-                        label="Sale Price Dates To"
+                        label="Sale Price Dates To *"
                         disabled={disabled}
                         fieldName={`variants.${index}.sale_price_dates_to`}
                         minDate={watch(
@@ -229,7 +229,7 @@ const VariantsTab = ({ formConfig, disabled }) => {
                 <div className="flex gap-4 mb-2">
                   <div className="flex-1">
                     <CommonTextField
-                      label="Stock Quantity"
+                      label="Stock Quantity *"
                       fieldName={`variants.${index}.quantity`}
                       disabled={disabled}
                       placeholder="Enter Stock Quantity"
@@ -254,7 +254,7 @@ const VariantsTab = ({ formConfig, disabled }) => {
                   </div>
                   <div className="flex-1">
                     <CommonSelect
-                      label="Allow Backorders?"
+                      label="Allow Backorders? *"
                       fieldName={`variants.${index}.allow_backorders`}
                       placeholder="Select"
                       rules={createRequiredValidation("Allow backdors")}
@@ -273,7 +273,7 @@ const VariantsTab = ({ formConfig, disabled }) => {
                 <div className="flex gap-4">
                   <div className="flex-1">
                     <CommonTextField
-                      label="Weight"
+                      label="Weight *"
                       disabled={disabled}
                       formConfig={formConfig}
                       isDecimal={true}
@@ -288,7 +288,7 @@ const VariantsTab = ({ formConfig, disabled }) => {
                   </div>
                   <div className="flex-1">
                     <CommonSelect
-                      label="Unit"
+                      label="Unit *"
                       disabled={disabled}
                       fieldName={`variants.${index}.unit`}
                       rules={createRequiredValidation("Unit")}

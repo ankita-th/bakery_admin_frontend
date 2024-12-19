@@ -10,19 +10,27 @@ import { PRODUCT_ENDPOINT } from "../api/endpoints";
 
 const CustomerBuys = ({ formConfig }) => {
   let timer;
-  const { watch, setValue, clearErrors } = formConfig;
+  const { watch, setValue, clearErrors, buy_products } = formConfig;
   const customer_buy_types = watch("customer_buy_types");
   const items_from = watch("items_from");
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     if (customer_buy_types === "minimum_items_quantity") {
       setValue("buy_products_amount", "");
+      setValue("customer_gets_amount", "");
       clearErrors("buy_products_amount");
+      clearErrors("customer_gets_amount");
     } else {
       setValue("buy_products_quantity", "");
-      clearErrors("buy_products_quantity");
+      clearErrors("customer_gets_quantity");
+      setValue("customer_gets_quantity", "");
+      clearErrors("buy_products_amount");
     }
   }, [customer_buy_types]);
+  useEffect(() => {
+    items_from?.value === "all_product" && setValue("buy_products", []);
+  }, [items_from]);
+  console.log(buy_products, "buy_products");
   const NoOptionsMessage = (NoticeProps) => {
     return (
       <p style={{ textAlign: "center", marginTop: "4px", color: "#b2afaf" }}>
@@ -64,6 +72,7 @@ const CustomerBuys = ({ formConfig }) => {
       }, 500);
     });
   };
+  console.log(items_from, "items_from");
   return (
     <div className="bg-white p-6 rounded-lg">
       <RadioGroup

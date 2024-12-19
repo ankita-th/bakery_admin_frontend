@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import FilterSection from "../Components/Common/FilterSection";
 import {
-  DEFAULT_ERROR_MESSAGE,
   DUMMY_CUSTOMER_DATA,
   ITEMS_PER_PAGE,
   SORT_BY_OPTIONS,
@@ -127,6 +126,7 @@ const Customers = () => {
           <FilterSection
             filterFields={filterFields}
             handleFilterChange={handleFilterChange}
+            filters={filters}
           >
             <CommonButton
               text="Add New Customer"

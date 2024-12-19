@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import FilterSection from "../Components/Common/FilterSection";
-import { deleteProduct, getProducts } from "../api/apiFunctions";
+import {
+  bulkActionProduct,
+  deleteProduct,
+  getProducts,
+} from "../api/apiFunctions";
 import usePagination from "../hooks/usePagination";
 import Pagination from "../Components/Common/Pagination";
 import {
@@ -23,6 +27,7 @@ import TableWrapper from "../Wrappers/TableWrapper";
 import { deleteItemBasedOnId } from "../utils/helpers";
 import SingleProductTableRow from "../Components/SingleProductTableRow";
 import { T } from "../utils/languageTranslator";
+import useSelectedItems from "../hooks/useSelectedItems";
 
 const OPTIONS = [
   { value: "Option1", label: "Option1" },
@@ -59,7 +64,7 @@ const filterFields = [
     type: "select",
     defaultOption: T["select_type"],
     options: TYPE_OPTIONS,
-    filterName: "type",
+    filterName: "status",
   },
   // {
   //   type: "select",
@@ -75,31 +80,44 @@ const filterFields = [
   },
   {
     type: "search",
-    filterName: "name",
+    filterName: "search",
     placeholder: T["search_product"],
   },
 ];
 const Products = () => {
   const navigate = useNavigate();
-  const { page, onPageChange } = usePagination();
+  const { page, onPageChange, setPage } = usePagination();
   const { showModal, toggleModal } = useModalToggle();
   const { pageLoader, buttonLoader, toggleLoader } = useLoader();
+  // selection
+  const {
+    selectedItems: selectedProducts,
+    setSelectedItems: setSelectedProducts,
+    handleSelectItems: handleSelectProduct,
+    selectAllItems,
+  } = useSelectedItems();
   const [products, setProducts] = useState([]);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [totalData, setTotalData] = useState();
   const [deleteLoader, setDeleteLoader] = useState(false);
   const [filters, setFilters] = useState({
-    type: "",
+    status: "",
     category: "",
     action: "",
-    name: "",
+    search: "",
   });
+  // const [pageLoader, setPageLoader] = useState(false);
+
+  // const [selectedProducts, setSelectedProducts] = useState([]);
 
   useEffect(() => {
     const apiFilters = {
       ...filters,
       page: page,
     };
+    fetchProducts(apiFilters);
+  }, [page, filters]);
+  const fetchProducts = async (apiFilters) => {
     toggleLoader("pageLoader");
     getProducts(apiFilters)
       .then((res) => {
@@ -107,15 +125,56 @@ const Products = () => {
         setTotalData(res?.data?.count);
       })
       .catch((err) => console.log(err))
-      .finally(() => toggleLoader("pageLoader"));
-  }, [page]);
-  // commented for future use
-  // }, [filters, page]);
-
+      .finally(() => {
+        toggleLoader("pageLoader");
+      });
+  };
   const handleFilterChange = (filterName, value) => {
-    const temp = { ...filters };
-    temp[filterName] = value;
-    setFilters(temp);
+    // logic for bulk actions
+    if (filterName === "action") {
+      const payload = {
+        products: selectedProducts,
+        status: value,
+      };
+      console.log(value, "this is value");
+
+      if (selectedProducts?.length) {
+        toggleLoader("pageLoader");
+        bulkActionProduct(payload)
+          .then((res) => {
+            fetchProducts({ page: 1 });
+            toastMessage(
+              res?.data?.message ||
+                `Products ${
+                  value === "delete"
+                    ? "Deleted"
+                    : value === "draft"
+                    ? "Drafted"
+                    : value === "duplicate" && "Duplicated"
+                } successfully`,
+              successType
+            );
+          })
+          .catch((err) => {
+            console.log(err, "this is err");
+            toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+          })
+          .finally(() => {
+            toggleLoader("pageLoader");
+            setPage(1);
+            setSelectedProducts([]);
+            // setFilters({ ...filters, ["action"]: "" });
+          });
+      } else {
+        toastMessage(
+          "Please select at least one product before performing any action"
+        );
+      }
+    } else {
+      const temp = { ...filters };
+      temp[filterName] = value;
+      setFilters(temp);
+    }
   };
   const handleCategoryClick = () => {
     navigate("/categories");
@@ -149,56 +208,76 @@ const Products = () => {
       setItemToDelete(id);
     }
   };
+  // const handleSelectProduct = (_,id) => {
+  //   // if the id is already in the array then remove it else add it
+  //   setSelectedProducts((prev) => {
+  //     if (prev.includes(id)) {
+  //       return prev.filter((el) => el !== id);
+  //     }
+  //     return [...prev, id];
+  //   });
+  // };
 
+  console.log(filters, "filters");
   return (
     <>
-      {pageLoader ? (
+      {/* {pageLoader ? (
         <PageLoader />
       ) : (
-        <div>
-          <FilterSection
-            filterFields={filterFields}
-            handleFilterChange={handleFilterChange}
-          >
-            <CommonButton
-              text="Categories"
-              onClick={() => navigate("/categories")}
-              type="button"
-              className="grey_btn"
-            />
-            <CommonButton
-              text="Add New Product"
-              onClick={() => navigate("/add-edit-product")}
-              type="button"
-              className="orange_btn"
-            />
-          </FilterSection>
-          {/* product listing */}
-          <TableWrapper columns={PRODUCT_PAGE_COLUMNS}>
-            {products?.length ? (
-              products?.map((dt, idx) => (
-                <SingleProductTableRow
-                  key={idx}
-                  data={dt}
-                  currentPage={page}
-                  index={idx}
-                  handleActions={handleActions}
-                />
-              ))
-            ) : (
-              // updates required:Create a better no data found component
-              <NoDataFound />
-            )}
-          </TableWrapper>
-
-          <Pagination
-            onPageChange={onPageChange}
-            itemsPerPage={ITEMS_PER_PAGE}
-            totalData={totalData}
-            currentPage={page}
+      )} */}
+      {pageLoader && <PageLoader />}
+      <div>
+        <FilterSection
+          filterFields={filterFields}
+          handleFilterChange={handleFilterChange}
+          filters={filters}
+        >
+          <CommonButton
+            text="Categories"
+            onClick={() => navigate("/categories")}
+            type="button"
+            className="grey_btn"
           />
-        </div>
-      )}
+          <CommonButton
+            text="Add New Product"
+            onClick={() => navigate("/add-edit-product")}
+            type="button"
+            className="orange_btn"
+          />
+        </FilterSection>
+        {/* product listing */}
+        <TableWrapper
+          columns={PRODUCT_PAGE_COLUMNS}
+          onCheckboxChange={(e) => {
+            selectAllItems(e, products);
+          }}
+          checked={products?.length === selectedProducts?.length}
+        >
+          {products?.length ? (
+            products?.map((dt, idx) => (
+              <SingleProductTableRow
+                key={idx}
+                data={dt}
+                currentPage={page}
+                index={idx}
+                handleActions={handleActions}
+                selectedProducts={selectedProducts}
+                handleSelectProduct={handleSelectProduct}
+              />
+            ))
+          ) : (
+            // updates required:Create a better no data found component
+            <NoDataFound />
+          )}
+        </TableWrapper>
+
+        <Pagination
+          onPageChange={onPageChange}
+          itemsPerPage={ITEMS_PER_PAGE}
+          totalData={totalData}
+          currentPage={page}
+        />
+      </div>
       {showModal && (
         <DeleteConfirmationModal
           icon={trashIcon}

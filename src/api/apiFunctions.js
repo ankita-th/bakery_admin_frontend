@@ -107,3 +107,52 @@ export const changePassword = (payload) => {
   console.log("change password payload: ", payload);
   return authAxios.post("/password/reset/", payload);
 };
+
+// bulk API actions
+export const bulkActionProduct = (payload) => {
+  const { status } = payload;
+  if (status === "delete") {
+    return authorizeAxios.delete("/bulk-product-update/", { data: payload });
+  } else if (status === "draft") {
+    return authorizeAxios.patch("/bulk-product-update/", payload);
+  } else if (status === "duplicate") {
+    delete payload?.status;
+    return authorizeAxios.post("/duplicate-product/", payload);
+  }
+};
+
+export const bulkActionMaterial = (payload) => {
+  const { status, product_material_ids } = payload;
+  if (status === "duplicate") {
+    delete payload?.status;
+    return authorizeAxios.post("/duplicate-material/", payload);
+  } else if (status === "draft") {
+    const draftPayload = {
+      product_materials: [...product_material_ids],
+      status: status,
+    };
+    return authorizeAxios.patch("/bulk-material-update/", draftPayload);
+  } else if (status === "delete") {
+    const deletePayload = {
+      product_materials: [...product_material_ids],
+      status: status,
+    };
+    return authorizeAxios.delete("/bulk-material-update/", {
+      data: deletePayload,
+    });
+  }
+};
+
+export const bulkActionRecipe = (payload) => {
+  const { status, recipes } = payload;
+  if (status === "duplicate") {
+    delete payload?.status;
+    return authorizeAxios.post("/recipe/recipe-duplicate/", payload);
+  } else if (status === "delete") {
+    return authorizeAxios.delete("/recipe/bulk-recipe-update/", {
+      data: payload,
+    });
+  } else if (status === "draft") {
+    return authorizeAxios.patch("/recipe/bulk-recipe-update/", payload);
+  }
+};

@@ -1,5 +1,10 @@
 import React, { useEffect } from "react";
-import { COUNTRY_OPTIONS, CUSTOMER_SPECIFIC_OPTIONS, STATES_OPTIONS, SWEDEN_COUNTY_OPTIONS } from "../constant";
+import {
+  COUNTRY_OPTIONS,
+  CUSTOMER_SPECIFIC_OPTIONS,
+  STATES_OPTIONS,
+  SWEDEN_COUNTY_OPTIONS,
+} from "../constant";
 import { createRequiredValidation } from "../utils/helpers";
 import RadioGroup from "../Form Fields/RadioGroup";
 import CommonSelect from "../Form Fields/CommonSelect";
@@ -9,19 +14,18 @@ import LocationField from "../Form Fields/LocationField";
 import { EmployeeValidations } from "../Validations/validations";
 
 const Countries = ({ formConfig }) => {
-  const { watch, setValue,clearErrors } = formConfig;
+  const { watch, setValue, clearErrors } = formConfig;
   //   useEffect(() => {
   //     if (customer_eligibility === "all_customer")
   //       setValue("customer_specification", "");
   //   }, [customer_eligibility]);
 
-
   useEffect(() => {
-    if (watch("select_states") === "all_states") {
+    if (watch("shipping_scope") === "all_states") {
       setValue("states", "");
       clearErrors("states");
     }
-  }, [watch("select_states")]);
+  }, [watch("shipping_scope")]);
 
   useEffect(() => {
     if (watch("exclude_shipping_rate") === true) {
@@ -29,20 +33,18 @@ const Countries = ({ formConfig }) => {
       clearErrors("shipping_rate");
     }
   }, [watch("exclude_shipping_rate")]);
-
-
   return (
     <div className="bg-white p-6 rounded-lg space-y-4">
       <RadioGroup
         className="flex gap-4"
         label="States *"
-        fieldName="select_states"
+        fieldName="shipping_scope"
         formConfig={formConfig}
         //   need to update these options , need to confirm from backend
         options={STATES_OPTIONS}
         rules={createRequiredValidation("States")}
       />
-      {watch("select_states") === "selected_states" && (
+      {watch("shipping_scope") === "specific_states" && (
         <>
           <CommonSelect
             formConfig={formConfig}
@@ -79,7 +81,7 @@ const Countries = ({ formConfig }) => {
           <CommonTextField
             formConfig={formConfig}
             fieldName="shipping_rate"
-            placeholder="0.00"
+            placeholder="($) 0.00"
             isNumberOnly={true}
             rules={createRequiredValidation("Shipping rates")}
           />

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import CommonTextField from "../Form Fields/CommonTextField";
 import {
+  convertPairFromProducts,
+  convertProductsIntoPairs,
   convertSelectOptionToValue,
   createRequiredValidation,
   extractOption,
@@ -33,12 +35,15 @@ import DiscountSideSection from "./DiscountSideSection";
 import DiscountCodeSection from "./Common/DiscountCodeSection";
 import DiscountTypeAndValue from "./Common/DiscountTypeAndValue";
 import DiscountUses from "./Common/DiscountUses";
+import useLoader from "../hooks/useLoader";
+import PageLoader from "../loaders/PageLoader";
 
 const AmountOffProduct = ({ location }) => {
   useEffect(() => {}, []);
   const navigate = useNavigate();
   const formConfig = useForm();
   const { watch, setValue } = formConfig;
+  const { pageLoader, toggleLoader } = useLoader();
 
   const [btnLoaders, setBtnLoaders] = useState({
     draft: false,
@@ -72,6 +77,7 @@ const AmountOffProduct = ({ location }) => {
     // }
 
     if (isEdit) {
+      toggleLoader("pageLoader");
       makeApiRequest({
         endPoint: `${DISCOUNT_ENDPOINT}${editId}`,
         method: METHODS.get,
@@ -92,7 +98,6 @@ const AmountOffProduct = ({ location }) => {
             "maximum_usage_value",
             "maximum_discount_usage",
           ];
-          console.log(res.data, "skdfjkslfjklsadfj");
           prefillFormValues(res.data, fields, setValue);
           const discountTypesExtractedOption = extractOption(
             DISCOUNT_TYPE_OPTIONS,
@@ -115,11 +120,24 @@ const AmountOffProduct = ({ location }) => {
             "customer_specification",
             customerSpecificationExtractedOption
           );
+          if (res?.data?.product?.length) {
+            // const formattedProducts = convertPairFromProducts(res?.data?.product);
+            // setValue("product", formattedProducts);
+          }
+          if (res?.data?.minimum_purchase_value) {
+            setValue(
+              "minimum_purchase_value",
+              +res?.data?.minimum_purchase_value
+            );
+          }
         })
         .catch((err) => {
           console.log(err);
           toastMessage(err?.response?.data?.name?.[0] || INVALID_ID);
           navigate("/discounts");
+        })
+        .finally(() => {
+          toggleLoader("pageLoader");
         });
       // prefillFormValues(dummy_data, fields, setValue);
       // const discountTypesExtractedOption = extractOption(DISCOUNT_TYPE_OPTIONS,dummy_data?.discount_types,"value");
@@ -133,7 +151,7 @@ const AmountOffProduct = ({ location }) => {
 
   const onSubmit = (values, event) => {
     const buttonType = event.nativeEvent.submitter.name;
-    // setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
+    setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
     const fields = [
       "code",
       "discount_value",
@@ -147,7 +165,8 @@ const AmountOffProduct = ({ location }) => {
       "minimum_quantity_value",
       "end_time",
       "maximum_usage_value",
-      // "maximum_discount_usage",
+      "maximum_discount_usage",
+      "customer_specification",
     ];
     let payload = {
       coupon_type: "amount_off_product",
@@ -156,8 +175,8 @@ const AmountOffProduct = ({ location }) => {
     };
     fields.forEach((key) => {
       if (values?.[key]) {
-        if (key === "combination") {
-          payload[key] = values[key];
+        if (key === "customer_specification") {
+          payload[key] = values?.[key]?.value;
         } else if (
           key === "discount_value" ||
           key === "maximum_usage_value" ||
@@ -170,61 +189,73 @@ const AmountOffProduct = ({ location }) => {
         }
       }
     });
-    payload = {
-      ...payload,
-      // product: values?.products?.[0]?.value && values?.products?.[0]?.value,
-      product: values?.products
-        ?.map((item) => item?.value)
-        .filter((value) => value !== undefined),
-    };
-    console.log(payload, "this is payload");
+    if (values?.products?.length) {
+      payload = {
+        ...payload,
+        product: values?.products
+          ?.map((item) => item?.value)
+          .filter((value) => value !== undefined),
+        // product: convertProductsIntoPairs(values?.products),
+      };
+    }
     makeApiRequest({
       endPoint: DISCOUNT_ENDPOINT,
-      method: METHODS.post,
+      method: isEdit ? METHODS?.put : METHODS.post,
       payload: payload,
+      update_id: editId,
     })
       .then((res) => {
-        toastMessage("Discount created successfully", successType);
+        toastMessage(
+          `Discount  ${isEdit ? "Updated" : "Created"} successfully`,
+          successType
+        );
         navigate("/discounts");
       })
       .catch((err) => {
         console.log(err);
-        toastMessage(err?.response?.data?.name?.[0] || DEFAULT_ERROR_MESSAGE);
+        const fieldError =
+          err?.response?.data?.code?.[0] || err?.response?.data?.name?.[0];
+        toastMessage(fieldError || DEFAULT_ERROR_MESSAGE);
       })
       .finally(() => {
         setBtnLoaders({ ...btnLoaders, [buttonType]: false });
       });
   };
   return (
-    <FormWrapper
-      formConfig={formConfig}
-      onSubmit={onSubmit}
-      isCustomButtons={true}
-    >
-      <div className="flex gap-6">
-        <div className="flex flex-col gap-8 w-3/4">
-          {/* first */}
-          <DiscountCodeSection formConfig={formConfig} />
+    <div>
+      {pageLoader ? (
+        <PageLoader />
+      ) : (
+        <FormWrapper
+          formConfig={formConfig}
+          onSubmit={onSubmit}
+          isCustomButtons={true}
+        >
+          <div className="flex gap-6">
+            <div className="flex flex-col gap-8 w-3/4">
+              {/* first */}
+              <DiscountCodeSection formConfig={formConfig} />
 
-          {/* second */}
+              {/* second */}
 
-          <div className="bg-white p-6 rounded-lg">
-            <DiscountTypeAndValue formConfig={formConfig} />
-            <AppliesTo formConfig={formConfig} />
+              <div className="bg-white p-6 rounded-lg">
+                <DiscountTypeAndValue formConfig={formConfig} />
+                <AppliesTo formConfig={formConfig} />
+              </div>
+              <MinimumPurchaseRequirement formConfig={formConfig} />
+              <CustomerEligibility formConfig={formConfig} />
+              <DiscountUses formConfig={formConfig} />
+              <Combinations formConfig={formConfig} />
+              <ActiveDates formConfig={formConfig} />
+            </div>
+            {/* sidebar */}
+            <DiscountSideSection btnLoaders={btnLoaders}>
+              <SummarySection formConfig={formConfig} />
+            </DiscountSideSection>
           </div>
-
-          <MinimumPurchaseRequirement formConfig={formConfig} />
-          <CustomerEligibility formConfig={formConfig} />
-          <DiscountUses formConfig={formConfig} />
-          <Combinations formConfig={formConfig} />
-          <ActiveDates formConfig={formConfig} />
-        </div>
-        {/* sidebar */}
-        <DiscountSideSection btnLoaders={btnLoaders}>
-          <SummarySection formConfig={formConfig} />
-        </DiscountSideSection>
-      </div>
-    </FormWrapper>
+        </FormWrapper>
+      )}
+    </div>
   );
 };
 

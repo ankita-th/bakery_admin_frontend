@@ -7,7 +7,6 @@ import { useLocation } from "react-router-dom";
 
 const MinimumPurchaseRequirement = ({ formConfig }) => {
   const location = useLocation();
-  console.log(location, "this is location");
   const { watch, setValue, clearErrors } = formConfig;
   const {
     minimum_purchase_requirement,
@@ -15,11 +14,16 @@ const MinimumPurchaseRequirement = ({ formConfig }) => {
     maximum_usage_value,
   } = watch();
   useEffect(() => {
-    if (minimum_purchase_requirement === "minimum_quantity") {
+    if (minimum_purchase_requirement === "minimum_items") {
       setValue("minimum_purchase_value", "");
       clearErrors("minimum_purchase_value");
     } else if (minimum_purchase_requirement === "minimum_purchase") {
       setValue("minimum_quantity_value", "");
+      clearErrors("minimum_quantity_value");
+    } else if (minimum_purchase_requirement === "no_requirement") {
+      setValue("minimum_purchase_value", "");
+      setValue("minimum_quantity_value", "");
+      clearErrors("minimum_purchase_value");
       clearErrors("minimum_quantity_value");
     }
   }, [minimum_purchase_requirement]);
@@ -46,10 +50,9 @@ const MinimumPurchaseRequirement = ({ formConfig }) => {
     />
   );
   const shouldShowText = (value) => {
-    return value === "minimum_quantity" || value === "minimum_purchase";
+    return value === "minimum_items" || value === "minimum_purchase";
   };
-  console.log(watch("minimum_purchase_requirement"))
-
+  console.log(watch("minimum_purchase_requirement"), "minimum_purchase_requirement");
   return (
     <div className="bg-white p-6 rounded-lg">
       <RadioGroup
@@ -57,7 +60,6 @@ const MinimumPurchaseRequirement = ({ formConfig }) => {
         label="Minimum Purchase Requirements *"
         fieldName="minimum_purchase_requirement"
         formConfig={formConfig}
-        //   need to update these options , need to confirm from backend
         options={PURCHASE_REQUIREMENT_OPTIONS}
         rules={createRequiredValidation("Minimum purchase requirement")}
       />
@@ -73,7 +75,8 @@ const MinimumPurchaseRequirement = ({ formConfig }) => {
         )}
       {shouldShowText(watch("minimum_purchase_requirement")) && (
         <div>
-          {location?.state?.type === "amount_off_order" || location?.state?.type === "free_shipping"
+          {location?.state?.type === "amount_off_order" ||
+          location?.state?.type === "free_shipping"
             ? "Applies To All Product"
             : "Applies Only To Selected Collections."}
         </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import basketImg from "../assets/images/cookie_img.png";
 import {
   CubesCategoryIcon,
@@ -18,7 +18,8 @@ import {
   Tooltip,
 } from "chart.js";
 import { T } from "../utils/languageTranslator";
-
+import { makeApiRequest, METHODS } from "../api/apiFunctions";
+import { DASHBOARD_ENDPOINT } from "../api/endpoints";
 // Register the necessary Chart.js components
 ChartJS.register(
   LinearScale,
@@ -30,20 +31,55 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
+  const [dashboardData, setDashboardData] = useState(null);
+  const weeklySalesData = dashboardData?.weekly_sales_data;
+
+  useEffect(() => {
+    makeApiRequest({
+      endPoint: DASHBOARD_ENDPOINT,
+      method: METHODS.get,
+    })
+      .then((res) => {
+        console.log(res.data, "f");
+        setDashboardData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {});
+   
+  }, []);
+
   // Data for Sales Summary chart
   const salesData = {
-    labels: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5"],
+    labels: weeklySalesData?.map((item)=>item.week),
     datasets: [
       {
-        label: "Sales",
-        data: [3000, 1150, 2500, 1500, 3500],
-        borderColor: "#475857",
-        backgroundColor: "#475857",
+        label: 'Sales',
+        data: weeklySalesData?.map((item)=>item.total_sales),
+        borderColor: '#475857',
+        backgroundColor: '#475857',
         fill: false,
         tension: 0.4,
       },
     ],
   };
+  useEffect(() => {
+    makeApiRequest({
+      endPoint: DASHBOARD_ENDPOINT,
+      method: METHODS.get,
+    })
+      .then((res) => {
+        console.log(res.data, "f");
+        setDashboardData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {});
+   
+  }, []);
+  // Data for Sales Summary chart
 
   const salesOptions = {
     plugins: {
@@ -127,14 +163,14 @@ const Dashboard = () => {
       <section className="top_cat">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4 w-full">
           <div className="md:col-span-3 bg-gradient-to-r from-yellow-200 to-orange-300 p-6 rounded-lg shadow-md">
-            <div className="flex flex-col md:flex-row justify-between items-center relative">
-              <div className="w-full md:w-2/3">
+            <div className="flex flex-col md:flex-row justify-between items-center relative h-full">
+              <div className="w-full md:w-2/3 h-full flex flex-col justify-between">
                 <div className="text-left">
                   <span className="text-lg font-semibold text-gray-700">
                    {T["total_revenue"]}
                   </span>
                   <h2 className="text-4xl font-bold text-gray-900">
-                    $10,40,000
+                    ${dashboardData?.total_revenue}
                   </h2>
                 </div>
                 <div className="flex space-x-4 mt-4">
@@ -144,7 +180,7 @@ const Dashboard = () => {
                       {T["total_order_placed"]}
                     </h5>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mt-3">
-                      <h3 className="text-2xl font-bold text-gray-800">05</h3>
+                      <h3 className="text-2xl font-bold text-gray-800">{dashboardData?.total_orders_in_period}</h3>
                       <div className="flex items-center text-green-600 text-sm font-semibold mt-1">
                         <span>51%</span>
                         {Increase_arrowIcon}
@@ -157,7 +193,7 @@ const Dashboard = () => {
                     {T["total_customers"]}
                     </h5>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mt-3">
-                      <h3 className="text-2xl font-bold text-gray-800">200</h3>
+                      <h3 className="text-2xl font-bold text-gray-800">{dashboardData?.total_breakfast_customers}</h3>
                       <div className="flex items-center text-red-600 text-sm font-semibold mt-1">
                         <span>20%</span>
                         {decrease_arrowIcon}
@@ -184,13 +220,13 @@ const Dashboard = () => {
                 <h2 className="text-black font-semibold text-lg">
               {T["total_products"]}
                 </h2>
-                <p className="text-4xl font-bold text-black">50</p>
+                <p className="text-4xl font-bold text-black">{dashboardData?.total_products_in_period}</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mt-3">
                   <p className="text-red-500 mt-2">{T["products_added"]}</p>
-                  <div className="mt-4 flex items-center text-red-500">
+                  <div className="mt-0 flex items-center text-red-500">
                     <span className="text-sm">{T["past_month"]}</span>
                     <svg
-                      className="w-6 h-6 ml-2"
+                      className="w-6 h-6 ml-2"  
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -214,7 +250,7 @@ const Dashboard = () => {
               {/* Categories Card */}
               <div className="bg-[#E8F0FB] rounded-lg p-6 relative">
                 <h2 className="text-black font-semibold text-lg">{T["categories"]}</h2>
-                <p className="text-4xl font-bold text-black">10</p>
+                <p className="text-4xl font-bold text-black">{dashboardData?.total_categories}</p>
                 <div className="flex justify-end mt-4 dashcat_icons">
                   {CubesCategoryIcon}
                 </div>
@@ -224,7 +260,7 @@ const Dashboard = () => {
                 <h2 className="text-black font-semibold text-lg">
                  {T["total_users"]}
                 </h2>
-                <p className="text-4xl font-bold text-black">20</p>
+                <p className="text-4xl font-bold text-black">{dashboardData?.total_workers}</p>
                 <div className="flex justify-end mt-4 dashcat_icons">
                   {ProfileIcon}
                 </div>
@@ -241,23 +277,22 @@ const Dashboard = () => {
             <h5 className="text-sm font-medium text-gray-600">
              {T["total_running_orders"]}
             </h5>
-            <h3 className="text-2xl font-bold text-gray-800 mt-3">250</h3>
+            <h3 className="text-2xl font-bold text-gray-800 mt-3">{dashboardData?.total_running_orders}</h3>
           </div>
 
           <div className="bg-[#FFEFE7] p-4 rounded-lg flex flex-col items-start gap-4">
             <h5 className="text-sm font-medium text-gray-600">
              {T["low_stock_items"]}
             </h5>
-            <h3 className="text-2xl font-bold text-gray-800 mt-3">120</h3>
+            <h3 className="text-2xl font-bold text-gray-800 mt-3">{dashboardData?.low_stock_products}</h3>
           </div>
-
           <div className="bg-[#FFEFE7] p-4 rounded-lg flex flex-col items-start gap-4">
             <h5 className="text-sm font-medium text-gray-600">
              {T["in_progress_orders"]}
             </h5>
-            <h3 className="text-2xl font-bold text-gray-800 mt-3">120</h3>
+            <h3 className="text-2xl font-bold text-gray-800 mt-3">{dashboardData?.total_in_progress_orders}</h3>  
           </div>
-
+          
           <div className="bg-[#FFEFE7] p-4 rounded-lg flex flex-col items-start gap-4">
             <h5 className="text-sm font-medium text-gray-600">
             {T["today_order_value"]}
@@ -275,7 +310,7 @@ const Dashboard = () => {
             <p className="text-3xl font-bold text-gray-900">
               6,345{" "}
               <span className="text-gray-500 text-sm font-normal">
-                1.3% VS LAST WEEK
+               {T["last_week"]} 
               </span>
             </p>
             <div className="mt-4">
@@ -289,7 +324,7 @@ const Dashboard = () => {
             <p className="text-3xl font-bold text-gray-900">
               9,845{" "}
               <span className="text-gray-500 text-sm font-normal">
-                past 30 days
+              {T["past_30_days"]} 
               </span>
             </p>
             <div className="mt-4">

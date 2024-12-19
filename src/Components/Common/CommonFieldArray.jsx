@@ -26,10 +26,10 @@ const CommonFieldArray = ({
   });
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 justify-start items-start">
       <h4 className="font-bold">{heading}</h4>
       {fields?.map((field, index) => (
-        <div key={field.id} className="flex space-x-4 items-center">
+        <div key={field.id} className="flex space-x-4 items-center w-full">
           {items?.map(
             (
               {
@@ -45,7 +45,7 @@ const CommonFieldArray = ({
             ) => (
               <>
                 {field_type === "stepCount" ? (
-                  <div>
+                  <div className=" w-full">
                     {/* update required , you will need to add step_count value while creating payload */}
                     <p>{label}</p>
                     <Controller
@@ -109,7 +109,7 @@ const CommonFieldArray = ({
           icon={plusIcon}
           onClick={() => append(itemToAppend)}
           type="button"
-          className="add-row-button px-6"
+          className="add-row-button p-6"
         />
       )}
     </div>

@@ -20,13 +20,15 @@ const RadioGroup = ({
       <div className={className}>
         {options?.map(({ value, label: optionLabel }, idx) => (
           <div key={idx} className="flex gap-4">
-            <input
-              disabled={disabled}
-              {...register(fieldName, rules)}
-              type="radio"
-              value={value}
-            />
-            <div className="option-label">{optionLabel}</div>
+            <label className="flex gap-1 cursor-pointer">
+              <input
+                disabled={disabled}
+                {...register(fieldName, rules)}
+                type="radio"
+                value={value}
+              />
+              <div className="option-label">{optionLabel}</div>
+            </label>
           </div>
         ))}
       </div>

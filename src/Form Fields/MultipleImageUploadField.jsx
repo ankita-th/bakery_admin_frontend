@@ -13,6 +13,7 @@ const MultipleImageUploadField = ({
   setImageError,
   uploadButton,
   accept = "image/*",
+  disabled = false,
 }) => {
   const inputId = `image-upload-${label}`;
 
@@ -55,14 +56,20 @@ const MultipleImageUploadField = ({
     setFiles((prev) => prev.filter((curElem, idx) => idx !== index));
   };
   console.log(imageError, "imageError");
-
+console.log(disabled,'diskejdked')
   return (
-    <div>
+    <div className="product-data-section p-3 bg-white">
       <div className="label">{label}</div>
-      <label htmlFor={inputId} className={uploadButton?.class}>
-        {uploadButton?.text}
-        {imageUploadIcon}
-      </label>
+      <div className="upload_img_div">
+        {!disabled ? (
+          <label htmlFor={inputId} className={uploadButton?.class}>
+            {imageUploadIcon}
+            {uploadButton?.text}
+          </label>
+        ) : (
+          ""
+        )}
+      </div>
       <input
         onChange={(e) => handleImageUpload(e)}
         type="file"
@@ -72,7 +79,7 @@ const MultipleImageUploadField = ({
         multiple={true}
       />
       {files?.length ? (
-        <div className="image-preview-section">
+        <div className="image-preview w-full !border-0 grid grid-cols-4 gap-4">
           {files?.map(
             ({ preview, file }, index) =>
               (file || preview) && (
@@ -82,12 +89,16 @@ const MultipleImageUploadField = ({
                     src={preview}
                     //   alt={`preview-${index}`}
                   />
-                  <div
-                    className="remove-image"
-                    onClick={() => removeImage(index)}
-                  >
-                    {closeIcon}
-                  </div>
+                  {!disabled ? (
+                    <div
+                      className="remove-image"
+                      onClick={() => removeImage(index)}
+                    >
+                      {closeIcon}
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
               )
           )}

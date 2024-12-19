@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { INSTANCE, makeApiRequest, METHODS } from "../api/apiFunctions";
+import {
+  bulkActionMaterial,
+  INSTANCE,
+  makeApiRequest,
+  METHODS,
+} from "../api/apiFunctions";
 import { RAW_MATERIAL_ENDPOINT } from "../api/endpoints";
 import usePagination from "../hooks/usePagination";
 import useLoader from "../hooks/useLoader";
@@ -17,7 +22,13 @@ import NoDataFound from "../Components/Common/NoDataFound";
 import SingleRawMaterialRow from "../Components/SingleRawMaterialRow";
 import useModalToggle from "../hooks/useModalToggle";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
-import { deleteItemBasedOnId, formatDate, handleEdit } from "../utils/helpers";
+import {
+  actionToText,
+  deleteItemBasedOnId,
+  formatDate,
+  handleBulkMessage,
+  handleEdit,
+} from "../utils/helpers";
 import { trashIcon } from "../assets/Icons/Svg";
 import Pagination from "../Components/Common/Pagination";
 import AddEditRawMaterial from "../Components/AddEditRawMaterial";
@@ -27,6 +38,7 @@ import CommonButton from "../Components/Common/CommonButton";
 import PageLoader from "../loaders/PageLoader";
 import ViewRawMaterials from "../Components/ViewRawMaterials";
 import { T } from "../utils/languageTranslator";
+import useSelectedItems from "../hooks/useSelectedItems";
 const RAW_MATERIAL_COLUMNS = [
   "checkbox",
   T["id"],
@@ -43,7 +55,7 @@ const filterFields = [
     type: "select",
     defaultOption: T["select_type"],
     options: TYPE_OPTIONS,
-    filterName: "type",
+    filterName: "status",
   },
   {
     type: "select",
@@ -53,7 +65,7 @@ const filterFields = [
   },
   {
     type: "search",
-    filterName: "name",
+    filterName: "search",
     placeholder: T["search_materials"],
   },
 ];
@@ -68,13 +80,19 @@ const RawMaterials = () => {
     showModal: showRawMaterialSection,
     toggleModal: toggleRawMaterialSection,
   } = useModalToggle();
+  const {
+    selectedItems: selectedMaterials,
+    setSelectedItems: setSelectedMaterials,
+    handleSelectItems: handleSelectMaterials,
+    selectAllItems,
+  } = useSelectedItems();
 
-  const { pageLoader, toggleLoader } = useLoader();
+  const { pageLoader, toggleLoader, setPageLoader } = useLoader();
   const { page, onPageChange, setPage } = usePagination();
   const [filters, setFilters] = useState({
-    type: "",
+    status: "",
     category: "",
-    name: "",
+    search: "",
   });
   const [editInfo, setEditInfo] = useState({
     isEdit: false,
@@ -91,12 +109,16 @@ const RawMaterials = () => {
   const [viewInfo, setViewInfo] = useState({ show: false, item: null });
 
   useEffect(() => {
-    toggleLoader("pageLoader");
     const apiFilters = {
       ...filters,
       page: page,
     };
-
+    fetchRawMaterials(apiFilters);
+  }, [page, filters]);
+  // commented for future use
+  // }, [filters, page]);
+  const fetchRawMaterials = (apiFilters) => {
+    setPageLoader((prev) => true);
     makeApiRequest({
       endPoint: RAW_MATERIAL_ENDPOINT,
       method: METHODS.get,
@@ -112,11 +134,9 @@ const RawMaterials = () => {
         console.log(err);
       })
       .finally(() => {
-        toggleLoader("pageLoader");
+        setPageLoader((prev) => false);
       });
-  }, [page]);
-  // commented for future use
-  // }, [filters, page]);
+  };
 
   const handleActions = ({ action, deleteId, editItem, viewItem }) => {
     if (action === "view") {
@@ -156,9 +176,40 @@ const RawMaterials = () => {
   };
 
   const handleFilterChange = (filterName, value) => {
-    const temp = { ...filters };
-    temp[filterName] = value;
-    setFilters(temp);
+    if (filterName === "action") {
+      if (selectedMaterials?.length) {
+        ("pageLoader");
+        const payload = {
+          product_material_ids: [...selectedMaterials],
+          status: value,
+        };
+        bulkActionMaterial(payload)
+          .then((res) => {
+            toastMessage(
+              `Raw materials ${actionToText[value]} successfully`,
+              successType
+            );
+            setFilters({ ...filters, action: "" });
+            // no need to call the api below as the filters will change api will get called automatically
+            // fetchRawMaterials({ page: page });
+          })
+          .catch((err) => {
+            console.log(err?.response?.data);
+            toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+            setPage(1);
+          })
+          .finally(() => {
+            // toggleLoader("pageLoader");
+            setSelectedMaterials([]);
+          });
+      } else {
+        toastMessage(handleBulkMessage("Raw material"));
+      }
+    } else {
+      const temp = { ...filters };
+      temp[filterName] = value;
+      setFilters(temp);
+    }
   };
 
   const handleRawMaterialCancel = () => {
@@ -216,78 +267,83 @@ const RawMaterials = () => {
   const handleButtonLoaders = (type) => {
     setbtnLoaders({ ...btnLoaders, [type]: !btnLoaders[type] });
   };
+  console.log(selectedMaterials, "selectedMaterials");
   return (
     <>
-      {pageLoader ? (
-        <PageLoader />
-      ) : (
-        <>
-          <FilterSection
-            filterFields={filterFields}
-            handleFilterChange={handleFilterChange}
-          >
-            <CommonButton
-              text="Add Raw Material"
-              className="orange_btn"
-              onClick={toggleRawMaterialSection}
+      {pageLoader && <PageLoader />}
+      <FilterSection
+        filterFields={filterFields}
+        handleFilterChange={handleFilterChange}
+        filters={filters}
+      >
+        <CommonButton
+          text="Add Raw Material"
+          className="orange_btn"
+          onClick={toggleRawMaterialSection}
+        />
+      </FilterSection>
+      <TableWrapper
+        columns={RAW_MATERIAL_COLUMNS}
+        onCheckboxChange={(e) => {
+          selectAllItems(e, rawMaterials);
+        }}
+        checked={rawMaterials?.length === selectedMaterials?.length}
+      >
+        {rawMaterials?.length ? (
+          rawMaterials?.map((it, idx) => (
+            <SingleRawMaterialRow
+              key={idx}
+              item={it}
+              index={idx}
+              currentPage={page}
+              handleActions={handleActions}
+              selectedMaterials={selectedMaterials}
+              handleSelectMaterials={handleSelectMaterials}
             />
-          </FilterSection>
-          <TableWrapper columns={RAW_MATERIAL_COLUMNS}>
-            {rawMaterials?.length ? (
-              rawMaterials?.map((it, idx) => (
-                <SingleRawMaterialRow
-                  key={idx}
-                  item={it}
-                  index={idx}
-                  currentPage={page}
-                  handleActions={handleActions}
-                />
-              ))
-            ) : (
-              <NoDataFound />
-            )}
-          </TableWrapper>
+          ))
+        ) : (
+          <NoDataFound />
+        )}
+      </TableWrapper>
 
-          <Pagination
-            onPageChange={onPageChange}
-            itemsPerPage={ITEMS_PER_PAGE}
-            totalData={totalData}
-            currentPage={page}
-          />
+      <Pagination
+        onPageChange={onPageChange}
+        itemsPerPage={ITEMS_PER_PAGE}
+        totalData={totalData}
+        currentPage={page}
+      />
 
-          {showDeleteModal && (
-            <DeleteConfirmationModal
-              title="Are you sure you want to delete this raw material?"
-              description="This action cannot be redo. Deleting this raw material will permanently remove it from your inventory"
-              onCancel={() => {
-                setItemToDelete(null);
-                toggleDeleteModal();
-              }}
-              loader={deleteLoader}
-              onDelete={deleteRawMaterial}
-            />
-          )}
+      {showDeleteModal && (
+        <DeleteConfirmationModal
+          title="Are you sure you want to delete this raw material?"
+          description="This action cannot be redo. Deleting this raw material will permanently remove it from your inventory"
+          onCancel={() => {
+            setItemToDelete(null);
+            toggleDeleteModal();
+          }}
+          loader={deleteLoader}
+          onDelete={deleteRawMaterial}
+        />
+      )}
 
-          {showRawMaterialSection && (
-            <AddEditRawMaterial
-              formConfig={formConfig}
-              onClose={handleRawMaterialCancel}
-              onSubmit={handleAddEditRawMaterial}
-              editInfo={editInfo}
-              btnLoaders={btnLoaders}
-            />
-          )}
-          {viewInfo?.show && (
-            <ViewRawMaterials
-              item={viewInfo?.item}
-              onClose={() => {
-                setViewInfo({ show: false, item: null });
-                reset();
-              }}
-              formConfig={formConfig}
-            />
-          )}
-        </>
+      {showRawMaterialSection && (
+        <AddEditRawMaterial
+          formConfig={formConfig}
+          onClose={handleRawMaterialCancel}
+          onSubmit={handleAddEditRawMaterial}
+          editInfo={editInfo}
+          btnLoaders={btnLoaders}
+        />
+      )}
+      {viewInfo?.show && (
+        <ViewRawMaterials
+          item={viewInfo?.item}
+          onClose={() => {
+            setViewInfo({ show: false, item: null });
+            reset();
+          }}
+          formConfig={formConfig}
+        />
       )}
     </>
   );

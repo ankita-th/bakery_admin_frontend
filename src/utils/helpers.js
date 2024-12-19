@@ -1,5 +1,9 @@
 import moment from "moment";
-import { RECIPE_MEASURE_OPTIONS } from "../constant";
+import {
+  BACKDOOR_OPTIONS,
+  MEASURE_OPTIONS,
+  RECIPE_MEASURE_OPTIONS,
+} from "../constant";
 import { T } from "./languageTranslator";
 const base_url = import.meta.env.VITE_APP_BASE_URL;
 const userName = localStorage?.getItem("userName");
@@ -24,6 +28,7 @@ const routeTitles = {
   "/settings": T["settings"],
   "/orders-management": T["order_management"],
   "/orders-history": T["order_history"],
+  "/view-product": T["view_product"]
 };
 
 export const getHeadingTitleFromRoute = (pathName) => {
@@ -37,7 +42,8 @@ export const getHeadingTitleFromRoute = (pathName) => {
 export const cleanFilters = (filters) => {
   return Object.keys(filters).reduce((acc, key) => {
     if (filters[key]) {
-      acc[key] = encodeURIComponent(filters[key]); // Encode the value
+      // acc[key] = encodeURIComponent(filters[key]); // Encode the value
+      acc[key] = filters[key];
     }
     return acc;
   }, {});
@@ -267,7 +273,7 @@ export const convertIntoSelectOptions = (options, labelKey, valueKey) => {
 };
 
 export const createPreview = (imagePreview) => {
-  const newPreview = imagePreview.substring(1)
+  const newPreview = imagePreview.substring(1);
   return `${base_url}${newPreview}`;
 };
 
@@ -365,4 +371,119 @@ export const getHeadingTitleFromState = (state) => {
   } else {
     return "Free Shipping";
   }
+};
+
+export const createVariantsData = (variants) => {
+  console.log(variants, "these are variants");
+  const result = [];
+  if (variants?.length) {
+    variants.forEach((curElem) => {
+      const item = {};
+      const directKeys = [
+        "allow_backorders",
+        "description",
+        "enabled",
+        "managed_stock",
+        "name",
+        "sku",
+      ];
+      const inventoryKeys = [
+        "regular_price",
+        "sale_price",
+        "sale_price_dates_from",
+        "sale_price_dates_to",
+        "sku",
+        "weight",
+        "bulking_price_rules",
+        "total_quantity",
+        "unit",
+      ];
+      directKeys.map((key) => {
+        if (key === "description") {
+          item[key] = extractTextFromParagraph(curElem[key]);
+        } else if (key === "allow_backorders") {
+          const extractedOption = extractOption(
+            BACKDOOR_OPTIONS,
+            "allow",
+            "value"
+          );
+          item[key] = extractedOption;
+        } else {
+          item[key] = curElem[key];
+        }
+      });
+      inventoryKeys.map((key) => {
+        if (key === "total_quantity") {
+          item["quantity"] = curElem?.inventory?.[key];
+        } else if (key === "unit") {
+          const extractedOption = extractOption(
+            MEASURE_OPTIONS,
+            curElem?.inventory?.[key],
+            "value"
+          );
+          item[key] = extractedOption;
+        } else {
+          item[key] = curElem?.inventory?.[key];
+        }
+      });
+      result.push(item);
+    });
+  }
+  console.log(result, "result");
+  return result;
+};
+
+export function extractTextFromParagraph(htmlString) {
+  const match = htmlString.match(/<p>(.*?)<\/p>/);
+  return match ? match[1] : "";
+}
+
+export const convertArrayToString = (array) => {
+  if (array?.length) {
+    return array.join(", ");
+  }
+};
+
+export const formatTime = (inputTime) => {
+  return moment(inputTime, "HH:mm").format("h:mm a");
+};
+
+export const COMBINATION_TO_VALUE = {
+  order_discounts: "Order discounts",
+  product_discounts: "Product discounts",
+  shipping_discounts: "Shipping discounts",
+};
+export const showCombination = (combination) => {
+  const formattedCombinations = combination.map((item) => {
+    return COMBINATION_TO_VALUE[item];
+  });
+  return convertArrayToString(formattedCombinations);
+};
+
+//  for payload
+export const convertProductsIntoPairs = (products) => {
+  const result = [];
+  products?.forEach((el) => {
+    const item = { name: el?.label, id: el?.value };
+    result?.push(item);
+  });
+  return result;
+};
+// for useEffect
+export const convertPairFromProducts = (products) => {
+  const result = [];
+  products?.forEach((el) => {
+    const item = { label: el?.name, value: el?.id };
+    result?.push(item);
+  });
+  return result;
+};
+
+export const actionToText = {
+  draft: "drafted",
+  duplicate: "duplicated",
+  delete: "deleted",
+};
+export const handleBulkMessage = (field) => {
+  return `Please select at least one ${field} before performing any action`;
 };

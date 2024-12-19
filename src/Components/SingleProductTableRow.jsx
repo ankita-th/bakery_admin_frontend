@@ -4,14 +4,27 @@ import { listCategories, renderSerialNumber } from "../utils/helpers";
 import { ITEMS_PER_PAGE } from "../constant";
 import Checkbox from "./Common/Checkbox";
 
-const SingleProductTableRow = ({ data, currentPage, index, handleActions }) => {
+const SingleProductTableRow = ({
+  data,
+  currentPage,
+  index,
+  handleActions,
+  selectedProducts,
+  handleSelectProduct,
+}) => {
   // updates required: price published status in date,date are not given and also category is in number
   const { id, name, product_detail, category, status } = data;
 
   return (
     <tr className=" border border-gray-400 ">
       <td className="text-center rounded-tl-[10px] rounded-bl-[10px] bg-white ">
-        <Checkbox />
+        <Checkbox
+          // selection
+          checked={selectedProducts?.includes(id)}
+          onClick={() => {
+            handleSelectProduct(id);
+          }}
+        />
       </td>
       <td className="py-2 px-4 border-0 bg-white ">
         {renderSerialNumber(currentPage, ITEMS_PER_PAGE, index)}

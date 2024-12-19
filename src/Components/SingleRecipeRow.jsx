@@ -10,7 +10,12 @@ const STATUS_TO_CLASS = {
   true: "text-green-500",
   false: "text-red-500",
 };
-const SingleRecipeRow = ({ item, handleActions }) => {
+const SingleRecipeRow = ({
+  item,
+  handleActions,
+  handleSelectRecipe,
+  selectedRecipes,
+}) => {
   // values in the figma name, id, quantity, reorder level, expiration date, last updated, notes:
   const {
     id,
@@ -24,7 +29,12 @@ const SingleRecipeRow = ({ item, handleActions }) => {
   return (
     <tr className="text-center">
       <td className="py-2 px-4 border">
-        <Checkbox />
+        <Checkbox
+          checked={selectedRecipes?.includes(id)}
+          onClick={() => {
+            handleSelectRecipe(id);
+          }}
+        />
       </td>
       <td className="py-2 px-4 border text-nowrap">{recipe_title}</td>
       <td className="py-2 px-4 border text-nowrap">

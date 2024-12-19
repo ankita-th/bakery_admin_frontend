@@ -11,7 +11,7 @@ import CommonButton from "../Components/Common/CommonButton";
 import { useNavigate } from "react-router-dom";
 import usePagination from "../hooks/usePagination";
 import useLoader from "../hooks/useLoader";
-import { makeApiRequest, METHODS } from "../api/apiFunctions";
+import { bulkActionRecipe, makeApiRequest, METHODS } from "../api/apiFunctions";
 import { RECIPE_ENDPOINT } from "../api/endpoints";
 import Pagination from "../Components/Common/Pagination";
 import TableWrapper from "../Wrappers/TableWrapper";
@@ -20,15 +20,20 @@ import useModalToggle from "../hooks/useModalToggle";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import SingleRecipeRow from "../Components/SingleRecipeRow";
 import { successType, toastMessage } from "../utils/toastMessage";
-import { deleteItemBasedOnId } from "../utils/helpers";
+import {
+  actionToText,
+  deleteItemBasedOnId,
+  handleBulkMessage,
+} from "../utils/helpers";
 import PageLoader from "../loaders/PageLoader";
 import { T } from "../utils/languageTranslator";
+import useSelectedItems from "../hooks/useSelectedItems";
 const filterFields = [
   {
     type: "select",
     defaultOption: T["select_type"],
-    options: TYPE_OPTIONS,  
-    filterName: "type",
+    options: TYPE_OPTIONS,
+    filterName: "status",
   },
   {
     type: "select",
@@ -38,7 +43,7 @@ const filterFields = [
   },
   {
     type: "search",
-    filterName: "name",
+    filterName: "search",
     placeholder: T["search_recipe"],
   },
 ];
@@ -50,20 +55,26 @@ const RECIPE_COLUMNS = [
   T["cook_time"],
   T["serving_size"],
   T["status"],
-  T["action"]
+  T["action"],
 ];
 
 const Recipe = () => {
   const navigate = useNavigate();
   const { page, onPageChange, setPage } = usePagination();
-  const { buttonLoader, pageLoader, toggleLoader } = useLoader();
+  const { buttonLoader, pageLoader, toggleLoader, setPageLoader } = useLoader();
   const { showModal: showDeleteModal, toggleModal: toggleDeleteModal } =
     useModalToggle();
+  const {
+    selectedItems: selectedRecipes,
+    setSelectedItems: setSelectedRecipes,
+    handleSelectItems: handleSelectRecipe,
+    selectAllItems: selectAllRecipes,
+  } = useSelectedItems();
 
   const [filters, setFilters] = useState({
-    type: "",
+    status: "",
     action: "",
-    name: "",
+    search: "",
   });
   const [recipes, setRecipes] = useState([]);
   const [totalData, setTotalData] = useState(null);
@@ -71,11 +82,48 @@ const Recipe = () => {
   const [deleteLoader, setDeleteLoader] = useState(false);
 
   useEffect(() => {
-    toggleLoader("pageLoader");
     const apiParams = {
       ...filters,
       page: page,
     };
+    fetchRecipes(apiParams);
+  }, [page, filters]);
+  // commented for future use
+  // }, [filters, page]);
+
+  const handleFilterChange = (filterName, value) => {
+    if (filterName === "action") {
+      if (selectedRecipes?.length) {
+        const payload = {
+          recipes: [...selectedRecipes],
+          status: value,
+        };
+        setPageLoader((prev) => true);
+        bulkActionRecipe(payload)
+          .then(() => {
+            // setFilters({ ...filters, action: "" })
+            toastMessage(`Recipes ${actionToText[value]} successfully`,successType);
+          })
+          .catch((err) => {
+            console.log();
+            toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+          })
+          .finally(() => {
+            setPageLoader((prev) => false);
+            setFilters({ ...filters, action: "" });
+            setSelectedRecipes([]);
+          });
+      } else {
+        toastMessage(handleBulkMessage("Recipe"));
+      }
+    } else {
+      const temp = { ...filters };
+      temp[filterName] = value;
+      setFilters(temp);
+    }
+  };
+  const fetchRecipes = (apiParams) => {
+    setPageLoader((prev) => true);
     makeApiRequest({
       endPoint: RECIPE_ENDPOINT,
       method: METHODS?.get,
@@ -86,15 +134,7 @@ const Recipe = () => {
         setTotalData(res?.data?.count);
       })
       .catch((err) => console.log(err))
-      .finally(() => toggleLoader("pageLoader"));
-  }, [page]);
-  // commented for future use
-  // }, [filters, page]);
-
-  const handleFilterChange = (filterName, value) => {
-    const temp = { ...filters };
-    temp[filterName] = value;
-    setFilters(temp);
+      .finally(() => setPageLoader((prev) => false));
   };
 
   const handleActions = ({ action, id }) => {
@@ -116,12 +156,10 @@ const Recipe = () => {
       delete_id: itemToDelete,
     })
       .then((res) => {
-        console.log(res, "delete response");
         toastMessage("Recipe deleted successfully", successType);
         setRecipes(deleteItemBasedOnId(recipes, itemToDelete)); //itemTo delete contains the id
       })
       .catch((err) => {
-        console.log(err, "tthis is err for recipe");
         toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
       })
       .finally((res) => {
@@ -130,63 +168,70 @@ const Recipe = () => {
         setDeleteLoader((prev) => false);
       });
   };
+  console.log(selectedRecipes, "selectedRecipes");
   return (
     <div>
-      {pageLoader ? (
-        <PageLoader />
-      ) : (
-        <>
-          <FilterSection
-            filterFields={filterFields}
-            handleFilterChange={handleFilterChange}
-          >
-            <CommonButton
-              text="Categories"
-              className="grey_btn"
-              onClick={() => navigate("/categories")}
-            />
-            <CommonButton
-              text="Add New Recipe"
-              className="orange_btn"
-              onClick={() => navigate("/add-edit-recipe")}
-            />
-          </FilterSection>
-          <TableWrapper columns={RECIPE_COLUMNS}>
-            {recipes?.length ? (
-              recipes?.map((it, idx) => (
-                <SingleRecipeRow
-                  key={idx}
-                  item={it}
-                  index={idx}
-                  currentPage={page}
-                  handleActions={handleActions}
-                  isRecipe={true}
-                />
-              ))
-            ) : (
-              <NoDataFound />
-            )}
-          </TableWrapper>
-          <Pagination
-            onPageChange={onPageChange}
-            itemsPerPage={ITEMS_PER_PAGE}
-            totalData={totalData}
-            currentPage={page}
+      {pageLoader && <PageLoader />}
+      <>
+        <FilterSection
+          filterFields={filterFields}
+          handleFilterChange={handleFilterChange}
+          filters={filters}
+        >
+          <CommonButton
+            text="Categories"
+            className="grey_btn"
+            onClick={() => navigate("/categories")}
           />
-          {showDeleteModal && (
-            <DeleteConfirmationModal
-              title="Are you sure you want to delete this recipe?"
-              description="This action cannot be redo. Deleting this recipe will permanently remove it from your inventory"
-              onCancel={() => {
-                setItemToDelete(null);
-                toggleDeleteModal();
-              }}
-              onDelete={deleteRecipe}
-              loader={deleteLoader}
-            />
+          <CommonButton
+            text="Add New Recipe"
+            className="orange_btn"
+            onClick={() => navigate("/add-edit-recipe")}
+          />
+        </FilterSection>
+        <TableWrapper
+          columns={RECIPE_COLUMNS}
+          onCheckboxChange={(e) => {
+            selectAllRecipes(e, recipes);
+          }}
+          checked={recipes?.length === selectedRecipes?.length}
+        >
+          {recipes?.length ? (
+            recipes?.map((it, idx) => (
+              <SingleRecipeRow
+                key={idx}
+                item={it}
+                index={idx}
+                currentPage={page}
+                handleActions={handleActions}
+                isRecipe={true}
+                selectedRecipes={selectedRecipes}
+                handleSelectRecipe={handleSelectRecipe}
+              />
+            ))
+          ) : (
+            <NoDataFound />
           )}
-        </>
-      )}
+        </TableWrapper>
+        <Pagination
+          onPageChange={onPageChange}
+          itemsPerPage={ITEMS_PER_PAGE}
+          totalData={totalData}
+          currentPage={page}
+        />
+        {showDeleteModal && (
+          <DeleteConfirmationModal
+            title="Are you sure you want to delete this recipe?"
+            description="This action cannot be redo. Deleting this recipe will permanently remove it from your inventory"
+            onCancel={() => {
+              setItemToDelete(null);
+              toggleDeleteModal();
+            }}
+            onDelete={deleteRecipe}
+            loader={deleteLoader}
+          />
+        )}
+      </>
     </div>
   );
 };

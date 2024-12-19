@@ -19,12 +19,14 @@ const CheckboxGroup = ({
       <div className={className}>
         {options?.map(({ value, label: optionLabel }, idx) => (
           <div key={idx} className="flex gap-4">
-            <input
-              {...register(fieldName, rules)}
-              type="checkbox"
-              value={value}
-            />
-            <div className="option-label">{optionLabel}</div>
+            <label>
+              <input
+                {...register(fieldName, rules)}
+                type="checkbox"
+                value={value}
+              />
+              <div className="option-label">{optionLabel}</div>
+            </label>
           </div>
         ))}
       </div>

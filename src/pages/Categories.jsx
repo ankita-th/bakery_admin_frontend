@@ -45,9 +45,9 @@ const DEFAULT_CATEGORY_VALUES = {
 const filterFields = [
   {
     type: "select",
-    defaultOption: "select_type",
+    defaultOption: "Select type",
     options: TYPE_OPTIONS,
-    filterName: "type",
+    filterName: "status",
   },
   {
     type: "select",
@@ -57,7 +57,7 @@ const filterFields = [
   },
   {
     type: "search",
-    filterName: "name",
+    filterName: "search",
     placeholder: "Search Categories",
   },
 ];
@@ -68,9 +68,9 @@ const Categories = () => {
   });
   const { reset, setValue } = formConfig;
   const [filters, setFilters] = useState({
-    type: "",
+    status: "",
     action: "",
-    name: "",
+    search: "",
   });
   const [file, setFile] = useState({
     file: null,
@@ -102,7 +102,7 @@ const Categories = () => {
 
   useEffect(() => {
     fetchData();
-  }, [page]);
+  }, [page, filters]);
   // commented for future use
   // }, [filters, page]);
 
@@ -306,6 +306,7 @@ const Categories = () => {
           <FilterSection
             filterFields={filterFields}
             handleFilterChange={handleFilterChange}
+            filters={filters}
           >
             <CommonButton
               text="Add Category/SubCategory"

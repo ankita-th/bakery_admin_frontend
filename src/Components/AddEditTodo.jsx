@@ -48,7 +48,6 @@ const AddEditTodo = ({
         editItem?.assigned_to,
         "value"
       );
-      console.log(employeeOption, "this is employee options");
       setValue("assigned_to", employeeOption);
     }
   }, [employeeList]);
@@ -85,14 +84,17 @@ const AddEditTodo = ({
               isNumberOnly={true}
             />
           )} */}
-          <CommonTextField
-            label="Task ID *"
-            fieldName="task_id"
-            rules={TodoValidations["task_id"]}
-            formConfig={formConfig}
-            placeholder="Enter Task ID"
-            isNumberOnly={true}
-          />
+          {isEdit && (
+            <CommonTextField
+              label="Task ID *"
+              fieldName="task_id"
+              rules={TodoValidations["task_id"]}
+              formConfig={formConfig}
+              placeholder="Enter Task ID"
+              isNumberOnly={true}
+              disabled={true}
+            />
+          )}
           <CommonTextField
             label="Task Name *"
             fieldName="title"

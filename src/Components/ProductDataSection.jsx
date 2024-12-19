@@ -3,6 +3,7 @@ import TabListing from "./TabListing";
 import InventoryTab from "./InventoryTab";
 import AdvancedTab from "./AdvancedTab";
 import VariantsTab from "./VariantsTab";
+import { T } from "../utils/languageTranslator";
 
 const TABS = [
   { label: "Inventory", value: "inventory" },
@@ -30,7 +31,7 @@ const ProductDataSection = ({
     <div className="product-data-section border">
       <div className="w-full mx-auto p-4 bg-white rounded-lg">
         <h2 className="text-lg font-semibold text-gray-700 mb-4">
-          Product Data
+          {T["product_data"]}
         </h2>
 
         <div className="flex space-x-4">
@@ -41,19 +42,19 @@ const ProductDataSection = ({
           />
           {/* {renderActiveTab()} */}
           <div
-            className={`inventory ${activeTab == "inventory" ? "" : "hidden"}`}
+            className={`inventory w-[calc(100%-200px)] ${activeTab == "inventory" ? "" : "hidden"}`}
           >
             <InventoryTab formConfig={formConfig} disabled={disabled} />
           </div>
           <div
-            className={`variations ${
+            className={`variations w-[calc(100%-200px)] ${
               activeTab === "variations" ? "" : "hidden"
             }`}
           >
             <VariantsTab formConfig={formConfig} disabled={disabled} />
           </div>
           <div
-            className={`advanced ${activeTab === "advanced" ? "" : "hidden"}`}
+            className={`advanced w-[calc(100%-200px)] ${activeTab === "advanced" ? "" : "hidden"}`}
           >
             <AdvancedTab formConfig={formConfig} disabled={disabled} />
           </div>

@@ -284,6 +284,7 @@ const Todo = () => {
           <FilterSection
             filterFields={filterFields}
             handleFilterChange={handleFilterChange}
+            filters={filters}
           >
             <CommonButton
               text="Add Todo List"

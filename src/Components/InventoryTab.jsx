@@ -7,6 +7,7 @@ import { MEASURE_OPTIONS } from "../constant";
 import CommonFieldArray from "./Common/CommonFieldArray";
 import { SPECIAL_CHARACTERS_REGEX } from "../regex/regex";
 import ErrorMessage from "./Common/ErrorMessage";
+import { T } from "../utils/languageTranslator";
 const InventoryTab = ({ formConfig, disabled }) => {
   const {
     watch,
@@ -19,22 +20,22 @@ const InventoryTab = ({ formConfig, disabled }) => {
   const BULKING_PRICE_ITEMS = [
     {
       fieldName: "quantity_from",
-      placeholder: "Enter Quantity From",
-      label: "Quantity From",
+      placeholder: T["enter_quantity_from"],
+      label: T["quantity_from"],
       isRequired: true,
       isNumberOnly: true,
     },
     {
       fieldName: "quantity_to",
-      placeholder: "Enter Quantity To",
-      label: "Quantity To",
+      placeholder: T["enter_quantity_to"],
+      label: T["quantity_to"],
       isRequired: true,
       isNumberOnly: true,
     },
     {
       fieldName: "price",
-      placeholder: "Enter Price",
-      label: "Price ($)",
+      placeholder: T["enter_price"],
+      label: T["prices"],
       isRequired: true,
     },
   ];
@@ -63,10 +64,10 @@ const InventoryTab = ({ formConfig, disabled }) => {
     <div>
       <div className="w-full space-y-4">
         <CommonTextField
-          label="SKU *"
+          label= {`${T["sku"]} *`}
           fieldName="sku"
           className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
-          rules={{
+          rules={{  
             ...createRequiredValidation("SKU"),
             pattern: {
               value: SPECIAL_CHARACTERS_REGEX,
@@ -74,30 +75,14 @@ const InventoryTab = ({ formConfig, disabled }) => {
             },
           }}
           formConfig={formConfig}
-          placeholder="Enter SKU"
+          placeholder={T["enter_sku"]}
           disabled={disabled}
         />
 
         <div className="grid grid-cols-2 gap-4">
-          {/* <CommonTextField
-            label="Regular Price ($) *"
-            fieldName="regular_price"
-            className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
-            rules={{
-              ...createRequiredValidation("Regular Price"),
-              maxLength: {
-                value: 8,
-                message:
-                  "Regular price must not be more than 8 digits in total",
-              },
-            }}
-            formConfig={formConfig}
-            placeholder="Enter Price of Product"
-            disabled={disabled}
-            isNumberOnly={true}
-          /> */}
+
           <div>
-            <label>Regular Price ($) *</label>
+            <label>{`${T["regular_price"]} *`}</label>
             <input
               {...register("regular_price", {
                 required: "Regular price is required",
@@ -108,8 +93,9 @@ const InventoryTab = ({ formConfig, disabled }) => {
                 },
               })}
               type="text"
-              placeholder="Enter Regular Price"
+              placeholder={T["enter_regular_price"]}
               className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
+              disabled={disabled}
             />
             <ErrorMessage fieldName="regular_price" errors={errors} />
           </div>
@@ -132,7 +118,7 @@ const InventoryTab = ({ formConfig, disabled }) => {
             disabled={disabled}
           /> */}
           <div>
-            <label>Sale Price ($) *</label>
+            <label>{`${T["sale_price"]} *`}</label>
             <input
               {...register("sale_price", {
                 required: "Sale price is required",
@@ -146,8 +132,9 @@ const InventoryTab = ({ formConfig, disabled }) => {
                   "Regular price and sale price can't be same.",
               })}
               type="text"
-              placeholder="Enter Sale Price"
+              placeholder={T["enter_sale_price"]}
               className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
+              disabled={disabled}
             />
             <ErrorMessage fieldName="sale_price" errors={errors} />
           </div>
@@ -155,7 +142,7 @@ const InventoryTab = ({ formConfig, disabled }) => {
 
         <div className="grid grid-cols-2 gap-4">
           <CommonDateField
-            label="Sale Price Date From *"
+            label={`${T["sale_price_date_from"]} *`}
             fieldName="sale_price_dates_from"
             rules={createRequiredValidation("Sale price date from")}
             formConfig={formConfig}
@@ -163,7 +150,7 @@ const InventoryTab = ({ formConfig, disabled }) => {
             disabled={disabled}
           />
           <CommonDateField
-            label="Sale Price Date To *"
+            label= {`${T["sale_price_date_to"]} *`}
             fieldName="sale_price_dates_to"
             minDate={watch("sale_price_dates_from")}
             disabled={disabled}
@@ -180,30 +167,29 @@ const InventoryTab = ({ formConfig, disabled }) => {
 
         <div className="grid grid-cols-2 gap-4">
           <CommonTextField
-            label="Weight *"
+            label={`${T["weight"]} *`}
             disabled={disabled}
             fieldName="weight"
             className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
             rules={createRequiredValidation("Weight")}
             formConfig={formConfig}
-            placeholder="Enter Weight Of Product"
+            placeholder={T["enter_weight_of_product"]}
             isNumberOnly={true}
           />
           <CommonSelect
-            label="Unit *"
+            label={`${T["unit"]} *`}
             formConfig={formConfig}
             disabled={disabled}
             fieldName="unit"
             rules={createRequiredValidation("Unit")}
             options={MEASURE_OPTIONS}
-            placeholder="Select Unit Of Product"
+            placeholder={T["select_unit_of_product"]}
             className="mt-2 border-2 border-solid border-black-500 rounded"
           />
         </div>
-
         <div>
           <CommonFieldArray
-            heading="Bulking Pricing Rules"
+            heading={T["bulking_pricing_rules"]}
             disabled={disabled}
             fieldArrayName="bulking_price_rules"
             items={BULKING_PRICE_ITEMS}

@@ -6,7 +6,8 @@ import { useForm } from "react-hook-form";
 import ErrorMessage from "./Common/ErrorMessage";
 import { successType, toastMessage } from "../utils/toastMessage";
 import { DEFAULT_ERROR_MESSAGE } from "../constant";
-
+import { T } from "../utils/languageTranslator";
+      
 const CategorySection = ({
   formConfig,
   fieldName,
@@ -101,9 +102,9 @@ const CategorySection = ({
 
   return (
     <div>
-      <div className="category-container p-4">
+      <div className="category-container p-4 w-full product-data-section">
         <div className="category-heading">
-          <h5>Categories</h5>
+          <h5>{T["categories"]}</h5>
           {!isViewOnly && (
             <span
               onClick={() => {
@@ -111,7 +112,7 @@ const CategorySection = ({
               }}
               className="text-[#FF6D2F]"
             >
-              +Add
+             {`+${T["add"]}`} 
             </span>
           )}
         </div>
@@ -119,7 +120,7 @@ const CategorySection = ({
           {categories?.length > 0 ? (
             categories.map(({ id, name }, index) => {
               return (
-                <div key={index}>
+                <div key={index} className="flex items-center gap-2 capitalize">
                   <input
                     {...register(fieldName, rules)}
                     type="checkbox"

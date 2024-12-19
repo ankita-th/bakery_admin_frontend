@@ -5,17 +5,18 @@ import { DISCOUNTED_USAGE_OPTIONS } from "../../constant";
 import { createRequiredValidation } from "../../utils/helpers";
 
 const DiscountUses = ({ formConfig }) => {
-  const { watch, setValue } = formConfig;
+  const { watch, setValue, clearErrors } = formConfig;
   const { maximum_discount_usage } = watch;
   useEffect(() => {
-    if (maximum_discount_usage !== "per_customer") {
-      setValue("", "");
+    if (watch("maximum_discount_usage") == "per_customer") {
+      setValue("maximum_usage_value", "");
+      clearErrors("maximum_usage_value");
     }
-  }, [maximum_discount_usage]);
+  }, [watch("maximum_discount_usage")]);
   const showValueField = () => {
-    return watch("maximum_discount_usage") == "limit_number_of_times";
+    return watch("maximum_discount_usage") == "limit_discount_usage_time";
   };
-  console.log(watch("maximum_discount_usage"))
+  console.log(watch("maximum_discount_usage"), "maximum_discount_usage");
   return (
     <div className="bg-white p-6 rounded-lg">
       <RadioGroup

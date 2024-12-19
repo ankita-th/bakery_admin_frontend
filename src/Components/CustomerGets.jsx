@@ -98,7 +98,7 @@ const CustomerGets = ({ formConfig }) => {
               isMulti={true}
               loadOptions={fetchProducts}
               placeholder="Search Product"
-              fieldName="buy_products"
+              fieldName="customer_get_products"
               rules={createRequiredValidation()}
               isLoading={isLoading}
               noOptionMessage={NoOptionsMessage}

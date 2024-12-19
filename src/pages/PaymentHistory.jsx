@@ -100,6 +100,7 @@ const PaymentHistory = () => {
           <FilterSection
             filterFields={filterFields}
             handleFilterChange={handleFilterChange}
+            filters={filters}
           />
           <TableWrapper columns={PAYMENT_COLUMNS}>
             {paymentHistory?.length ? (
