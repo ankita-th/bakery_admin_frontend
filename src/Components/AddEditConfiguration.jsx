@@ -8,6 +8,7 @@ import CommonButton from "./Common/CommonButton";
 import { AVAILABILITY_OPTIONS, SWEDEN_COUNTY_OPTIONS } from "../constant";
 import { extractOption, prefillFormValues } from "../utils/helpers";
 import LocationField from "../Form Fields/LocationField";
+import { T } from "../utils/languageTranslator";
 
 const AddEditConfiguration = ({
   onClose,
@@ -50,7 +51,7 @@ const AddEditConfiguration = ({
       <div className="category-section overflow-auto">
         <AddEditSectionHeading
           onClose={onClose}
-          text={isEdit ? "Edit Configuration" : "Add Configuration"}
+          text={isEdit ?  T["edit_configuartion"] : T["add_configuration"]}
         />
         <FormWrapper
           onSubmit={onSubmit}
@@ -59,19 +60,19 @@ const AddEditConfiguration = ({
           isCustomButtons={true}
         >
           <CommonTextField
-            label="ZIP Code *"
+              label={`${T["zip_code"]} *`}
             fieldName="zip_code"
             rules={ConfigurationValidations["zip_code"]}
             formConfig={formConfig}
             isNumberOnly={true}
-            placeholder="Enter ZIP code e.g (12345)"
+            placeholder={T["enter_zip_code"]}
             maxlength={5}
           />
           <LocationField
             fieldName="address"
             formConfig={formConfig}
-            placeholder="Enter Area Name"
-            label="Area/Location Name *"
+            placeholder={T["enter_area_name"]}
+            label={`${T["area_location_name"]} *`}
             rules={ConfigurationValidations["address"]}
             options={{
               types: ["address"],
@@ -80,9 +81,9 @@ const AddEditConfiguration = ({
           />
           <CommonSelect
             formConfig={formConfig}
-            label="State *"
+            label={`${T["state"]} *`}
             selectType="react-select"
-            placeholder="Select State"
+            placeholder={T["select_state"]}
             options={SWEDEN_COUNTY_OPTIONS}
             fieldName="state"
             rules={ConfigurationValidations["state"]}
@@ -91,8 +92,8 @@ const AddEditConfiguration = ({
           <LocationField
             fieldName="city"
             formConfig={formConfig}
-            placeholder="Enter City"
-            label="City *"
+            placeholder={T["enter_city"]}
+            label={`${T["city"]} *`}
             rules={ConfigurationValidations["city"]}
             options={{
               types: ["(cities)"],
@@ -100,11 +101,11 @@ const AddEditConfiguration = ({
             }}
           />
           <CommonTextField
-            label="Min. Order Quantity *"
+            label={`${T["min_order_quantity"]} *`}
             fieldName="min_order_quantity"
             rules={ConfigurationValidations["min_order_quantity"]}
             formConfig={formConfig}
-            placeholder="Enter Minimum Purchase Order"
+            placeholder={T["enter_minimum_purchase_order"]}
             isNumberOnly={true}
             maxlength={5}
           />
@@ -120,9 +121,9 @@ const AddEditConfiguration = ({
 
           <CommonSelect
             formConfig={formConfig}
-            label="Delivery Available *"
+            label={`${T["delivery_available"]} *`}
             selectType="react-select"
-            placeholder="Select Availability"
+            placeholder={T["select_availability"]}
             options={AVAILABILITY_OPTIONS}
             fieldName="delivery_availability"
             rules={ConfigurationValidations["delivery_availability"]}
@@ -130,11 +131,11 @@ const AddEditConfiguration = ({
           />
 
           <CommonTextField
-            label="Notes"
+            label={T["notes"]}
             fieldName="notes"
             rules={ConfigurationValidations["notes"]}
             formConfig={formConfig}
-            placeholder="Enter Notes"
+            placeholder={T["enter_notes"]}
             type="textarea"
             rows={4}
           />

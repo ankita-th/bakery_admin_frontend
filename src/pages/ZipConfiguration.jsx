@@ -110,6 +110,7 @@ const ZipConfiguration = () => {
   };
 
   const onSubmit = (data, event) => {
+    console.log(data,"data");
     toggleLoader("buttonLoader");
     const buttonType = event.nativeEvent.submitter.name;
     setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
@@ -123,7 +124,7 @@ const ZipConfiguration = () => {
       delivery_availability: data?.delivery_availability?.value,
       min_order_quantity: +data?.min_order_quantity,
       // delivery_threshold: +data?.delivery_threshold,
-      city: data?.city?.formatted_address || data?.city?.formatted_address,
+      city: data?.city?.formatted_address || data?.city,
       address: data?.address?.formatted_address,
       state: data?.state?.value,
       delivery_threshold: "21",
