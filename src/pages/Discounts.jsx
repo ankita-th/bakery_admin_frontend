@@ -4,14 +4,11 @@ import {
   DEFAULT_ERROR_MESSAGE,
   ITEMS_PER_PAGE,
   SORT_BY_OPTIONS,
+  TYPE_OPTIONS,
 } from "../constant";
 import FilterSection from "../Components/Common/FilterSection";
 import usePagination from "../hooks/usePagination";
-import {
-  bulkActionDiscount,
-  makeApiRequest,
-  METHODS,
-} from "../api/apiFunctions";
+import { makeApiRequest, METHODS } from "../api/apiFunctions";
 import useLoader from "../hooks/useLoader";
 import PageLoader from "../loaders/PageLoader";
 import NoDataFound from "../Components/Common/NoDataFound";
@@ -35,12 +32,7 @@ const filterFields = [
     options: SORT_BY_OPTIONS,
     filterName: "sort_by",
   },
-  {
-    type: "select",
-    defaultOption: T["select_action"],
-    options: ACTIONS,
-    filterName: "action",
-  },
+
   {
     type: "search",
     filterName: "name",
@@ -59,7 +51,7 @@ const DISCOUNTS_COLUMNS = [
 const Discounts = () => {
   const navigate = useNavigate();
   const { page, onPageChange } = usePagination();
-  const { toggleLoader, pageLoader,setPageLoader } = useLoader();
+  const { toggleLoader, pageLoader } = useLoader();
   const [filters, setFilters] = useState({
     sort_by: "",
     search: "",
@@ -106,36 +98,16 @@ const Discounts = () => {
       });
   };
 
+  // const handleFilterChange = (filterName, value) => {
+  //   const temp = { ...filters };
+  //   temp[filterName] = value;
+  //   setFilters(temp);
+  // };
+
   const handleFilterChange = (filterName, value) => {
-    if (filterName === "action") {
-      if (selectedDiscount?.length) {
-        const payload = {
-          discounts: [...selectedDiscount],
-          status: value,
-        };
-        setPageLoader((prev) => true);
-        bulkActionDiscount(payload)
-          .then(() => {
-            // setFilters({ ...filters, action: "" })
-            toastMessage(`discounts ${actionToText[value]} successfully`,successType);
-          })
-          .catch((err) => {
-            console.log();
-            toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
-          })
-          .finally(() => {
-            setPageLoader((prev) => false);
-            setFilters({ ...filters, action: "" });
-            setSelectedDiscount([]);
-          });
-      } else {
-        toastMessage(handleBulkMessage("Discount"));
-      }
-    } else {
-      const temp = { ...filters };
-      temp[filterName] = value;
-      setFilters(temp);
-    }
+    const temp = { ...filters };
+    temp[filterName] = value;
+    setFilters(temp);
   };
 
   const handleActions = ({ action, delete_id, editItem }) => {
