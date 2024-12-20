@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {
+  ACTIONS,
   DEFAULT_ERROR_MESSAGE,
   ITEMS_PER_PAGE,
   SORT_BY_OPTIONS,
+  TYPE_OPTIONS,
 } from "../constant";
 import FilterSection from "../Components/Common/FilterSection";
 import usePagination from "../hooks/usePagination";
@@ -16,7 +18,7 @@ import Pagination from "../Components/Common/Pagination";
 import TableWrapper from "../Wrappers/TableWrapper";
 import useModalToggle from "../hooks/useModalToggle";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
-import { deleteItemBasedOnId } from "../utils/helpers";
+import { actionToText, deleteItemBasedOnId, handleBulkMessage } from "../utils/helpers";
 import { successType, toastMessage } from "../utils/toastMessage";
 import CommonButton from "../Components/Common/CommonButton";
 import DiscountTypeSection from "../Components/DiscountTypeSection";
@@ -53,6 +55,7 @@ const Discounts = () => {
   const [filters, setFilters] = useState({
     sort_by: "",
     search: "",
+    action: "",
   });
   const [discounts, setDiscounts] = useState([]);
   const [totalData, setTotalData] = useState([]);
@@ -94,6 +97,12 @@ const Discounts = () => {
         toggleLoader("pageLoader");
       });
   };
+
+  // const handleFilterChange = (filterName, value) => {
+  //   const temp = { ...filters };
+  //   temp[filterName] = value;
+  //   setFilters(temp);
+  // };
 
   const handleFilterChange = (filterName, value) => {
     const temp = { ...filters };
@@ -138,6 +147,7 @@ const Discounts = () => {
       });
   };
   const handleAddNewCoupon = () => {};
+  console.log(selectedDiscount,'selectedDiscount')
   return (
     <div>
       {pageLoader && <PageLoader />}
@@ -182,7 +192,7 @@ const Discounts = () => {
         totalData={totalData}
         currentPage={page}
       />
-      {showDeleteModal && (
+      {showDeleteModal && ( 
         <DeleteConfirmationModal
           // update required: may be need to correct this messages
           title="Are you sure you want to delete this discount coupons?"

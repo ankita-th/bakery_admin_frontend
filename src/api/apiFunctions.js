@@ -121,6 +121,30 @@ export const bulkActionProduct = (payload) => {
   }
 };
 
+export const bulkActionDiscount = (payload) => {
+  const { status } = payload;
+  if (status === "delete") {
+    return authorizeAxios.delete("/bulk-coupon-update", { data: payload });
+  } else if (status === "draft") {
+    return authorizeAxios.patch("/bulk-coupon-update", payload);
+  } else if (status === "duplicate") {
+    delete payload?.status;
+    return authorizeAxios.post("/bulk-coupon-duplicate", payload);
+  }
+};
+
+export const bulkActionCategory = (payload) => {
+  const { status } = payload;
+  if (status === "delete") {
+    return authorizeAxios.delete("/bulk-category-update/", { data: payload });
+  } else if (status === "draft") {
+    return authorizeAxios.patch("/bulk-category-update/", payload);
+  } else if (status === "duplicate") {
+    delete payload?.status;
+    return authorizeAxios.post("/duplicate-category/", payload);
+  }
+};
+
 export const bulkActionMaterial = (payload) => {
   const { status, product_material_ids } = payload;
   if (status === "duplicate") {
@@ -156,3 +180,4 @@ export const bulkActionRecipe = (payload) => {
     return authorizeAxios.patch("/recipe/bulk-recipe-update/", payload);
   }
 };
+
