@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { INSTANCE, makeApiRequest, METHODS } from "../api/apiFunctions";
+import {
+  bulkActionDiscount,
+  INSTANCE,
+  makeApiRequest,
+  METHODS,
+} from "../api/apiFunctions";
 import { CATEGORIES_ENDPOINT, SUBCATEGORY_ENDPOINT } from "../api/endpoints";
 import { successType, toastMessage } from "../utils/toastMessage";
 import {
@@ -23,6 +28,7 @@ import FilterSection from "../Components/Common/FilterSection";
 import CommonButton from "../Components/Common/CommonButton";
 import AddEditCategorySection from "../Components/AddEditCategorySection";
 import PageLoader from "../loaders/PageLoader";
+import useSelectedItems from "../hooks/useSelectedItems";
 const CATEGORY_PAGE_COLUMNS = [
   "checkbox",
   "", // for image section
@@ -97,8 +103,17 @@ const Categories = () => {
   // for delete confirmation modal
   const { showModal, toggleModal } = useModalToggle();
   const { page, onPageChange, setPage } = usePagination();
+  const {
+    selectedItems: selectedCategories,
+    setSelectedItems: setSelectedCategories,
+    handleSelectItems: handleSelectedCategories,
+    selectAllItems,
+  } = useSelectedItems();
+
   // for add and edit category modal
   const categoryModal = useModalToggle();
+
+  console.log(selectedCategories,"select all items");
 
   useEffect(() => {
     fetchData();
@@ -175,10 +190,59 @@ const Categories = () => {
       });
   };
 
+  // const handleFilterChange = (filterName, value) => {
+  //   const temp = { ...filters };
+  //   temp[filterName] = value;
+  //   setFilters(temp);
+  // };
+
   const handleFilterChange = (filterName, value) => {
-    const temp = { ...filters };
-    temp[filterName] = value;
-    setFilters(temp);
+    // logic for bulk actions
+    if (filterName === "action") {
+      const payload = {
+        handleFilterChange,
+        coupons: selectedCategories,
+        status: value,
+      };
+      console.log(value, "this is value");
+
+      if (selectedCategories?.length) {
+        toggleLoader("pageLoader");
+        bulkActionDiscount(payload) // need to change api
+          .then((res) => {
+            // fetchDiscounts({ page: 1 });
+            toastMessage(
+              res?.data?.message ||
+                `Categories ${
+                  value === "delete"
+                    ? "Deleted"
+                    : value === "draft"
+                    ? "Drafted"
+                    : value === "duplicate" && "Duplicated"
+                } successfully`,
+              successType
+            );
+          })
+          .catch((err) => {
+            console.log(err, "this is err");
+            toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+          })
+          .finally(() => {
+            toggleLoader("pageLoader");
+            setPage(1);
+            setSelectedCategories([]);
+            setFilters({ ...filters, ["action"]: "" });
+          });
+      } else {
+        toastMessage(
+          "Please select at least one discount before performing any action"
+        );
+      }
+    } else {
+      const temp = { ...filters };
+      temp[filterName] = value;
+      setFilters(temp);
+    }
   };
 
   const handleCategoryModal = ({ action }) => {
@@ -318,7 +382,13 @@ const Categories = () => {
               className="orange_btn"
             />
           </FilterSection>
-          <TableWrapper columns={CATEGORY_PAGE_COLUMNS}>
+          <TableWrapper
+            columns={CATEGORY_PAGE_COLUMNS}
+            onCheckboxChange={(e) => {
+              selectAllItems(e, categories);
+            }}
+            checked={categories?.length === selectedCategories?.length}
+          >
             {categories?.length ? (
               categories?.map((it, idx) => (
                 <SingleCategoryRow
@@ -327,6 +397,8 @@ const Categories = () => {
                   currentPage={page}
                   index={idx}
                   handleActions={handleActions}
+                  selectedCategories={selectedCategories}
+                  handleSelectedCategories={handleSelectedCategories}
                   // for image upload
                   // setFile={setFile}
                   // file={file}
