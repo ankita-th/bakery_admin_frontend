@@ -216,8 +216,8 @@ const BuyXGetY = ({ location }) => {
           payload[key] = values[key]?.value;
         } else if (key === "buy_products" || key === "customer_get_products") {
           if (values[key]?.length) {
-            payload[key] = values[key]?.map((el) => el.value || el);
-            // payload[key] = convertProductsIntoPairs(values?.[key]);
+            // payload[key] = values[key]?.map((el) => el.value || el);
+            payload[key] = convertProductsIntoPairs(values?.[key]);
           }
         } else {
           payload[key] = values[key];

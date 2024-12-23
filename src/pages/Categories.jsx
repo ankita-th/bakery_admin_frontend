@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
+  bulkActionCategories,
   bulkActionDiscount,
   INSTANCE,
   makeApiRequest,
@@ -23,7 +24,12 @@ import SingleCategoryRow from "../Components/Common/SingleCategoryRow";
 import useModalToggle from "../hooks/useModalToggle";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import Pagination from "../Components/Common/Pagination";
-import { deleteItemBasedOnId, handleEdit } from "../utils/helpers";
+import {
+  actionToText,
+  completeLength,
+  deleteItemBasedOnId,
+  handleEdit,
+} from "../utils/helpers";
 import FilterSection from "../Components/Common/FilterSection";
 import CommonButton from "../Components/Common/CommonButton";
 import AddEditCategorySection from "../Components/AddEditCategorySection";
@@ -72,6 +78,11 @@ const Categories = () => {
   const formConfig = useForm({
     defaultValues: DEFAULT_CATEGORY_VALUES,
   });
+  const { showModal, toggleModal } = useModalToggle();
+  const { page, onPageChange, setPage } = usePagination();
+  const categoryModal = useModalToggle();
+  const { pageLoader, toggleLoader, setPageLoader } = useLoader();
+
   const { reset, setValue } = formConfig;
   const [filters, setFilters] = useState({
     status: "",
@@ -98,31 +109,30 @@ const Categories = () => {
     publish: false,
     draft: false,
   });
+
   const [deleteLoader, setDeleteLoader] = useState(false);
-  const { pageLoader, toggleLoader } = useLoader();
+  const [selectedItems, setSelectedItems] = useState({
+    categories: [],
+    subCategories: [],
+  });
+
   // for delete confirmation modal
-  const { showModal, toggleModal } = useModalToggle();
-  const { page, onPageChange, setPage } = usePagination();
-  const {
-    selectedItems: selectedCategories,
-    setSelectedItems: setSelectedCategories,
-    handleSelectItems: handleSelectedCategories,
-    selectAllItems,
-  } = useSelectedItems();
+  // const {
+  //   selectedItems: selectedCategories,
+  //   setSelectedItems: setSelectedCategories,
+  //   handleSelectItems: handleSelectedCategories,
+  //   selectAllItems,
+  // } = useSelectedItems();
+  // categories section include some different logic so that's why not using the custom hook for handling bulk API integration
 
   // for add and edit category modal
-  const categoryModal = useModalToggle();
-
-  console.log(selectedCategories,"select all items");
 
   useEffect(() => {
     fetchData();
   }, [page, filters]);
-  // commented for future use
-  // }, [filters, page]);
 
   const fetchData = () => {
-    toggleLoader("pageLoader");
+    setPageLoader((prev) => true);
     const apiFilters = {
       ...filters,
       page: page,
@@ -140,7 +150,7 @@ const Categories = () => {
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => toggleLoader("pageLoader"));
+      .finally(() => setPageLoader((prev) => false));
   };
 
   const handleActions = ({ action, editItem, deleteId, type }) => {
@@ -197,46 +207,39 @@ const Categories = () => {
   // };
 
   const handleFilterChange = (filterName, value) => {
-    // logic for bulk actions
     if (filterName === "action") {
-      const payload = {
-        handleFilterChange,
-        coupons: selectedCategories,
-        status: value,
-      };
-      console.log(value, "this is value");
+      if (
+        !selectedItems?.categories?.length &&
+        !selectedItems?.subCategories?.length
+      ) {
+        toastMessage(
+          "Please select at least one category or subcategory before performing any action"
+        );
+      } else {
+        // logic for bulk action
+        const payload = {
+          categories: [...selectedItems?.categories],
+          sub_categories: [...selectedItems?.subCategories],
+          status: value,
+        };
+        setPageLoader((prev) => true);
 
-      if (selectedCategories?.length) {
-        toggleLoader("pageLoader");
-        bulkActionDiscount(payload) // need to change api
+        bulkActionCategories(payload)
           .then((res) => {
-            // fetchDiscounts({ page: 1 });
-            toastMessage(
-              res?.data?.message ||
-                `Categories ${
-                  value === "delete"
-                    ? "Deleted"
-                    : value === "draft"
-                    ? "Drafted"
-                    : value === "duplicate" && "Duplicated"
-                } successfully`,
-              successType
-            );
+            toastMessage(`${actionToText[value]} successfully`, successType);
+            setFilters({ ...filters, action: "" });
           })
           .catch((err) => {
-            console.log(err, "this is err");
             toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+            setPage(1);
           })
           .finally(() => {
-            toggleLoader("pageLoader");
-            setPage(1);
-            setSelectedCategories([]);
-            setFilters({ ...filters, ["action"]: "" });
+            setSelectedItems({
+              categories: [],
+              subCategories: [],
+            });
+            setPageLoader((prev) => false);
           });
-      } else {
-        toastMessage(
-          "Please select at least one discount before performing any action"
-        );
       }
     } else {
       const temp = { ...filters };
@@ -300,7 +303,6 @@ const Categories = () => {
       update_id: isEdit && item?.id,
       payload: formData,
       instanceType: INSTANCE.formInstance,
-      // payload: payload,
     })
       .then((res) => {
         toastMessage(
@@ -322,7 +324,6 @@ const Categories = () => {
       .catch((err) => {
         const fieldError =
           err?.response?.data?.name?.[0] || err?.response?.data?.slug?.[0];
-        console.log(fieldError);
         if (fieldError) {
           toastMessage(fieldError);
         } else {
@@ -361,92 +362,155 @@ const Categories = () => {
     }
   };
 
+  // commented for future use
+  // const handleSelectItems = (id, type) => {
+  //   console.log("inside item", id, type);
+  //   if (type === "category") {
+  //     let temp = { ...selectedItems };
+  //     let categories = [...temp?.categories];
+  //     if (categories?.includes(id)) {
+  //       categories = categories?.filter((el) => el !== id);
+  //     } else {
+  //       categories = [...categories, id];
+  //     }
+  //     temp.categories = [...categories];
+  //     setSelectedItems(temp);
+  //     console.log(temp, "temp");
+  //   } else {
+  //     let temp = { ...selectedItems };
+  //     let subCategories = [...temp?.subCategories];
+  //     if (subCategories?.includes(id)) {
+  //       subCategories = subCategories?.filter((el) => el !== id);
+  //     } else {
+  //       subCategories = [...subCategories, id];
+  //     }
+  //     temp.subCategories = [...subCategories];
+  //     setSelectedItems(temp);
+  //   }
+  // };
+
+  // cat/subcat selection logic
+  const handleSelectItems = (id, type) => {
+    setSelectedItems((prev) => {
+      const updatedItems = { ...prev };
+      const key = type === "category" ? "categories" : "subCategories";
+
+      // Toggle the ID in the respective array
+      updatedItems[key] = updatedItems[key].includes(id)
+        ? updatedItems[key].filter((el) => el !== id)
+        : [...updatedItems[key], id];
+
+      return updatedItems;
+    });
+  };
+  const selectAllItems = (e) => {
+    const { checked } = e.target;
+    let tempCategories = [];
+    let tempSubCategories = [];
+    if (checked) {
+      categories?.forEach((elem) => {
+        tempCategories?.push(elem?.id);
+        elem?.subcategories?.map((subcat) => {
+          tempSubCategories?.push(subcat?.id);
+        });
+      });
+    }
+    const result = {
+      categories: [...tempCategories],
+      subCategories: [...tempSubCategories],
+    };
+    setSelectedItems(result);
+  };
+  const isSelectAllChecked = () => {
+    if (
+      selectedItems?.categories?.length &&
+      selectedItems?.subCategories?.length
+    ) {
+      return (
+        completeLength(categories) ==
+        selectedItems?.categories?.length + selectedItems?.subCategories?.length
+      );
+    }
+    return false;
+  };
   return (
     <>
-      {pageLoader ? (
-        <PageLoader />
-      ) : (
-        <>
-          <FilterSection
-            filterFields={filterFields}
-            handleFilterChange={handleFilterChange}
-            filters={filters}
-          >
-            <CommonButton
-              text="Add Category/SubCategory"
-              // may be need to change this action from here to somewhere else
-              onClick={() => {
-                handleCategoryModal({ action: "open" });
-              }}
-              type="button"
-              className="orange_btn"
-            />
-          </FilterSection>
-          <TableWrapper
-            columns={CATEGORY_PAGE_COLUMNS}
-            onCheckboxChange={(e) => {
-              selectAllItems(e, categories);
+      {pageLoader && <PageLoader />}
+      <>
+        <FilterSection
+          filterFields={filterFields}
+          handleFilterChange={handleFilterChange}
+          filters={filters}
+        >
+          <CommonButton
+            text="Add Category/SubCategory"
+            onClick={() => {
+              handleCategoryModal({ action: "open" });
             }}
-            checked={categories?.length === selectedCategories?.length}
-          >
-            {categories?.length ? (
-              categories?.map((it, idx) => (
-                <SingleCategoryRow
-                  key={idx}
-                  item={it}
-                  currentPage={page}
-                  index={idx}
-                  handleActions={handleActions}
-                  selectedCategories={selectedCategories}
-                  handleSelectedCategories={handleSelectedCategories}
-                  // for image upload
-                  // setFile={setFile}
-                  // file={file}
-                />
-              ))
-            ) : (
-              // updates required:Create a better no data found component
-              <NoDataFound />
-            )}
-          </TableWrapper>
-
-          <Pagination
-            onPageChange={onPageChange}
-            itemsPerPage={ITEMS_PER_PAGE}
-            totalData={totalData}
-            currentPage={page}
+            type="button"
+            className="orange_btn"
           />
-          {showModal && (
-            <DeleteConfirmationModal
-              title={`Are you sure you want to delete this ${
-                itemToDelete?.type === "category" ? "Category" : "Subcategory"
-              }?`}
-              description={`This action cannot be redo. Deleting this  ${
-                itemToDelete?.type === "category" ? "Category" : "Subcategory"
-              } will permanently remove it from your inventory`}
-              onCancel={() => {
-                setItemToDelete({ id: null, type: "" });
-                toggleModal();
-              }}
-              onDelete={handleDeleteCategory}
-              loader={deleteLoader}
-            />
+        </FilterSection>
+        <TableWrapper
+          columns={CATEGORY_PAGE_COLUMNS}
+          onCheckboxChange={(e) => {
+            selectAllItems(e, categories);
+          }}
+          checked={isSelectAllChecked()}
+        >
+          {categories?.length ? (
+            categories?.map((it, idx) => (
+              <SingleCategoryRow
+                key={idx}
+                item={it}
+                currentPage={page}
+                index={idx}
+                handleActions={handleActions}
+                selectedItems={selectedItems}
+                handleSelectItems={handleSelectItems}
+              />
+            ))
+          ) : (
+            <NoDataFound />
           )}
+        </TableWrapper>
 
-          {categoryModal?.showModal && (
-            <AddEditCategorySection
-              onClose={() => handleCategoryModal({ action: "close" })}
-              onSubmit={handleAddEditCategory}
-              formConfig={formConfig}
-              file={file}
-              setFile={setFile}
-              editCategoryInfo={editCategoryInfo}
-              btnLoaders={btnLoaders}
-              categories={categories}
-            />
-          )}
-        </>
-      )}
+        <Pagination
+          onPageChange={onPageChange}
+          itemsPerPage={ITEMS_PER_PAGE}
+          totalData={totalData}
+          currentPage={page}
+        />
+        {showModal && (
+          <DeleteConfirmationModal
+            title={`Are you sure you want to delete this ${
+              itemToDelete?.type === "category" ? "Category" : "Subcategory"
+            }?`}
+            description={`This action cannot be redo. Deleting this  ${
+              itemToDelete?.type === "category" ? "Category" : "Subcategory"
+            } will permanently remove it from your inventory`}
+            onCancel={() => {
+              setItemToDelete({ id: null, type: "" });
+              toggleModal();
+            }}
+            onDelete={handleDeleteCategory}
+            loader={deleteLoader}
+          />
+        )}
+
+        {categoryModal?.showModal && (
+          <AddEditCategorySection
+            onClose={() => handleCategoryModal({ action: "close" })}
+            onSubmit={handleAddEditCategory}
+            formConfig={formConfig}
+            file={file}
+            setFile={setFile}
+            editCategoryInfo={editCategoryInfo}
+            btnLoaders={btnLoaders}
+            categories={categories}
+          />
+        )}
+      </>
     </>
   );
 };

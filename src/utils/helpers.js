@@ -28,7 +28,7 @@ const routeTitles = {
   "/settings": T["settings"],
   "/orders-management": T["order_management"],
   "/orders-history": T["order_history"],
-  "/view-product": T["view_product"]
+  "/view-product": T["view_product"],
 };
 
 export const getHeadingTitleFromRoute = (pathName) => {
@@ -486,4 +486,17 @@ export const actionToText = {
 };
 export const handleBulkMessage = (field) => {
   return `Please select at least one ${field} before performing any action`;
+};
+// for calculating complete length of categories and subcategories
+export const completeLength = (categories) => {
+  let tempCategories = [];
+  let tempSubCategories = [];
+
+  categories?.forEach((elem) => {
+    tempCategories?.push(elem?.id);
+    elem?.subcategories?.map((subcat) => {
+      tempSubCategories?.push(subcat?.id);
+    });
+  });
+  return tempCategories?.length + tempSubCategories?.length;
 };

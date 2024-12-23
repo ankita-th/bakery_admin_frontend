@@ -11,7 +11,7 @@ const useSelectedItems = () => {
       return [...prev, id];
     });
   };
-  const selectAllItems = (e,stateValue) => {
+  const selectAllItems = (e, stateValue) => {
     const { checked } = e.target;
     if (checked) {
       setSelectedItems(stateValue?.map((el) => el?.id));

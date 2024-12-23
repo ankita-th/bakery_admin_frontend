@@ -122,14 +122,17 @@ export const bulkActionProduct = (payload) => {
 };
 
 export const bulkActionDiscount = (payload) => {
-  const { status } = payload;
+  const { status, coupons } = payload;
   if (status === "delete") {
-    return authorizeAxios.delete("/bulk-coupon-update", { data: payload });
-  } else if (status === "draft") {
-    return authorizeAxios.patch("/bulk-coupon-update", payload);
-  } else if (status === "duplicate") {
     delete payload?.status;
-    return authorizeAxios.post("/bulk-coupon-duplicate", payload);
+    return authorizeAxios.delete("/bulk-coupon-update/", { data: payload });
+  } else if (status === "draft") {
+    return authorizeAxios.patch("/bulk-coupon-update/", payload);
+  } else if (status === "duplicate") {
+    const newPayload = {
+      coupon_ids: [...coupons],
+    };
+    return authorizeAxios.post("/bulk-coupon-duplicate/", newPayload);
   }
 };
 
@@ -181,3 +184,15 @@ export const bulkActionRecipe = (payload) => {
   }
 };
 
+export const bulkActionCategories = (payload) => {
+  const { status, recipes } = payload;
+  if (status === "duplicate") {
+    return authorizeAxios.post("/bulk-category-update/", payload);
+  } else if (status === "delete") {
+    return authorizeAxios.delete("/bulk-category-update/", {
+      data: payload,
+    });
+  } else if (status === "draft") {
+    return authorizeAxios.patch("/bulk-category-update/", payload);
+  }
+};

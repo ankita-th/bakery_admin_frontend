@@ -178,7 +178,6 @@ const RawMaterials = () => {
   const handleFilterChange = (filterName, value) => {
     if (filterName === "action") {
       if (selectedMaterials?.length) {
-        ("pageLoader");
         const payload = {
           product_material_ids: [...selectedMaterials],
           status: value,
@@ -189,17 +188,17 @@ const RawMaterials = () => {
               `Raw materials ${actionToText[value]} successfully`,
               successType
             );
-            setFilters({ ...filters, action: "" });
             // no need to call the api below as the filters will change api will get called automatically
             // fetchRawMaterials({ page: page });
           })
           .catch((err) => {
-            console.log(err?.response?.data);
             toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
             setPage(1);
           })
           .finally(() => {
             // toggleLoader("pageLoader");
+            // setPageLoader((prev) => false);
+            setFilters({ ...filters, action: "" });
             setSelectedMaterials([]);
           });
       } else {

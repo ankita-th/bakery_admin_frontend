@@ -4,11 +4,14 @@ import {
   DEFAULT_ERROR_MESSAGE,
   ITEMS_PER_PAGE,
   SORT_BY_OPTIONS,
-  TYPE_OPTIONS,
 } from "../constant";
 import FilterSection from "../Components/Common/FilterSection";
 import usePagination from "../hooks/usePagination";
-import { makeApiRequest, METHODS } from "../api/apiFunctions";
+import {
+  bulkActionDiscount,
+  makeApiRequest,
+  METHODS,
+} from "../api/apiFunctions";
 import useLoader from "../hooks/useLoader";
 import PageLoader from "../loaders/PageLoader";
 import NoDataFound from "../Components/Common/NoDataFound";
@@ -18,7 +21,11 @@ import Pagination from "../Components/Common/Pagination";
 import TableWrapper from "../Wrappers/TableWrapper";
 import useModalToggle from "../hooks/useModalToggle";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
-import { actionToText, deleteItemBasedOnId, handleBulkMessage } from "../utils/helpers";
+import {
+  actionToText,
+  deleteItemBasedOnId,
+  handleBulkMessage,
+} from "../utils/helpers";
 import { successType, toastMessage } from "../utils/toastMessage";
 import CommonButton from "../Components/Common/CommonButton";
 import DiscountTypeSection from "../Components/DiscountTypeSection";
@@ -32,10 +39,16 @@ const filterFields = [
     options: SORT_BY_OPTIONS,
     filterName: "sort_by",
   },
+  {
+    type: "select",
+    defaultOption: T["select_action"],
+    options: ACTIONS,
+    filterName: "action",
+  },
 
   {
     type: "search",
-    filterName: "name",
+    filterName: "search",
     placeholder: T["search_coupon"],
   },
 ];
@@ -51,7 +64,7 @@ const DISCOUNTS_COLUMNS = [
 const Discounts = () => {
   const navigate = useNavigate();
   const { page, onPageChange } = usePagination();
-  const { toggleLoader, pageLoader } = useLoader();
+  const { toggleLoader, pageLoader, setPageLoader } = useLoader();
   const [filters, setFilters] = useState({
     sort_by: "",
     search: "",
@@ -75,7 +88,7 @@ const Discounts = () => {
     selectAllItems,
   } = useSelectedItems();
   useEffect(() => {
-    toggleLoader("pageLoader");
+    // toggleLoader("pageLoader");
     const apiParams = {
       ...filters,
       page: page,
@@ -83,6 +96,7 @@ const Discounts = () => {
     fetchDiscounts(apiParams);
   }, [filters, page]);
   const fetchDiscounts = (apiParams) => {
+    setPageLoader((prev) => true);
     makeApiRequest({
       endPoint: DISCOUNT_ENDPOINT,
       method: METHODS.get,
@@ -94,7 +108,7 @@ const Discounts = () => {
       })
       .catch((err) => console.log(err))
       .finally(() => {
-        toggleLoader("pageLoader");
+        setPageLoader((prev) => false);
       });
   };
 
@@ -105,9 +119,37 @@ const Discounts = () => {
   // };
 
   const handleFilterChange = (filterName, value) => {
-    const temp = { ...filters };
-    temp[filterName] = value;
-    setFilters(temp);
+    if (filterName === "action") {
+      if (selectedDiscount?.length) {
+        const payload = {
+          coupons: [...selectedDiscount],
+          status: value,
+        };
+        setPageLoader((prev) => true);
+        bulkActionDiscount(payload)
+          .then((res) => {
+            toastMessage(
+              `Discounts ${actionToText[value]} successfully`,
+              successType
+            );
+            setFilters({ ...filters, action: "" });
+          })
+          .catch((err) => {
+            toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+            setPage(1);
+          })
+          .finally(() => {
+            setSelectedDiscount([]);
+            setPageLoader((prev) => false);
+          });
+      } else {
+        toastMessage(handleBulkMessage("Raw material"));
+      }
+    } else {
+      const temp = { ...filters };
+      temp[filterName] = value;
+      setFilters(temp);
+    }
   };
 
   const handleActions = ({ action, delete_id, editItem }) => {
@@ -147,7 +189,6 @@ const Discounts = () => {
       });
   };
   const handleAddNewCoupon = () => {};
-  console.log(selectedDiscount,'selectedDiscount')
   return (
     <div>
       {pageLoader && <PageLoader />}
@@ -192,7 +233,7 @@ const Discounts = () => {
         totalData={totalData}
         currentPage={page}
       />
-      {showDeleteModal && ( 
+      {showDeleteModal && (
         <DeleteConfirmationModal
           // update required: may be need to correct this messages
           title="Are you sure you want to delete this discount coupons?"

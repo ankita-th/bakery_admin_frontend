@@ -11,7 +11,8 @@ const SingleCategoryRow = ({
   index,
   handleActions,
   handleSelectedCategories,
-  selectedCategories
+  selectedItems,
+  handleSelectItems,
   // setFile,
   // file,
 }) => {
@@ -24,14 +25,17 @@ const SingleCategoryRow = ({
     category_image,
     subcategories,
   } = item;
+  const { categories, subCategories } = selectedItems;
   return (
     <>
       <tr className="text-center">
         <td className="text-center rounded-tl-[10px] rounded-bl-[10px] ">
-          <Checkbox checked={selectedCategories?.includes(id)}
-          onClick={() => {
-            handleSelectedCategories(id);
-          }}/>
+          <Checkbox
+            checked={categories?.includes(id)}
+            onClick={() => {
+              handleSelectItems(id, "category");
+            }}
+          />
         </td>
         <td>
           {category_image ? (
@@ -83,10 +87,12 @@ const SingleCategoryRow = ({
             <Fragment key={subCategoryIndex}>
               <tr className="text-center">
                 <td className="text-center rounded-tl-[10px] rounded-bl-[10px]">
-                <Checkbox checked={selectedCategories?.includes(id)}
-          onClick={() => {
-            handleSelectedCategories(id);
-          }}/>
+                  <Checkbox
+                    checked={subCategories?.includes(subCategory?.id)}
+                    onClick={() => {
+                      handleSelectItems(subCategory?.id, "subcategory");
+                    }}
+                  />
                 </td>
                 <td>
                   {subCategory?.category_image ? (
