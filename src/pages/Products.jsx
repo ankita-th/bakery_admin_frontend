@@ -138,7 +138,6 @@ const Products = () => {
       };
       if (selectedProducts?.length) {
         toggleLoader("pageLoader");
-        // setPageLoader((prev) => true);
         bulkActionProduct(payload)
           .then((res) => {
             fetchProducts({ page: 1 });
@@ -215,10 +214,6 @@ const Products = () => {
   console.log(filters, "filters");
   return (
     <>
-      {/* {pageLoader ? (
-        <PageLoader />
-      ) : (
-      )} */}
       {pageLoader && <PageLoader />}
       <div>
         <FilterSection
@@ -245,7 +240,7 @@ const Products = () => {
           onCheckboxChange={(e) => {
             selectAllItems(e, products);
           }}
-          checked={products?.length === selectedProducts?.length}
+          checked={products?.length && products?.length === selectedProducts?.length}
         >
           {products?.length ? (
             products?.map((dt, idx) => (
@@ -272,7 +267,7 @@ const Products = () => {
           currentPage={page}
         />
       </div>
-      {showModal && ( 
+      {showModal && (
         <DeleteConfirmationModal
           icon={trashIcon}
           title="Are you sure you want to delete this product?"

@@ -102,7 +102,10 @@ const Recipe = () => {
         bulkActionRecipe(payload)
           .then(() => {
             // setFilters({ ...filters, action: "" })
-            toastMessage(`Recipes ${actionToText[value]} successfully`,successType);
+            toastMessage(
+              `Recipes ${actionToText[value]} successfully`,
+              successType
+            );
           })
           .catch((err) => {
             console.log();
@@ -194,7 +197,9 @@ const Recipe = () => {
           onCheckboxChange={(e) => {
             selectAllRecipes(e, recipes);
           }}
-          checked={recipes?.length === selectedRecipes?.length}
+          checked={
+            recipes?.length && recipes?.length === selectedRecipes?.length
+          }
         >
           {recipes?.length ? (
             recipes?.map((it, idx) => (

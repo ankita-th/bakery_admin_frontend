@@ -286,7 +286,10 @@ const RawMaterials = () => {
         onCheckboxChange={(e) => {
           selectAllItems(e, rawMaterials);
         }}
-        checked={rawMaterials?.length === selectedMaterials?.length}
+        checked={
+          rawMaterials?.length &&
+          rawMaterials?.length === selectedMaterials?.length
+        }
       >
         {rawMaterials?.length ? (
           rawMaterials?.map((it, idx) => (

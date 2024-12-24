@@ -112,12 +112,6 @@ const Discounts = () => {
       });
   };
 
-  // const handleFilterChange = (filterName, value) => {
-  //   const temp = { ...filters };
-  //   temp[filterName] = value;
-  //   setFilters(temp);
-  // };
-
   const handleFilterChange = (filterName, value) => {
     if (filterName === "action") {
       if (selectedDiscount?.length) {
@@ -132,7 +126,6 @@ const Discounts = () => {
               `Discounts ${actionToText[value]} successfully`,
               successType
             );
-            setFilters({ ...filters, action: "" });
           })
           .catch((err) => {
             toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
@@ -140,6 +133,7 @@ const Discounts = () => {
           })
           .finally(() => {
             setSelectedDiscount([]);
+            setFilters({ ...filters, action: "" });
             setPageLoader((prev) => false);
           });
       } else {
@@ -188,7 +182,6 @@ const Discounts = () => {
         setDeleteLoader((prev) => false);
       });
   };
-  const handleAddNewCoupon = () => {};
   return (
     <div>
       {pageLoader && <PageLoader />}
@@ -209,7 +202,9 @@ const Discounts = () => {
           onCheckboxChange={(e) => {
             selectAllItems(e, discounts);
           }}
-          checked={discounts?.length === selectedDiscount?.length}
+          checked={
+            discounts?.length && discounts?.length === selectedDiscount?.length
+          }
         >
           {discounts?.length ? (
             discounts?.map((it, idx) => (
