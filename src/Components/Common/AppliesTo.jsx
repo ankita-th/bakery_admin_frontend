@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CommonSelect from "../../Form Fields/CommonSelect";
 import { APPLIES_TO_OPTIONS } from "../../constant";
 import { makeApiRequest, METHODS } from "../../api/apiFunctions";
@@ -10,7 +10,7 @@ import { createRequiredValidation } from "../../utils/helpers";
 
 const AppliesTo = ({ formConfig }) => {
   let timer;
-  const { watch } = formConfig;
+  const { watch, setValue } = formConfig;
   const [productName, setProductName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -23,6 +23,11 @@ const AppliesTo = ({ formConfig }) => {
       </p>
     );
   };
+  useEffect(() => {
+    if (watch("applies_to")?.value == "all_products") {
+      setValue("specific_products", []);
+    }
+  }, [watch("applies_to")]);
 
   const fetchProducts = (inputValue) => {
     return new Promise((resolve, reject) => {
@@ -56,6 +61,7 @@ const AppliesTo = ({ formConfig }) => {
       }, 500);
     });
   };
+  console.log(watch("applies_to"), "these are applies to");
 
   return (
     <div>
@@ -78,7 +84,7 @@ const AppliesTo = ({ formConfig }) => {
               isMulti={true}
               loadOptions={fetchProducts}
               placeholder="Search Product"
-              fieldName="products"
+              fieldName="specific_products"
               rules={createRequiredValidation()}
               noOptionMessage={NoOptionsMessage}
               className="x-4 py-2 mb-4 w-full rounded-lg bg-[#F5F5F5]"

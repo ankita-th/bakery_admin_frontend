@@ -28,7 +28,7 @@ const Countries = ({ formConfig }) => {
   }, [watch("shipping_scope")]);
 
   useEffect(() => {
-    if (watch("exclude_shipping_rate") === true) {
+    if (watch("exclude_shipping_rate") === false) {
       setValue("shipping_rate", "");
       clearErrors("shipping_rate");
     }

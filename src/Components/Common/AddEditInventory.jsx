@@ -29,6 +29,11 @@ const AddEditInventory = ({
     if (isEdit) {
       // for filling normal keys
       prefillFormValues(item, prefillKeys, setValue);
+      const [barcode_from, barcode_to] = item?.barcode?.split("-");
+      setValue("barcode_from", barcode_from);
+      setValue("barcode_to", barcode_to);
+      setValue("barcode_to", barcode_to);
+      setValue("quantity", item?.quantity);
       // for prefilling values with custom logic
       // setValue("expiry_date", formatDate(item?.expiry_date, YYYY_MM_DD));
     }
@@ -36,10 +41,10 @@ const AddEditInventory = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="category-section">
+      <div className="category-section overflow-auto">
         <AddEditSectionHeading
           onClose={onClose}
-          text={isEdit ? "Edit Inventory" : "Add Inventory"}
+          text={isEdit ? "Add Stocks" : "Add Stocks"}
         />
         {/* <CommonButton text="fill form" type="button" onClick={fillForm} /> */}
         <FormWrapper
@@ -74,24 +79,30 @@ const AddEditInventory = ({
             placeholder="Enter SKU"
             formConfig={formConfig}
           />
-          <CommonTextField
+          {/* <CommonTextField
             label="Reorder Level"
             fieldName="reorder"
             rules={createRequiredValidation("Reorder")}
             placeholder="Enter Reorder"
             formConfig={formConfig}
-          />
+          /> */}
           <CommonTextField
             label="Number Of Stock Added*"
-            fieldName="current_stock"
+            fieldName="quantity"
             placeholder="Quantity Of Stock Added"
-            rules={createRequiredValidation("Number of stock added")}
+            rules={{
+              ...createRequiredValidation("Number of stock added"),
+              min: {
+                value: 1,
+                message: "Number of stocks added must be greater than zero",
+              },
+            }}
             formConfig={formConfig}
             isNumberOnly={true}
           />
           <CommonTextField
             label="Barcode From *"
-            fieldName="barcode_no"
+            fieldName="barcode_from"
             rules={createRequiredValidation("Barcode from")}
             placeholder="Enter Barcode From"
             formConfig={formConfig}
@@ -108,7 +119,8 @@ const AddEditInventory = ({
           <div className="button-section">
             <CommonButton
               type="submit"
-              text={isEdit ? "Update Inventory" : "Add Inventory"}
+              // text={isEdit ? "Add Inventory" : "Add Inventory"}
+              text="Add Inventory"
               // icon={publishIcon}
               className="orange_btn"
               name="inventory"
@@ -117,7 +129,7 @@ const AddEditInventory = ({
             />
             {/* need to confirm functionality for this */}
             <CommonButton
-              type="submit"
+              type="button"
               text="Print Order No."
               // icon={draftIcon}
               className="grey_btn"

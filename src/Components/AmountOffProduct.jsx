@@ -120,9 +120,11 @@ const AmountOffProduct = ({ location }) => {
             "customer_specification",
             customerSpecificationExtractedOption
           );
-          if (res?.data?.product?.length) {
-            // const formattedProducts = convertPairFromProducts(res?.data?.product);
-            // setValue("product", formattedProducts);
+          if (res?.data?.specific_products?.length) {
+            const formattedProducts = convertPairFromProducts(
+              res?.data?.specific_products
+            );
+            setValue("specific_products", formattedProducts);
           }
           if (res?.data?.minimum_purchase_value) {
             setValue(
@@ -139,13 +141,6 @@ const AmountOffProduct = ({ location }) => {
         .finally(() => {
           toggleLoader("pageLoader");
         });
-      // prefillFormValues(dummy_data, fields, setValue);
-      // const discountTypesExtractedOption = extractOption(DISCOUNT_TYPE_OPTIONS,dummy_data?.discount_types,"value");
-      // setValue("discount_types",discountTypesExtractedOption);
-      // const appliesToExtractedOption = extractOption(APPLIES_TO_OPTIONS,dummy_data?.applies_to,"value");
-      // setValue("applies_to",appliesToExtractedOption);
-      // const customerSpecificationExtractedOption = extractOption(CUSTOMER_SPECIFIC_OPTIONS,dummy_data?.customer_specification,"value");
-      // setValue("customer_specification", customerSpecificationExtractedOption);
     }
   }, []);
 
@@ -189,13 +184,13 @@ const AmountOffProduct = ({ location }) => {
         }
       }
     });
-    if (values?.products?.length) {
+    if (values?.specific_products?.length) {
       payload = {
         ...payload,
-        product: values?.products
-          ?.map((item) => item?.value)
-          .filter((value) => value !== undefined),
-        // product: convertProductsIntoPairs(values?.products),
+        // product: values?.products
+        //   ?.map((item) => item?.value)
+        //   .filter((value) => value !== undefined),
+        specific_products: convertProductsIntoPairs(values?.specific_products),
       };
     }
     makeApiRequest({

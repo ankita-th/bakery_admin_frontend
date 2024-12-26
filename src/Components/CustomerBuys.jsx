@@ -12,7 +12,7 @@ const CustomerBuys = ({ formConfig }) => {
   let timer;
   const { watch, setValue, clearErrors, buy_products } = formConfig;
   const customer_buy_types = watch("customer_buy_types");
-  const items_from = watch("items_from");
+  const applied_to = watch("applied_to");
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     if (customer_buy_types === "minimum_items_quantity") {
@@ -28,8 +28,8 @@ const CustomerBuys = ({ formConfig }) => {
     }
   }, [customer_buy_types]);
   useEffect(() => {
-    items_from?.value === "all_product" && setValue("buy_products", []);
-  }, [items_from]);
+    applied_to?.value === "all_product" && setValue("buy_products", []);
+  }, [applied_to]);
   console.log(buy_products, "buy_products");
   const NoOptionsMessage = (NoticeProps) => {
     return (
@@ -72,7 +72,6 @@ const CustomerBuys = ({ formConfig }) => {
       }, 500);
     });
   };
-  console.log(items_from, "items_from");
   return (
     <div className="bg-white p-6 rounded-lg">
       <RadioGroup
@@ -88,7 +87,7 @@ const CustomerBuys = ({ formConfig }) => {
           label="Any Items From *"
           selectType="react-select"
           formConfig={formConfig}
-          fieldName="items_from"
+          fieldName="applied_to"
           rules={createRequiredValidation("")}
           options={ITEMS_FROM_OPTIONS}
           className="mt-2 border-2 border-solid border-black-500 rounded"
@@ -118,7 +117,7 @@ const CustomerBuys = ({ formConfig }) => {
           )}
         </div>
         <div className="product-search">
-          {items_from?.value === "specific_product" ? (
+          {applied_to?.value === "specific_product" ? (
             <CommonAsyncSelect
               formConfig={formConfig}
               label=""

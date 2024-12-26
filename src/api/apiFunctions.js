@@ -72,7 +72,11 @@ export const makeApiRequest = async ({
       }
 
       case METHODS.put: {
-        return await API_INSTANCE.put(endPoint + update_id + "/", payload);
+        if (update_id) {
+          return await API_INSTANCE.put(endPoint + update_id + "/", payload);
+        } else {
+          return await API_INSTANCE.put(endPoint + "/", payload);
+        }
       }
 
       case METHODS.patch: {
@@ -116,23 +120,24 @@ export const bulkActionProduct = (payload) => {
   } else if (status === "draft") {
     return authorizeAxios.patch("/bulk-product-update/", payload);
   } else if (status === "duplicate") {
-    delete payload?.status;
-    return authorizeAxios.post("/duplicate-product/", payload);
+    // delete payload?.status;
+    return authorizeAxios.post("/bulk-product-update/", payload);
   }
 };
 
 export const bulkActionDiscount = (payload) => {
   const { status, coupons } = payload;
   if (status === "delete") {
-    delete payload?.status;
+    // delete payload?.status;
     return authorizeAxios.delete("/bulk-coupon-update/", { data: payload });
   } else if (status === "draft") {
     return authorizeAxios.patch("/bulk-coupon-update/", payload);
   } else if (status === "duplicate") {
     const newPayload = {
-      coupon_ids: [...coupons],
+      coupons: [...coupons],
+      status: status,
     };
-    return authorizeAxios.post("/bulk-coupon-duplicate/", newPayload);
+    return authorizeAxios.post("/bulk-coupon-update/", newPayload);
   }
 };
 
@@ -151,8 +156,12 @@ export const bulkActionCategory = (payload) => {
 export const bulkActionMaterial = (payload) => {
   const { status, product_material_ids } = payload;
   if (status === "duplicate") {
-    delete payload?.status;
-    return authorizeAxios.post("/duplicate-material/", payload);
+    // delete payload?.status;
+    const duplicatePayload = {
+      product_materials: [...product_material_ids],
+      status: status,
+    };
+    return authorizeAxios.post("/bulk-material-update/", duplicatePayload);
   } else if (status === "draft") {
     const draftPayload = {
       product_materials: [...product_material_ids],
@@ -173,8 +182,8 @@ export const bulkActionMaterial = (payload) => {
 export const bulkActionRecipe = (payload) => {
   const { status, recipes } = payload;
   if (status === "duplicate") {
-    delete payload?.status;
-    return authorizeAxios.post("/recipe/recipe-duplicate/", payload);
+    // delete payload?.status;
+    return authorizeAxios.post("/recipe/bulk-recipe-update/", payload);
   } else if (status === "delete") {
     return authorizeAxios.delete("/recipe/bulk-recipe-update/", {
       data: payload,

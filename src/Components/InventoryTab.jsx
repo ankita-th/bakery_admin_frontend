@@ -45,7 +45,6 @@ const InventoryTab = ({ formConfig, disabled }) => {
     price: "",
   };
 
-
   const handlePriceChange = (value, type) => {
     const sale_price = watch("sale_price");
     if (type === "regular_price" && value !== "") {
@@ -64,10 +63,10 @@ const InventoryTab = ({ formConfig, disabled }) => {
     <div>
       <div className="w-full space-y-4">
         <CommonTextField
-          label= {`${T["sku"]} *`}
+          label={`${T["sku"]} *`}
           fieldName="sku"
           className="w-full p-2 rounded-md bg-[#F5F5F5] mt-2"
-          rules={{  
+          rules={{
             ...createRequiredValidation("SKU"),
             pattern: {
               value: SPECIAL_CHARACTERS_REGEX,
@@ -80,7 +79,6 @@ const InventoryTab = ({ formConfig, disabled }) => {
         />
 
         <div className="grid grid-cols-2 gap-4">
-
           <div>
             <label>{`${T["regular_price"]} *`}</label>
             <input
@@ -150,7 +148,7 @@ const InventoryTab = ({ formConfig, disabled }) => {
             disabled={disabled}
           />
           <CommonDateField
-            label= {`${T["sale_price_date_to"]} *`}
+            label={`${T["sale_price_date_to"]} *`}
             fieldName="sale_price_dates_to"
             minDate={watch("sale_price_dates_from")}
             disabled={disabled}

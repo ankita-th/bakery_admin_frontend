@@ -164,8 +164,9 @@ const AmountOffOrder = ({ location }) => {
         navigate("/discounts");
       })
       .catch((err) => {
-        console.log(err);
-        toastMessage(err?.response?.data?.name?.[0] || DEFAULT_ERROR_MESSAGE);
+        console.log(err?.response?.data,"this is coupon errir");
+        const fieldError = err?.response?.data?.name?.[0]  || err?.response?.data?.code?.[0]
+        toastMessage(fieldError || DEFAULT_ERROR_MESSAGE);
       })
       .finally(() => {
         setBtnLoaders({ ...btnLoaders, [buttonType]: false });

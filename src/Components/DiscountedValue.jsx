@@ -10,11 +10,11 @@ const DiscountedValue = ({ formConfig }) => {
 
   useEffect(() => {
     // commented for future use
-    // if (discount_types === "free") {
-    //   setValue("discount_value", "");
-    // }
-    clearErrors("discount_value");
-    setValue("discount_value", "");
+    if (discount_types === "free") {
+      setValue("discount_value", "");
+      clearErrors("discount_value");
+    }
+    // setValue("discount_value", "");
   }, [discount_types]);
 
   const showValueField = () => {
@@ -23,6 +23,7 @@ const DiscountedValue = ({ formConfig }) => {
       watch("discount_types") === "percentage"
     );
   };
+  console.log(watch("discount_value"),"this is discount value")
   return (
     <div className="bg-white p-6 rounded-lg">
       <RadioGroup

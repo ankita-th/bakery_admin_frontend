@@ -145,21 +145,23 @@ const BuyXGetY = ({ location }) => {
           setValue("customer_specification", extractedOption);
           const itemsFromExtractedOption = extractOption(
             ITEMS_FROM_OPTIONS,
-            res?.data?.items_from,
+            res?.data?.applied_to,
             "value"
           );
-          setValue("items_from", itemsFromExtractedOption);
+          // setValue("applied_to", itemsFromExtractedOption);
+          // setValue("applied_to", { label: "Specify product", value: "specific_product" });
+
 
           // for customer buys and customer gets products
           if (res?.data?.buy_products?.length) {
-            //  const formattedProducts = convertPairFromProducts(res?.data?.buy_products);
-            //  setValue("buy_products",formattedProducts,)
+             const formattedProducts = convertPairFromProducts(res?.data?.buy_products);
+             setValue("buy_products",formattedProducts,)
           }
           if (res?.data?.customer_get_products) {
-            // const formattedProducts = convertPairFromProducts(
-            //   res?.data?.customer_get_products
-            // );
-            // setValue("customer_get_products", formattedProducts);
+            const formattedProducts = convertPairFromProducts(
+              res?.data?.customer_get_products
+            );
+            setValue("customer_get_products", formattedProducts);
           }
         })
         .catch((err) => {
@@ -188,7 +190,7 @@ const BuyXGetY = ({ location }) => {
       "maximum_usage_value",
       // customer buys
       "customer_buy_types",
-      "items_from",
+      "applied_to",
       "buy_products_quantity",
       "buy_products_amount",
       "buy_products",
@@ -212,7 +214,7 @@ const BuyXGetY = ({ location }) => {
           key === "customer_gets_quantity"
         ) {
           payload[key] = +values[key];
-        } else if (key === "items_from" || key === "customer_specification") {
+        } else if (key === "applied_to" || key === "customer_specification") {
           payload[key] = values[key]?.value;
         } else if (key === "buy_products" || key === "customer_get_products") {
           if (values[key]?.length) {
@@ -228,6 +230,7 @@ const BuyXGetY = ({ location }) => {
       ...payload,
       coupon_type: "buy_x_get_y",
     };
+    console.log(payload,"this is payload")
     setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
     makeApiRequest({
       endPoint: DISCOUNT_ENDPOINT,
@@ -240,8 +243,8 @@ const BuyXGetY = ({ location }) => {
         navigate("/discounts");
       })
       .catch((err) => {
-        console.log(err);
-        toastMessage(err?.response?.data?.name?.[0] || DEFAULT_ERROR_MESSAGE);
+        const fieldError = err?.response?.data?.name?.[0] || err?.response?.data?.code?.[0]
+        toastMessage(fieldError || DEFAULT_ERROR_MESSAGE);
       })
       .finally(() => {
         setBtnLoaders({ ...btnLoaders, [buttonType]: false });

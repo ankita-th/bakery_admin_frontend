@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import usePagination from "../hooks/usePagination";
 import { INSTANCE, makeApiRequest, METHODS } from "../api/apiFunctions";
 import useLoader from "../hooks/useLoader";
-import { GET_INVENTORY_ENDPOINT, INVENTORY_ENDPOINT } from "../api/endpoints";
+import {
+  GET_INVENTORY_ENDPOINT,
+  INVENTORY_ENDPOINT,
+  UPDATE_STOCK_ENDPOINT,
+} from "../api/endpoints";
 import FilterSection from "../Components/Common/FilterSection";
 import CommonButton from "../Components/Common/CommonButton";
 import {
@@ -29,6 +33,7 @@ import {
 import { successType, toastMessage } from "../utils/toastMessage";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import { T } from "../utils/languageTranslator";
+import PageLoader from "../loaders/PageLoader";
 // For now this is static so follow comments when API will be created for this
 const filterFields = [
   {
@@ -48,7 +53,7 @@ const InventoryManagement = () => {
   const formConfig = useForm();
   const { reset } = formConfig;
   const { page, onPageChange, setPage } = usePagination();
-  const { loader, toggleLoader } = useLoader();
+  const { pageLoader, toggleLoader, setPageLoader } = useLoader();
   const { showModal: showInventorySection, toggleModal: toggleInventory } =
     useModalToggle();
   const { showModal: showDeleteModal, toggleModal: toggleDeleteModal } =
@@ -70,12 +75,16 @@ const InventoryManagement = () => {
     name: "",
   });
   useEffect(() => {
-    toggleLoader("pageLoader");
+    fetchInventory();
+  }, [page, filters]);
+  // console.log(inventories, "inventories");
+
+  const fetchInventory = () => {
+    setPageLoader((prev) => true);
     const apiParams = {
       ...filters,
       page: page,
     };
-    // setInventories(DUMMY_INVENTORY_DATA);
     makeApiRequest({
       endPoint: GET_INVENTORY_ENDPOINT,
       params: apiParams,
@@ -87,10 +96,9 @@ const InventoryManagement = () => {
       })
       .catch((err) => console.log(err))
       .finally(() => {
-        toggleLoader("pageLoader");
+        setPageLoader((prev) => false);
       });
-  }, [page, filters]);
-  // console.log(inventories, "inventories");
+  };
 
   const handleFilterChange = (filterName, value) => {
     const temp = { ...filters };
@@ -129,60 +137,53 @@ const InventoryManagement = () => {
   };
 
   const onSubmit = (values, event) => {
-    console.log(values, "valeussdsf");
-    const buttonType = event.nativeEvent.submitter.name; //contains publish and draft
+    const buttonType = event.nativeEvent.submitter.name; //contains invenory and print
+    const itemStatus = editInfo?.item?.status;
+    console.log(buttonType, "buttonType");
     handleButtonLoaders(buttonType);
+    console.log(values?.quantity, "values?.quantity");
     const payload = {
-      ...values,
-      // barcode_no: combineBarcode(values.barcode_no,values.barcode_to),
-      status: "in_stock",
-      // barcode_from: +values?.barcode_from, // for converting barcode_from type from string into number
-      // barcode_to: +values?.barcode_to, // for converting barcode_to type from string into number
+      name: values?.name,
+      sku: values?.sku,
+      quantity: +values?.quantity,
+      start_from: +values?.barcode_from,
+      end_from: +values?.barcode_to,
+      status: itemStatus,
     };
 
-    // makeApiRequest({
-    //   endPoint: INVENTORY_ENDPOINT,
-    //   payload: payload,
-    //   method: editInfo?.isEdit ? METHODS?.patch : METHODS.post,
-    //   update_id: editInfo?.isEdit && editInfo?.item?.id,
-    // })
-    //   .then((res) => {
-    //     toastMessage(
-    //       `Inventory ${editInfo?.isEdit ? "updated" : "added"} successfully`,
-    //       successType
-    //     );
-    //     if (editInfo?.isEdit) {
-    //       setInventories(
-    //         handleEdit(inventories, editInfo?.item?.id, res?.data)
-    //       );
-    //     } else {
-    //       setInventories((prev) => [...prev, res?.data]);
-    //     }
-    //     setbtnLoaders({ publish: false, draft: false });
-    //     handleInventoryCancel();
-    //     setPage(1);
-    //   })
-    //   .catch((err) => {
-    // toastMessage(err?.response?.data?.name?.[0] || DEFAULT_ERROR_MESSAGE);
-    //     if (!err?.response?.data?.name?.[0]) {
-    //       handleInventoryCancel();
-    //       setPage(1);
-    //     }
-    //   })
-    //   .finally(setbtnLoaders({ publish: false, draft: false }));
+    makeApiRequest({
+      endPoint: UPDATE_STOCK_ENDPOINT,
+      payload: payload,
+      method: METHODS?.put,
+      // update_id: editInfo?.isEdit && editInfo?.item?.id,
+    })
+      .then((res) => {
+        toastMessage(`Stocks added successfully`, successType);
+        handleInventoryCancel();
+        // setPage(1);
+        fetchInventory();
 
-    toastMessage(
-      `Inventory ${editInfo?.isEdit ? "updated" : "added"} successfully`,
-      successType
-    );
-    if (editInfo?.isEdit) {
-      setInventories(handleEdit(inventories, editInfo?.item?.id, payload));
-    } else {
-      setInventories((prev) => [...prev, payload]);
-    }
-    setbtnLoaders({ inventory: false, print: false });
-    handleInventoryCancel();
-    setPage(1);
+        // commented for future use
+        // toastMessage(
+        //   `Inventory ${editInfo?.isEdit ? "updated" : "added"} successfully`,
+        //   successType
+        // );
+        // if (editInfo?.isEdit) {
+        //   setInventories(handleEdit(inventories, editInfo?.item?.id, res?.data));
+        // } else {
+        //   setInventories((prev) => [...prev, res?.data]);
+        // }
+      })
+      .catch((err) => {
+        toastMessage(err?.response?.data?.name?.[0] || DEFAULT_ERROR_MESSAGE);
+        if (!err?.response?.data?.name?.[0]) {
+          handleInventoryCancel();
+          setPage(1);
+        }
+      })
+      .finally(() => {
+        setbtnLoaders({ inventory: false, print: false });
+      });
   };
 
   const handleButtonLoaders = (type) => {
@@ -215,19 +216,19 @@ const InventoryManagement = () => {
 
   return (
     <div>
-      {" "}
+      {pageLoader && <PageLoader />}{" "}
       <FilterSection
         filterFields={filterFields}
         handleFilterChange={handleFilterChange}
         filters={filters}
       >
-        <CommonButton
+        {/* <CommonButton
           text="Add Inventory"
           className="orange_btn"
           onClick={() => {
             handleInventorySection({ action: "open" });
           }}
-        />
+        /> */}
       </FilterSection>
       <TableWrapper columns={INVENTORY_PAGE_COLUMNS}>
         {inventories?.length ? (
@@ -259,6 +260,7 @@ const InventoryManagement = () => {
           onClose={handleInventoryCancel}
           editInfo={editInfo}
           onSubmit={onSubmit}
+          btnLoaders={btnLoaders}
         />
       )}
       {showDeleteModal && (

@@ -152,7 +152,7 @@ const FreeShipping = ({ location }) => {
     makeApiRequest({
       endPoint: DISCOUNT_ENDPOINT,
       method: isEdit ? METHODS?.put : METHODS?.post,
-      update_id: isEdit && values?.id,
+      update_id: editId && editId,
       payload: payload,
     })
       .then((res) => {
@@ -161,7 +161,8 @@ const FreeShipping = ({ location }) => {
       })
       .catch((err) => {
         console.log(err);
-        toastMessage(err?.response?.data?.name?.[0] || DEFAULT_ERROR_MESSAGE);
+        const fieldError = err?.response?.data?.name?.[0] || err?.response?.data?.code?.[0] 
+        toastMessage(fieldError|| DEFAULT_ERROR_MESSAGE);
       })
       .finally(() => {
         setBtnLoaders({ ...btnLoaders, [buttonType]: false });

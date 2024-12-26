@@ -11,7 +11,7 @@ const CustomerGets = ({ formConfig }) => {
   let timer;
   const { watch } = formConfig;
   const customer_buy_types = watch("customer_buy_types");
-  const items_from = watch("items_from");
+  const applied_to = watch("applied_to");
   const [isLoading, setIsLoading] = useState(false);
   const fetchProducts = (inputValue) => {
     console.log(inputValue, "inputValue");
@@ -61,7 +61,7 @@ const CustomerGets = ({ formConfig }) => {
           label="Any Items From *"
           selectType="react-select"
           formConfig={formConfig}
-          fieldName="items_from"
+          fieldName="applied_to"
           rules={createRequiredValidation("")}
           options={ITEMS_FROM_OPTIONS}
           className="mt-2 border-2 border-solid border-black-500 rounded"
@@ -91,7 +91,7 @@ const CustomerGets = ({ formConfig }) => {
           )}
         </div>
         <div className="product-search">
-          {items_from?.value === "specific_product" ? (
+          {applied_to?.value === "specific_product" ? (
             <CommonAsyncSelect
               formConfig={formConfig}
               label=""
