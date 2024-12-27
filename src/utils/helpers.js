@@ -15,7 +15,7 @@ const routeTitles = {
   "/raw-materials": T["raw_materials"],
   "/configuration": T["zip_code_configuration"],
   "/recipe": T["recipe"],
-  "/add-edit-recipe": T["new_recip"],
+  "/add-edit-recipe": T["new_recipe"],
   "/inventory": T["inventory_management"],
   "/employee": T["employee_management"],
   "/payment-history": T["payment_history"],
@@ -500,3 +500,36 @@ export const completeLength = (categories) => {
   });
   return tempCategories?.length + tempSubCategories?.length;
 };
+
+export function downloadPDF(responseData, fileName = "document.pdf") {
+  // Convert the API response to a Blob object
+  const blob = new Blob([responseData], { type: "application/pdf" });
+
+  // Create a temporary link element
+  const link = document.createElement("a");
+  link.href = window.URL.createObjectURL(blob);
+  link.download = fileName;
+
+  // Trigger the download
+  document.body.appendChild(link);
+  link.click();
+
+  // Clean up
+  document.body.removeChild(link);
+}
+
+export function handlePrint(responseData) {
+  // Convert the API response to a Blob object
+  const blob = new Blob([responseData], { type: "application/pdf" });
+
+  // Create a temporary URL for the Blob
+  const pdfUrl = window.URL.createObjectURL(blob);
+
+  // Open the URL in a new tab or window
+  const printWindow = window.open(pdfUrl);
+
+  // Wait for the PDF to load, then trigger print
+  printWindow.onload = () => {
+    printWindow.print();
+  };
+}

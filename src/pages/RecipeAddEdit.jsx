@@ -52,7 +52,7 @@ const INGREDIENTS_ITEMS = [
   {
     fieldName: "quantity",
     placeholder: T["enter_quantity"],
-    label:`${T["ingredient_quantity"]} *`,
+    label: `${T["ingredient_quantity"]} *`,
     isRequired: true,
     isNumberOnly: true,
   },
@@ -194,6 +194,7 @@ const RecipeAddEdit = () => {
     // if (file?.error) {
     //   return;
     // }
+    console.log(values?.category, "values?.category");
     const buttonType = event.nativeEvent.submitter.name;
     setBtnLoaders({ ...btnLoaders, [buttonType]: !btnLoaders[buttonType] });
     // creating payload
@@ -211,7 +212,11 @@ const RecipeAddEdit = () => {
       // update required make this category key dynamic
       // category: +6,
       // Converting catgeory array elements to
-      category: values?.category.map(Number),
+      category: values?.category
+        ? Array.isArray(values?.category)
+          ? values?.category.map(Number)
+          : values?.category
+        : null,
     };
     console.log("this is payload", payload);
     // converting payload into formdata
@@ -404,7 +409,7 @@ const RecipeAddEdit = () => {
                               options={DIETRY_OPTIONS}
                               fieldName="dietary_plan"
                               formConfig={formConfig}
-                              placeholder= {T["select"]}
+                              placeholder={T["select"]}
                               rules={RecipeValidations["dietary_plan"]}
                             />
                           </div>
@@ -415,7 +420,7 @@ const RecipeAddEdit = () => {
                               options={ALLERGEN_OPTIONS}
                               fieldName="allergen_information"
                               formConfig={formConfig}
-                              placeholder= {T["select"]}
+                              placeholder={T["select"]}
                               rules={RecipeValidations["allergen_informations"]}
                             />
                           </div>

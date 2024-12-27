@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import FilterSection from "../Components/Common/FilterSection";
 import {
+  DEFAULT_ERROR_MESSAGE,
   DUMMY_CUSTOMER_DATA,
   ITEMS_PER_PAGE,
   SORT_BY_OPTIONS,
@@ -44,7 +45,7 @@ const CUSTOMER_COLUMNS = [
   T["action"],
 ];
 const Customers = () => {
-  const { toggleLoader, pageLoader } = useLoader();
+  const { toggleLoader, pageLoader, setPageLoader } = useLoader();
   const { page, onPageChange } = usePagination();
   const { showModal: showDeleteModal, toggleModal: toggleDeleteModal } =
     useModalToggle();
@@ -57,12 +58,12 @@ const Customers = () => {
     name: "",
   });
   useEffect(() => {
-    toggleLoader("pageLoader");
+    setPageLoader((prev) => true);
     const apiParams = {
       ...filters,
       page: page,
     };
-    setCustomers(DUMMY_CUSTOMER_DATA);
+    // setCustomers(DUMMY_CUSTOMER_DATA);
     makeApiRequest({
       // update required: Update with the actual endpoint
       endPoint: CUSTOMER_ENDPOINT,
@@ -75,7 +76,7 @@ const Customers = () => {
       })
       .catch((err) => console.log(err))
       .finally(() => {
-        toggleLoader("pageLoader");
+        setPageLoader((prev) => false);
       });
   }, [page, filters]);
 
@@ -93,86 +94,77 @@ const Customers = () => {
   const deleteCustomer = () => {
     setDeleteLoader((prev) => true);
     //update required : remove this section and uncomment the api call
-    toastMessage("Deleted Successfully", successType);
-    setCustomers(deleteItemBasedOnId(customers, itemToDelete));
-    setDeleteLoader((prev) => false);
-    toggleDeleteModal();
-    // makeApiRequest({
-    //   endPoint: CUSTOMER_ENDPOINT,
-    //   method: METHODS.delete,
-    //   delete_id: itemToDelete,
-    // })
-    //   .then((res) => {
-    //     // update required:Add a proper message here
-    //     toastMessage("Deleted Successfully", successType);
-    //     setCustomers(deleteItemBasedOnId(customers, itemToDelete));
-    //   })
-    //   .catch((err) => {
-    //     // update required: chek in the api in which object error message is coming
-    //     toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
-    //   })
-    //   .finally(() => {
-    //     setDeleteLoader((prev) => false);
-    //     toggleDeleteModal();
-    //     setItemToDelete(null);
-    //   });
+    makeApiRequest({
+      endPoint: CUSTOMER_ENDPOINT,
+      method: METHODS.delete,
+      delete_id: itemToDelete,
+    })
+      .then((res) => {
+        toastMessage("Customer Deleted Successfully", successType);
+        setCustomers(deleteItemBasedOnId(customers, itemToDelete));
+      })
+      .catch((err) => {
+        // update required: chek in the api in which object error message is coming
+        toastMessage(err?.response?.data?.error || DEFAULT_ERROR_MESSAGE);
+      })
+      .finally(() => {
+        setDeleteLoader((prev) => false);
+        toggleDeleteModal();
+        setItemToDelete(null);
+      });
   };
   return (
     <>
-      {pageLoader ? (
-        <PageLoader />
-      ) : (
-        <>
-          <FilterSection
-            filterFields={filterFields}
-            handleFilterChange={handleFilterChange}
-            filters={filters}
-          >
-            <CommonButton
-              text="Add New Customer"
-              className="orange_btn"
-              type="button"
-              onClick={() => {
-                handleEmployeeSection({ action: "open" });
-              }}
-            />
-          </FilterSection>
-          <TableWrapper columns={CUSTOMER_COLUMNS}>
-            {customers?.length ? (
-              customers?.map((it, idx) => (
-                <SingleCustomerRow
-                  key={idx}
-                  item={it}
-                  index={idx}
-                  currentPage={page}
-                  handleActions={handleActions}
-                />
-              ))
-            ) : (
-              <NoDataFound />
-            )}
-          </TableWrapper>
-          <Pagination
-            onPageChange={onPageChange}
-            itemsPerPage={ITEMS_PER_PAGE}
-            totalData={totalData}
-            currentPage={page}
-          />
-          {showDeleteModal && (
-            <DeleteConfirmationModal
-              title={T["remove_this_customer"]}
-              description={T["this_action_cannot_be_redo"]}
-              onCancel={() => {
-                setItemToDelete(null);
-                toggleDeleteModal();
-                toggleLoader();
-              }}
-              onDelete={deleteCustomer}
-              loader={deleteLoader}
-            />
+      {pageLoader && <PageLoader />}
+      <>
+        <FilterSection
+          filterFields={filterFields}
+          handleFilterChange={handleFilterChange}
+          filters={filters}
+        >
+          {/* <CommonButton
+            text="Add New Customer"
+            className="orange_btn"
+            type="button"
+            onClick={() => {
+              handleEmployeeSection({ action: "open" });
+            }}
+          /> */}
+        </FilterSection>
+        <TableWrapper columns={CUSTOMER_COLUMNS}>
+          {customers?.length ? (
+            customers?.map((it, idx) => (
+              <SingleCustomerRow
+                key={idx}
+                item={it}
+                index={idx}
+                currentPage={page}
+                handleActions={handleActions}
+              />
+            ))
+          ) : (
+            <NoDataFound />
           )}
-        </>
-      )}
+        </TableWrapper>
+        <Pagination
+          onPageChange={onPageChange}
+          itemsPerPage={ITEMS_PER_PAGE}
+          totalData={totalData}
+          currentPage={page}
+        />
+        {showDeleteModal && (
+          <DeleteConfirmationModal
+            title={T["remove_this_customer"]}
+            description={T["this_action_cannot_be_redo"]}
+            onCancel={() => {
+              setItemToDelete(null);
+              toggleDeleteModal();
+            }}
+            onDelete={deleteCustomer}
+            loader={deleteLoader}
+          />
+        )}
+      </>
     </>
   );
 };

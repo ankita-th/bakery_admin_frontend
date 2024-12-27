@@ -41,7 +41,7 @@ const AddEditRawMaterial = ({
       <div className="category-section overflow-auto">
         <AddEditSectionHeading
           onClose={onClose}
-          text={isEdit ? "Edit Raw Material" : "Add Raw Material"}
+          text={isEdit ? "Edit Raw Product" : "Add Raw Product"}
         />
         {/* <CommonButton text="fill form" type="button" onClick={fillForm} /> */}
         <FormWrapper
@@ -92,7 +92,7 @@ const AddEditRawMaterial = ({
           <CommonTextField
             label="Cost Per Unit ($)*"
             fieldName="cost"
-            placeholder="Cost Per Unit"
+            placeholder="Enter Cost Per Unit"
             rules={RawMaterialValidations["cost"]}
             formConfig={formConfig}
             isNumberOnly={true}

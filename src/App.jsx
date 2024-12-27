@@ -7,10 +7,13 @@ import PublicLayout from "./Layouts/PublicLayout";
 import { routes } from "./routing/routes";
 import Dashboard from "./pages/Dashboard";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
+  const getCurrentRole = () => {
+    const currentUserRole = localStorage?.getItem("role");
+    return currentUserRole;
+  };
   return (
     <>
       <ToastContainer
@@ -28,9 +31,11 @@ function App() {
         {routes?.map((curItem, idx) => (
           <Fragment key={idx}>
             {curItem.private ? (
-              <Route element={<PrivateLayout />}>
-                <Route path={curItem.path} element={curItem.element} />
-              </Route>
+              curItem.roles.includes(getCurrentRole()) && (
+                <Route element={<PrivateLayout />}>
+                  <Route path={curItem.path} element={curItem.element} />
+                </Route>
+              )
             ) : curItem.public ? (
               <Route element={<PublicLayout />}>
                 <Route path={curItem.path} element={curItem.element} />

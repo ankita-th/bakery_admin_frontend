@@ -36,7 +36,7 @@ const filterFields = [
   },
   {
     type: "search",
-    filterName: "name",
+    filterName: "search",
     placeholder: T["search_to_do"],
   },
 ];
@@ -49,7 +49,7 @@ export const TODO_COLUMNS = [
   T["due_date"],
   T["status"],
   T["notes"],
-  T["action"]
+  T["action"],
 ];
 const Todo = () => {
   const { page, onPageChange, setPage } = usePagination();
@@ -63,7 +63,7 @@ const Todo = () => {
   const [todos, setTodos] = useState([]);
   const [filters, setFilters] = useState({
     sort_by: "",
-    name: "",
+    search: "",
   });
   const [totalData, setTotalData] = useState(null);
   const [itemToDelete, setItemToDelete] = useState(null);
@@ -277,77 +277,74 @@ const Todo = () => {
 
   return (
     <div>
-      {pageLoader ? (
-        <PageLoader />
-      ) : (
-        <>
-          <FilterSection
-            filterFields={filterFields}
-            handleFilterChange={handleFilterChange}
-            filters={filters}
-          >
-            <CommonButton
-              text="Add Todo List"
-              className="orange_btn"
-              onClick={() => {
-                // for opening add edit todo section
-                handleTodoSection({ action: "open" });
-              }}
-            />
-          </FilterSection>
-
-          <TableWrapper columns={TODO_COLUMNS}>
-            {todos?.length ? (
-              todos?.map((it, idx) => (
-                <SingleTodoRow
-                  key={idx}
-                  item={it}
-                  handleActions={handleActions}
-                  employeeList={employeeList}
-                  handleAssignTask={handleAssignTask}
-                  assignLoader={assignLoader}
-                />
-              ))
-            ) : (
-              <NoDataFound />
-            )}
-          </TableWrapper>
-          <Pagination
-            onPageChange={onPageChange}
-            itemsPerPage={TODO_ITEMS_PER_PAGE}
-            totalData={totalData}
-            currentPage={page}
+      {pageLoader && <PageLoader />}
+      <>
+        <FilterSection
+          filterFields={filterFields}
+          handleFilterChange={handleFilterChange}
+          filters={filters}
+        >
+          <CommonButton
+            text="Add Todo List"
+            className="orange_btn"
+            onClick={() => {
+              // for opening add edit todo section
+              handleTodoSection({ action: "open" });
+            }}
           />
+        </FilterSection>
 
-          {/* delete confirmation modal */}
-          {deleteModal?.showModal && (
-            <DeleteConfirmationModal
-              title="Are you sure you want to delete this task?"
-              description="This action cannot be redo.The task will permanently be deleted"
-              onCancel={() => {
-                setItemToDelete(null);
-                deleteModal.toggleModal();
-              }}
-              onDelete={deleteTask}
-              loader={deleteLoader}
-            />
+        <TableWrapper columns={TODO_COLUMNS}>
+          {todos?.length ? (
+            todos?.map((it, idx) => (
+              <SingleTodoRow
+                key={idx}
+                item={it}
+                handleActions={handleActions}
+                employeeList={employeeList}
+                handleAssignTask={handleAssignTask}
+                assignLoader={assignLoader}
+              />
+            ))
+          ) : (
+            <NoDataFound />
           )}
+        </TableWrapper>
+        <Pagination
+          onPageChange={onPageChange}
+          itemsPerPage={TODO_ITEMS_PER_PAGE}
+          totalData={totalData}
+          currentPage={page}
+        />
 
-          {/* add/edit todo section */}
-          {todoSection?.showModal && (
-            <AddEditTodo
-              onClose={() => handleTodoSection({ action: "close" })}
-              editInfo={editInfo}
-              onSubmit={onSubmit}
-              formConfig={formConfig}
-              employeeList={employeeList}
-              btnLoaders={btnLoaders}
-              handleTodoSection={handleTodoSection}
-              assignOnly={assignOnly}
-            />
-          )}
-        </>
-      )}
+        {/* delete confirmation modal */}
+        {deleteModal?.showModal && (
+          <DeleteConfirmationModal
+            title="Are you sure you want to delete this task?"
+            description="This action cannot be redo.The task will permanently be deleted"
+            onCancel={() => {
+              setItemToDelete(null);
+              deleteModal.toggleModal();
+            }}
+            onDelete={deleteTask}
+            loader={deleteLoader}
+          />
+        )}
+
+        {/* add/edit todo section */}
+        {todoSection?.showModal && (
+          <AddEditTodo
+            onClose={() => handleTodoSection({ action: "close" })}
+            editInfo={editInfo}
+            onSubmit={onSubmit}
+            formConfig={formConfig}
+            employeeList={employeeList}
+            btnLoaders={btnLoaders}
+            handleTodoSection={handleTodoSection}
+            assignOnly={assignOnly}
+          />
+        )}
+      </>
     </div>
   );
 };

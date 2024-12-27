@@ -7,21 +7,20 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* width */
 ::-webkit-scrollbar {
   width: 5px;
-  height:5px;
+  height: 5px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
   border-radius: 10px;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #ff6d2f; 
+  background: #ff6d2f;
   border-radius: 10px;
 }
 
@@ -266,7 +265,6 @@ header.header {
   text-wrap: nowrap;
   width: auto;
   padding: 10px 40px;
-
 }
 
 /* Header CSS */
@@ -544,6 +542,22 @@ div#dropdownMenu a:last-child {
   width: 30px;
 }
 
+.disabled-sign-in {
+  width: 100%;
+  padding: 12px 0; /* Equivalent to py-3 */
+  margin-top: 16px; /* Equivalent to mt-4 */
+  background-color: #d1d5db; /* Equivalent to bg-gray-300 */
+  color: #4b5563; /* Equivalent to text-gray-600 */
+  font-weight: 600; /* Equivalent to font-semibold */
+  border-radius: 50px; /* Equivalent to rounded-[50px] */
+  cursor: pointer;
+  transition: all 0.4s ease-in-out; /* Equivalent to transition-all duration-400 ease-in-out */
+}
+.sign-in-button {
+  background-color: #5f6f52;
+  color: #ffffff;
+}
+
 .custom_table tbody td button {
   padding: 5px;
   background: #ff6d2f1f;
@@ -557,9 +571,17 @@ div#dropdownMenu a:last-child {
   padding: 5px 8px;
 }
 .max-limit {
-  color: #3E3232;
+  color: #3e3232;
   text-align: right;
-  font-size:12px;
+  font-size: 12px;
+}
+.delete_modal button.print_button svg * {
+  fill: #fff;
+}
+.print_close_icon {
+  position: absolute;
+  top: 62px;
+  right: 254px;
 }
 
 @-webkit-keyframes loaderdots {
@@ -605,7 +627,6 @@ div#dropdownMenu a:last-child {
     box-shadow: 20px 0 0 -2px, 44px 0 0 2px, -20px 0 0 -2px, -44px 0 0 -2px;
   }
 }
-
 
 .image-preview-section.featured_img {
   width: 100%;

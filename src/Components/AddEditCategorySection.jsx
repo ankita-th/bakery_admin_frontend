@@ -67,7 +67,9 @@ const AddEditCategorySection = ({
     if (isEdit) {
       return `Edit ${type === "category" ? "Category" : "Subcategory"}`;
     } else {
-      return (shouldShowParentCategoryField() ? "Add Category/SubCategory" : "Add Category");
+      return shouldShowParentCategoryField()
+        ? "Add Category/SubCategory"
+        : "Add Category";
     }
   };
   return (
@@ -108,13 +110,15 @@ const AddEditCategorySection = ({
               options={categoryOptions}
               rules={CategoryValidations["parent"]}
               fieldName="parent"
-              defaultOption="None"
+              // defaultOption="Select Parent Category"
               formConfig={formConfig}
               // className="add-edit-input"
               label="Parent Category"
-              placeholder="None"
+              placeholder="Select Parent Category"
             />
-          ):""}
+          ) : (
+            ""
+          )}
           <CommonTextField
             label="Description"
             fieldName="description"
@@ -159,7 +163,7 @@ const AddEditCategorySection = ({
             </div>
           ) : (
             <CommonButton
-            type="submit"
+              type="submit"
               text="Add category"
               className="orange_btn"
               icon={publishIcon}

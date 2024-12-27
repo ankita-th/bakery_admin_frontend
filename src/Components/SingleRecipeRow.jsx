@@ -36,7 +36,7 @@ const SingleRecipeRow = ({
           }}
         />
       </td>
-      <td className="py-2 px-4 border text-nowrap">{recipe_title}</td>
+      <td className="py-2 px-4 border text-nowrap capitalize">{recipe_title}</td>
       <td className="py-2 px-4 border text-nowrap">
         {listCategories(category)}
       </td>
@@ -54,7 +54,7 @@ const SingleRecipeRow = ({
         {/* uncomment this  */}
         <button
           className="text-blue-500 hover:text-blue-700"
-          onClick={() => handleActions({ action: "view" })}
+          onClick={() => handleActions({ action: "print", id: id })}
         >
           {/* {true ? printIcon : eyeIcon} */}
           {printIcon}

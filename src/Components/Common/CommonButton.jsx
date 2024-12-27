@@ -5,7 +5,7 @@ const CommonButton = ({
   onClick,
   type = "submit",
   text,
-  disabled,
+  disabled = false,
   icon,
   className = "",
   loader = false,

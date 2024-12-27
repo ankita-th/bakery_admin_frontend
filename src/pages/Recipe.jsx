@@ -4,7 +4,6 @@ import {
   ACTIONS,
   DEFAULT_ERROR_MESSAGE,
   ITEMS_PER_PAGE,
-  OPTIONS,
   TYPE_OPTIONS,
 } from "../constant";
 import CommonButton from "../Components/Common/CommonButton";
@@ -12,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import usePagination from "../hooks/usePagination";
 import useLoader from "../hooks/useLoader";
 import { bulkActionRecipe, makeApiRequest, METHODS } from "../api/apiFunctions";
-import { RECIPE_ENDPOINT } from "../api/endpoints";
+import { PRINT_RECIPE_ENDPOINT, RECIPE_ENDPOINT } from "../api/endpoints";
 import Pagination from "../Components/Common/Pagination";
 import TableWrapper from "../Wrappers/TableWrapper";
 import NoDataFound from "../Components/Common/NoDataFound";
@@ -23,11 +22,14 @@ import { successType, toastMessage } from "../utils/toastMessage";
 import {
   actionToText,
   deleteItemBasedOnId,
+  downloadPDF,
   handleBulkMessage,
+  handlePrint,
 } from "../utils/helpers";
 import PageLoader from "../loaders/PageLoader";
 import { T } from "../utils/languageTranslator";
 import useSelectedItems from "../hooks/useSelectedItems";
+import PrintModal from "../Modals/PrintModal";
 const filterFields = [
   {
     type: "select",
@@ -80,6 +82,12 @@ const Recipe = () => {
   const [totalData, setTotalData] = useState(null);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [deleteLoader, setDeleteLoader] = useState(false);
+  const [showPrintModal, setShowPrintModal] = useState(false);
+  const [printLoaders, setPrintLoaders] = useState({
+    print: false,
+    download: false,
+  });
+  const [recipeId, setRecipeId] = useState(null);
 
   useEffect(() => {
     const apiParams = {
@@ -148,6 +156,8 @@ const Recipe = () => {
       navigate(`/add-edit-recipe/${id}`);
     } else {
       // this is for print/view
+      setRecipeId(id);
+      setShowPrintModal(true);
     }
   };
 
@@ -172,6 +182,43 @@ const Recipe = () => {
       });
   };
   console.log(selectedRecipes, "selectedRecipes");
+  const onRecipeSubmit = (data, event) => {
+    const buttonType = event.nativeEvent.submitter.name;
+    handlePrintLoaders(buttonType);
+    const payload = {
+      serving_size: data?.quantity,
+    };
+    // downloadPDF("https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf","dummyPdf");
+    // handlePrint("https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
+
+    makeApiRequest({
+      endPoint: `${PRINT_RECIPE_ENDPOINT}/${recipeId}/`,
+      method: METHODS?.post,
+      payload: payload,
+    })
+      .then((res) => {
+        console.log(res?.data, "this is print");
+        if (buttonType === "download") {
+          downloadPDF(res?.data);
+        } else {
+          handlePrint(res?.data);
+        }
+      })
+      .catch((err) => {
+        toastMessage(err?.response?.data || DEFAULT_ERROR_MESSAGE);
+      })
+      .finally(() => {
+        handlePrintLoaders(buttonType);
+        setRecipeId(null);
+        setShowPrintModal(false);
+      });
+  };
+  const handlePrintLoaders = (buttonType) => {
+    setPrintLoaders((prev) => ({
+      ...prev,
+      [buttonType]: !prev[buttonType],
+    }));
+  };
   return (
     <div>
       {pageLoader && <PageLoader />}
@@ -234,6 +281,16 @@ const Recipe = () => {
             }}
             onDelete={deleteRecipe}
             loader={deleteLoader}
+          />
+        )}
+        {showPrintModal && (
+          <PrintModal
+            onCancel={() => {
+              setShowPrintModal(false);
+              setRecipeId(null);
+            }}
+            onRecipeSubmit={onRecipeSubmit}
+            printLoaders={printLoaders}
           />
         )}
       </>

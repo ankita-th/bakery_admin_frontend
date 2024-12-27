@@ -44,7 +44,7 @@ const filterFields = [
   },
   {
     type: "search",
-    filterName: "name",
+    filterName: "search",
     placeholder: T["search_inventory"],
   },
 ];
@@ -72,7 +72,7 @@ const InventoryManagement = () => {
   const [itemToDelete, setItemToDelete] = useState();
   const [filters, setFilters] = useState({
     sort_by: "",
-    name: "",
+    search: "",
   });
   useEffect(() => {
     fetchInventory();
@@ -148,7 +148,7 @@ const InventoryManagement = () => {
       quantity: +values?.quantity,
       start_from: +values?.barcode_from,
       end_from: +values?.barcode_to,
-      status: itemStatus,
+    status: itemStatus,
     };
 
     makeApiRequest({

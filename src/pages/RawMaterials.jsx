@@ -13,7 +13,6 @@ import {
   ACTIONS,
   DEFAULT_ERROR_MESSAGE,
   ITEMS_PER_PAGE,
-  OPTIONS,
   TYPE_OPTIONS,
   YYYY_MM_DD,
 } from "../constant";
@@ -29,7 +28,6 @@ import {
   handleBulkMessage,
   handleEdit,
 } from "../utils/helpers";
-import { trashIcon } from "../assets/Icons/Svg";
 import Pagination from "../Components/Common/Pagination";
 import AddEditRawMaterial from "../Components/AddEditRawMaterial";
 import { useForm } from "react-hook-form";
@@ -90,7 +88,7 @@ const RawMaterials = () => {
   const { pageLoader, toggleLoader, setPageLoader } = useLoader();
   const { page, onPageChange, setPage } = usePagination();
   const [filters, setFilters] = useState({
-    status: "",
+    status: "all",
     category: "",
     search: "",
   });
@@ -202,7 +200,7 @@ const RawMaterials = () => {
             setSelectedMaterials([]);
           });
       } else {
-        toastMessage(handleBulkMessage("Raw material"));
+        toastMessage(handleBulkMessage("Raw product"));
       }
     } else {
       const temp = { ...filters };
@@ -237,7 +235,7 @@ const RawMaterials = () => {
     })
       .then((res) => {
         toastMessage(
-          `Raw material ${editInfo?.isEdit ? "updated" : "added"} successfully`,
+          `Raw product ${editInfo?.isEdit ? "updated" : "added"} successfully`,
           successType
         );
         if (editInfo?.isEdit) {
@@ -266,7 +264,6 @@ const RawMaterials = () => {
   const handleButtonLoaders = (type) => {
     setbtnLoaders({ ...btnLoaders, [type]: !btnLoaders[type] });
   };
-  console.log(selectedMaterials, "selectedMaterials");
   return (
     <>
       {pageLoader && <PageLoader />}
@@ -276,7 +273,7 @@ const RawMaterials = () => {
         filters={filters}
       >
         <CommonButton
-          text="Add Raw Material"
+          text="Add Raw Product"
           className="orange_btn"
           onClick={toggleRawMaterialSection}
         />
@@ -317,7 +314,7 @@ const RawMaterials = () => {
 
       {showDeleteModal && (
         <DeleteConfirmationModal
-          title="Are you sure you want to delete this raw material?"
+          title="Are you sure you want to delete this raw product?"
           description="This action cannot be redo. Deleting this raw material will permanently remove it from your inventory"
           onCancel={() => {
             setItemToDelete(null);

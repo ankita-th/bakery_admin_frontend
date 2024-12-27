@@ -207,8 +207,10 @@ export const OPTIONS = [
 ];
 
 export const SORT_BY_OPTIONS = [
-  { value: "newest", label: T["newest"] },
-  { value: "oldest", label: T["oldest"] },
+  // { value: "newest", label: T["newest"] },
+  // { value: "oldest", label: T["oldest"] },
+  { value: "asce", label: T["ascending"] },
+  { value: "desc", label: T["descending"] },
 ];
 export const PAYMENT_TYPE_OPTIONS = [{ value: "card", label: T["card"] }];
 
@@ -396,31 +398,23 @@ export const INVENTORY_PAGE_COLUMNS = [
 export const DUMMY_CUSTOMER_DATA = [
   // Update required: update according to the api parameters /////////
   {
-    id: 1,
-    customer_type: "Individual",
-    name: "John Doe",
-    contact_person: "michael Johnson",
-    contact_details: "John@example.com",
-    address: "45 bakery lane  london",
-    order_history: "5 orders",
-  },
-  {
-    id: 2,
-    customer_type: "Company",
-    name: "Alice Smith",
-    contact_person: "michael Johnson",
-    contact_details: "John@example.com",
-    address: "45 bakery lane  london",
-    order_history: "5 orders",
-  },
-  {
-    id: 3,
-    customer_type: "Company",
-    name: "John Doe",
-    contact_person: "michael Johnson",
-    contact_details: "John@example.com",
-    address: "45 bakery lane  london",
-    order_history: "5 orders",
+    id: 41,
+    user: {
+      email: "sappaxeiddosei-4037@yopmail.com",
+      role: "bakery",
+      first_name: "Nina",
+      last_name: "Gilbert",
+    },
+    created_at: "2024-12-23T11:42:54.117057Z",
+    updated_at: "2024-12-23T11:42:54.117074Z",
+    name: "christmas bakery shop",
+    contact_no: "1238838338",
+    contact_no_verified: true,
+    email_verified: true,
+    term_condition: true,
+    sms_reminders: true,
+    email_reminders: true,
+    newletter_reminders: true,
   },
 ];
 
@@ -737,11 +731,12 @@ export const ROLE_OPTIONS = [
   { value: "accountant", label: "Accountant" },
   { value: "worker", label: "Worker" },
   { value: "admin", label: "Admin" },
+  { value: "stock_manager", label: "Stock Manager" },
 ];
 export const TYPE_OPTIONS = [
+  { label: T["all"], value: "all" },
   { label: T["published"], value: "publish" },
   { label: T["draft"], value: "draft" },
-  { label: T["all"], value: "all" },
 ];
 
 export const ACTIONS = [
@@ -831,3 +826,10 @@ export const ITEMS_FROM_OPTIONS = [
   { label: "All products", value: "all_product" },
   { label: "Specify product", value: "specific_product" },
 ];
+
+export const ROLES = {
+  accountManager: "accountant",
+  stockManager: "stock_manager",
+  admin: "admin",
+  worker: "worker",
+};

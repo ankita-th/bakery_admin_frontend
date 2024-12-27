@@ -1001,7 +1001,32 @@ export const copyToClipboardIcon = (
 );
 
 export const checkedIcon = (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-    <path d="M20 6L9 17L4 12" stroke="#FF6D2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    <path
+      d="M20 6L9 17L4 12"
+      stroke="#FF6D2F"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
   </svg>
+);
+
+export const downloadIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="#FF6F61"
+    width="48px"
+    height="48px"
+  >
+    <path d="M5 20h14v2H5zm9-9h5l-7 7-7-7h5V4h4z" />
+  </svg>
+
 )

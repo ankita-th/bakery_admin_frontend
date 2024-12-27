@@ -11,11 +11,15 @@ import { toast } from "react-toastify";
 import googleIcon from "../assets/images/google_logo.svg";
 import CommonButton from "../Components/Common/CommonButton";
 import SocialLogin from "../Components/SocialLogin";
+import { ROLES } from "../constant";
 
 const Login = () => {
   const navigate = useNavigate();
   const formConfig = useForm();
-  const { handleSubmit } = formConfig;
+  const {
+    handleSubmit,
+    formState: { errors, isValid },
+  } = formConfig;
   const [showPassword, setShowPassword] = useState(false);
   const [btnLoader, setBtnLoader] = useState(false);
   const toggleShowPassword = () => {
@@ -25,14 +29,19 @@ const Login = () => {
     setBtnLoader((prev) => true);
     login(values)
       .then((res) => {
-        // update the token logic with actual token
+        // const role = res?.data?.role;
+        const role = ROLES?.admin;
+        if (role === ROLES?.worker) {
+          toastMessage("Invalid Role");
+          return;
+        }
         localStorage.setItem("token", res?.data?.access);
-        // toastMessage("Logged In Successfully", successType);
         localStorage.setItem("refreshToken", res?.data?.refresh);
+        localStorage.setItem("role", role);
+
         const userName = `${res?.data?.first_name} ${res?.data?.last_name}`;
-        // update required:update this later
-        localStorage.setItem("userName", "Admin");
-        navigate("/dashboard");
+        localStorage.setItem("userName", userName);
+        handleNavigate(role);
       })
       .catch((err) => {
         const fieldError =
@@ -44,7 +53,18 @@ const Login = () => {
       })
       .finally(() => setBtnLoader((prev) => false));
   };
-  const afterAPISuccess = () => {};
+  const handleNavigate = (role) => {
+    if (role === ROLES?.admin) {
+      // navigate("/dashboard");
+      window.location.href = "/dashboard";
+    } else if (role === ROLES?.accountManager) {
+      // navigate("/orders-management");
+      window.location.href = "/orders-management";
+    } else if (role === ROLES?.stockManager) {
+      // navigate("/products");
+      window.location.href = "/products";
+    }
+  };
   return (
     <>
       {/* <AuthRedirectSection
@@ -87,7 +107,8 @@ const Login = () => {
           text="Sign in"
           type="submit"
           loader={btnLoader}
-          className="sign-in-button w-full py-3 mt-4 bg-gray-300 text-gray-600 font-semibold rounded-md hover:bg-[#5F6F52] hover:text-white rounded-[50px] cursor-pointer transition-all duration-400 ease-in-out"
+          className={`disabled-sign-in ${isValid && "sign-in-button"}`}
+          disabled={!isValid || btnLoader}
         />
         {/* commented for future  use */}
         {/* <SocialLogin

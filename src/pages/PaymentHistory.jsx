@@ -93,38 +93,35 @@ const PaymentHistory = () => {
   };
   return (
     <>
-      {pageLoader ? (
-        <PageLoader />
-      ) : (
-        <>
-          <FilterSection
-            filterFields={filterFields}
-            handleFilterChange={handleFilterChange}
-            filters={filters}
-          />
-          <TableWrapper columns={PAYMENT_COLUMNS}>
-            {paymentHistory?.length ? (
-              paymentHistory?.map((it, idx) => (
-                <SinglePaymentRow
-                  key={idx}
-                  item={it}
-                  index={idx}
-                  currentPage={page}
-                  handleActions={handleActions}
-                />
-              ))
-            ) : (
-              <NoDataFound />
-            )}
-          </TableWrapper>
-          <Pagination
-            onPageChange={onPageChange}
-            itemsPerPage={ITEMS_PER_PAGE}
-            totalData={totalData}
-            currentPage={page}
-          />
-        </>
-      )}
+      {pageLoader && <PageLoader />}
+      <>
+        <FilterSection
+          filterFields={filterFields}
+          handleFilterChange={handleFilterChange}
+          filters={filters}
+        />
+        <TableWrapper columns={PAYMENT_COLUMNS}>
+          {paymentHistory?.length ? (
+            paymentHistory?.map((it, idx) => (
+              <SinglePaymentRow
+                key={idx}
+                item={it}
+                index={idx}
+                currentPage={page}
+                handleActions={handleActions}
+              />
+            ))
+          ) : (
+            <NoDataFound />
+          )}
+        </TableWrapper>
+        <Pagination
+          onPageChange={onPageChange}
+          itemsPerPage={ITEMS_PER_PAGE}
+          totalData={totalData}
+          currentPage={page}
+        />
+      </>
     </>
   );
 };

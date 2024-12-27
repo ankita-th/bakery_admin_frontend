@@ -21,7 +21,7 @@
   "categories": "Categories",
   "zip_code_configuration": "ZIP Code Configuration",
   "recipe": "Recipe",
-  "new_recip": "New Recip",
+  "new_recipe": "New Recipe",
   "inventory_management": "Inventory Management",
   "employee_management": "Employee Management",
   "to_do_list": "To-Do List",
@@ -225,7 +225,7 @@
   "city": "City",
   "enter_city": "Enter City",
   "enter_minimum_purchase_order": "Enter Minimum Purchase Order",
-  "delivery_available":"Delivery Available",
+  "delivery_available": "Delivery Available",
   "select_availability": "Select Availability",
   "update": "Update",
   "employee_id": "Employee ID",
@@ -238,6 +238,7 @@
   "eg": "Eg. 46 123 456 789 or 012 345 6789",
   "hiring_date": "Hiring Date",
   "enter_employee_address": "Enter Employee Address",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "descending": "Descending",
+  "ascending": "Ascending"
 }
- 
